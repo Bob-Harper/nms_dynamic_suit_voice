@@ -1,0 +1,10 @@
+sound2wem/
+TEMP_WEM_DIR/
+tools/
+venv/
+suit_voice.env
+.idea/
+*.DS_Store
+__pycache__/
+*.pyc
+*.log
