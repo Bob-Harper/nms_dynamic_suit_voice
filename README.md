@@ -53,8 +53,8 @@ Recommended (tested) setup:
 
 Clone this repository
 ```
-git clone https://github.com/YOUR-USERNAME/YOUR-REPO.git
-cd YOUR-REPO
+git clone https://github.com/Bob-Harper/nms_dynamic_suit_voice.git
+cd nms_dynamic_suit_voice
 ```
 
 Install Python dependencies
