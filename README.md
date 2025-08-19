@@ -21,6 +21,19 @@ Drop-in replacement for default suit AI audio files.
 
 Local-only – no cloud processing or internet connection required. Completely Offline game compatible.
 
+## Examples:
+<br>Original Game Wording: Nearby toxins detected
+<br> Final Output: Corrosive environmental toxins are causing damage to your suit's protective filters.
+<br> Final Output: Corrosive environmental toxins are threatening the effectiveness of your suit's protective filters.
+<br> Final Output: Corrosive environmental toxins are harming Your suit’s protective filters.
+<br> Final Output: Corrosive environmental toxins are impacting Your suit's protective filters, leading to damage and potential filter failure.
+<br> Final Output: Corrosive environmental contaminants are debilitating your suit’s filtration system.
+
+Original Game Wording: Extreme Night Temperature Detected
+<br> Final Output: Extreme night cold weather noted. Alerting of potential severe consequences for life support and safety.
+<br> Final Output: Extreme night temperature detected poses a severe risk to life support and your well-being.
+<br> Final Output: Extreme night cold temperatures are reported. This is concerning as it could lead to reduced life support and potential danger for You.
+<br> Final Output: Extreme cold temperatures during the night cycle are detected, posing a significant threat to life support and your safety.
 
 
 ## Limitations / Disclaimer
@@ -40,7 +53,9 @@ This has only been tested on my personal development machine:
 <br>Performance and results may vary wildly on other hardware.
 <br>This is not tested on any other system, OS, or GPU configuration.
 
-This should be started BEFORE NMS is started up, or there may be fights over your VRAM and GPU usage and the game will stutter to the point where a well tuned Powerpoint presentation would be smoother.  The model I use and recommend takes up under 2GB of VRAm - on my machine that is a large hit to the amount available for the game, but honestly I dont notice a difference - unless I forget and load the game before I load the generator.
+This should be started BEFORE NMS is started up, or there may be fights over your VRAM and GPU usage and the game will stutter to the point where a well tuned Powerpoint presentation would be smoother.  The model I use and recommend takes up 1GB of VRAm - on my machine that is a large hit to the amount available for the game, but honestly I dont notice a difference - unless I forget and load the game before I load the generator.
+<img width="3274" height="286" alt="image" src="https://github.com/user-attachments/assets/d4c88904-f197-45f2-a0c3-ba0bc5c0b491" />
+
 
 ## Requirements
 
