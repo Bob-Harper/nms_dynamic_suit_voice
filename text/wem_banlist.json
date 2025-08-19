@@ -1,0 +1,62 @@
+{
+  "default": {
+    "banned": [
+      "player",
+      "user",
+      "I",
+      "me",
+      "my",
+      "we",
+      "our",
+      "us",
+      "game",
+      "system",
+      "AI"
+    ],
+    "bias": -50
+  },
+  "780959188": {
+    "banned": [
+      "empty",
+      "running low",
+      "space available",
+      "room left"
+    ],
+    "bias": -50
+  },
+  "330331555": {
+    "banned": [
+      "paid",
+      "payment sent",
+      "spent",
+      "deducted",
+      "withdrawn"
+    ],
+    "bias": -50
+  },
+  "980411923": {
+    "banned": [
+      "sold",
+      "removed",
+      "discarded",
+      "constructed",
+      "built"
+    ],
+    "bias":  -50
+  },
+  "245522736": {
+    "banned": [
+      "your",
+      "your",
+      "your"
+    ],
+    "bias": -15
+  },
+  "236472322": {
+    "banned": [
+      "you",
+      "your"
+    ],
+    "bias": -15
+  }
+}

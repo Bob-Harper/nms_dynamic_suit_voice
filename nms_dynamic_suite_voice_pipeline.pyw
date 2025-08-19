@@ -14,6 +14,7 @@ import re
 import requests
 import random
 from ollama import Client
+import json
 
 # Load .env from the local subdirectory
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
@@ -37,9 +38,34 @@ ICON_IMAGE = Path(os.getenv("ICON_IMAGE"))
 LOGGING = os.getenv("LOGGING", "false").strip().lower() == "true"  # force boolean: true, anything else => False
 GAME_OUTPUT_CSV = Path(os.getenv("GAME_OUTPUT_CSV"))
 CREATE_NO_WINDOW = 0x08000000 if sys.platform == "win32" else 0
-with open("assets/suit_voice_prompt.txt", encoding="utf-8") as f:
+with open("text/suit_voice_prompt.txt", encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 RUNNING = True
+
+
+def load_banlist(path: str) -> dict:
+    with open(path, encoding="utf-8") as f_ban:
+        return json.load(f_ban)
+
+BAN = load_banlist("text/wem_banlist.json")
+
+def build_logit_bias_for_wem(wem_number, ban_map=None, bias_value=-10):
+    """Return a dict suitable for Ollama's logit_bias option."""
+    if ban_map is None:
+        ban_map = BAN
+    taboo = ban_map.get(wem_number, [])
+    bias = {}
+    for p in taboo:
+        for v in phrase_variants(p):
+            # Ollama expects keys as token strings (heuristic). Add negative bias.
+            # Example key: " empty" or "empty"
+            bias[v] = bias_value
+    return bias
+
+
+def phrase_variants(phrase):
+    """Return possible token variants for a phrase (basic)."""
+    return [phrase, " " + phrase]
 
 
 def load_intent_map(csv_path: Path) -> dict:
@@ -112,6 +138,7 @@ def reword_phrase(input_phrase: str,
                   wem_id: str,
                   original_phrase_r: str
                   ) -> str:
+    logit_bias = build_logit_bias_for_wem(wem_id)
     prompt = SUIT_VOICE_PROMPT.format(intent_data=intent_data.strip(), input_phrase=input_phrase.strip())
 
     payload = {
@@ -123,7 +150,8 @@ def reword_phrase(input_phrase: str,
             "temperature": 0.3,
             "top_k": 10,
             "top_p": 0.9,
-            "seed": random.randint(1, 9999999)  # or pass as an argument
+            "seed": random.randint(1, 9999999),  # or pass as an argument
+            "logit_bias": logit_bias
         }
     }
 
@@ -143,7 +171,8 @@ def reword_phrase(input_phrase: str,
             else:
                 print(f"LLM ERROR on WEM {wem_id}: {e2}")
                 return f"WEM ERROR {wem_id}, {e2}.  {original_phrase_r}"
-
+    # ... end of for loop
+    return str(original_phrase_r)  # safety fallback
 
 def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
     final_wav = TEMP_WEM_DIR / f"{wem_num}.wav"
