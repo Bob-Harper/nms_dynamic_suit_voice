@@ -7,21 +7,90 @@ from ollama import Client
 from pathlib import Path
 from dotenv import load_dotenv
 import time
+import json
 
 # CONFIG
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
 CSV_PATH = Path(os.getenv("CSV_PATH"))
 OLLAMA_SERVER = os.getenv("OLLAMA_SERVER")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
-TEMP_WEM_DIR = Path(os.getenv("TEMP_WEM_DIR").strip('"'))
-TEMP_WEM_DIR.mkdir(parents=True, exist_ok=True)
 TEST_OUTPUT_CSV = Path(os.getenv("TEST_OUTPUT_CSV"))
 START_ROW = 0  # inclusive.  yes I know it starts at 0.  this is a test script.
-END_ROW = 209    # exclusive
+END_ROW = 200    # exclusive
 client = Client(OLLAMA_SERVER)
-with open("assets/suit_voice_prompt.txt", encoding="utf-8") as f:
+with open("text/suit_voice_prompt.txt", encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 
+def load_banlist(path: str) -> dict:
+    with open(path, encoding="utf-8") as f_ban:
+        return json.load(f_ban)
+
+BAN = load_banlist("text/wem_banlist.json")
+
+
+def build_logit_bias(wem_id, ban_map, default_bias=-50):
+    """
+    Return a dict of token -> bias for Ollama.
+
+    - Uses the WEM-specific banned list if available.
+    - Falls back to the default banned list for all other words.
+    - Applies the WEM-specific bias if provided; otherwise uses default bias.
+    """
+    bias_dict = {}
+
+    # Add default banned words
+    default_words = ban_map.get("default", {}).get("banned", [])
+    default_value = ban_map.get("default", {}).get("bias", default_bias)
+    for word in default_words:
+        bias_dict[word] = default_value
+        bias_dict[f" {word}"] = default_value  # also add variant with leading space
+
+    # Add WEM-specific banned words if any
+    if wem_id in ban_map:
+        wem_entry = ban_map[wem_id]
+        wem_words = wem_entry.get("banned", [])
+        wem_value = wem_entry.get("bias", default_value)
+        for word in wem_words:
+            bias_dict[word] = wem_value
+            bias_dict[f" {word}"] = wem_value
+
+    return bias_dict
+
+
+def phrase_variants(phrase):
+    variants = [phrase, " " + phrase]
+    if phrase.isalpha():
+        variants.append(phrase.lower())
+        variants.append(" " + phrase.lower())
+    return variants
+
+
+def enforce_user_pronouns(text: str) -> str:
+    """
+    Replace any first-person or team pronouns with 'You' in the context
+    of the suit AI notifications. Leaves everything else intact.
+    """
+    # Replace exact words or contractions
+    replacements = {
+        r"\bI\b": "You",
+        r"\bmy\b": "your",
+        r"\bwe\b": "You",
+        r"\bours\b": "your",
+        r"\bus\b": "You",
+        r"\bme\b": "You",
+        r"\bI'm\b": "You are",
+        r"\bI am\b": "You are",
+        r"\bI've\b": "You have",
+        r"\bI'll\b": "You will",
+        r"\bWe\b": "You",
+        r"\bMy\b": "Your",
+        r"\bOur\b": "Your",
+        r"\bUs\b": "You",
+    }
+
+    for pattern, replacement in replacements.items():
+        text = re.sub(pattern, replacement, text)
+    return text
 
 def load_intent_map(csv_path: Path) -> dict:
     i_intent_map = {}
@@ -76,6 +145,7 @@ def reword_phrase(input_phrase: str,
                   wem_id: str,
                   original_phrase_r: str
                   ) -> str:
+    logit_bias = build_logit_bias(wem_id, BAN)
     prompt = SUIT_VOICE_PROMPT.format(intent_data=intent_data.strip(), input_phrase=input_phrase.strip())
 
     payload = {
@@ -83,14 +153,15 @@ def reword_phrase(input_phrase: str,
         "prompt": prompt,
         "stream": False,
         "options": {
-            "max_tokens": 75,
-            "temperature": 0.3,
-            "top_k": 30,
+            "max_tokens": 60,
+            "temperature": 0.5,
+            "top_k": 70,
             "top_p": 0.9,
-            "seed": random.randint(1, 9999999)  # or pass as an argument
+            "seed": random.randint(1, 9999999),  # or pass as an argument
+            "logit_bias": logit_bias
         }
     }
-
+    # print(f"\n\nPayload: {payload}\n")
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -99,8 +170,9 @@ def reword_phrase(input_phrase: str,
             generated_response = response.json().get("response", "").strip()
             if not generated_response:
                 raise ValueError("Empty response from Ollama")
-            generated_response = re.sub(r"<think>.*?</think>", "",
-                                        generated_response, flags=re.DOTALL).strip()
+            generated_response = re.sub(r"<think>.*?</think>", "", generated_response, flags=re.DOTALL).strip()
+            # Postprocess to enforce 'You'
+            generated_response = enforce_user_pronouns(generated_response)
             return generated_response
         except Exception as e2:
             if attempt < max_retries - 1:
@@ -108,6 +180,9 @@ def reword_phrase(input_phrase: str,
             else:
                 print(f"LLM ERROR on WEM {wem_id}: {e2}")
                 return f"WEM ERROR {wem_id}, {e2}.  {original_phrase_r}"
+
+    # Safety fallback
+    return enforce_user_pronouns(str(original_phrase_r))
 
 
 # Read intent map (already cleaned and ready)
