@@ -15,7 +15,6 @@ import requests
 import random
 from ollama import Client
 import json
-
 # Load .env from the local subdirectory
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
 CHECK_INTERVAL = float(os.getenv("CHECK_INTERVAL"))
@@ -38,7 +37,7 @@ ICON_IMAGE = Path(os.getenv("ICON_IMAGE"))
 LOGGING = os.getenv("LOGGING", "false").strip().lower() == "true"  # force boolean: true, anything else => False
 GAME_OUTPUT_CSV = Path(os.getenv("GAME_OUTPUT_CSV"))
 CREATE_NO_WINDOW = 0x08000000 if sys.platform == "win32" else 0
-with open("text/suit_voice_prompt.txt", encoding="utf-8") as f:
+with open("data/suit_voice_prompt.txt", encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 RUNNING = True
 
@@ -47,25 +46,73 @@ def load_banlist(path: str) -> dict:
     with open(path, encoding="utf-8") as f_ban:
         return json.load(f_ban)
 
-BAN = load_banlist("text/wem_banlist.json")
+BAN = load_banlist("data/wem_banlist.json")
 
-def build_logit_bias_for_wem(wem_number, ban_map=None, bias_value=-10):
-    """Return a dict suitable for Ollama's logit_bias option."""
-    if ban_map is None:
-        ban_map = BAN
-    taboo = ban_map.get(wem_number, [])
-    bias = {}
-    for p in taboo:
-        for v in phrase_variants(p):
-            # Ollama expects keys as token strings (heuristic). Add negative bias.
-            # Example key: " empty" or "empty"
-            bias[v] = bias_value
-    return bias
+def build_logit_bias(wem_id, ban_map, default_bias=-50):
+    """
+    Return a dict of token -> bias for Ollama.
+
+    - Uses the WEM-specific banned list if available.
+    - Falls back to the default banned list for all other words.
+    - Applies the WEM-specific bias if provided; otherwise uses default bias.
+    """
+    bias_dict = {}
+
+    # Add default banned words
+    default_words = ban_map.get("default", {}).get("banned", [])
+    default_value = ban_map.get("default", {}).get("bias", default_bias)
+    for word in default_words:
+        bias_dict[word] = default_value
+        bias_dict[f" {word}"] = default_value  # also add variant with leading space
+
+    # Add WEM-specific banned words if any
+    if wem_id in ban_map:
+        wem_entry = ban_map[wem_id]
+        wem_words = wem_entry.get("banned", [])
+        wem_value = wem_entry.get("bias", default_value)
+        for word in wem_words:
+            bias_dict[word] = wem_value
+            bias_dict[f" {word}"] = wem_value
+
+    return bias_dict
 
 
 def phrase_variants(phrase):
-    """Return possible token variants for a phrase (basic)."""
-    return [phrase, " " + phrase]
+    variants = [phrase, " " + phrase]
+    if phrase.isalpha():
+        variants.append(phrase.lower())
+        variants.append(" " + phrase.lower())
+    return variants
+
+
+def enforce_user_pronouns(text: str) -> str:
+    """
+    Replace any first-person or team pronouns with 'You' in the context
+    of the suit AI notifications. Leaves everything else intact.
+    """
+    # Replace exact words or contractions
+    replacements = {
+        r"\bI\b": "You",
+        r"\bmy\b": "your",
+        r"\bwe\b": "You",
+        r"\bours\b": "your",
+        r"\bus\b": "You",
+        r"\bme\b": "You",
+        r"\bI'm\b": "You are",
+        r"\bI am\b": "You are",
+        r"\bI've\b": "You have",
+        r"\bI'll\b": "You will",
+        r"\bWe\b": "You",
+        r"\bMy\b": "Your",
+        r"\bOur\b": "Your",
+        r"\bUs\b": "You",
+        r"\bThe user's\b": "Your",
+        r"\bThe user\b": "You",
+    }
+
+    for pattern, replacement in replacements.items():
+        text = re.sub(pattern, replacement, text)
+    return text
 
 
 def load_intent_map(csv_path: Path) -> dict:
@@ -138,7 +185,7 @@ def reword_phrase(input_phrase: str,
                   wem_id: str,
                   original_phrase_r: str
                   ) -> str:
-    logit_bias = build_logit_bias_for_wem(wem_id)
+    logit_bias = build_logit_bias(wem_id, BAN)
     prompt = SUIT_VOICE_PROMPT.format(intent_data=intent_data.strip(), input_phrase=input_phrase.strip())
 
     payload = {
@@ -146,8 +193,8 @@ def reword_phrase(input_phrase: str,
         "prompt": prompt,
         "stream": False,
         "options": {
-            "max_tokens": 120,
-            "temperature": 0.3,
+            "max_tokens": 15,
+            "temperature": 0.4,
             "top_k": 10,
             "top_p": 0.9,
             "seed": random.randint(1, 9999999),  # or pass as an argument
@@ -164,6 +211,8 @@ def reword_phrase(input_phrase: str,
             if not generated_response:
                 raise ValueError("Empty response from Ollama")
             generated_response = re.sub(r"<think>.*?</think>", "", generated_response, flags=re.DOTALL).strip()
+            # Postprocess to enforce 'You'
+            generated_response = enforce_user_pronouns(generated_response)
             return generated_response
         except Exception as e2:
             if attempt < max_retries - 1:
@@ -171,8 +220,9 @@ def reword_phrase(input_phrase: str,
             else:
                 print(f"LLM ERROR on WEM {wem_id}: {e2}")
                 return f"WEM ERROR {wem_id}, {e2}.  {original_phrase_r}"
-    # ... end of for loop
-    return str(original_phrase_r)  # safety fallback
+
+    # Safety fallback
+    return enforce_user_pronouns(str(original_phrase_r))
 
 def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
     final_wav = TEMP_WEM_DIR / f"{wem_num}.wav"
@@ -197,9 +247,13 @@ def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
 
 
 def convert_to_wem(wav_file_path: Path, output_dir: Path, conversion_quality="Vorbis Quality High"):
+    # Resolve both input and output paths to absolute
+    wav_file_path = wav_file_path.resolve()
+    output_dir = output_dir.resolve()
+
     subprocess.run([
         "cmd.exe", "/c",
-        str(CMD_SCRIPT_PATH),
+        str(CMD_SCRIPT_PATH.resolve()),  # make sure the CMD script path is absolute too
         f'--conversion:{conversion_quality}',
         f'--out:{str(output_dir)}',
         str(wav_file_path)
@@ -375,3 +429,6 @@ watcher.start()
 
 # Run the icon (blocks until user chooses Quit).
 tray_icon.run()
+
+# to do: break up into classes/files.  more modulare.  prompting.py, postprocessing.py, generate.py
+# tray_icon.py and leave the watchdog in here. modular, easier to maintain, futureproof, add on.

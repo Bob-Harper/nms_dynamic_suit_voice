@@ -16,16 +16,16 @@ OLLAMA_SERVER = os.getenv("OLLAMA_SERVER")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
 TEST_OUTPUT_CSV = Path(os.getenv("TEST_OUTPUT_CSV"))
 START_ROW = 0  # inclusive.  yes I know it starts at 0.  this is a test script.
-END_ROW = 200    # exclusive
+END_ROW = 220    # exclusive
 client = Client(OLLAMA_SERVER)
-with open("text/suit_voice_prompt.txt", encoding="utf-8") as f:
+with open("data/suit_voice_prompt.txt", encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 
 def load_banlist(path: str) -> dict:
     with open(path, encoding="utf-8") as f_ban:
         return json.load(f_ban)
 
-BAN = load_banlist("text/wem_banlist.json")
+BAN = load_banlist("data/wem_banlist.json")
 
 
 def build_logit_bias(wem_id, ban_map, default_bias=-50):
@@ -86,6 +86,8 @@ def enforce_user_pronouns(text: str) -> str:
         r"\bMy\b": "Your",
         r"\bOur\b": "Your",
         r"\bUs\b": "You",
+        r"\bThe user's\b": "Your",
+        r"\bThe user\b": "You",
     }
 
     for pattern, replacement in replacements.items():
@@ -147,15 +149,16 @@ def reword_phrase(input_phrase: str,
                   ) -> str:
     logit_bias = build_logit_bias(wem_id, BAN)
     prompt = SUIT_VOICE_PROMPT.format(intent_data=intent_data.strip(), input_phrase=input_phrase.strip())
-
+    # temporary, per-call no-think
+    # prompt = "/no_think\n" + prompt
     payload = {
         "model": OLLAMA_MODEL,
         "prompt": prompt,
         "stream": False,
         "options": {
-            "max_tokens": 60,
-            "temperature": 0.5,
-            "top_k": 70,
+            "max_tokens": 15,
+            "temperature": 0.4,
+            "top_k": 10,
             "top_p": 0.9,
             "seed": random.randint(1, 9999999),  # or pass as an argument
             "logit_bias": logit_bias
@@ -204,8 +207,7 @@ for idx, (wem_number, entry) in enumerate(intent_map.items()):
 
     try:
         reworded = reword_phrase(seed_phrase, intent, wem_number, original_phrase)
-        print(f"\nWEM: {wem_number}")
-        print(f"Original Game Wording: {original_phrase}")
+        print(f"\nWEM: {wem_number} -- Original Game Wording: {original_phrase}")
         print(f"Context: {context}")
         print(f"Intent: {intent}")
         print(f"Adjusted Seed phrase: {seed_phrase}")
