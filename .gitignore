@@ -1,5 +1,4 @@
-sound2wem/
-TEMP_WEM_DIR/
+sound2wem/*
 tools/
 venv/
 suit_voice.env
@@ -8,3 +7,6 @@ suit_voice.env
 __pycache__/
 *.pyc
 *.log
+/bullshit.py
+/tmp_wem_dir/*
+

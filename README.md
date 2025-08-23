@@ -56,59 +56,32 @@ This has only been tested on my personal development machine:
 This should be started BEFORE NMS is started up, or there may be fights over your VRAM and GPU usage and the game will stutter to the point where a well tuned Powerpoint presentation would be smoother.  The model I use and recommend takes up 1GB of VRAm - on my machine that is a large hit to the amount available for the game, but honestly I dont notice a difference - unless I forget and load the game before I load the generator.
 <img width="3274" height="286" alt="image" src="https://github.com/user-attachments/assets/d4c88904-f197-45f2-a0c3-ba0bc5c0b491" />
 
-
-## Requirements
-
-Tested setup:
-<br>Windows 11
-<br>64GB RAM
-<br>NVIDIA GPU with 4GB VRAM minimum (1650 Ti or better recommended)
-<br>Python 3.10 or higher
-<br>Installed dependencies (see Installation)
-<br>Ollama https://ollama.com/download
-<br> - downloaded ollama model
-<br>Sound2Wem https://github.com/EternalLeo/sound2wem
-<br> - install sound2wem in the root directory of this project (if not, you will need to manually change the paths so it knows where to look.  adding sound2wem install dir as a .env variable is on the to do list)
-<br> - per sound2wem readme: "Upon running the script for the first time, you'll be prompted to install Wwise, and FFmpeg, unless you already have them"
-<br>Minimum specs suggestions have not been explored nor tested.
-
 ## Installation
 
-Clone this repository
-```
-git clone https://github.com/Bob-Harper/nms_dynamic_suit_voice.git
-cd nms_dynamic_suit_voice
-```
-
-Install Python dependencies
-```
-pip install -r requirements.txt
-```
-
-Prepare voice generation model
-<br>Download and configure the LLM model.
-<br>Short version - Install Ollama, "ollama pull qwen2.5:0.5b", set your model timeout to 30 mins (default is 5) and make sure ollama is running.
-<br>Download and install sound2wem converter with the default project supplied inside this project's sound2wem folder.
-<br>Copy pregenerated .wem files from the "DYNAMIC_SUIT_VOICE" folder into your No Man’s Sky MODS folder (NOT PCBANKS). These can act as replacement suit lines as-is on their own but then you would miss out on the fin of different lines every time.  Without the pre-generated WEMs there's nothing for the watchdog to monitor.  They're small. The directory structure is kept intact, if you copy the entire DYNAMIC_SUIT_VOICE folder and paste it as-is to the MODS folder it should be ready to go.  To test, start up the game and sell something.  if you get a different voice telling you something other than Units Received, they are in the correct place.
-
-Run the generator.
-```
-python generate_suit_lines.py  (update to correct .pyw file/command here)
-```
-
-Start No Man's Sky and play until your suit notifies you of something important.
+For detailed instructions refer to the Setup.md in the docs folder.
+<br>Short version:
+<br>Clone this repository
+<br>Install Python dependencies
+<br>Install Ollama if you don't have it, download a model.
+<br>Download and install sound2wem
+<br>Copy pregenerated .wem files from the "DYNAMIC_SUIT_VOICE" folder into your No Man’s Sky MODS folder (NOT PCBANKS).
+<br>Run the generator.
+<br>Start NMS
+<br>Play!
 
 ## Usage
 
-The generator will watch for suit AI voice triggers and produce a new audio file on demand.
+The generator will watch for a suit voice trigger and produce a new audio file.
 
-Output is sent directly to the output_wem folder, and overwrites the previous file. (The suit voice line that was just used in game).  
+Output is sent directly to the mod folder, and overwrites the voice line that was just used in the game. The next time you
+hear that same notification, the wording will be different.
 
 ## Future Plans (Version 2 Goals)
-
-Context-aware lines (react to in-game events with tailored responses).
+<br>Context-aware lines (react to in-game events with tailored responses).
 <br>Expanded voice profiles and personalities.
 <br>User Adjustable creativity and tone parameters.
+<br>setup gui to help with configuring the .env paramaters and filepaths
+<br>voice embeddings to clone your voice (or your kid's voices.  Use voice cloning technology responsibly.  Don't be evil.)
 
 ## License
 
