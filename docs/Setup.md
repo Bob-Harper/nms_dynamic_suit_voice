@@ -1,67 +1,29 @@
-# Dynamic No Man’s Sky Suit AI Voice Mod
+# Dynamic No Man’s Sky Suit AI Voice Mod Installation
 
 Version: 1.0<br>
 Author: [[Bob-Harper](https://github.com/Bob-Harper)]<br>
 Repository: [[nms_dynamic_suit_voice](https://github.com/Bob-Harper/nms_dynamic_suit_voice)]
 
-## Overview
-
-This mod replaces static suit AI voice lines in No Man’s Sky with dynamically generated, non-repetitive lines, powered by a local AI model.<br>
-Non-negotiable design philosophies guiding every decision made on this project:<br> - Local files ONLY.<br> - ENHANCE gameplay but NOT at the EXPENSE of gameplay
-
-## Explanation
-
-When the game makes a call to use a suit voice line, it will use the file it finds in the mod directory at the time it searches. The game does NOT preload mod voice files when it starts.  They do NOT stay in memory.  They load and play EACH TIME the game makes a call for that specific WEM file, then are unloaded until called from the file again.  This is why this pipeline works.  If we generate a new voice file fast enough, and save it before the game has a chance to call it again, every line will be completely new - even when selling items at a terminal.  No more repetitive "Units Received Units Received Units Received Units Received ".
-
-## Key Features
-
-No repetition – each line is freshly generated, so you rarely hear the same thing twice.
-
-Drop-in replacement for default suit AI audio files.
-
-Local-only – no cloud processing or internet connection required. Completely Offline game compatible.
-
-## Examples:
-<br>Original Game Wording: Nearby toxins detected
-<br> Final Output: Corrosive environmental toxins are causing damage to your suit's protective filters.
-<br> Final Output: Corrosive environmental toxins are threatening the effectiveness of your suit's protective filters.
-<br> Final Output: Corrosive environmental toxins are harming Your suit’s protective filters.
-<br> Final Output: Corrosive environmental toxins are impacting Your suit's protective filters, leading to damage and potential filter failure.
-<br> Final Output: Corrosive environmental contaminants are debilitating your suit’s filtration system.
-
-Original Game Wording: Extreme Night Temperature Detected
-<br> Final Output: Extreme night cold weather noted. Alerting of potential severe consequences for life support and safety.
-<br> Final Output: Extreme night temperature detected poses a severe risk to life support and your well-being.
-<br> Final Output: Extreme night cold temperatures are reported. This is concerning as it could lead to reduced life support and potential danger for You.
-<br> Final Output: Extreme cold temperatures during the night cycle are detected, posing a significant threat to life support and your safety.
-
-
-## Limitations / Disclaimer
-
-<br> - This mod is incompatible with other mods that change the suit voice.
-<br> - This mod (and the notes regarding it's capabilities) assume minimizing VRAM occupation. If you have a high end Nvidia card, I would love to hear how it fares.
-<br> - Larger LLM's give better dynamic results, at the expense of eating your VRAM and gpu cycles.  
-<br> - Larger LLM's tend to take longer to process, meaning it will take longer to create a new voice line and save it, decreasing the chances of being able to create a new file fast enough if doing repetitive actions that call the same suit line (crafting or selling, typically)
-<br> - Smaller LLM's are better for speed - The prompting used currently is very heavily optimized for qwen2.5:0.5b, if you choose to swap that out, you may need to take some time testing the output results.  A transcript test script is included to help with this.
-
 
 ⚠️ WARNING
-This has only been tested on my personal development machine: yes this is mentioned on the first page.  I state it again
-to ensure those with a FIFO cortex processing unit recall that if they proceed.  I dont see why it wouldn't work on
-most other configurations but the two big ones are for this to run at speed, it assumes a Nvidia GPU of at least 4GB and
-Windows OS.  If you are on a different OS and still want to try installing and running, I suggest reviewing the Advanced.md
-in the docs folder.
+This has only been tested on my personal development machine. Yes this is mentioned on the first page.  I state it again
+to ensure those with FIFO memory retention tendencies (I am one of them) recall this fact if they proceed.  I dont see why it wouldn't work on
+most other configurations, but the two biggest factors are:
+<br>1) for this to run at speed, it assumes a Nvidia GPU of at least 4GB and
+<br>2) Windows OS.
+<br>If you are on a different OS or have different (or no) dedicated graphics hardware and still want to try installing
+and running, I suggest reviewing the Advanced.md in the docs folder.
 
 ## Requirements
 
 Tested setup:
-<br>Windows 11 (OS required, likely works on any OS that runs NMS and Python 3.10)
+<br>Windows 11 (likely works on any OS that runs NMS and Python 3.10, with the exception of the systray icon)
 <br>64GB RAM (Less should still be fine but may affect speed and may also impact gameplay if not carefully balanced)
 <br>NVIDIA GPU with 4GB VRAM minimum (1650 Ti or better recommended) (Local LLM Inference can cause a huge hit. I've minimized
-as much as I can will still getting coherent output from the LLM)
+as much as I can while still getting coherent output from the LLM)
 <br>Python 3.10 or higher
-<br>Installed dependencies (see Installation)
-<br>Ollama https://ollama.com/download
+<br>Installed dependencies
+<br>Ollama - https://ollama.com/download
 <br>Ollama model - recommended "ollama pull qwen3:0.6b" https://ollama.com/library/qwen3:0.6b
 <br>Sound2Wem https://github.com/EternalLeo/sound2wem (will prompt and walk you through installing itself and required dependencies)
 

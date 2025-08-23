@@ -150,7 +150,7 @@ def reword_phrase(input_phrase: str,
     logit_bias = build_logit_bias(wem_id, BAN)
     prompt = SUIT_VOICE_PROMPT.format(intent_data=intent_data.strip(), input_phrase=input_phrase.strip())
     # temporary, per-call no-think
-    # prompt = "/no_think\n" + prompt
+    prompt = "/no_think\n" + prompt
     payload = {
         "model": OLLAMA_MODEL,
         "prompt": prompt,
