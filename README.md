@@ -42,7 +42,7 @@ Original Game Wording: Extreme Night Temperature Detected
 <br> - This mod (and the notes regarding it's capabilities) assume minimizing VRAM occupation. If you have a high end Nvidia card, I would love to hear how it fares.
 <br> - Larger LLM's give better dynamic results, at the expense of eating your VRAM and gpu cycles.  
 <br> - Larger LLM's tend to take longer to process, meaning it will take longer to create a new voice line and save it, decreasing the chances of being able to create a new file fast enough if doing repetitive actions that call the same suit line (crafting or selling, typically)
-<br> - Smaller LLM's are better for speed - The prompting used currently is very heavily optimized for qwen2.5:0.5b, if you choose to swap that out, you may need to take some time testing the output results.  A transcript test script is included to help with this.
+<br> - Smaller LLM's are better for speed - The prompting used currently is very heavily optimized for qwen3:0.6b, if you choose to swap that out, you may need to take some time testing the output results.  A transcript test script is included to help with this.
 
 
 ⚠️ WARNING
