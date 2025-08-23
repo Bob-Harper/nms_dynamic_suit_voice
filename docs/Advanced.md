@@ -36,4 +36,51 @@ Then the transcript CSV in the data directory is your next stop.
 
 ## But what about (insert something not covered here)
 
-Work in progress.  So much WIP.  ask and ye shall get some form of answer.at
+Work in progress.  So much WIP.  ask and ye shall get some form of answer.
+
+## Configuring Ollama
+
+I find that the default timeout of Ollama being 5 minutes is too short - there are times where i could easily go longer than
+that before i get another suit voice notification.  Ollama unloads the model when it reaches the timeout limit.  I set mine for 30.
+ To do this, there are two options - adjust the code and add it to the parameters being sent, or editing the environment variables.
+ In my case, I chose to edit the environment variables.
+
+ From Ollama docs:
+ Setting environment variables on Windows
+
+On Windows, Ollama inherits your user and system environment variables.
+
+    First Quit Ollama by clicking on it in the task bar.
+
+    Start the Settings (Windows 11) or Control Panel (Windows 10) application and search for environment variables.
+
+    Click on Edit environment variables for your account.
+
+    Edit or create a new variable for your user account for OLLAMA_HOST, OLLAMA_MODELS, etc.
+
+    Click OK/Apply to save.
+
+    Start the Ollama application from the Windows Start menu.
+
+Also from Ollama Docs:
+
+If you're using the API, use the keep_alive parameter with the /api/generate and /api/chat endpoints to set the amount of time that a model stays in memory. The keep_alive parameter can be set to:
+
+    a duration string (such as "10m" or "24h")
+    a number in seconds (such as 3600)
+    any negative number which will keep the model loaded in memory (e.g. -1 or "-1m")
+    '0' which will unload the model immediately after generating a response
+
+For example, to preload a model and leave it in memory use:
+
+curl http://localhost:11434/api/generate -d '{"model": "llama3.2", "keep_alive": -1}'
+
+To unload the model and free up memory use:
+
+curl http://localhost:11434/api/generate -d '{"model": "llama3.2", "keep_alive": 0}'
+
+Alternatively, you can change the amount of time all models are loaded into memory by setting the OLLAMA_KEEP_ALIVE environment variable when starting the Ollama server. The OLLAMA_KEEP_ALIVE variable uses the same parameter types as the keep_alive parameter types mentioned above. Refer to the section explaining how to configure the Ollama server to correctly set the environment variable.
+
+The keep_alive API parameter with the /api/generate and /api/chat API endpoints will override the OLLAMA_KEEP_ALIVE setting.
+
+The Ollama FAQS document has additional parameters that may be of interest when optimizing performans.and
