@@ -36,15 +36,25 @@ git clone https://github.com/Bob-Harper/nms_dynamic_suit_voice.git
 cd nms_dynamic_suit_voice
 ```
 
-Install Python dependencies (may take some time).  Using a virtual environment is recommended.
+(Optional but highly recommended) Create a virtual environment.
+This keeps the dependencies isolated from the rest of your system.
+Assumption: you’re on Windows 11, you installed Python 3.10+ with defaults unchanged.
+```
+python --version       # should print 3.10.x or higher
+python -m venv venv    # create a virtual environment in the "venv" folder
+.\venv\Scripts\activate
+```
+You’ll know it worked if your prompt now starts with (venv).
+
+Install Python dependencies (may take some time).
 ```
 pip install -r requirements.txt
 ```
 
 Prepare voice generation pipeline
-<br>Download and configure the LLM model.
+<br>Download and configure the LLM model. If you already have Ollama, adjust your process accordingly.
 <br>- Short version: Install Ollama, "ollama pull qwen2.5:0.5b", set your model timeout to 30 mins (default is 5) and make sure ollama is running.
-<br>Download and install sound2wem.  My own process was to git clone sound2wem into my dynamic_suit_voice directory alongside data, docs, assets, etc.  If you prefer a different location, you will need to adjust the paths in the .env folder accordingly.
+<br>Git clone or Download and install sound2wem.  My own process was to git clone sound2wem into my dynamic_suit_voice directory alongside data, docs, assets, etc.  If you prefer a different location, you will need to adjust the paths in the .env folder accordingly.
 <br>Copy pregenerated .wem files from the "DYNAMIC_SUIT_VOICE" folder into your No Man’s Sky MODS folder (NOT PCBANKS). These can act as replacement suit lines as-is on their own but then you would miss out on the fin of different lines every time.  Without the pre-generated WEMs there's nothing for the watchdog to monitor.  They're small. The directory structure is kept intact, if you copy the entire DYNAMIC_SUIT_VOICE folder and paste it as-is to the MODS folder it should be ready to go.  To test, start up the game and sell something.  if you get a different voice telling you something other than Units Received, they are in the correct place.
 <br>TTS inference will automatically download the needed voice models the first time it is run.
 
