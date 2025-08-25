@@ -117,6 +117,16 @@ WEM moved successfully: C:\Program Files (x86)\Steam\steamapps\common\No Man's S
 ### Shut down the script
 
 You can shut the script back down at any time, wether you are playing or not.  This will also free up the VRAM for the NMS though the game may not see it until restarted.
+
 Two ways to shut down 
 <br> - rudely, by closing the terminal window or using Ctrl-C
 <br> - gracefully, by right clicking the tray icon and choosing "Quit".
+
+## Uninstall
+
+But why?
+
+If you must, remove the install directory nms_dynamic_suit_voice.  Also remove the directory from the MODS directory.
+That's it.  
+<br>Note: If you choose to leave the MODS directory alone, the game will continue to use any voice lines left behind.  This could complicate your setup if you have another suit voice mod.  If you choose to remove the voice files but leave the pipeline, there will be nothing for the pipeline to watch for changes.
+
