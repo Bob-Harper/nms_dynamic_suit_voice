@@ -69,7 +69,7 @@ pip install -r requirements.txt
 ### Run the generator. 
 Curse because something didn't go right.  Read back through, recheck every step, try again until it runs.
 ```
-python generate_suit_lines.pyw
+python nms_dynamic_suite_voice_pipeline.pyw
 ```
 I saved as a .pyw because I wanted to make a shortcut and just run it directly.  It does not take any command line arguments
 so starting it through a simple shortcut (right click, create shortcut) on the desktop is my preferred method.
