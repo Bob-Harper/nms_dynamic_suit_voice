@@ -3,60 +3,69 @@
     "banned": [
       "player",
       "user",
+      "wearer",
+      "the player",
+      "the user",
+      "the wearer",
+      "wearer's",
+      "the wearer's",
+      "all personell",
+      "under my protection",
+      "alert",
+      "the pilot",
+      "alerting",
+      "shared",
+      "car",
       "I",
+      "I am",
       "me",
       "my",
       "we",
       "our",
+      "ours",
       "us",
       "game",
       "system",
-      "AI"
+      "the AI",
+      "the game",
+      "the system",
+      "planet name",
+      "Planet Name",
+      "the explorers",
+      "Freighter Combat",
+      "your freighter",
+      "team",
+      "the AI"
     ],
-    "bias": -50
+    "bias": -100
   },
   "780959188": {
-    "banned": [
+    "Inventory": [
       "empty",
       "running low",
       "space available",
       "room left"
     ],
-    "bias": -50
+    "bias": -100
   },
   "330331555": {
-    "banned": [
+    "Monetary Transaction": [
       "paid",
       "payment sent",
       "spent",
       "deducted",
       "withdrawn"
     ],
-    "bias": -50
+    "bias": -100
   },
   "980411923": {
-    "banned": [
+    "Notification": [
       "sold",
       "removed",
       "discarded",
       "constructed",
       "built"
     ],
-    "bias":  -50
-  },
-  "245522736": {
-    "banned": [
-      "your",
-      "your",
-      "your"
-    ],
-    "bias": -15
-  },
-  "236472322": {
-    "banned": [
-      "you",
-      "your"
-    ],
-    "bias": -15
+    "bias":  -100
   }
 }

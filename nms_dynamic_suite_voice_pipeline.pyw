@@ -18,11 +18,10 @@ import json
 # Load .env from the local subdirectory
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
 CHECK_INTERVAL = float(os.getenv("CHECK_INTERVAL"))
-WATCH_DIR = Path(os.getenv("WATCH_DIR").strip('"'))
+MOD_DIR = Path(os.getenv("MOD_DIR").strip('"'))
 CSV_PATH = Path(os.getenv("CSV_PATH"))
 TEMP_WEM_DIR = Path(os.getenv("TEMP_WEM_DIR").strip('"'))
 TEMP_WEM_DIR.mkdir(parents=True, exist_ok=True)
-OUTPUT_DIR = Path(os.getenv("OUTPUT_DIR").strip('"'))
 CMD_SCRIPT_PATH = Path(os.getenv("CMD_SCRIPT_PATH").strip('"'))
 OLLAMA_SERVER = os.getenv("OLLAMA_SERVER")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
@@ -264,11 +263,11 @@ def convert_to_wem(wav_file_path: Path, output_dir: Path, conversion_quality="Vo
 
 def watch_wems():
     # Initialize access times for all .wav files in the directory
-    access_times = {f3: f3.stat().st_atime for f3 in WATCH_DIR.glob("*.wem")}
+    access_times = {f3: f3.stat().st_atime for f3 in MOD_DIR.glob("*.wem")}
     print("Watching for file access...")
     while RUNNING:
 
-        for f3 in WATCH_DIR.glob("*.wem"):
+        for f3 in MOD_DIR.glob("*.wem"):
             try:
                 current_atime = f3.stat().st_atime
                 if current_atime != access_times.get(f3, 0):
@@ -317,7 +316,7 @@ def watch_wems():
                             print(f"Error converting to WEM: {e3}")
                             continue
                         temp_wem_path = TEMP_WEM_DIR / f"{wem_id}.wem"
-                        final_wem_path = OUTPUT_DIR / f"{wem_id}.wem"
+                        final_wem_path = MOD_DIR / f"{wem_id}.wem"
 
                         for attempt in range(40):
                             try:
@@ -333,7 +332,7 @@ def watch_wems():
                         else:
                             print(f"Failed to move WEM after 20 seconds: {temp_wem_path}")
 
-                        new_wem = WATCH_DIR / f"{wem_id}.wem"
+                        new_wem = MOD_DIR / f"{wem_id}.wem"
                         if new_wem.exists():
                             access_times[new_wem] = new_wem.stat().st_atime
                     else:
