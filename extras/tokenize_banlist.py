@@ -3,7 +3,7 @@ from transformers import AutoTokenizer
 
 # Paths
 BANNED_JSON = "data/wem_banlist.json"        # your source JSON
-TOKENIZER_DIR = "assets"                       # folder with tokenizer.json & tokenizer_config.json
+TOKENIZER_DIR = "../assets"  # folder with tokenizer.json & tokenizer_config.json
 OUTPUT_JSON = "data/tokenized_banlist.json"  # where the processed output goes
 
 # Load Qwen tokenizer

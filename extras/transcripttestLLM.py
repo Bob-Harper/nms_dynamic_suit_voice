@@ -19,10 +19,10 @@ TEST_OUTPUT_CSV = Path(os.getenv("TEST_OUTPUT_CSV"))
 START_ROW = 0  # inclusive.  yes I know it starts at 0.
 END_ROW = 220    # exclusive. 211 lines, max value 212
 client = Client(OLLAMA_SERVER)
-with open("data/suit_voice_prompt.txt", encoding="utf-8") as f:
+with open("../data/suit_voice_prompt.txt", encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 category_prompts = CategoryPrompts()
-TOKENIZED_BANLIST_PATH = Path("data/tokenized_banlist.json")
+TOKENIZED_BANLIST_PATH = Path("../data/tokenized_banlist.json")
 with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
     LOGIT_BANLIST = json.load(f)
 
