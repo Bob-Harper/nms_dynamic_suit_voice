@@ -6,7 +6,7 @@ import csv
 import subprocess
 from pathlib import Path
 from dotenv import load_dotenv
-import os
+import os, shutil
 import shutil
 from TTS.api import TTS  # coqui-tts fork, pinned in requirements, uses TTS name for compatibility
 import sys
