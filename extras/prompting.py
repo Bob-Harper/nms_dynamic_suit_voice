@@ -8,7 +8,7 @@ class CategoryPrompts:
             self.prompts = json.load(file)
 
     def get_prompt(self, category: str) -> str:
-        """Return the formatted prompt based on category, or fallback."""
+        """Return the formatted prompt based on category_for_logit, or fallback."""
 
         context = self.prompts.get(category, self.prompts.get("Default"))
         return f"{context}"
