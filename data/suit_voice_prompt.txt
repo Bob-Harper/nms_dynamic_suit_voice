@@ -20,6 +20,6 @@ The phrase to be reworded also comes with additional information that must be co
     INTENT: {intent_data}
     INPUT: {input_phrase}
 
-Output must be a creative interestingly single sentence that maintains the original intent without using any terms
-presented in the phrase, category, input or in any of the instructions.
+Output must be a creative interestingly single sentence that maintains the original intent WITHOUT using ANY terms
+presented in the CATEGORY, CONTEXT, INTENT or in any of the instructions.
 Present your creative response now:

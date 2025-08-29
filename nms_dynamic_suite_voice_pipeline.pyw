@@ -38,10 +38,11 @@ ICON_IMAGE = Path(os.getenv("ICON_IMAGE"))
 LOGGING = os.getenv("LOGGING", "false").strip().lower() == "true"  # force boolean: true, anything else => False
 GAME_OUTPUT_CSV = Path(os.getenv("GAME_OUTPUT_CSV"))
 CREATE_NO_WINDOW = 0x08000000 if sys.platform == "win32" else 0
-with open("data/suit_voice_prompt.txt", encoding="utf-8") as f:
+SUIT_VOICE_PROMPT_PATH = Path(os.getenv("SUIT_VOICE_PROMPT_PATH"))
+with open(SUIT_VOICE_PROMPT_PATH, encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 category_prompts = CategoryPrompts()
-TOKENIZED_BANLIST_PATH = Path("data/tokenized_banlist.json")
+TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
 with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
     LOGIT_BANLIST = json.load(f)
 RUNNING = True
@@ -63,7 +64,7 @@ def load_intent_map(csv_path: Path) -> dict:
 
                 i_intent_map[wem_number] = {
                     "original_phrase": original_phrase,
-                    "category": category,
+                    "category_for_logit": category,
                     "intent": intent,
                     "context": context,
                     "thinking": thinking,
@@ -72,24 +73,6 @@ def load_intent_map(csv_path: Path) -> dict:
     except Exception as e1:
         print(f"Error loading intent map: {e1}")
     return i_intent_map
-
-
-def save_usage_counts():
-    with open(CSV_PATH, encoding='utf-8', newline='') as f1:
-        lines = list(csv.reader(f1))
-
-    headers = lines[0]
-    idx_wem = headers.index("WEM number")
-    idx_count = headers.index("Count")
-
-    for i in range(1, len(lines)):
-        wem = lines[i][idx_wem].strip()
-        if wem in intent_map:
-            lines[i][idx_count] = str(intent_map[wem]["count"])
-
-    with open(CSV_PATH, 'w', encoding='utf-8', newline='') as f2:
-        writer = csv.writer(f2)
-        writer.writerows(lines)
 
 
 def reword_phrase(intent_data: str,
@@ -121,7 +104,7 @@ def reword_phrase(intent_data: str,
             "logit_bias": logit_bias
         }
     }
-    print(f"\n\nPayload: {payload}\n")
+    # print(f"\n\nPayload: {payload}\n")
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -137,7 +120,13 @@ def reword_phrase(intent_data: str,
                                         generated_response,
                                         flags=re.DOTALL
                                         ).strip()
+            generated_response = re.sub(r"—",
+                                        " - ",
+                                        generated_response,
+                                        flags=re.DOTALL
+                                        ).strip()
             # Postprocess to enforce 'You'
+            generated_response = enforce_user_pronouns(generated_response)
             return generated_response
         except Exception as e2:
             if attempt < max_retries - 1:
@@ -168,7 +157,7 @@ def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
     if not final_wav.exists():
         raise FileNotFoundError(f"TTS output WAV not found: {final_wav}")
 
-    print(f"Generated WAV: {final_wav}")
+    # print(f"Generated WAV: {final_wav}")
     return final_wav
 
 
@@ -188,6 +177,40 @@ def convert_to_wem(wav_file_path: Path, output_dir: Path, conversion_quality="Vo
     print(f"Conversion attempt complete for {wav_file_path.name}")
 
 
+def enforce_user_pronouns(text: str) -> str:
+    """
+    Normalize text for TTS:
+    - lowercase everything
+    - replace first-person/team pronouns with 'you' or 'your'
+    - collapse spaces
+    """
+    text = text.lower()
+
+    replacements = {
+        r"\byou're\b": "you are",
+        r"\bi\b": "you",
+        r"\bmy\b": "your",
+        r"\bwe\b": "you",
+        r"\bours\b": "your",
+        r"\bus\b": "you",
+        r"\bme\b": "you",
+        r"\bi'm\b": "you",
+        r"\bi am\b": "you",
+        r"\bi've\b": "you",
+        r"\bi'll\b": "you",
+        r"\bthe user's\b": "your",
+        r"\bthe user\b": "you",
+        r"\bthe pilot's\b": "your",
+        r"\bthe pilot\b": "you",
+    }
+
+    for pattern, replacement in replacements.items():
+        text = re.sub(pattern, replacement, text)
+
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
 def watch_wems():
     # Initialize access times for all .wav files in the directory
     access_times = {f3: f3.stat().st_atime for f3 in MOD_DIR.glob("*.wem")}
@@ -205,7 +228,7 @@ def watch_wems():
                         intent_entry = intent_map[wem_id]
                         intent_entry["count"] += 1
                         original_phrase_w = intent_entry["original_phrase"]
-                        category = intent_entry["category"]
+                        category = intent_entry["category_for_logit"]
                         no_thinking_w = intent_entry["thinking"]
                         intent_w = intent_entry["intent"]
                         context = intent_entry["context"]
@@ -229,20 +252,20 @@ def watch_wems():
                                     writer.writeheader()
                                 writer.writerow(log_entry)
 
-                            print(f"Appended output for review in {GAME_OUTPUT_CSV}")
+                            # print(f"Appended output for review in {GAME_OUTPUT_CSV}")
 
-                        print("Calling run_tts...")
+                        # print("Calling run_tts...")
                         try:
                             wav_path = run_tts(reworded, wem_id)
-                            print(f"WAV created at {wav_path}")
+                            # print(f"WAV created at {wav_path}")
                         except Exception as e3:
                             print(f"Error creating WAV: {e3}")
                             continue
 
-                        print("Calling convert_to_wem...")
+                        # print("Calling convert_to_wem...")
                         try:
                             convert_to_wem(wav_path, TEMP_WEM_DIR)
-                            print("Conversion to WEM complete")
+                            # print("Conversion to WEM complete")
                         except Exception as e3:
                             print(f"Error converting to WEM: {e3}")
                             continue
@@ -252,7 +275,7 @@ def watch_wems():
                         for attempt in range(40):
                             try:
                                 shutil.move(str(temp_wem_path), str(final_wem_path))
-                                print(f"WEM moved successfully: {final_wem_path}")
+                                # print(f"WEM moved successfully: {final_wem_path}")
                                 break
                             except PermissionError:
                                 # print(f"WEM file still in use. Retry {attempt + 1}")
@@ -278,12 +301,10 @@ def watch_wems():
 def shutdown():
     global RUNNING
     RUNNING = False
-    save_usage_counts()
     try:
         subprocess.run(["ollama", "stop", OLLAMA_MODEL])
-    except Exception as e4:
-        print(f"Warning stopping Ollama model: {e4}")
-
+    except Exception as e:
+        print(f"Warning stopping Ollama model: {e}")
     tray_icon.stop()
 
 

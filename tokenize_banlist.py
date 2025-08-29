@@ -2,8 +2,8 @@ import json
 from transformers import AutoTokenizer
 
 # Paths
-BANNED_JSON = "data/wem_banlist.json"        # your source JSON
-TOKENIZER_DIR = "../assets"  # folder with tokenizer.json & tokenizer_config.json
+BANNED_JSON = "data/editable_banned_words.json"        # your source JSON
+TOKENIZER_DIR = "assets/qwen3_06b"  # folder with tokenizer.json & tokenizer_config.json
 OUTPUT_JSON = "data/tokenized_banlist.json"  # where the processed output goes
 
 # Load Qwen tokenizer
@@ -31,14 +31,14 @@ with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
 print(f"Tokenization complete. Output saved to {OUTPUT_JSON}")
 
 
-# Helper function to get Ollama-ready logit_bias for a category
-def get_logit_bias(category: str) -> dict:
-    """Return {token_id: bias_value, ...} for a given category."""
-    cat_data = tokenized_banned.get(category)
+# Helper function to get Ollama-ready logit_bias for a category_for_logit
+def get_logit_bias(category_for_logit: str) -> dict:
+    """Return {token_id: bias_value, ...} for a given category_for_logit."""
+    cat_data = tokenized_banned.get(category_for_logit)
     if not cat_data:
         cat_data = tokenized_banned.get("default", {})
     bias_value = cat_data.get("bias", 0)
-    logit_dict = {tid: bias_value for phrase, tids in cat_data.items() if phrase != "bias" for tid in tids}
+    logit_dict = {tid: bias_value for logit_phrase, tids in cat_data.items() if logit_phrase != "bias" for tid in tids}
     return logit_dict
 
 # Example usage:
