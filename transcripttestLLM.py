@@ -35,43 +35,40 @@ def load_intent_map(csv_path: Path) -> dict:
         with open(csv_path, newline='', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                wem_number = (row.get('WEM number') or '').strip()
-                original_phrase_loaded = (row.get('Transcription') or '').strip()
-                category_loaded = (row.get('Category') or '').strip()
-                intent_loaded = (row.get('Intent') or '').strip()
+                wem_number = (row.get('WEM_number') or '').strip()
+                original_phrase = (row.get('Transcription') or '').strip()
+                category = (row.get('Category') or '').strip()
+                intent = (row.get('Intent') or '').strip()
                 context = (row.get('Context') or '').strip()
-                thinking_loaded = (row.get('NO_THINKING') or '').strip()
-                usage_count = (row.get('Count') or '').strip()
+                thinking = (row.get('No_Thinking') or '').strip()
 
                 i_intent_map[wem_number] = {
-                    "original_phrase": original_phrase_loaded,
-                    "category": category_loaded,
-                    "intent": intent_loaded,
-                    "context": context,
-                    "thinking": thinking_loaded,
-                    "count": int(usage_count) if usage_count.isdigit() else 0
+                    "Transcription": original_phrase,
+                    "Category": category,
+                    "Intent": intent,
+                    "Context": context,
+                    "No_Thinking": thinking,
                     }
     except Exception as e1:
-        print(f"Error loading intent_loaded map: {e1}")
+        print(f"Error loading intent map: {e1}")
     return i_intent_map
 
 
-def reword_phrase(intent_data: str,
-                  wem_id_w: str,
+def reword_phrase(wem_id_r: str,
                   original_phrase_r: str,
-                  no_thinking,
-                  category_w,
+                  intent_r: str,
+                  category_r,
+                  no_thinking_r,
                   ) -> str:
 
     prompt = ""
-    if no_thinking:  # Only prepend /no_think if THERE IS A VALUE IN THE COLUMN
+    if no_thinking_r:  # Only prepend /no_think if THERE IS A VALUE IN THE COLUMN
         prompt = "/no_think "
-    context = category_prompts.get_prompt(category_w)
-    logit_bias = {**LOGIT_BANLIST.get(category_w, {}), **LOGIT_BANLIST.get("default", {})}
-    # print(f"\n\n{context}")
-    prompt += SUIT_VOICE_PROMPT.format(category=category_w.strip(), intent_data=intent_data.strip(),
-                                       context=context.strip(), input_phrase=original_phrase_r.strip())
-    # print(f"\n\n{prompt}")
+    category_context = category_prompts.get_prompt(category_r)
+    logit_bias = {**LOGIT_BANLIST.get(category_r, {}), **LOGIT_BANLIST.get("default", {})}
+    prompt += SUIT_VOICE_PROMPT.format(category_type=category_r.strip(), input_intent=intent_r.strip(),
+                                       input_phrase=original_phrase_r.strip(), category_context=category_context.strip())
+    # print(f"{prompt}")
     payload = {
         "model": OLLAMA_MODEL,
         "prompt": prompt,
@@ -85,46 +82,38 @@ def reword_phrase(intent_data: str,
             "logit_bias": logit_bias
         }
     }
-    # print(f"\n\nPayload: {payload}\n")
+
     max_retries = 3
     for attempt in range(max_retries):
         try:
             response = requests.post(f"{OLLAMA_SERVER}/api/generate", json=payload, timeout=10)
             response.raise_for_status()
-            generated_response = response.json().get("response", "").strip()
+            generated_response = response.json().get("response", "")
             if not generated_response:
                 raise ValueError("Empty response from Ollama")
             # full_response = generated_response
             # print(f"\nWEM {wem_id_w} -- Full response with thinking tags if included: \n{full_response}")
-            generated_response = re.sub(r"<think>.*?</think>",
-                                        "",
-                                        generated_response,
-                                        flags=re.DOTALL
-                                        ).strip()
-            generated_response = re.sub(r"—",
-                                        " - ",
-                                        generated_response,
-                                        flags=re.DOTALL
-                                        ).strip()
-            # Postprocess to enforce 'You'
-            generated_response = enforce_user_pronouns(generated_response)
+            generated_response = re.sub(r"<think>.*?</think>", "", generated_response, flags=re.DOTALL).strip()
+
+            generated_response = tts_llm_scrubber(generated_response)
             return generated_response
         except Exception as e2:
             if attempt < max_retries - 1:
                 time.sleep(1)
             else:
-                print(f"LLM ERROR on WEM {wem_id_w}: {e2}")
-                return f"WEM ERROR {wem_id_w}, {e2}.  {original_phrase_r}"
+                print(f"LLM ERROR on WEM {wem_id_r}: {e2}")
+                return f"WEM ERROR {wem_id_r}, {e2}.  {original_phrase_r}"
 
     # Safety fallback
     return f"{original_phrase_r}. External Reality alert, error detected"
 
 
-def enforce_user_pronouns(text: str) -> str:
+def tts_llm_scrubber(text: str) -> str:
     """
     Normalize text for TTS:
     - lowercase everything
     - replace first-person/team pronouns with 'you' or 'your'
+    - other text corretions so the TTS pronounces things correctly.
     - collapse spaces
     """
     text = text.lower()
@@ -154,46 +143,54 @@ def enforce_user_pronouns(text: str) -> str:
     return text
 
 
-""" To test individual rows or ranges from csv, uncomment this section and comment out the category test.
-
-# Read intent map (already cleaned and ready)
-intent_map = load_intent_map(CSV_PATH)
-output_rows = []
-
-for idx, (wem_id, entry) in enumerate(intent_map.items()):
-    if idx < START_ROW:
-        continue
-    if idx >= END_ROW:
-        break
-"""
-"""
- 
-,  Vehicle Readiness,  Vehicle Status
-"""
-# Pick a category to process
-TARGET_CATEGORY = "Vehicle Readiness"  # replace with your desired category
-
-# Read intent map (already cleaned and ready)
-intent_map = load_intent_map(CSV_PATH)
-output_rows = []
-
-for idx, (wem_id, entry) in enumerate(intent_map.items()):
-    # Skip rows that don't match the target category
-    if entry["category"] != TARGET_CATEGORY:
-        continue
-
-    original_phrase = entry["original_phrase"]
-    intent = entry["intent"]
-    thinking = entry["thinking"]
-    category = entry["category"]  # now using the CSV field correctly
+def process_entry(wem_id, entry):
+    """Shared processing of a single intent-map entry."""
+    category = entry["Category"]
+    original_phrase = entry["Transcription"]
+    intent = entry["Intent"]
+    thinking = entry["No_Thinking"]
 
     try:
-        reworded = reword_phrase(intent, wem_id, original_phrase, thinking, category)
-        GREEN = "\033[92m"
-        RESET = "\033[0m"
+        reworded = reword_phrase(
+            wem_id,
+            original_phrase,
+            intent,
+            category,
+            thinking
+        )
         print(f"\nWEM: {wem_id} -- Original Game Wording: {original_phrase}")
-        # print(f"Intent: {intent}")
-        print(f"{GREEN}Final Output: {reworded}{RESET}")
+        print(f"\033[92mFinal Output: {reworded}\033[0m")
     except Exception as e:
         print(f"LLM ERROR on WEM {wem_id}: {e}")
         reworded = f"WEM ERROR {wem_id}.  {original_phrase}"
+
+    return wem_id, reworded
+
+
+def process_by_row_range(intent_mapr, start_row, end_row):
+    output_rows_r = []
+    for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
+        if idx < start_row:
+            continue
+        if idx >= end_row:
+            break
+        output_rows_r.append(process_entry(wem_id, entry))
+    return output_rows_r
+
+
+def process_by_category(intent_mapp, target_category):
+    output_rows_c = []
+    for wem_id, entry in intent_mapp.items():
+        if entry["Category"] != target_category:
+            continue
+        output_rows_c.append(process_entry(wem_id, entry))
+    return output_rows_c
+
+
+"""
+Discovery,  Environmental Status,  Equipment Status,  Freighter Combat,  Inventory,  Monetary Transaction,  
+Notification,  Personal Combat,  Personal Protection,  Starship Combat,  Starship Movement,  Vehicle Status
+"""
+intent_map = load_intent_map(CSV_PATH)
+# output_rows = process_by_row_range(intent_map, START_ROW, END_ROW)
+output_rows = process_by_category(intent_map, "Environmental Status")
