@@ -16,6 +16,7 @@ import random
 from ollama import Client
 from extras.prompting import CategoryPrompts
 import json
+import torch
 
 # Load .env from the local subdirectory
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
@@ -46,6 +47,7 @@ TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
 with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
     LOGIT_BANLIST = json.load(f)
 RUNNING = True
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 def load_intent_map(csv_path: Path) -> dict:
@@ -54,43 +56,39 @@ def load_intent_map(csv_path: Path) -> dict:
         with open(csv_path, newline='', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                wem_number = (row.get('WEM number') or '').strip()
+                wem_number = (row.get('WEM_number') or '').strip()
                 original_phrase = (row.get('Transcription') or '').strip()
                 category = (row.get('Category') or '').strip()
                 intent = (row.get('Intent') or '').strip()
                 context = (row.get('Context') or '').strip()
-                thinking = (row.get('NO_THINKING') or '').strip()
-                usage_count = (row.get('Count') or '').strip()
+                thinking = (row.get('No_Thinking') or '').strip()
 
                 i_intent_map[wem_number] = {
-                    "original_phrase": original_phrase,
-                    "category_for_logit": category,
-                    "intent": intent,
-                    "context": context,
-                    "thinking": thinking,
-                    "count": int(usage_count) if usage_count.isdigit() else 0
+                    "Transcription": original_phrase,
+                    "Category": category,
+                    "Intent": intent,
+                    "Context": context,
+                    "No_Thinking": thinking,
                     }
     except Exception as e1:
         print(f"Error loading intent map: {e1}")
     return i_intent_map
 
-
-def reword_phrase(intent_data: str,
-                  wem_id: str,
+def reword_phrase(wem_id_r: str,
                   original_phrase_r: str,
-                  no_thinking,
-                  category,
+                  intent_r: str,
+                  category_r,
+                  no_thinking_r,
                   ) -> str:
 
     prompt = ""
-    if no_thinking:  # Only prepend /no_think if THERE IS A VALUE IN THE COLUMN
+    if no_thinking_r:  # Only prepend /no_think if THERE IS A VALUE IN THE COLUMN
         prompt = "/no_think "
-    context = category_prompts.get_prompt(category)
-    logit_bias = {**LOGIT_BANLIST.get("default", {}), **LOGIT_BANLIST.get(category, {})}
-    # print(f"\n\n{context}")
-    prompt += SUIT_VOICE_PROMPT.format(category=category.strip(), intent_data=intent_data.strip(),
-                                       input_phrase=original_phrase_r.strip(), context=context.strip())
-    # print(f"\n\n{prompt}")
+    category_context = category_prompts.get_prompt(category_r)
+    logit_bias = {**LOGIT_BANLIST.get(category_r, {}), **LOGIT_BANLIST.get("default", {})}
+    prompt += SUIT_VOICE_PROMPT.format(category_type=category_r.strip(), input_intent=intent_r.strip(),
+                                       input_phrase=original_phrase_r.strip(), category_context=category_context.strip())
+    # print(f"{prompt}")
     payload = {
         "model": OLLAMA_MODEL,
         "prompt": prompt,
@@ -104,36 +102,27 @@ def reword_phrase(intent_data: str,
             "logit_bias": logit_bias
         }
     }
-    # print(f"\n\nPayload: {payload}\n")
+
     max_retries = 3
     for attempt in range(max_retries):
         try:
             response = requests.post(f"{OLLAMA_SERVER}/api/generate", json=payload, timeout=10)
             response.raise_for_status()
-            generated_response = response.json().get("response", "").strip()
+            generated_response = response.json().get("response", "")
             if not generated_response:
                 raise ValueError("Empty response from Ollama")
-            full_response = generated_response
-            print(f"\nWEM {wem_id} -- Full response with thinking tags if included: \n{full_response}")
-            generated_response = re.sub(r"<think>.*?</think>",
-                                        "",
-                                        generated_response,
-                                        flags=re.DOTALL
-                                        ).strip()
-            generated_response = re.sub(r"—",
-                                        " - ",
-                                        generated_response,
-                                        flags=re.DOTALL
-                                        ).strip()
-            # Postprocess to enforce 'You'
-            generated_response = enforce_user_pronouns(generated_response)
+            # full_response = generated_response
+            # print(f"\nWEM {wem_id_w} -- Full response with thinking tags if included: \n{full_response}")
+            generated_response = re.sub(r"<think>.*?</think>", "", generated_response, flags=re.DOTALL).strip()
+
+            generated_response = tts_llm_scrubber(generated_response)
             return generated_response
         except Exception as e2:
             if attempt < max_retries - 1:
                 time.sleep(1)
             else:
-                print(f"LLM ERROR on WEM {wem_id}: {e2}")
-                return f"WEM ERROR {wem_id}, {e2}.  {original_phrase_r}"
+                print(f"LLM ERROR on WEM {wem_id_r}: {e2}")
+                return f"WEM ERROR {wem_id_r}, {e2}.  {original_phrase_r}"
 
     # Safety fallback
     return f"{original_phrase_r}. External Reality alert, error detected"
@@ -142,13 +131,26 @@ def reword_phrase(intent_data: str,
 def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
     final_wav = TEMP_WEM_DIR / f"{wem_num}.wav"
     temp_wav = final_wav.with_suffix(".temp.wav")
+    base_dir = r"C:\NMS_SUIT_VOICE\tools\onnavoice"
+    wav_dir = os.path.join(base_dir, "reference")
+    gain_db = 5
+    atempo = 1.05
+    rate = 0.5
+    asetrate = int(44100 * rate)
+    speaker_wav = [
+        "onna_amused.wav",
+        "onna_concerned.wav",
+        "onna_emphasis.wav",
+    ]
+    # Build list of full paths
+    speaker_wav_path = [os.path.join(wav_dir, w) for w in speaker_wav]
 
-    tts_model.tts_to_file(text=text, file_path=str(final_wav))
+    tts_model.tts_to_file(text=text, speaker_wav=speaker_wav_path, file_path=str(final_wav), device=device)
     if gain_db and gain_db != 0:
         subprocess.run([
             "ffmpeg", "-hide_banner", "-y",
             "-i", str(final_wav),
-            "-af", f"volume={gain_db}dB,atempo=1.55,asetrate=44100*0.44",
+            "-af", f"volume={gain_db}dB,atempo={atempo},asetrate={asetrate}",
             str(temp_wav)
         ], check=True, creationflags=CREATE_NO_WINDOW)
 
@@ -177,7 +179,7 @@ def convert_to_wem(wav_file_path: Path, output_dir: Path, conversion_quality="Vo
     print(f"Conversion attempt complete for {wav_file_path.name}")
 
 
-def enforce_user_pronouns(text: str) -> str:
+def tts_llm_scrubber(text: str) -> str:
     """
     Normalize text for TTS:
     - lowercase everything
@@ -226,13 +228,12 @@ def watch_wems():
 
                     if wem_id in intent_map:
                         intent_entry = intent_map[wem_id]
-                        intent_entry["count"] += 1
-                        original_phrase_w = intent_entry["original_phrase"]
-                        category = intent_entry["category_for_logit"]
-                        no_thinking_w = intent_entry["thinking"]
-                        intent_w = intent_entry["intent"]
-                        context = intent_entry["context"]
-                        reworded = reword_phrase(intent_w, wem_id, original_phrase_w, no_thinking_w, category)
+                        original_phrase_w = intent_entry["Transcription"]
+                        category = intent_entry["Category"]
+                        no_thinking_w = intent_entry["No_Thinking"]
+                        intent_w = intent_entry["Intent"]
+                        context = intent_entry["Context"]
+                        reworded = reword_phrase(wem_id, original_phrase_w, intent_w, category, no_thinking_w)
                         if LOGGING:
                             fieldnames = ["WEM number", "Category", "Original", "Intent Phrase", "Context", "Final Voice Line"]
                             file_exists = Path(GAME_OUTPUT_CSV).exists()

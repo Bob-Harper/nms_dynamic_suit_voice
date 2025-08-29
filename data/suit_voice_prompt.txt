@@ -15,9 +15,9 @@ Be inventive, colloquial, wax poetic, add some smugness, make the rephrase ACCUR
 Only provide a single sentence as the final output.
 The phrase to be reworded also comes with additional information that must be considered:
 
-    CATEGORY: {category}
-    CONTEXT: {context}
-    INTENT: {intent_data}
+    CATEGORY: {category_type}
+    CONTEXT: {category_context}
+    INTENT: {input_intent}
     INPUT: {input_phrase}
 
 Output must be a creative interestingly single sentence that maintains the original intent WITHOUT using ANY terms
