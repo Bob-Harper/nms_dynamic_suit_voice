@@ -35,6 +35,14 @@ try:
     tts_model = TTS(model_name=TTS_MODEL)
 except Exception as e0:
     raise SystemExit(f"Failed to load TTS model: {e0}")
+ffmpeg_path = shutil.which("ffmpeg")
+if not ffmpeg_path:
+    ffmpeg_env = os.getenv("FFMPEG_PATH")
+    if ffmpeg_env:
+        ffmpeg_path = Path(ffmpeg_env.strip('"'))
+        os.environ["PATH"] = str(ffmpeg_path.parent) + ";" + os.environ.get("PATH", "")
+    else:
+        raise SystemExit("ffmpeg not found on PATH and FFMPEG_PATH not set in .env")    
 ICON_IMAGE = Path(os.getenv("ICON_IMAGE"))
 LOGGING = os.getenv("LOGGING", "false").strip().lower() == "true"  # force boolean: true, anything else => False
 GAME_OUTPUT_CSV = Path(os.getenv("GAME_OUTPUT_CSV"))
