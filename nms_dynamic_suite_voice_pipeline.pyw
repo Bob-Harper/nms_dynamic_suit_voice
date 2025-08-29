@@ -137,15 +137,7 @@ def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
     atempo = 1.05
     rate = 0.5
     asetrate = int(44100 * rate)
-    speaker_wav = [
-        "onna_amused.wav",
-        "onna_concerned.wav",
-        "onna_emphasis.wav",
-    ]
-    # Build list of full paths
-    speaker_wav_path = [os.path.join(wav_dir, w) for w in speaker_wav]
-
-    tts_model.tts_to_file(text=text, speaker_wav=speaker_wav_path, file_path=str(final_wav), device=device)
+    tts_model.tts_to_file(text=text, file_path=str(final_wav), device=device)
     if gain_db and gain_db != 0:
         subprocess.run([
             "ffmpeg", "-hide_banner", "-y",
