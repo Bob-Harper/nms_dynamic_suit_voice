@@ -38,10 +38,11 @@ ICON_IMAGE = Path(os.getenv("ICON_IMAGE"))
 LOGGING = os.getenv("LOGGING", "false").strip().lower() == "true"  # force boolean: true, anything else => False
 GAME_OUTPUT_CSV = Path(os.getenv("GAME_OUTPUT_CSV"))
 CREATE_NO_WINDOW = 0x08000000 if sys.platform == "win32" else 0
-with open("data/suit_voice_prompt.txt", encoding="utf-8") as f:
+SUIT_VOICE_PROMPT_PATH = Path(os.getenv("SUIT_VOICE_PROMPT_PATH"))
+with open(SUIT_VOICE_PROMPT_PATH, encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 category_prompts = CategoryPrompts()
-TOKENIZED_BANLIST_PATH = Path("data/tokenized_banlist.json")
+TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
 with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
     LOGIT_BANLIST = json.load(f)
 RUNNING = True
@@ -63,7 +64,7 @@ def load_intent_map(csv_path: Path) -> dict:
 
                 i_intent_map[wem_number] = {
                     "original_phrase": original_phrase,
-                    "category": category,
+                    "category_for_logit": category,
                     "intent": intent,
                     "context": context,
                     "thinking": thinking,
@@ -72,24 +73,6 @@ def load_intent_map(csv_path: Path) -> dict:
     except Exception as e1:
         print(f"Error loading intent map: {e1}")
     return i_intent_map
-
-
-def save_usage_counts():
-    with open(CSV_PATH, encoding='utf-8', newline='') as f1:
-        lines = list(csv.reader(f1))
-
-    headers = lines[0]
-    idx_wem = headers.index("WEM number")
-    idx_count = headers.index("Count")
-
-    for i in range(1, len(lines)):
-        wem = lines[i][idx_wem].strip()
-        if wem in intent_map:
-            lines[i][idx_count] = str(intent_map[wem]["count"])
-
-    with open(CSV_PATH, 'w', encoding='utf-8', newline='') as f2:
-        writer = csv.writer(f2)
-        writer.writerows(lines)
 
 
 def reword_phrase(intent_data: str,
@@ -205,7 +188,7 @@ def watch_wems():
                         intent_entry = intent_map[wem_id]
                         intent_entry["count"] += 1
                         original_phrase_w = intent_entry["original_phrase"]
-                        category = intent_entry["category"]
+                        category = intent_entry["category_for_logit"]
                         no_thinking_w = intent_entry["thinking"]
                         intent_w = intent_entry["intent"]
                         context = intent_entry["context"]
@@ -278,12 +261,10 @@ def watch_wems():
 def shutdown():
     global RUNNING
     RUNNING = False
-    save_usage_counts()
     try:
         subprocess.run(["ollama", "stop", OLLAMA_MODEL])
-    except Exception as e4:
-        print(f"Warning stopping Ollama model: {e4}")
-
+    except Exception as e:
+        print(f"Warning stopping Ollama model: {e}")
     tray_icon.stop()
 
 

@@ -14,16 +14,85 @@
       1782,
       2781
     ],
+    "The user's": [
+      785,
+      1196,
+      594
+    ],
+    "The user": [
+      785,
+      1196
+    ],
     "the user": [
       1782,
       1196
+    ],
+    "the user’s": [
+      1782,
+      1196,
+      748
     ],
     "the wearer": [
       1782,
       84602
     ],
+    "wearer's": [
+      86,
+      20786,
+      594
+    ],
+    "the wearer's": [
+      1782,
+      84602,
+      594
+    ],
+    "all personell": [
+      541,
+      1697,
+      613
+    ],
+    "our systems": [
+      413,
+      5942
+    ],
+    "a warning": [
+      64,
+      9958
+    ],
+    "sci-fi": [
+      53827,
+      36631
+    ],
+    "twist": [
+      15560,
+      380
+    ],
+    "alert": [
+      5083
+    ],
+    "the pilot": [
+      1782,
+      17708
+    ],
+    "alerting": [
+      5083,
+      287
+    ],
+    "shared": [
+      6100
+    ],
+    "car": [
+      6918
+    ],
+    "Earth": [
+      43824
+    ],
     "I": [
       40
+    ],
+    "I am": [
+      40,
+      1079
     ],
     "me": [
       2660
@@ -31,14 +100,29 @@
     "my": [
       2408
     ],
+    "My": [
+      5050
+    ],
     "we": [
       896
+    ],
+    "let's": [
+      1149,
+      594
+    ],
+    "we're": [
+      896,
+      2299
     ],
     "our": [
       413
     ],
     "ours": [
       2471
+    ],
+    "ourselves": [
+      2471,
+      4275
     ],
     "us": [
       355
@@ -69,15 +153,473 @@
       59634,
       3988
     ],
+    "the explorers": [
+      1782,
+      47439,
+      388
+    ],
+    "Stay alert": [
+      38102,
+      5115
+    ],
+    "Stay vigilant": [
+      38102,
+      80234
+    ],
+    "everyone": [
+      91957
+    ],
+    "seconds": [
+      17403
+    ],
+    "minutes": [
+      37037
+    ],
+    "Fahrenheit": [
+      37,
+      47910
+    ],
+    "together": [
+      983,
+      3439
+    ],
+    "Celsius": [
+      34,
+      40247
+    ],
+    "Kelvin": [
+      84599,
+      9603
+    ],
+    "team": [
+      9196
+    ],
+    "our team": [
+      413,
+      2083
+    ],
+    "your team": [
+      21732,
+      2083
+    ],
+    "the team": [
+      1782,
+      2083
+    ],
+    "preserving the original intent": [
+      23623,
+      19505,
+      279,
+      4024,
+      7385
+    ],
+    "original intent": [
+      9889,
+      7385
+    ],
     "bias": -100
   },
-  "780959188": {
+  "Inventory": {
+    "empty": [
+      3194
+    ],
+    "running low": [
+      27173,
+      3347
+    ],
+    "space available": [
+      8746,
+      2500
+    ],
+    "my inventory": [
+      2408,
+      15444
+    ],
+    "my space": [
+      2408,
+      3550
+    ],
+    "your system": [
+      21732,
+      1849
+    ],
+    "room left": [
+      2966,
+      2115
+    ],
     "bias": -100
   },
-  "330331555": {
+  "Monetary Transaction": {
+    "paid": [
+      34678
+    ],
+    "payment sent": [
+      13755,
+      3208
+    ],
+    "our system": [
+      413,
+      1849
+    ],
+    "spent": [
+      94364
+    ],
+    "deducted": [
+      9789,
+      667,
+      291
+    ],
+    "sci-fi": [
+      53827,
+      36631
+    ],
+    "twist": [
+      15560,
+      380
+    ],
+    "trillion": [
+      376,
+      14726
+    ],
+    "currency": [
+      15973
+    ],
+    "sci-fi-themed": [
+      53827,
+      36631,
+      56589
+    ],
+    "trillion-dollar": [
+      376,
+      14726,
+      53035
+    ],
+    "dollar": [
+      67,
+      21295
+    ],
+    "withdrawn": [
+      62446,
+      77
+    ],
     "bias": -100
   },
-  "980411923": {
+  "Notification": {
+    "a warning": [
+      64,
+      9958
+    ],
+    "Alert:": [
+      9676,
+      25
+    ],
+    "siren": [
+      82,
+      46335
+    ],
+    "siren's": [
+      82,
+      46335,
+      594
+    ],
+    "as a warning": [
+      300,
+      264,
+      9958
+    ],
+    "A warning": [
+      32,
+      9958
+    ],
+    "the warning": [
+      1782,
+      9958
+    ],
+    "The warning": [
+      785,
+      9958
+    ],
+    "Stay alert": [
+      38102,
+      5115
+    ],
+    "Stay alert,": [
+      38102,
+      5115,
+      11
+    ],
+    "we encourage": [
+      896,
+      14907
+    ],
+    "alert": [
+      5083
+    ],
+    "bias": -100
+  },
+  "Discovery": {
+    "planet name": [
+      50074,
+      829
+    ],
+    "Planet Name": [
+      59634,
+      3988
+    ],
+    "the explorers": [
+      1782,
+      47439,
+      388
+    ],
+    "Earth": [
+      43824
+    ],
+    "[planet name]": [
+      58,
+      50074,
+      829,
+      60
+    ],
+    "[Planet Name]": [
+      58,
+      59634,
+      3988,
+      60
+    ],
+    "[planet]": [
+      58,
+      50074,
+      60
+    ],
+    "we": [
+      896
+    ],
+    "bias": -100
+  },
+  "Environmental Status": {
+    "specific values": [
+      51240,
+      2750
+    ],
+    "environmental concern": [
+      23294,
+      278,
+      4643
+    ],
+    "fragile balance": [
+      33198,
+      457,
+      8172
+    ],
+    "delicate balance": [
+      9588,
+      8463,
+      8172
+    ],
+    "worry about": [
+      86,
+      8468,
+      911
+    ],
+    "specific data": [
+      51240,
+      821
+    ],
+    "underground environment": [
+      7995,
+      1951,
+      4573
+    ],
+    "underground environment's": [
+      7995,
+      1951,
+      4573,
+      594
+    ],
+    "environment": [
+      23294
+    ],
+    "environmental health": [
+      23294,
+      278,
+      2820
+    ],
+    "environment's health": [
+      23294,
+      594,
+      2820
+    ],
+    "no need": [
+      2152,
+      1184
+    ],
+    "natural world": [
+      52880,
+      1879
+    ],
+    "nature's balance": [
+      66712,
+      594,
+      8172
+    ],
+    "natural balance": [
+      52880,
+      8172
+    ],
+    "degrees": [
+      69749
+    ],
+    "bias": -100
+  },
+  "Freighter Combat": {
+    "under our protection": [
+      7995,
+      1039,
+      9135
+    ],
+    "Freighter Combat": [
+      36731,
+      85200,
+      35982
+    ],
+    "Freighter Combat battle": [
+      36731,
+      85200,
+      35982,
+      8049
+    ],
+    "your vessel": [
+      21732,
+      26182
+    ],
+    "your freighter": [
+      21732,
+      45117,
+      261
+    ],
+    "🚨": [
+      146040
+    ],
+    "our freighter": [
+      413,
+      45117,
+      261
+    ],
+    "bias": -100
+  },
+  "Personal Combat": {
+    "vital": [
+      85,
+      2174
+    ],
+    "Personal Combat": [
+      34027,
+      35982
+    ],
+    "shadow": [
+      32952
+    ],
+    "shadowy": [
+      32952,
+      88
+    ],
+    "Vital": [
+      53,
+      2174
+    ],
+    "alers": [
+      55785
+    ],
+    "Squad's": [
+      50,
+      31610,
+      594
+    ],
+    "Squad": [
+      50,
+      31610
+    ],
+    "squad's": [
+      82,
+      31610,
+      594
+    ],
+    "squad": [
+      82,
+      31610
+    ],
+    "alert": [
+      5083
+    ],
+    "bias": -100
+  },
+  "Personal Protection": {
+    "we": [
+      896
+    ],
+    "%": [
+      4
+    ],
+    "guardian": [
+      26098,
+      1103
+    ],
+    "Guardian": [
+      20806,
+      1103
+    ],
+    "our": [
+      413
+    ],
+    "bias": -100
+  },
+  "Starship Combat": {
+    "aircraft": [
+      1310,
+      7712
+    ],
+    "airborne": [
+      1310,
+      30996
+    ],
+    "our": [
+      413
+    ],
+    "bias": -100
+  },
+  "Starship Movement": {
+    "I": [
+      40
+    ],
+    "My": [
+      5050
+    ],
+    "pilot": [
+      79,
+      23958
+    ],
+    "the pilot": [
+      1782,
+      17708
+    ],
+    "The pilot": [
+      785,
+      17708
+    ],
+    "the pilot's": [
+      1782,
+      17708,
+      594
+    ],
+    "The pilot's": [
+      785,
+      17708,
+      594
+    ],
+    "a pilot": [
+      64,
+      17708
+    ],
     "bias": -100
   }
 }
