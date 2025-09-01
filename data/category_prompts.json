@@ -10,7 +10,7 @@
   "Hot Temperature": "Generate a single notification about environmental conditions directly affecting the user.",
   "Inventory": "Reference to items and storage spaces.",
   "Life Support": "Generate a single notification about Life Support issues directly affecting the user.",
-  "Monetary Transaction": "Avoid numbers, amounts, or speculation.",
+  "Monetary Transaction": "Be poetic but DO NOT specify numbers, amounts, or value.",
   "Navigation": "This is in regards to navigation through space across vast distances.",
   "Notification": "Use only neutral phrases to inform the user of important information that may be of interest. Do NOT refer to it as an alert or warning.  PRESERVE THE INTENT. Only deliever the message content..",
   "Oxygen Level": "Generate a single notification about Oxygen Level aad breathing conditions directly affecting the user.",
