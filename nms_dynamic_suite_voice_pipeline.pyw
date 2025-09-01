@@ -114,7 +114,7 @@ def reword_phrase(wem_id_r: str,
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            response = requests.post(f"{OLLAMA_SERVER}/api/generate", json=payload, timeout=30)
+            response = requests.post(f"{OLLAMA_SERVER}/api/generate", json=payload, timeout=45)
             response.raise_for_status()
             generated_response = response.json().get("response", "")
             if not generated_response:
