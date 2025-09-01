@@ -6,7 +6,7 @@ import csv
 import subprocess
 from pathlib import Path
 from dotenv import load_dotenv
-import os, shutil
+import os
 import shutil
 from TTS.api import TTS  # coqui-tts fork, pinned in requirements, uses TTS name for compatibility
 import sys
@@ -16,7 +16,6 @@ import random
 from ollama import Client
 from extras.prompting import CategoryPrompts
 import json
-import torch
 
 # Load .env from the local subdirectory
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
@@ -33,8 +32,10 @@ try:
     if not TTS_MODEL:
         raise ValueError("TTS_MODEL not set in environment")
     tts_model = TTS(model_name=TTS_MODEL)
+    # tts_model.to("cuda")
 except Exception as e0:
     raise SystemExit(f"Failed to load TTS model: {e0}")
+
 ffmpeg_path = shutil.which("ffmpeg")
 if not ffmpeg_path:
     ffmpeg_env = os.getenv("FFMPEG_PATH")
@@ -55,7 +56,6 @@ TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
 with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
     LOGIT_BANLIST = json.load(f)
 RUNNING = True
-device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 def load_intent_map(csv_path: Path) -> dict:
@@ -102,7 +102,7 @@ def reword_phrase(wem_id_r: str,
         "prompt": prompt,
         "stream": False,
         "options": {
-            "max_tokens": 25,
+            "max_tokens": 20,
             "temperature": 0.7,
             "top_k": 90,
             "top_p": 0.9,
@@ -114,7 +114,7 @@ def reword_phrase(wem_id_r: str,
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            response = requests.post(f"{OLLAMA_SERVER}/api/generate", json=payload, timeout=10)
+            response = requests.post(f"{OLLAMA_SERVER}/api/generate", json=payload, timeout=30)
             response.raise_for_status()
             generated_response = response.json().get("response", "")
             if not generated_response:
@@ -130,7 +130,7 @@ def reword_phrase(wem_id_r: str,
                 time.sleep(1)
             else:
                 print(f"LLM ERROR on WEM {wem_id_r}: {e2}")
-                return f"WEM ERROR {wem_id_r}, {e2}.  {original_phrase_r}"
+                return f"External Reality alert, {attempt} attempts made.  {original_phrase_r}"
 
     # Safety fallback
     return f"{original_phrase_r}. External Reality alert, error detected"
@@ -139,20 +139,25 @@ def reword_phrase(wem_id_r: str,
 def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
     final_wav = TEMP_WEM_DIR / f"{wem_num}.wav"
     temp_wav = final_wav.with_suffix(".temp.wav")
-    base_dir = r"C:\NMS_SUIT_VOICE\tools\onnavoice"
-    wav_dir = os.path.join(base_dir, "reference")
+    # embed_dir = r"C:\NMS_SUIT_VOICE\embeds"
+    # ref_wav_dir = os.path.join(embed_dir, "reference")
     gain_db = 5
-    atempo = 1.05
-    rate = 0.5
-    asetrate = int(44100 * rate)
-    tts_model.tts_to_file(text=text, file_path=str(final_wav), device=device)
+    # # atempo = 1.05
+    # # rate = 0.5
+    # # asetrate = int(44100 * rate)
+    # speaker_wav = []  # "amused.wav",
+    # speaker_wav_path = [os.path.join(ref_wav_dir, w) for w in speaker_wav]
+    tts_model.tts_to_file(text=text,
+                          file_path=str(final_wav)
+                          )  # to clone voice add this and enable the speaker stuff speaker_wav=speaker_wav_path,
     if gain_db and gain_db != 0:
         subprocess.run([
             "ffmpeg", "-hide_banner", "-y",
             "-i", str(final_wav),
-            "-af", f"volume={gain_db}dB,atempo={atempo},asetrate={asetrate}",
+            "-af", f"volume={gain_db}dB",
             str(temp_wav)
         ], check=True, creationflags=CREATE_NO_WINDOW)
+        # "-af", f"volume={gain_db}dB,atempo={atempo},asetrate={asetrate}",
 
         temp_wav.replace(final_wav)
 
@@ -204,6 +209,11 @@ def tts_llm_scrubber(text: str) -> str:
         r"\bthe user\b": "you",
         r"\bthe pilot's\b": "your",
         r"\bthe pilot\b": "you",
+        r"\bthe wearer's\b": "your",
+        r"\bthe wearer\b": "you",
+        r"\b—\b": ", ",
+        r"\bheat\b": "heet",
+        r"\byou's\b": "your",
     }
 
     for pattern, replacement in replacements.items():

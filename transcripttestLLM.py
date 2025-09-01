@@ -18,7 +18,7 @@ OLLAMA_SERVER = os.getenv("OLLAMA_SERVER")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
 TEST_OUTPUT_CSV = Path(os.getenv("TEST_OUTPUT_CSV"))
 START_ROW = 0  # inclusive.  starts at 0.
-END_ROW = 22   # exclusive. going past the end effectively skips nonexistent lines.
+END_ROW = 220   # exclusive. going past the end effectively skips nonexistent lines.
 client = Client(OLLAMA_SERVER)
 SUIT_VOICE_PROMPT_PATH = Path(os.getenv("SUIT_VOICE_PROMPT_PATH"))
 with open(SUIT_VOICE_PROMPT_PATH, encoding="utf-8") as f:
@@ -74,7 +74,7 @@ def reword_phrase(wem_id_r: str,
         "prompt": prompt,
         "stream": False,
         "options": {
-            "max_tokens": 25,
+            "max_tokens": 20,
             "temperature": 0.7,
             "top_k": 90,
             "top_p": 0.9,
@@ -82,7 +82,7 @@ def reword_phrase(wem_id_r: str,
             "logit_bias": logit_bias
         }
     }
-
+    # print(f"{payload}")
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -92,7 +92,7 @@ def reword_phrase(wem_id_r: str,
             if not generated_response:
                 raise ValueError("Empty response from Ollama")
             # full_response = generated_response
-            # print(f"\nWEM {wem_id_w} -- Full response with thinking tags if included: \n{full_response}")
+            # print(f"\nWEM {wem_id_r} -- Full response with thinking tags if included: \n{full_response}")
             generated_response = re.sub(r"<think>.*?</think>", "", generated_response, flags=re.DOTALL).strip()
 
             generated_response = tts_llm_scrubber(generated_response)
@@ -134,6 +134,11 @@ def tts_llm_scrubber(text: str) -> str:
         r"\bthe user\b": "you",
         r"\bthe pilot's\b": "your",
         r"\bthe pilot\b": "you",
+        r"\bthe wearer's\b": "your",
+        r"\bthe wearer\b": "you",
+        r"\b—\b": ", ",
+        r"\bheat\b": "heet",
+        r"\byou's\b": "your",
     }
 
     for pattern, replacement in replacements.items():
@@ -188,9 +193,31 @@ def process_by_category(intent_mapp, target_category):
 
 
 """
-Discovery,  Environmental Status,  Equipment Status,  Freighter Combat,  Inventory,  Monetary Transaction,  
-Notification,  Personal Combat,  Personal Protection,  Starship Combat,  Starship Movement,  Vehicle Status
+Cold Temperature
+Discovery
+Energy Shield
+Environmental Status
+Equipment Status
+Extreme Temperature
+Freighter Combat
+Hot Temperature
+Inventory
+Life Support
+Monetary Transaction
+Navigation
+Notification
+Oxygen Level
+Personal Combat
+Personal Protection
+Protection from Environment
+Radiation Exposure
+REFERENCE
+Starship Combat
+Starship Movement
+Toxic Environment
+Vehicle Readiness
+Vehicle Status
 """
 intent_map = load_intent_map(CSV_PATH)
 # output_rows = process_by_row_range(intent_map, START_ROW, END_ROW)
-output_rows = process_by_category(intent_map, "Environmental Status")
+output_rows = process_by_category(intent_map, "Monetary Transaction")
