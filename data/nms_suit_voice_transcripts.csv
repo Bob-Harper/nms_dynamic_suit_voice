@@ -212,3 +212,4 @@ Filename,Transcription,Category,Intent,WEM_number,No_Thinking
 740830728.WEM,Refuel Vehicle,Vehicle Status,The vehicle is critically low on fuel and requires immediate refueling or recharging.,740830728,
 891464212.WEM,Fuel Depleted,Vehicle Status,"vehicle fuel reserves are fully depleted, disabling vehicle operation. ",891464212,
 974964870.WEM,Damage Sustained To Vehicle,Vehicle Status,Your vehicle has sustained light to moderate damage and the safety harness has engaged as a protective response.,974964870,
+666.WEM,Mandatory Test,Debugging,"Hello, you've reached I.T.  Have you tried turning it off and then on again?",666

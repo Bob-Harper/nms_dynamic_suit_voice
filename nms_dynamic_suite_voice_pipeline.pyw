@@ -7,17 +7,24 @@ import subprocess
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import json
 import shutil
 from TTS.api import TTS  # coqui-tts fork, pinned in requirements, uses TTS name for compatibility
 import sys
-import re
-import requests
-import random
-from ollama import Client
 from extras.prompting import CategoryPrompts
-import json
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import LogitsProcessor, LogitsProcessorList
 
-# Load .env from the local subdirectory
+# Setup once globally at start.  pick an HF model name or point it at a local model file if you already have one.
+MODEL_NAME = "Qwen/Qwen3-0.6B"  # base model no quantizing etc.  quants happen at runtime for now.
+
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_NAME,
+    torch_dtype="auto",
+    device_map="auto",
+)
+# Load .env from the local subdirectorylogits_bias
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
 CHECK_INTERVAL = float(os.getenv("CHECK_INTERVAL"))
 MOD_DIR = Path(os.getenv("MOD_DIR").strip('"'))
@@ -25,14 +32,11 @@ CSV_PATH = Path(os.getenv("CSV_PATH"))
 TEMP_WEM_DIR = Path(os.getenv("TEMP_WEM_DIR").strip('"'))
 TEMP_WEM_DIR.mkdir(parents=True, exist_ok=True)
 CMD_SCRIPT_PATH = Path(os.getenv("CMD_SCRIPT_PATH").strip('"'))
-OLLAMA_SERVER = os.getenv("OLLAMA_SERVER")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
 try:
     TTS_MODEL = os.getenv("TTS_MODEL")
     if not TTS_MODEL:
         raise ValueError("TTS_MODEL not set in environment")
     tts_model = TTS(model_name=TTS_MODEL)
-    # tts_model.to("cuda")
 except Exception as e0:
     raise SystemExit(f"Failed to load TTS model: {e0}")
 
@@ -52,10 +56,22 @@ SUIT_VOICE_PROMPT_PATH = Path(os.getenv("SUIT_VOICE_PROMPT_PATH"))
 with open(SUIT_VOICE_PROMPT_PATH, encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 category_prompts = CategoryPrompts()
-TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
+TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))  # re-implementing. DO NOT REMOVE
 with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
-    LOGIT_BANLIST = json.load(f)
+    raw_bias = json.load(f)
+LOGIT_BANLIST = {k: {int(tid): v for tid, v in d.items()} for k, d in raw_bias.items()}
+
 RUNNING = True
+
+
+class LogitBiasProcessor(LogitsProcessor):
+    def __init__(self, bias_map: dict):
+        self.bias_map = bias_map
+
+    def __call__(self, input_ids, scores):
+        for token_id, bias in self.bias_map.items():
+            scores[0, token_id] += bias
+        return scores
 
 
 def load_intent_map(csv_path: Path) -> dict:
@@ -69,92 +85,85 @@ def load_intent_map(csv_path: Path) -> dict:
                 category = (row.get('Category') or '').strip()
                 intent = (row.get('Intent') or '').strip()
                 context = (row.get('Context') or '').strip()
-                thinking = (row.get('No_Thinking') or '').strip()
 
                 i_intent_map[wem_number] = {
                     "Transcription": original_phrase,
                     "Category": category,
                     "Intent": intent,
                     "Context": context,
-                    "No_Thinking": thinking,
                     }
     except Exception as e1:
         print(f"Error loading intent map: {e1}")
     return i_intent_map
 
-def reword_phrase(wem_id_r: str,
-                  original_phrase_r: str,
-                  intent_r: str,
-                  category_r,
-                  no_thinking_r,
-                  ) -> str:
 
-    prompt = ""
-    if no_thinking_r:  # Only prepend /no_think if THERE IS A VALUE IN THE COLUMN
-        prompt = "/no_think "
+def reword_phrase(original_phrase_r, intent_r, category_r):
     category_context = category_prompts.get_prompt(category_r)
+
+    # retrieve logits for this category + defaults
     logit_bias = {**LOGIT_BANLIST.get(category_r, {}), **LOGIT_BANLIST.get("default", {})}
-    prompt += SUIT_VOICE_PROMPT.format(category_type=category_r.strip(), input_intent=intent_r.strip(),
-                                       input_phrase=original_phrase_r.strip(), category_context=category_context.strip())
-    # print(f"{prompt}")
-    payload = {
-        "model": OLLAMA_MODEL,
-        "prompt": prompt,
-        "stream": False,
-        "options": {
-            "max_tokens": 20,
-            "temperature": 0.7,
-            "top_k": 90,
-            "top_p": 0.9,
-            "seed": random.randint(1, 9999999),  # or pass as an argument
-            "logit_bias": logit_bias
-        }
-    }
 
-    max_retries = 3
-    for attempt in range(max_retries):
-        try:
-            response = requests.post(f"{OLLAMA_SERVER}/api/generate", json=payload, timeout=45)
-            response.raise_for_status()
-            generated_response = response.json().get("response", "")
-            if not generated_response:
-                raise ValueError("Empty response from Ollama")
-            # full_response = generated_response
-            # print(f"\nWEM {wem_id_w} -- Full response with thinking tags if included: \n{full_response}")
-            generated_response = re.sub(r"<think>.*?</think>", "", generated_response, flags=re.DOTALL).strip()
+    prompt = SUIT_VOICE_PROMPT.format(
+        category_type=category_r.strip(),
+        input_intent=intent_r.strip(),
+        input_phrase=original_phrase_r.strip(),
+        category_context=category_context.strip()
+    )
+    messages = [{"role": "user", "content": prompt}]
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
+        enable_thinking=True
+    )
+    model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
 
-            generated_response = tts_llm_scrubber(generated_response)
-            return generated_response
-        except Exception as e2:
-            if attempt < max_retries - 1:
-                time.sleep(1)
-            else:
-                print(f"LLM ERROR on WEM {wem_id_r}: {e2}")
-                return f"External Reality alert, {attempt} attempts made.  {original_phrase_r}"
+    # add the logits processor here
+    logits_processor = LogitsProcessorList([
+        LogitBiasProcessor(logit_bias)
+    ])
 
-    # Safety fallback
-    return f"{original_phrase_r}. External Reality alert, error detected"
+    generated_ids = model.generate(
+        **model_inputs,
+        max_new_tokens=1024,
+        temperature=0.7,
+        top_k=90,
+        top_p=0.9,
+        logits_processor=logits_processor,   # <--- THIS IS NEW
+    )
+    output_ids = generated_ids[0][len(model_inputs.input_ids[0]):].tolist()
+
+    try:
+        index = len(output_ids) - output_ids[::-1].index(151668)
+    except ValueError:
+        index = 0
+
+    thinking_content = tokenizer.decode(output_ids[:index], skip_special_tokens=True).strip("\n")
+    final_output = tokenizer.decode(output_ids[index:], skip_special_tokens=True).strip("\n")
+
+    return thinking_content, final_output
 
 
 def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
     final_wav = TEMP_WEM_DIR / f"{wem_num}.wav"
     temp_wav = final_wav.with_suffix(".temp.wav")
-    # embed_dir = r"C:\NMS_SUIT_VOICE\embeds"
-    # ref_wav_dir = os.path.join(embed_dir, "reference")
+    embed_dir = r"C:\NMS_SUIT_VOICE\embeds"
+    ref_wav_dir = os.path.join(embed_dir, "reference")
     gain_db = 5
-    # # atempo = 1.05
-    # # rate = 0.5
-    # # asetrate = int(44100 * rate)
-    # speaker_wav = []  # "amused.wav",
-    # speaker_wav_path = [os.path.join(ref_wav_dir, w) for w in speaker_wav]
+    atempo = 1.05
+    rate = 0.5
+    asetrate = int(44100 * rate)
+    speaker_wav = ["amused.wav"]  # "amused.wav",
+    speaker_wav_path = [os.path.join(ref_wav_dir, w) for w in speaker_wav]
     tts_model.tts_to_file(text=text,
+                          speaker_wav=speaker_wav_path,
                           file_path=str(final_wav)
                           )  # to clone voice add this and enable the speaker stuff speaker_wav=speaker_wav_path,
     if gain_db and gain_db != 0:
         subprocess.run([
             "ffmpeg", "-hide_banner", "-y",
             "-i", str(final_wav),
-            "-af", f"volume={gain_db}dB",
+            "-af", f"volume={gain_db}dB,atempo={atempo},asetrate={asetrate}",
             str(temp_wav)
         ], check=True, creationflags=CREATE_NO_WINDOW)
         # "-af", f"volume={gain_db}dB,atempo={atempo},asetrate={asetrate}",
@@ -184,45 +193,6 @@ def convert_to_wem(wav_file_path: Path, output_dir: Path, conversion_quality="Vo
     print(f"Conversion attempt complete for {wav_file_path.name}")
 
 
-def tts_llm_scrubber(text: str) -> str:
-    """
-    Normalize text for TTS:
-    - lowercase everything
-    - replace first-person/team pronouns with 'you' or 'your'
-    - collapse spaces
-    """
-    text = text.lower()
-
-    replacements = {
-        r"\byou're\b": "you are",
-        r"\bi\b": "you",
-        r"\bmy\b": "your",
-        r"\bwe\b": "you",
-        r"\bours\b": "your",
-        r"\bus\b": "you",
-        r"\bme\b": "you",
-        r"\bi'm\b": "you",
-        r"\bi am\b": "you",
-        r"\bi've\b": "you",
-        r"\bi'll\b": "you",
-        r"\bthe user's\b": "your",
-        r"\bthe user\b": "you",
-        r"\bthe pilot's\b": "your",
-        r"\bthe pilot\b": "you",
-        r"\bthe wearer's\b": "your",
-        r"\bthe wearer\b": "you",
-        r"\b—\b": ", ",
-        r"\bheat\b": "heet",
-        r"\byou's\b": "your",
-    }
-
-    for pattern, replacement in replacements.items():
-        text = re.sub(pattern, replacement, text)
-
-    text = re.sub(r"\s+", " ", text).strip()
-    return text
-
-
 def watch_wems():
     # Initialize access times for all .wav files in the directory
     access_times = {f3: f3.stat().st_atime for f3 in MOD_DIR.glob("*.wem")}
@@ -240,12 +210,11 @@ def watch_wems():
                         intent_entry = intent_map[wem_id]
                         original_phrase_w = intent_entry["Transcription"]
                         category = intent_entry["Category"]
-                        no_thinking_w = intent_entry["No_Thinking"]
                         intent_w = intent_entry["Intent"]
                         context = intent_entry["Context"]
-                        reworded = reword_phrase(wem_id, original_phrase_w, intent_w, category, no_thinking_w)
+                        cot, reworded = reword_phrase(original_phrase_w, intent_w, category)
                         if LOGGING:
-                            fieldnames = ["WEM number", "Category", "Original", "Intent Phrase", "Context", "Final Voice Line"]
+                            fieldnames = ["WEM number", "Category", "Original", "Intent Phrase", "Context", "Chain Of Thought", "Final Voice Line"]
                             file_exists = Path(GAME_OUTPUT_CSV).exists()
 
                             log_entry = {
@@ -254,6 +223,7 @@ def watch_wems():
                                 "Original": original_phrase_w if wem_id in intent_map else "",
                                 "Intent Phrase": intent_w if wem_id in intent_map else "",
                                 "Context": context if wem_id in intent_map else "",
+                                "Chain Of Thought": cot,
                                 "Final Voice Line": reworded
                             }
 
@@ -262,8 +232,6 @@ def watch_wems():
                                 if not file_exists:
                                     writer.writeheader()
                                 writer.writerow(log_entry)
-
-                            # print(f"Appended output for review in {GAME_OUTPUT_CSV}")
 
                         # print("Calling run_tts...")
                         try:
@@ -312,10 +280,6 @@ def watch_wems():
 def shutdown():
     global RUNNING
     RUNNING = False
-    try:
-        subprocess.run(["ollama", "stop", OLLAMA_MODEL])
-    except Exception as e:
-        print(f"Warning stopping Ollama model: {e}")
     tray_icon.stop()
 
 
@@ -324,7 +288,6 @@ def on_quit(_icon, _item):
 
 
 intent_map = load_intent_map(CSV_PATH)
-
 
 # Create a tray icon (point to any .png, or use PIL to make a blank one. 64x64px).
 menu = Menu(MenuItem('Quit', on_quit))
@@ -339,49 +302,7 @@ except Exception as e5:
     print(f"Warning: Could not load icon: {e5}. Falling back to blank icon.")
     img = Image.new('RGB', (64, 64), color='black')
 
-# client = Client(OLLAMA_SERVER) -- DO NOT CHANGE THIS CALL.  You will not pass Go.  You will not collect $200.
-client = Client(OLLAMA_SERVER)
-
-# preload designated model by giving it a minimal inference task
-client.chat(model=OLLAMA_MODEL, messages=[{"role": "user", "content": " "}])
-
-try:
-    models = client.ps()
-    models_list = models.models  # This is the actual list of Model objects
-    # Extract the model names from the returned Model objects
-    model_names = [m.model for m in models_list]  # 'model' attribute holds the model name like 'smollm2:latest'
-except Exception as e6:
-    print(f"Warning: Could not query models from Ollama: {e6}")
-    model_names = []
-# Compose dynamic tooltip
-# Base tooltip lines
-tooltip_lines = ["NMS DynamicSuitVoice"]
-
-# Estimate the static character count (excluding the model name)
-base_len = len("\n".join(tooltip_lines))
-warning_lines = []
-if len(model_names) == 1:
-    prefix = "Loaded: "
-    suffix = ""
-else:
-    prefix = f"Loaded: "
-    suffix = f" +{len(model_names) - 1} more"
-    warning_lines = [
-        "Warning: Multiple ollama models loaded",
-        "Game performance may be compromised"
-    ]
-
-# Remaining space for the model name (including newline and prefix/suffix) because 128 max chars
-reserved = len("\n".join(tooltip_lines + warning_lines)) + len(prefix) + len(suffix) + 1  # +1 for newline
-max_model_len = 128 - reserved
-model_name = model_names[0]
-if len(model_name) > max_model_len:
-    model_name = model_name[:max_model_len - 3] + "..."
-
-tooltip_lines.append(f"{prefix}{model_name}{suffix}")
-tooltip_lines += warning_lines
-
-tooltip_text = "\n".join(tooltip_lines)
+tooltip_text = ["NMS DynamicSuitVoice"]
 
 tray_icon = Icon("NMS_DynamicSuitVoice", img, tooltip_text, menu)
 
@@ -392,5 +313,5 @@ watcher.start()
 # Run the icon (blocks until user chooses Quit).
 tray_icon.run()
 
-# to do: break up into classes/files.  more modulare.  prompting.py, postprocessing.py, generate.py
+# to do: break up into classes/files.  more modulare.  postprocessing.py, generate.py
 # tray_icon.py and leave the watchdog in here. modular, easier to maintain, futureproof, add on.

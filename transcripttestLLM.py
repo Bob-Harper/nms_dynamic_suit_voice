@@ -8,6 +8,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 import time
 from extras.prompting import CategoryPrompts
+import psutil
+import subprocess
 import json
 
 # CONFIG
@@ -40,14 +42,12 @@ def load_intent_map(csv_path: Path) -> dict:
                 category = (row.get('Category') or '').strip()
                 intent = (row.get('Intent') or '').strip()
                 context = (row.get('Context') or '').strip()
-                thinking = (row.get('No_Thinking') or '').strip()
 
                 i_intent_map[wem_number] = {
                     "Transcription": original_phrase,
                     "Category": category,
                     "Intent": intent,
                     "Context": context,
-                    "No_Thinking": thinking,
                     }
     except Exception as e1:
         print(f"Error loading intent map: {e1}")
@@ -58,12 +58,9 @@ def reword_phrase(wem_id_r: str,
                   original_phrase_r: str,
                   intent_r: str,
                   category_r,
-                  no_thinking_r,
                   ) -> str:
 
     prompt = ""
-    if no_thinking_r:  # Only prepend /no_think if THERE IS A VALUE IN THE COLUMN
-        prompt = "/no_think "
     category_context = category_prompts.get_prompt(category_r)
     logit_bias = {**LOGIT_BANLIST.get(category_r, {}), **LOGIT_BANLIST.get("default", {})}
     prompt += SUIT_VOICE_PROMPT.format(category_type=category_r.strip(), input_intent=intent_r.strip(),
@@ -74,7 +71,6 @@ def reword_phrase(wem_id_r: str,
         "prompt": prompt,
         "stream": False,
         "options": {
-            "max_tokens": 20,
             "temperature": 0.7,
             "top_k": 90,
             "top_p": 0.9,
@@ -153,7 +149,6 @@ def process_entry(wem_id, entry):
     category = entry["Category"]
     original_phrase = entry["Transcription"]
     intent = entry["Intent"]
-    thinking = entry["No_Thinking"]
 
     try:
         reworded = reword_phrase(
@@ -161,7 +156,6 @@ def process_entry(wem_id, entry):
             original_phrase,
             intent,
             category,
-            thinking
         )
         print(f"\nWEM: {wem_id} -- Original Game Wording: {original_phrase}")
         print(f"\033[92mFinal Output: {reworded}\033[0m")
@@ -192,6 +186,29 @@ def process_by_category(intent_mapp, target_category):
     return output_rows_c
 
 
+
+def start_ollama():
+    # Hardcoded startup values
+    os.environ["OLLAMA_KEEP_ALIVE"] = "1h"
+    os.environ["OLLAMA_MAX_LOADED_MODELS"] = "1"
+    os.environ["OLLAMA_NOHISTORY"] = "1"
+    os.environ["OLLAMA_NUM_PARALLEL"] = "1"
+
+    # Build command
+    cmd = ["ollama", "serve"]
+
+    # Launch Ollama detached
+    subprocess.Popen(cmd)
+
+
+
+def is_ollama_running():
+    for proc in psutil.process_iter(['name']):
+        if 'ollama' in proc.info['name'].lower():
+            return True
+    return False
+
+
 """
 Cold Temperature
 Discovery
@@ -218,6 +235,12 @@ Toxic Environment
 Vehicle Readiness
 Vehicle Status
 """
+
+if not is_ollama_running():
+    print("Ollama not detected, starting with optimized settings...")
+    start_ollama()
+else:
+    print("Ollama already running.")
 intent_map = load_intent_map(CSV_PATH)
 # output_rows = process_by_row_range(intent_map, START_ROW, END_ROW)
 output_rows = process_by_category(intent_map, "Monetary Transaction")
