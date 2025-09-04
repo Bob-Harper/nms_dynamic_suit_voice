@@ -56,26 +56,263 @@ with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
 print(f"Tokenization complete. Output saved to {OUTPUT_JSON}")
 
 
-# Helper function to get Ollama-ready logit_bias for a category_for_logit
 def get_logit_bias(category_for_logit: str) -> dict:
-    """Return Ollama-ready logit_bias {token_id: bias_value}."""
     cat_data = tokenized_banned.get(category_for_logit, tokenized_banned.get("default", {}))
-    bias_value = cat_data.get("bias", 0)
+    return {int(tid): bias for tid, bias in cat_data.items() if tid != "bias"}
 
-    logit_dict = {}
-    for phrase, token_ids in cat_data.items():
-        if phrase == "bias":
-            continue
-        for tid in token_ids:
-            logit_dict[int(tid)] = bias_value  # token ID as key, bias as value
+"""
 
-    return logit_dict
-# Example usage:
-# logit_bias = get_logit_bias("780959188")
-# completion = client.chat.completions.create(
-#     model="qwen3:0.6b",
-#     messages=[{"role": "user", "content": "Once upon a"}],
-#     logit_bias=logit_bias
-# )
-
-
+{
+  "default": {
+    "banned": [
+      "player",
+      "user",
+      "wearer",
+      "the player",
+      "The user's",
+      "The user",
+      "the user",
+      "the user’s",
+      "the wearer",
+      "wearer's",
+      "the wearer's",
+      "all personell",
+      "our systems",
+      "a warning",
+      "sci-fi",
+      "twist",
+      "alert",
+      "the pilot",
+      "alerting",
+      "shared",
+      "car",
+      "Earth",
+      "I",
+      "I am",
+      "me",
+      "my",
+      "My",
+      "we",
+      "let's",
+      "we're",
+      "our",
+      "ours",
+      "ourselves",
+      "us",
+      "game",
+      "system",
+      "the AI",
+      "the game",
+      "the system",
+      "planet name",
+      "Planet Name",
+      "the explorers",
+      "Stay alert",
+      "Stay vigilant",
+      "everyone",
+      "seconds",
+      "minutes",
+      "Fahrenheit",
+      "together",
+      "Celsius",
+      "Kelvin",
+      "team",
+      "our team",
+      "your team",
+      "the team",
+      "preserving the original intent",
+      "original intent",
+      "the AI"
+    ],
+    "bias": -100
+  },
+  "Inventory": {
+    "banned": [
+      "empty",
+      "running low",
+      "space available",
+      "my inventory",
+      "my space",
+      "your system",
+      "room left"
+    ],
+    "bias": -100
+  },
+  "Monetary Transaction": {
+    "banned": [
+      "paid",
+      "payment sent",
+      "our system",
+      "spent",
+      "deducted",
+      "sci-fi",
+      "twist",
+      "trillion",
+      "currency",
+      "sci-fi-themed",
+      "trillion-dollar",
+      "dollar",
+      "poetic",
+      " poetic",
+      "poetic ",
+      "withdrawn"
+    ],
+    "bias": -100
+  },
+  "Notification": {
+    "banned": [
+      "a warning",
+      "Alert:",
+      "siren",
+      "siren's",
+      "as a warning",
+      "A warning",
+      "the warning",
+      "The warning",
+      "Stay alert",
+      "Stay alert,",
+      "we encourage",
+      "alert"
+    ],
+    "bias": -100
+  },
+  "Discovery": {
+    "banned": [
+      "planet name",
+      "Planet Name",
+      "the explorers",
+      "Earth",
+      "[planet name]",
+      "[Planet Name]",
+      "[planet]",
+      "we"
+    ],
+    "bias": -100
+  },
+  "Environmental Status": {
+    "banned": [
+      "specific values",
+      "environmental concern",
+      "fragile balance",
+      "delicate balance",
+      "worry about",
+      "specific data",
+      "underground environment",
+      "underground environment's",
+      "environment",
+      "environmental health",
+      "environment's health",
+      "no need",
+      "natural world",
+      "nature's balance",
+      "natural balance",
+      "degrees"
+    ],
+    "bias": -100
+  },
+  "Freighter Combat": {
+    "banned": [
+      "under our protection",
+      "Freighter Combat",
+      "Freighter Combat battle",
+      "your vessel",
+      "your freighter",
+      "your freighter",
+      "\uD83D\uDEA8",
+      "our freighter"
+    ],
+    "bias": -100
+  },
+  "Personal Combat": {
+    "banned": [
+      "vital",
+      "Personal Combat",
+      "shadow",
+      "shadowy",
+      "Vital",
+      "alers",
+      "Squad's",
+      "Squad",
+      "squad's",
+      "squad",
+      "alert"
+    ],
+    "bias": -100
+  },
+  "Personal Protection": {
+    "banned": [
+      "we",
+      "%",
+      "guardian",
+      "Guardian",
+      "our"
+    ],
+    "bias": -100
+  },
+  "Starship Combat": {
+    "banned": [
+      "aircraft",
+      "airborne",
+      "our"
+    ],
+    "bias": -100
+  },
+  "Starship Movement": {
+    "banned": [
+      "I",
+      "My",
+      "pilot",
+      "the pilot",
+      "The pilot",
+      "the pilot's",
+      "The pilot's",
+      "a pilot"
+    ],
+    "bias": -100
+  },
+  "Radiation Exposure": {
+    "banned": [
+      "the user",
+      "the wearer",
+      "our"
+    ],
+    "bias": -100
+  },
+  "Debugging": {
+    "banned": [
+      "wait",
+      "alternatively",
+      "hmm",
+      "but",
+      "however",
+      "alternative",
+      "another",
+      "check",
+      "double-check",
+      "oh",
+      "maybe",
+      "verify",
+      "other",
+      "again",
+      "now",
+      "ah",
+      "any"
+    ],
+    "encouraged": [
+      "the user",
+      "the wearer",
+      "our"
+    ],
+    "required": [
+      "the user",
+      "the wearer",
+      "our"
+    ],
+    "bias": {
+      "banned": -100,
+      "encouraged": 50,
+      "required": 100
+    }
+  }
+}
+"""

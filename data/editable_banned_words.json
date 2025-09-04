@@ -110,7 +110,7 @@
       "we encourage",
       "alert"
     ],
-    "bias":  -100
+    "bias": -100
   },
   "Discovery": {
     "banned": [
@@ -123,7 +123,7 @@
       "[planet]",
       "we"
     ],
-    "bias":  -100
+    "bias": -100
   },
   "Environmental Status": {
     "banned": [
@@ -144,7 +144,7 @@
       "natural balance",
       "degrees"
     ],
-    "bias":  -100
+    "bias": -100
   },
   "Freighter Combat": {
     "banned": [
@@ -157,7 +157,7 @@
       "\uD83D\uDEA8",
       "our freighter"
     ],
-    "bias":  -100
+    "bias": -100
   },
   "Personal Combat": {
     "banned": [
@@ -173,7 +173,7 @@
       "squad",
       "alert"
     ],
-    "bias":  -100
+    "bias": -100
   },
   "Personal Protection": {
     "banned": [
@@ -183,7 +183,7 @@
       "Guardian",
       "our"
     ],
-    "bias":  -100
+    "bias": -100
   },
   "Starship Combat": {
     "banned": [
@@ -191,7 +191,7 @@
       "airborne",
       "our"
     ],
-    "bias":  -100
+    "bias": -100
   },
   "Starship Movement": {
     "banned": [
@@ -204,7 +204,7 @@
       "The pilot's",
       "a pilot"
     ],
-    "bias":  -100
+    "bias": -100
   },
   "Radiation Exposure": {
     "banned": [
@@ -212,6 +212,34 @@
       "the wearer",
       "our"
     ],
-    "bias":  -100
+    "bias": -100
+  },
+  "Encouraged": {
+    "banned": [
+      "/nothink"
+    ],
+    "bias": 100
+  },
+  "Debugging": {
+    "banned": [
+      "wait",
+      "alternatively",
+      "hmm",
+      "but",
+      "however",
+      "alternative",
+      "another",
+      "check",
+      "double-check",
+      "oh",
+      "maybe",
+      "verify",
+      "other",
+      "again",
+      "now",
+      "ah",
+      "any"
+    ],
+    "bias": -100
   }
 }
