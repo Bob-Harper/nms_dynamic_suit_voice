@@ -10,3 +10,5 @@ __pycache__/
 /bullshit.py
 /tmp_wem_dir/*
 
+/test_voices/
+/embeds/

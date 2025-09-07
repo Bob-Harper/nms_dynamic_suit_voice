@@ -10,9 +10,7 @@ import time
 from extras.prompting import CategoryPrompts
 import psutil
 import subprocess
-import json
 
-# CONFIG
 # Load .env from the local subdirectory
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
 CSV_PATH = Path(os.getenv("CSV_PATH"))
@@ -26,9 +24,6 @@ SUIT_VOICE_PROMPT_PATH = Path(os.getenv("SUIT_VOICE_PROMPT_PATH"))
 with open(SUIT_VOICE_PROMPT_PATH, encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 category_prompts = CategoryPrompts()
-TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
-with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
-    LOGIT_BANLIST = json.load(f)
 
 
 def load_intent_map(csv_path: Path) -> dict:
@@ -62,7 +57,6 @@ def reword_phrase(wem_id_r: str,
 
     prompt = ""
     category_context = category_prompts.get_prompt(category_r)
-    logit_bias = {**LOGIT_BANLIST.get(category_r, {}), **LOGIT_BANLIST.get("default", {})}
     prompt += SUIT_VOICE_PROMPT.format(category_type=category_r.strip(), input_intent=intent_r.strip(),
                                        input_phrase=original_phrase_r.strip(), category_context=category_context.strip())
     # print(f"{prompt}")
@@ -75,7 +69,6 @@ def reword_phrase(wem_id_r: str,
             "top_k": 90,
             "top_p": 0.9,
             "seed": random.randint(1, 9999999),  # or pass as an argument
-            "logit_bias": logit_bias
         }
     }
     # print(f"{payload}")
@@ -120,6 +113,7 @@ def tts_llm_scrubber(text: str) -> str:
         r"\bmy\b": "your",
         r"\bwe\b": "you",
         r"\bours\b": "your",
+        r"\bour\b": "your",
         r"\bus\b": "you",
         r"\bme\b": "you",
         r"\bi'm\b": "you",
@@ -150,6 +144,8 @@ def process_entry(wem_id, entry):
     original_phrase = entry["Transcription"]
     intent = entry["Intent"]
 
+    start_time = time.time()
+
     try:
         reworded = reword_phrase(
             wem_id,
@@ -162,6 +158,10 @@ def process_entry(wem_id, entry):
     except Exception as e:
         print(f"LLM ERROR on WEM {wem_id}: {e}")
         reworded = f"WEM ERROR {wem_id}.  {original_phrase}"
+
+    end_time = time.time()
+    elapsed = end_time - start_time
+    print(f"Processing time for WEM {wem_id}: {elapsed:.2f} seconds")
 
     return wem_id, reworded
 
@@ -188,11 +188,13 @@ def process_by_category(intent_mapp, target_category):
 
 
 def start_ollama():
-    # Hardcoded startup values
-    os.environ["OLLAMA_KEEP_ALIVE"] = "1h"
+    # Hardcoded startup values NewEngine=1
+    os.environ["OLLAMA_KEEP_ALIVE"] = "-1"
     os.environ["OLLAMA_MAX_LOADED_MODELS"] = "1"
     os.environ["OLLAMA_NOHISTORY"] = "1"
     os.environ["OLLAMA_NUM_PARALLEL"] = "1"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ["NewEngine"] = "1"
 
     # Build command
     cmd = ["ollama", "serve"]
@@ -234,6 +236,7 @@ Starship Movement
 Toxic Environment
 Vehicle Readiness
 Vehicle Status
+Debugging
 """
 
 if not is_ollama_running():
@@ -243,4 +246,4 @@ else:
     print("Ollama already running.")
 intent_map = load_intent_map(CSV_PATH)
 # output_rows = process_by_row_range(intent_map, START_ROW, END_ROW)
-output_rows = process_by_category(intent_map, "Monetary Transaction")
+output_rows = process_by_category(intent_map, "Freighter Combat")
