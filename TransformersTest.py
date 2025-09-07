@@ -7,8 +7,9 @@ from dotenv import load_dotenv
 from transformers import LogitsProcessor, LogitsProcessorList
 from extras.prompting import CategoryPrompts
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers.models.qwen3.configuration_qwen3 import Qwen3Config
 # Setup once globally at start.  pick an HF model name or point it at a local model file if you already have one.
-MODEL_NAME = "Qwen/Qwen3-0.6B"  # base model no quantizing etc.  quants happen at runtime for now.
+MODEL_NAME = "unsloth/Qwen3-0.6B-Base-bnb-4bit"  # base model no quantizing etc.  quants happen at runtime for now.
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModelForCausalLM.from_pretrained(
@@ -77,14 +78,12 @@ def reword_phrase(original_phrase_r, intent_r, category_r):
         input_phrase=original_phrase_r.strip(),
         category_context=category_context.strip()
     )
-    messages = [{"role": "user", "content": prompt}]
-    text = tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True,
-        enable_thinking=True
-    )
-    model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
+
+    # Directly pass the string
+    model_inputs = tokenizer(
+        prompt,
+        return_tensors="pt"
+    ).to(model.device)
 
     # add the logits processor here
     logits_processor = LogitsProcessorList([

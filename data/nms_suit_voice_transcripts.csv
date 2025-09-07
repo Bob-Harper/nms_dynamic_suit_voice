@@ -205,11 +205,11 @@ Filename,Transcription,Category,Intent,WEM_number,No_Thinking
 548071497.WEM,Vehicle Deployed,Vehicle Readiness,Your selected vehicle has been successfully deployed to your current location.,548071497,
 670654758.WEM,Vehicle Acquired,Vehicle Readiness,A new vehicle or starship has been added to your usable selection.,670654758,
 682649339.WEM,New Vehicle Acquired,Vehicle Readiness,A new vehicle has been added to your accessible assets.,682649339,
-729203380.WEM,Vehicle Mobilized,Vehicle Readiness,An vehicle is ready for use at your location.,729203380,
+729203380.WEM,Vehicle Mobilized,Vehicle Readiness,A vehicle is ready for use at your location.,729203380,
 1045889204.WEM,Vehicle Summoned,Vehicle Readiness,A vehicle has been summoned and delivered to you via orbital drop.,1045889204,
 531979220.WEM,Fuel Required,Vehicle Status,Fuel levels are below operational thresholds and must be replenished to continue normal function.,531979220,
 579975330.WEM,Vehicle Damage Sustained,Vehicle Status,Your vehicle has taken medium damage.  Do not speculate on the source of damage.,579975330,
 740830728.WEM,Refuel Vehicle,Vehicle Status,The vehicle is critically low on fuel and requires immediate refueling or recharging.,740830728,
-891464212.WEM,Fuel Depleted,Vehicle Status,"vehicle fuel reserves are fully depleted, disabling vehicle operation. ",891464212,
+891464212.WEM,Fuel Depleted,Vehicle Status,"Vehicle fuel reserves are fully depleted, disabling vehicle operation. ",891464212,
 974964870.WEM,Damage Sustained To Vehicle,Vehicle Status,Your vehicle has sustained light to moderate damage and the safety harness has engaged as a protective response.,974964870,
 666.WEM,Mandatory Test,Debugging,"Hello, you've reached I.T.  Have you tried turning it off and then on again?",666

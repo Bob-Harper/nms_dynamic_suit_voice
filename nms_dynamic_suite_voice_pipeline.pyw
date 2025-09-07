@@ -3,27 +3,18 @@ from PIL import Image
 import threading
 import time
 import csv
+import re
+import requests
+import random
 import subprocess
 from pathlib import Path
 from dotenv import load_dotenv
 import os
-import json
 import shutil
 from TTS.api import TTS  # coqui-tts fork, pinned in requirements, uses TTS name for compatibility
 import sys
 from extras.prompting import CategoryPrompts
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from transformers import LogitsProcessor, LogitsProcessorList
 
-# Setup once globally at start.  pick an HF model name or point it at a local model file if you already have one.
-MODEL_NAME = "Qwen/Qwen3-0.6B"  # base model no quantizing etc.  quants happen at runtime for now.
-
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-model = AutoModelForCausalLM.from_pretrained(
-    MODEL_NAME,
-    torch_dtype="auto",
-    device_map="auto",
-)
 # Load .env from the local subdirectorylogits_bias
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
 CHECK_INTERVAL = float(os.getenv("CHECK_INTERVAL"))
@@ -32,6 +23,9 @@ CSV_PATH = Path(os.getenv("CSV_PATH"))
 TEMP_WEM_DIR = Path(os.getenv("TEMP_WEM_DIR").strip('"'))
 TEMP_WEM_DIR.mkdir(parents=True, exist_ok=True)
 CMD_SCRIPT_PATH = Path(os.getenv("CMD_SCRIPT_PATH").strip('"'))
+OLLAMA_SERVER = os.getenv("OLLAMA_SERVER")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
+
 try:
     TTS_MODEL = os.getenv("TTS_MODEL")
     if not TTS_MODEL:
@@ -56,22 +50,8 @@ SUIT_VOICE_PROMPT_PATH = Path(os.getenv("SUIT_VOICE_PROMPT_PATH"))
 with open(SUIT_VOICE_PROMPT_PATH, encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 category_prompts = CategoryPrompts()
-TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))  # re-implementing. DO NOT REMOVE
-with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
-    raw_bias = json.load(f)
-LOGIT_BANLIST = {k: {int(tid): v for tid, v in d.items()} for k, d in raw_bias.items()}
 
 RUNNING = True
-
-
-class LogitBiasProcessor(LogitsProcessor):
-    def __init__(self, bias_map: dict):
-        self.bias_map = bias_map
-
-    def __call__(self, input_ids, scores):
-        for token_id, bias in self.bias_map.items():
-            scores[0, token_id] += bias
-        return scores
 
 
 def load_intent_map(csv_path: Path) -> dict:
@@ -97,51 +77,92 @@ def load_intent_map(csv_path: Path) -> dict:
     return i_intent_map
 
 
-def reword_phrase(original_phrase_r, intent_r, category_r):
+def reword_phrase(original_phrase_r: str,
+                  intent_r: str,
+                  category_r,
+                  ) -> str:
+
+    prompt = ""
     category_context = category_prompts.get_prompt(category_r)
+    prompt += SUIT_VOICE_PROMPT.format(category_type=category_r.strip(), input_intent=intent_r.strip(),
+                                       input_phrase=original_phrase_r.strip(), category_context=category_context.strip())
+    # print(f"{prompt}")
+    payload = {
+        "model": OLLAMA_MODEL,
+        "prompt": prompt,
+        "stream": False,
+        "options": {
+            "temperature": 0.7,
+            "top_k": 90,
+            "top_p": 0.9,
+            "seed": random.randint(1, 9999999),  # or pass as an argument
+        }
+    }
+    # print(f"{payload}")
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            response = requests.post(f"{OLLAMA_SERVER}/api/generate", json=payload, timeout=20)
+            response.raise_for_status()
+            generated_response = response.json().get("response", "")
+            if not generated_response:
+                raise ValueError("Empty response from Ollama")
+            # full_response = generated_response
+            # print(f"\nWEM {wem_id_r} -- Full response with thinking tags if included: \n{full_response}")
+            generated_response = re.sub(r"<think>.*?</think>", "", generated_response, flags=re.DOTALL).strip()
 
-    # retrieve logits for this category + defaults
-    logit_bias = {**LOGIT_BANLIST.get(category_r, {}), **LOGIT_BANLIST.get("default", {})}
+            generated_response = tts_llm_scrubber(generated_response)
+            return generated_response
+        except Exception as e2:
+            if attempt < max_retries - 1:
+                time.sleep(1)
+            else:
+                return f"External Reality alert, error detected, {e2}.  {original_phrase_r}"
 
-    prompt = SUIT_VOICE_PROMPT.format(
-        category_type=category_r.strip(),
-        input_intent=intent_r.strip(),
-        input_phrase=original_phrase_r.strip(),
-        category_context=category_context.strip()
-    )
-    messages = [{"role": "user", "content": prompt}]
-    text = tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True,
-        enable_thinking=True
-    )
-    model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
+    # Safety fallback
+    return f"{original_phrase_r}. External Reality alert, error detected"
 
-    # add the logits processor here
-    logits_processor = LogitsProcessorList([
-        LogitBiasProcessor(logit_bias)
-    ])
 
-    generated_ids = model.generate(
-        **model_inputs,
-        max_new_tokens=1024,
-        temperature=0.7,
-        top_k=90,
-        top_p=0.9,
-        logits_processor=logits_processor,   # <--- THIS IS NEW
-    )
-    output_ids = generated_ids[0][len(model_inputs.input_ids[0]):].tolist()
+def tts_llm_scrubber(text: str) -> str:
+    """
+    Normalize text for TTS:
+    - lowercase everything
+    - replace first-person/team pronouns with 'you' or 'your'
+    - other text corretions so the TTS pronounces things correctly.
+    - collapse spaces
+    """
+    text = text.lower()
 
-    try:
-        index = len(output_ids) - output_ids[::-1].index(151668)
-    except ValueError:
-        index = 0
+    replacements = {
+        r"\byou're\b": "you are",
+        r"\bi\b": "you",
+        r"\bmy\b": "your",
+        r"\bwe\b": "you",
+        r"\bours\b": "your",
+        r"\bour\b": "your",
+        r"\bus\b": "you",
+        r"\bme\b": "you",
+        r"\bi'm\b": "you",
+        r"\bi am\b": "you",
+        r"\bi've\b": "you",
+        r"\bi'll\b": "you",
+        r"\bthe user's\b": "your",
+        r"\bthe user\b": "you",
+        r"\bthe pilot's\b": "your",
+        r"\bthe pilot\b": "you",
+        r"\bthe wearer's\b": "your",
+        r"\bthe wearer\b": "you",
+        r"\b—\b": ", ",
+        r"\bheat\b": "heet",
+        r"\byou's\b": "your",
+    }
 
-    thinking_content = tokenizer.decode(output_ids[:index], skip_special_tokens=True).strip("\n")
-    final_output = tokenizer.decode(output_ids[index:], skip_special_tokens=True).strip("\n")
+    for pattern, replacement in replacements.items():
+        text = re.sub(pattern, replacement, text)
 
-    return thinking_content, final_output
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
 
 
 def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
@@ -212,7 +233,7 @@ def watch_wems():
                         category = intent_entry["Category"]
                         intent_w = intent_entry["Intent"]
                         context = intent_entry["Context"]
-                        cot, reworded = reword_phrase(original_phrase_w, intent_w, category)
+                        reworded = reword_phrase(original_phrase_w, intent_w, category)
                         if LOGGING:
                             fieldnames = ["WEM number", "Category", "Original", "Intent Phrase", "Context", "Chain Of Thought", "Final Voice Line"]
                             file_exists = Path(GAME_OUTPUT_CSV).exists()
@@ -223,7 +244,7 @@ def watch_wems():
                                 "Original": original_phrase_w if wem_id in intent_map else "",
                                 "Intent Phrase": intent_w if wem_id in intent_map else "",
                                 "Context": context if wem_id in intent_map else "",
-                                "Chain Of Thought": cot,
+                                # "Chain Of Thought": cot,
                                 "Final Voice Line": reworded
                             }
 
@@ -302,7 +323,7 @@ except Exception as e5:
     print(f"Warning: Could not load icon: {e5}. Falling back to blank icon.")
     img = Image.new('RGB', (64, 64), color='black')
 
-tooltip_text = ["NMS DynamicSuitVoice"]
+tooltip_text = "NMS DynamicSuitVoice"
 
 tray_icon = Icon("NMS_DynamicSuitVoice", img, tooltip_text, menu)
 

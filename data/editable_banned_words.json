@@ -8,6 +8,8 @@
       "The user's",
       "The user",
       "the user",
+      "current users",
+      "current user",
       "the user’s",
       "the wearer",
       "wearer's",
@@ -58,6 +60,9 @@
       "the team",
       "preserving the original intent",
       "original intent",
+      "minute",
+      "second",
+      "hour",
       "the AI"
     ],
     "bias": -100
@@ -216,7 +221,7 @@
   },
   "Encouraged": {
     "banned": [
-      "/nothink"
+      "</think<"
     ],
     "bias": 100
   },
