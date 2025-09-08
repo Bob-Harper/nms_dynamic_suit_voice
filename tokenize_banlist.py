@@ -3,8 +3,7 @@ from transformers import AutoTokenizer
 
 # Paths
 BANNED_JSON = "data/editable_banned_words.json"
-TOKENIZER_DIR = "assets/qwen3_06b"
-# TOKENIZER_DIR = "assets/qwen3_06b_q4"
+TOKENIZER_DIR = "assets/qwen3_06b_q4"
 OUTPUT_JSON = "data/tokenized_banlist.json"
 
 # Load tokenizer

@@ -1,10 +1,16 @@
 {
-  "default": {
+  "Default": {
     "banned": [
       "player",
       "user",
       "wearer",
       "the player",
+      "her",
+      "hers",
+      "his",
+      "him",
+      "she",
+      "he",
       "The user's",
       "The user",
       "the user",
@@ -158,8 +164,53 @@
       "Freighter Combat battle",
       "your vessel",
       "your freighter",
+      "your missile",
+      "pirates asking",
+      "pirates asked",
+      "our freighter"
+    ],
+    "bias": -100
+  },
+  "Missile Launch": {
+    "banned": [
+      "under our protection",
+      "Freighter Combat",
+      "Freighter Combat battle",
+      "your vessel",
+      "space",
+      "space battles",
       "your freighter",
-      "\uD83D\uDEA8",
+      "your missile",
+      "sky",
+      "skies",
+      "plane",
+      "aircraft",
+      "our freighter"
+    ],
+    "bias": -100
+  },
+  "Freighter Escape": {
+    "banned": [
+      "under our protection",
+      "Freighter Combat",
+      "Freighter Combat battle",
+      "your vessel",
+      "your freighter",
+      "your missile",
+      "our freighter"
+    ],
+    "bias": -100
+  },
+  "Missile Destroyed": {
+    "banned": [
+      "under our protection",
+      "Freighter Combat",
+      "Freighter Combat battle",
+      "your vessel",
+      "your freighter",
+      "your missile",
+      "space",
+      "space battles",
       "our freighter"
     ],
     "bias": -100
@@ -219,11 +270,27 @@
     ],
     "bias": -100
   },
-  "Encouraged": {
+  "Thinking": {
     "banned": [
-      "</think<"
+      "wait",
+      "alternatively",
+      "hmm",
+      "but",
+      "however",
+      "alternative",
+      "another",
+      "check",
+      "double-check",
+      "oh",
+      "maybe",
+      "verify",
+      "other",
+      "again",
+      "now",
+      "ah",
+      "any"
     ],
-    "bias": 100
+    "bias": -50
   },
   "Debugging": {
     "banned": [
