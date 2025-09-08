@@ -1,32 +1,14 @@
-import os
 import csv
-from pathlib import Path
-from dotenv import load_dotenv
-import time
-from extras.prompting import CategoryPrompts
-import lmstudio as lms
-from openai import OpenAI
-import json
 import re
+from pathlib import Path
+import time
+from modular.load_env import SuitVoiceConfig
+import random
 
-SERVER_API_HOST = "localhost:1234"
-lms.configure_default_client(SERVER_API_HOST)
-# Load model (do this once at startup)
-xmodel = lms.llm("lmstudio-community/qwen3-0.6b")
-xclient = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
-# Load .env from the local subdirectory
-load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
-CSV_PATH = Path(os.getenv("CSV_PATH"))
-TEST_OUTPUT_CSV = Path(os.getenv("TEST_OUTPUT_CSV"))
+# Load .env vars from load_env.py
+config = SuitVoiceConfig()
 START_ROW = 0  # inclusive.  starts at 0.
 END_ROW = 220   # exclusive. going past the end effectively skips nonexistent lines.
-SUIT_VOICE_PROMPT_PATH = Path(os.getenv("TEST_VOICE_PROMPT_PATH"))
-with open(SUIT_VOICE_PROMPT_PATH, encoding="utf-8") as f:
-    SUIT_VOICE_PROMPT = f.read()
-category_prompts = CategoryPrompts()
-TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
-with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
-    LOGIT_BANLIST = json.load(f)
 
 
 def reword_phrase(wem_id_r: str,
@@ -34,30 +16,36 @@ def reword_phrase(wem_id_r: str,
                   intent_r: str,
                   category_r):
 
-    category_context = category_prompts.get_prompt(category_r)
+    category_context = config.category_prompts.get_prompt(category_r)
 
-    system_prompt = SUIT_VOICE_PROMPT.format(
+    system_prompt = config.suit_voice_prompt.format(
         category_type=category_r.strip(),
         input_intent=intent_r.strip(),
         input_phrase=original_phrase_r.strip(),
         category_context=category_context.strip()
     )
-    # system_prompt += "Output the reworded phrase only, then write <END> to signal completion."
     # print(f"Composed System Prompt:\n {system_prompt}")
-    logit_bias = {**LOGIT_BANLIST.get(category_r, {}), **LOGIT_BANLIST.get("default", {})}
-    chat = lms.Chat(system_prompt)
+    logit_bias = {**config.logit_banlist.get(category_r, {})
+                  , **config.logit_banlist.get("Default", {})
+                  , **config.logit_banlist.get("Thinking", {})}
     max_retries = 3
     for attempt in range(max_retries):
         try:
+            output = config.llm.create_chat_completion(
+                messages=[  # type: ignore
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": original_phrase_r},
+                ],
+                max_tokens=768,
+                temperature=0.8,
+                top_k=90,
+                top_p=0.9,
+                logit_bias=logit_bias,
+                seed=-1
+            )
 
-            with lms.Client() as client:
-                model = client.llm.model()
-                result = model.respond(chat, config={
-                    "temperature": 0.6,
-                    "maxTokens": 50,
-                })
-            print(f"ChatResult:\n{result}")
-
+            result = output["choices"][0]["message"]["content"].strip()
+            result = postprocess_for_tts(result)
             return result
 
         except Exception as e:
@@ -68,6 +56,11 @@ def reword_phrase(wem_id_r: str,
                 return f"WEM ERROR {wem_id_r}, {e}. {original_phrase_r}"
     return original_phrase_r
 
+
+def postprocess_for_tts(text: str) -> str:
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
+    text = re.sub(r"[—–]", " - ", text)  # handle em-dash and en-dash
+    return text.strip()
 
 
 def process_entry(wem_id, entry):
@@ -141,9 +134,9 @@ def process_by_category(intent_mapp, target_category):
     return output_rows_c
 
 
-intent_map = load_intent_map(CSV_PATH)
+intent_map = load_intent_map(config.csv_path)
 # output_rows = process_by_row_range(intent_map, START_ROW, END_ROW)
-output_rows = process_by_category(intent_map, "Monetary Transaction")
+output_rows = process_by_category(intent_map, "Freighter Escapethat")
 
 """
 Cold Temperature
@@ -153,6 +146,9 @@ Environmental Status
 Equipment Status
 Extreme Temperature
 Freighter Combat
+Missile Launch
+Freighter Escape
+Missile Destroyed
 Hot Temperature
 Inventory
 Life Support

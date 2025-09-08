@@ -1,19 +1,19 @@
-from pystray import Icon, Menu, MenuItem
-from PIL import Image
-import threading
-import time
-import csv
-import re
-import requests
-import random
-import subprocess
-from pathlib import Path
-from dotenv import load_dotenv
 import os
-import shutil
-from TTS.api import TTS  # coqui-tts fork, pinned in requirements, uses TTS name for compatibility
+import re
 import sys
+import csv
+import time
+import json
+import shutil
+import threading
+import subprocess
+from PIL import Image
+from pathlib import Path
+from llama_cpp import Llama
+from dotenv import load_dotenv
+from pystray import Icon, Menu, MenuItem
 from extras.prompting import CategoryPrompts
+from TTS.api import TTS  # coqui-tts fork, pinned in requirements, uses TTS name for compatibility
 
 # Load .env from the local subdirectorylogits_bias
 load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
@@ -23,9 +23,6 @@ CSV_PATH = Path(os.getenv("CSV_PATH"))
 TEMP_WEM_DIR = Path(os.getenv("TEMP_WEM_DIR").strip('"'))
 TEMP_WEM_DIR.mkdir(parents=True, exist_ok=True)
 CMD_SCRIPT_PATH = Path(os.getenv("CMD_SCRIPT_PATH").strip('"'))
-OLLAMA_SERVER = os.getenv("OLLAMA_SERVER")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
-
 try:
     TTS_MODEL = os.getenv("TTS_MODEL")
     if not TTS_MODEL:
@@ -50,7 +47,16 @@ SUIT_VOICE_PROMPT_PATH = Path(os.getenv("SUIT_VOICE_PROMPT_PATH"))
 with open(SUIT_VOICE_PROMPT_PATH, encoding="utf-8") as f:
     SUIT_VOICE_PROMPT = f.read()
 category_prompts = CategoryPrompts()
-
+TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
+with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
+    LOGIT_BANLIST = json.load(f)
+LLM_MODEL = str(Path(os.getenv("LLM_MODEL")))
+llm = Llama(
+    model_path=LLM_MODEL,
+    n_ctx=4096,
+    n_threads=4,       # adjust for your CPU
+    verbose=False
+)
 RUNNING = True
 
 
@@ -77,92 +83,55 @@ def load_intent_map(csv_path: Path) -> dict:
     return i_intent_map
 
 
-def reword_phrase(original_phrase_r: str,
+def reword_phrase(wem_id_r: str,
+                  original_phrase_r: str,
                   intent_r: str,
-                  category_r,
-                  ) -> str:
+                  category_r):
 
-    prompt = ""
     category_context = category_prompts.get_prompt(category_r)
-    prompt += SUIT_VOICE_PROMPT.format(category_type=category_r.strip(), input_intent=intent_r.strip(),
-                                       input_phrase=original_phrase_r.strip(), category_context=category_context.strip())
-    # print(f"{prompt}")
-    payload = {
-        "model": OLLAMA_MODEL,
-        "prompt": prompt,
-        "stream": False,
-        "options": {
-            "temperature": 0.7,
-            "top_k": 90,
-            "top_p": 0.9,
-            "seed": random.randint(1, 9999999),  # or pass as an argument
-        }
-    }
-    # print(f"{payload}")
+
+    system_prompt = SUIT_VOICE_PROMPT.format(
+        category_type=category_r.strip(),
+        input_intent=intent_r.strip(),
+        input_phrase=original_phrase_r.strip(),
+        category_context=category_context.strip()
+    )
+    # print(f"Composed System Prompt:\n {system_prompt}")
+    logit_bias = {**LOGIT_BANLIST.get(category_r, {}), **LOGIT_BANLIST.get("default", {})}
+    # print(f"Logit_bias:\n{logit_bias}")
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            response = requests.post(f"{OLLAMA_SERVER}/api/generate", json=payload, timeout=20)
-            response.raise_for_status()
-            generated_response = response.json().get("response", "")
-            if not generated_response:
-                raise ValueError("Empty response from Ollama")
-            # full_response = generated_response
-            # print(f"\nWEM {wem_id_r} -- Full response with thinking tags if included: \n{full_response}")
-            generated_response = re.sub(r"<think>.*?</think>", "", generated_response, flags=re.DOTALL).strip()
+            output = llm.create_chat_completion(
+                messages=[  # type: ignore
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": original_phrase_r},
+                ],
+                max_tokens=768,
+                temperature=0.8,
+                top_k=90,
+                top_p=0.9,
+                logit_bias=logit_bias,
+                seed=-1
+            )
 
-            generated_response = tts_llm_scrubber(generated_response)
-            return generated_response
-        except Exception as e2:
+            result = output["choices"][0]["message"]["content"].strip()
+            result = postprocess_for_tts(result)
+            return result
+
+        except Exception as e:
             if attempt < max_retries - 1:
                 time.sleep(1)
             else:
-                return f"External Reality alert, error detected, {e2}.  {original_phrase_r}"
+                print(f"LLM ERROR on WEM {wem_id_r}: {e}")
+                return f"WEM ERROR {wem_id_r}, {e}. {original_phrase_r}"
+    return original_phrase_r
 
-    # Safety fallback
-    return f"{original_phrase_r}. External Reality alert, error detected"
 
-
-def tts_llm_scrubber(text: str) -> str:
-    """
-    Normalize text for TTS:
-    - lowercase everything
-    - replace first-person/team pronouns with 'you' or 'your'
-    - other text corretions so the TTS pronounces things correctly.
-    - collapse spaces
-    """
-    text = text.lower()
-
-    replacements = {
-        r"\byou're\b": "you are",
-        r"\bi\b": "you",
-        r"\bmy\b": "your",
-        r"\bwe\b": "you",
-        r"\bours\b": "your",
-        r"\bour\b": "your",
-        r"\bus\b": "you",
-        r"\bme\b": "you",
-        r"\bi'm\b": "you",
-        r"\bi am\b": "you",
-        r"\bi've\b": "you",
-        r"\bi'll\b": "you",
-        r"\bthe user's\b": "your",
-        r"\bthe user\b": "you",
-        r"\bthe pilot's\b": "your",
-        r"\bthe pilot\b": "you",
-        r"\bthe wearer's\b": "your",
-        r"\bthe wearer\b": "you",
-        r"\b—\b": ", ",
-        r"\bheat\b": "heet",
-        r"\byou's\b": "your",
-    }
-
-    for pattern, replacement in replacements.items():
-        text = re.sub(pattern, replacement, text)
-
-    text = re.sub(r"\s+", " ", text).strip()
-    return text
-
+def postprocess_for_tts(text: str) -> str:
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
+    text = re.sub(r"[—–]", " - ", text)  # handle em-dash and en-dash
+    return text.strip()
 
 
 def run_tts(text: str, wem_num: str, gain_db: float = 5.0) -> Path:
@@ -233,9 +202,10 @@ def watch_wems():
                         category = intent_entry["Category"]
                         intent_w = intent_entry["Intent"]
                         context = intent_entry["Context"]
-                        reworded = reword_phrase(original_phrase_w, intent_w, category)
+                        reworded = reword_phrase(wem_id, original_phrase_w, intent_w, category)
                         if LOGGING:
-                            fieldnames = ["WEM number", "Category", "Original", "Intent Phrase", "Context", "Chain Of Thought", "Final Voice Line"]
+                            fieldnames = ["WEM number", "Category", "Original", "Intent Phrase", "Context",
+                                          "Chain Of Thought", "Final Voice Line"]
                             file_exists = Path(GAME_OUTPUT_CSV).exists()
 
                             log_entry = {
@@ -334,5 +304,5 @@ watcher.start()
 # Run the icon (blocks until user chooses Quit).
 tray_icon.run()
 
-# to do: break up into classes/files.  more modulare.  postprocessing.py, generate.py
+# to do: break up into classes/files.  more modular.  postprocessing.py, generate.py
 # tray_icon.py and leave the watchdog in here. modular, easier to maintain, futureproof, add on.

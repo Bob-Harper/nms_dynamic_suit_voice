@@ -58,28 +58,28 @@ Filename,Transcription,Category,Intent,WEM_number
 570428671.WEM,Extreme Temperature Detected,Extreme Temperature,"Environment temperature is detected at extreme levels, posing risk to you and your equipment. Review the visual heads up display for details.",570428671
 653680659.WEM,Extreme Subterranean Temperature Detected,Extreme Temperature,Sensors indicate dangerous temperature levels while exploring below the surface. There are hazardous subterranean temperature conditions that could compromise the suit.,653680659
 733521599.WEM,Extreme Night Temperature Detected,Extreme Temperature,"Extreme night-time temperature levels have been detected, which may threaten suit integrity and your safety. ",733521599
-449779025.WEM,Incoming Missiles Destroyed,Missile Destroyed,A hostile missile has been destroyed.,449779025
-389592073.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,389592073
-241169623.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,241169623
-672799524.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,672799524
+449779025.WEM,Incoming Missile Destroyed,Missile Destroyed,A hostile missile has been destroyed.,449779025
+389592073.WEM,Incoming Missiles Neutralized,Missile Destroyed,All hostile missiles have been destroyed.,389592073
+241169623.WEM,Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,241169623
+672799524.WEM,Missiles Neutralized,Missile Destroyed,All hostile missiles have been destroyed.,672799524
 167092968.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,167092968
-459254064.WEM,Enemy Missile Incoming,Missile Launch,"During a space battle, a missile has been launched by hostile forces at a civilian freighter.  ",459254064
-245522736.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",245522736
-80959229.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",80959229
+459254064.WEM,Missile Inbound: Impact Imminent,Missile Launch,"During a space battle, a missile has been launched by hostile forces at a civilian freighter.  ",459254064
+245522736.WEM,Enemy Missile Inbound,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",245522736
+80959229.WEM,Missile Locked,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",80959229
 776652442.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",776652442
-972765308.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",972765308
-756031301.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",756031301
+972765308.WEM,Missile Locked And Ready,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",972765308
+756031301.WEM,Incoming Missile,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",756031301
 711767177.wem,Warning: civilian shields depleted,Freighter Combat,"A civilian freighter is at risk of immediate destruction, it's defenses are inactive.",711767177
 160765928.wem,Civilian freighter destroyed,Freighter Combat,"A civilian freighter, under attack from pirates, asked for your protection. You failed; the freighter was destroyed, and no one survived. The destruction is final, no rescue is possible. Provide a short but epic poetic eulogy lamenting their loss.ontext.",160765928
 954591441.wem,Pirate engines neutralized,Freighter Escape,"The engines of a hostile ship have been disabled, leaving it unable to maneuver.",954591441
 278919221.wem,Hyperdrive damage is critical,Freighter Escape,A freighter ship is attempting a hyperspace jump with critically damaged engines.  You still have time to disable the ship before it escapes.,278919221
-311554138.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,311554138
+311554138.WEM,Warping,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,311554138
 48466939.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,48466939
-565386800.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,565386800
-597203928.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,597203928
-4494640.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,4494640
-45779246.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,45779246
-695050944.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,695050944
+565386800.WEM,Jump Engaged,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,565386800
+597203928.WEM,Warp Engaged,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,597203928
+4494640.WEM,Missile Neutralized,Missile Destroyed,A missile fired from a hostile ship has been destroyed.,4494640
+45779246.WEM,Incoming Missile Neutralized,Missile Destroyed,A missile fired from a hostile ship has been destroyed.,45779246
+695050944.WEM,Missile Destroyed,Missile Destroyed,A missile fired from a hostile ship has been destroyed.,695050944
 543874217.WEM,Danger: Heat Levels Critical,Hot Temperature,"Critical heat levels have bypassed your protective systems, resulting in life-threatening high temperatures.",543874217
 580370729.WEM,Extreme Heat Damage Detected,Hot Temperature,"Extreme heat damage has been detected; failure to mitigate this will cause severe harm to you, possibly fatal. ",580370729
 647699088.WEM,Extreme Heat: Critical,Hot Temperature,You are currently unable to cope with critical heat conditions. Continued exposure will result in total failure or destruction of the suit and your physical self.,647699088
