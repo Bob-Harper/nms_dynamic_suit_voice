@@ -102,8 +102,8 @@ Filename,Transcription,Category,Intent,WEM_number
 825969836.WEM,Life Support Power Low,Life Support,Life support power is significantly depleted. Failure to take corrective action will result in your death.,825969836
 865668553.wem,Life support level falling,Life Support,Life support power is dangerously low and must be restored to prevent death.,865668553
 1061736374.WEM,Life Support Offline,Life Support,"Life support systems are now offline, and suit systems are shutting down. Regaining consciousness will be very unlikely.",1061736374
-303147008.WEM,Units Depleted,Monetary Transaction,"You have no money, your current balance is zero. (deliver this in a poetic fashion)",303147008
-911201958.WEM,Insufficient Units,Monetary Transaction,your monetary units are insufficient to complete a purchase.(deliver this in a poetic fashion),911201958
+303147008.WEM,Units Depleted,Monetary Transaction,"You have no money, your current balance is zero.",303147008
+911201958.WEM,Insufficient Units,Monetary Transaction,your monetary units are insufficient to complete a purchase.,911201958
 330331555.WEM,Units Received,Monetary Transaction,Units have been received and have been added to your account.,330331555
 126319994.WEM,Secure Transmission Module Located,Navigation,A communications module has been found and its data is being downloaded to your navigation system.,126319994
 243520476.WEM,Orbital Station Coordinates Received,Navigation,New coordinates for a previously unvisited orbital station have been uploaded to your navigation system.,243520476

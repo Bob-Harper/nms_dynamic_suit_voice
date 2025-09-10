@@ -6,7 +6,6 @@ import shutil
 from pathlib import Path
 from llama_cpp import Llama
 from dotenv import load_dotenv
-from extras.prompting import CategoryPrompts
 from TTS.api import TTS  # coqui-tts fork
 
 class SuitVoiceConfig:
@@ -50,7 +49,9 @@ class SuitVoiceConfig:
         with open(self.suit_voice_prompt_path, encoding="utf-8") as f:
             self.suit_voice_prompt = f.read()
 
-        self.category_prompts = CategoryPrompts()
+        promptbuilder_path = Path(os.getenv("PROMPTBUILDER_PATH"))
+        with open(promptbuilder_path, encoding="utf-8") as f:
+            self.promptbuilder = json.load(f)
 
         # Banlist
         self.tokenized_banlist_path = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
