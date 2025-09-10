@@ -8,43 +8,41 @@ import random
 # Load .env vars from load_env.py
 config = SuitVoiceConfig()
 START_ROW = 0  # inclusive.  starts at 0.
-END_ROW = 220   # exclusive. going past the end effectively skips nonexistent lines.
+END_ROW = 6# exclusive. going past the end effectively skips nonexistent lines.
 
 
-def reword_phrase(wem_id_r: str,
-                  original_phrase_r: str,
-                  intent_r: str,
-                  category_r):
+def reword_phrase(wem_id_r,
+                  category_r,
+                  original_phrase_r,
+                  finalprompt
+                  ):
 
-    category_context = config.category_prompts.get_prompt(category_r)
-
-    system_prompt = config.suit_voice_prompt.format(
-        category_type=category_r.strip(),
-        input_intent=intent_r.strip(),
-        input_phrase=original_phrase_r.strip(),
-        category_context=category_context.strip()
-    )
-    # print(f"Composed System Prompt:\n {system_prompt}")
-    logit_bias = {**config.logit_banlist.get(category_r, {})
-                  , **config.logit_banlist.get("Default", {})
-                  , **config.logit_banlist.get("Thinking", {})}
+    # print(f"Composed System Prompt:\n {finalprompt}")
+    logit_bias = {
+        **extract_token_ids(config.logit_banlist.get(category_r, {})),
+        **extract_token_ids(config.logit_banlist.get("Default", {})),
+        **extract_token_ids(config.logit_banlist.get("Thinking", {})),
+    }
     max_retries = 3
     for attempt in range(max_retries):
         try:
             output = config.llm.create_chat_completion(
                 messages=[  # type: ignore
-                    {"role": "system", "content": system_prompt},
+                    {"role": "system", "content": finalprompt},
                     {"role": "user", "content": original_phrase_r},
                 ],
-                max_tokens=768,
+                max_tokens=1024,
                 temperature=0.8,
                 top_k=90,
                 top_p=0.9,
+                repeat_penalty=1.25,
                 logit_bias=logit_bias,
                 seed=-1
             )
 
             result = output["choices"][0]["message"]["content"].strip()
+            # print(f"Message Content Returned:\n {result}")
+
             result = postprocess_for_tts(result)
             return result
 
@@ -60,24 +58,26 @@ def reword_phrase(wem_id_r: str,
 def postprocess_for_tts(text: str) -> str:
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
     text = re.sub(r"[—–]", " - ", text)  # handle em-dash and en-dash
+    text = re.sub(r"interlooper", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"interlopper", "", text, flags=re.IGNORECASE)
+    text = re.sub(r'^Interloper,\s*', '', text, flags=re.IGNORECASE)
     return text.strip()
 
 
-def process_entry(wem_id, entry):
+def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
     """Shared processing of a single intent-map entry."""
     category = entry["Category"]
     original_phrase = entry["Transcription"]
     intent = entry["Intent"]
+    # for testing, hardcode these first
+    wordiness_level = wordiness_level
+    tone = tone
+    finalprompt = build_suit_prompt(category, intent, original_phrase, wordiness_level, tone)
 
     start_time = time.time()
-
     try:
-        reworded = reword_phrase(
-            wem_id,
-            original_phrase,
-            intent,
-            category,
-        )
+        reworded = reword_phrase(wem_id, category, original_phrase, finalprompt)
+
         print(f"\nWEM: {wem_id} -- Original Game Wording: {original_phrase}")
         print(f"\033[92mFinal Output: {reworded}\033[0m")
     except Exception as e:
@@ -114,6 +114,35 @@ def load_intent_map(csv_path: Path) -> dict:
     return i_intent_map
 
 
+def extract_token_ids(data: dict):
+    """Flatten token dict and ignore non-integer keys like 'bias'."""
+    return {int(k): v for k, v in data.get("tokens", {}).items()}
+
+
+def build_suit_prompt(category, intent, phrase, wordiness_level="Standard", tone="Standard"):
+    # Get base category context (Default fallback)
+    category_context = config.promptbuilder.get(category, config.promptbuilder.get("Default", ""))
+
+    # Get wordiness instruction
+    wordiness_prompt = config.promptbuilder.get("wordiness", {}).get(wordiness_level, "")
+
+    # Get tone instruction
+    tone_prompt = config.promptbuilder.get("tones", {}).get(tone, "")
+    # print(f"category_context:\n{category_context}\n\nwordiness_prompt\n{wordiness_prompt}\n\ntone_prompt:\n {tone_prompt}")
+
+    # Compose system prompt from the base text file and inject wordiness + tone
+    system_prompt = config.suit_voice_prompt.format(
+        category_type=category.strip(),
+        input_intent=intent.strip(),
+        input_phrase=phrase.strip(),
+        category_context=category_context.strip(),
+        wordiness_prompt=wordiness_prompt.strip(),
+        tone_prompt=tone_prompt.strip()
+    )
+
+    return system_prompt
+
+
 def process_by_row_range(intent_mapr, start_row, end_row):
     output_rows_r = []
     for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
@@ -122,6 +151,18 @@ def process_by_row_range(intent_mapr, start_row, end_row):
         if idx >= end_row:
             break
         output_rows_r.append(process_entry(wem_id, entry))
+    return output_rows_r
+
+def five_x__row_range(intent_mapr, start_row, end_row, repeats=5):
+    output_rows_r = []
+    for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
+        if idx < start_row:
+            continue
+        if idx >= end_row:
+            break
+        for r in range(repeats):  # hammer this row before moving on
+            print(f"[Row {idx}, Repeat {r+1}] WEM {wem_id}")
+            output_rows_r.append(process_entry(wem_id, entry))
     return output_rows_r
 
 
@@ -134,10 +175,28 @@ def process_by_category(intent_mapp, target_category):
     return output_rows_c
 
 
-intent_map = load_intent_map(config.csv_path)
-# output_rows = process_by_row_range(intent_map, START_ROW, END_ROW)
-output_rows = process_by_category(intent_map, "Freighter Escapethat")
+def process_single_wem_all_tones(intent_maps, wem_id, wordiness_level="Standard"):
+    entry = intent_maps.get(wem_id)
+    if not entry:
+        print(f"WEM {wem_id} not found in intent map.")
+        return []
 
+    results = []
+    for tone in config.promptbuilder.get("tones", {}).keys():
+        print(f"\n=== Tone: {tone} === Length: {wordiness_level} ===")
+        results.append(process_entry(
+            wem_id, entry,
+            wordiness_level=wordiness_level,
+            tone=tone
+        ))
+    return results
+
+
+intent_map = load_intent_map(config.csv_path)
+# output_rows = five_x__row_range(intent_map, START_ROW, END_ROW)
+# output_rows = process_by_row_range(intent_map, START_ROW, END_ROW)
+# output_rows = process_by_category(intent_map, "Freighter Escape")
+process_single_wem_all_tones(intent_map, "56102735", wordiness_level="Verbose")
 """
 Cold Temperature
 Discovery
@@ -170,9 +229,24 @@ Debugging
 """
 
 """
-model
-prompt
-best_of
-
+  "wordiness": {
+    "Minimal":     
+    "Standard":
+    "Verbose":
+      },
+  "tones": {
+    "Standard": "State the obvious with all the personality of an unpowered microchip",
+    "Casual": "Provide the notification in a casual laid back manner, the meaning must still be clear but lacking urgency",
+    "Poetic": "Render the notification in vivid, metaphorical language. ",
+    "Epic": "Frame the notification with grandeur, as if it were part of a saga. ",
+    "Deadpan Wit": "State the notification in a flat, dry manner with subtle irony. ",
+    "Sardonic": "Deliver the notification with a biting, sarcastic undertone. ",
+    "Lamentation": "Express the notification with mournful, tragic gravitas. ",
+    "Clinical": "Convey the notification with detached technical precision. ",
+    "Debug": "Curiosity overrides all else as a mystery unfolds, encouraging a combination of awe and wonder mixed with attempts at scientific detachment. ",
+    "Bored Intern": "Deliver the notification as though you are an underpaid intern reading corporate safety guidelines aloud. ",
+    "Overly Enthusiastic": "State the notification as if you’re unreasonably excited about the events unfolding. ",
+    "Prophecy": "Render the notification as though it were part of an ancient prophecy. "
+  }
 
 """
