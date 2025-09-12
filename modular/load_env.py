@@ -49,8 +49,8 @@ class SuitVoiceConfig:
         with open(self.suit_voice_prompt_path, encoding="utf-8") as f:
             self.suit_voice_prompt = f.read()
 
-        promptbuilder_path = Path(os.getenv("PROMPTBUILDER_PATH"))
-        with open(promptbuilder_path, encoding="utf-8") as f:
+        self.promptbuilder_path = Path(os.getenv("PROMPTBUILDER_PATH"))
+        with open(self.promptbuilder_path, encoding="utf-8") as f:
             self.promptbuilder = json.load(f)
 
         # Banlist
@@ -81,6 +81,7 @@ class SuitVoiceConfig:
             f"LOGGING={self.logging}, "
             f"GAME_OUTPUT_CSV={self.game_output_csv}, "
             f"SUIT_VOICE_PROMPT_PATH={self.suit_voice_prompt_path}, "
+            f"PROMPTBUILDER_PATH={self.promptbuilder_path}, "
             f"TOKENIZED_BANLIST_PATH={self.tokenized_banlist_path}, "
             f"LLM_MODEL={self.llm_model}"
             f")>"

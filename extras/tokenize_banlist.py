@@ -2,7 +2,7 @@ import json
 from transformers import AutoTokenizer
 
 # Paths
-INPUT_JSON = "data/logit_bias.json"   # merged format file
+INPUT_JSON = "../data/logit_bias.json"   # merged format file
 TOKENIZER_DIR = "../assets/qwen3_06b_q4"
 
 # Load tokenizer
@@ -21,6 +21,9 @@ def generate_variants(word: str):
     }
     if not word.endswith("'s"):
         variants.update({f"{word}'s", f" {word}'s"})
+    if not word.endswith("s"):
+        variants.update({f"{word}s", f" {word}s"})
+
     return variants
 
 # Load JSON

@@ -1,4 +1,4 @@
-Filename,Transcription,Category,Intent,WEM_number
+Filename,Transcription,Category,Intent,WEM_numb	er
 76438123.WEM,Extreme Cold: Critical,Cold Temperature,"The environment’s extreme cold is critically impacting the user, potentially depleting life support resources rapidly.",76438123
 56102735.WEM,Danger: Critical Hypothermia,Cold Temperature,"Extreme cold conditions have overwhelmed your life support system, and hypothermia has begun, failure to address this may be fatal.",56102735
 968836370.WEM,Extreme Cold Damage Detected,Cold Temperature,You are sustaining serious damage due to exposure to extreme cold conditions.,968836370
