@@ -1,215 +1,216 @@
-Filename,Transcription,Category,Intent,WEM_number
-76438123.WEM,Extreme Cold: Critical,Cold Temperature,"The environment’s extreme cold is critically impacting the user, potentially depleting life support resources rapidly.",76438123
-56102735.WEM,Danger: Critical Hypothermia,Cold Temperature,"Extreme cold conditions have overwhelmed your life support system, and hypothermia has begun, failure to address this may be fatal.",56102735
-968836370.WEM,Extreme Cold Damage Detected,Cold Temperature,You are sustaining serious damage due to exposure to extreme cold conditions.,968836370
-223423849.WEM,Discovery Uploaded,Discovery,Your discovery has been uploaded to the galactic network.,223423849
-263752892.WEM,Home Planet Claimed,Discovery,You have officially claimed a planet as a new home base.,263752892
-497090550.WEM,Discovery Uploaded,Discovery,"Your discovery has been uploaded to the galactic network, and a reward for the discovery has been processed.",497090550
-682556976.WEM,New Planet Analyzed,Discovery,A new planet has been analyzed and the data recorded in your personal archives.,682556976
-685057897.WEM,Discovery Uploaded,Discovery,A recently uploaded discovery is now pending peer review by the galactic scientific community.,685057897
-760990899.WEM,Home Planet Established,Discovery,A new planet has been successfully surveyed and established as your home.,760990899
-990719346.WEM,New System Discovered,Discovery,You have successfully discovered a previously uncharted star system.,990719346
-1010781808.WEM,Discovery Uploaded,Discovery,"A new discovery made by you has been successfully uploaded to the official galactic survey network, allowing others across the galaxy to access and review the data.",1010781808
-27999850.WEM,Shield Protection Falling,Energy Shield,Your energy shield is actively being degraded by continuous damage.,27999850
-67834502.WEM,Shields Down,Energy Shield,The energy shield has failed entirely and you are vulnerable.,67834502
-272020218.WEM,Shield Down,Energy Shield,Energy shield systems are offline due to complete energy depletion. Defensive capability is lost.,272020218
-394683190.WEM,Shield Down,Energy Shield,Your energy shield has failed due to taking damage.,394683190
-468585602.WEM,Shield Down,Energy Shield,Energy levels in the energy shield are severely depleted. Recharge is required.,468585602
-691940593.WEM,Shield Protection Stabilizing,Energy Shield,You are recovering from recent damage and energy shield stabilization is underway.,691940593
-781094525.WEM,Danger: Shield Compromised,Energy Shield,The suit’s kinetic shield has failed and can no longer mitigate physical injury.,781094525
-871932351.WEM,Shield Down,Energy Shield,Critical incoming damage has destroyed all energy shield integrity.,871932351
-774834164.WEM,Weather Update: Storm Clearing,Environmental Status,A storm has passed. Weather conditions are returning to normal.,774834164
-1032826641.WEM,Weather Warning: Incoming Storm,Environmental Status,A storm front will arrive at your location very soon.,1032826641
-351875919.WEM,Delve Limit Reached,Environmental Status,Portable mining equipment has reached a physical limit imposed by gravitational forces. Further excavation is impossible due to environmental constraints.,351875919
-863051935.WEM,Extreme Hazard Planet,Environmental Status,The planet currently being explored presents multiple extreme hazards.  DO NOT SPECIFY THE TYPES OF HAZARDS.,863051935
-105331281.WEM,Component Repaired,Equipment Status,A damaged equipment component has been successfully repaired.,105331281
-792296351.WEM,Technology Recharged,Equipment Status,"One of your tech modules has been provided with additional power, and is functioning normally.",792296351
-43830316.WEM,Technology Repaired,Equipment Status,Repairs have been completed on a damaged piece of installed equipment.,43830316
-117536789.WEM,Additional Resources Required,Equipment Status,You need additional resources to build the desired item.,117536789
-260557941.wem,Backup generators online,Equipment Status,Backup generators have been engaged.,260557941
-299876357.WEM,Freighter Acquired,Equipment Status,"A newly acquired freighter is in poor condition, requiring maintenance and repair.",299876357
-315361790.WEM,Multi-Tool Charge Depleted,Equipment Status,Multi-tool power is completely depleted. Monitor power levels more closely while in use to avoid shutdown during operation.,315361790
-337859118.WEM,Base Computer Online,Equipment Status,The computer for your new base is online and operational. The full build menu is now accessible.,337859118
-353234571.WEM,New Weapon Available,Equipment Status,A previously unobtainable weapon has become available for acquisition.,353234571
-370738335.wem,Emergency damage recovery system engaged,Equipment Status,Severe damage has been sustained and automated repair systems are now active.,370738335
-425064686.WEM,Arial Propulsion Jet Pack Online,Equipment Status,The jetpack is fully operational and ready for use.,425064686
-462791110.wem,"Welcome home, Commander",Equipment Status,Greeting upon returning to a safe location.,462791110
-474358890.WEM,New Freighter Acquired,Equipment Status,"You have acquired a new freighter in poor condition, it is in dire needd of maintenance.",474358890
-487034870.WEM,Internal View Selected,Equipment Status,You have switched to an internal camera view of your suit or vehicle.,487034870
-496984207.WEM,Technology Offline,Equipment Status,A component of the suit or equipment has been damaged and is now offline.,496984207
-589305615.WEM,Shield Kinetic System Online,Equipment Status,You are now fully conscious. The suit’s kinetic shield subsystem has been activated.,589305615
-634281443.WEM,Commencing Atlas System Suit Initialization,Equipment Status,You are exiting a state of unconsciousness. The Atlas Suit and AI companion are initializing and running self-diagnostic processes.,634281443
-639001585.WEM,Suit Power Cells Depleted,Equipment Status,"The suit has exhausted its power reserves, rendering most functions inactive until recharged.",639001585
-757274367.WEM,Technology Installed,Equipment Status,A new technology module has been successfully installed into your equipment.,757274367
-770752691.WEM,Scanner Damaged Repair Required,Equipment Status,Scanner system inoperable; you must initiate repairs to restore functionality.,770752691
-781458145.WEM,Equipment Damaged,Equipment Status,"Your equipment has sustained significant damage, causing some systems or functions to be impaired or offline. Repairs or recalibration are required.",781458145
-911633476.WEM,Initialization Sequence Complete,Equipment Status,Startup routine completed; your interface and systems are now online.,911633476
-929033162.WEM,Device Critically Damaged,Equipment Status,"One or more critical components of the currently equipped tool are severely damaged, impairing its function. Repair or replacement is required to restore full operation.",929033162
-934987809.WEM,No Active Technology in Multi Tool,Equipment Status,Your multitool has no active modules or usable systems. There is a total lack of function.,934987809
-935180311.WEM,New Ship Now Available,Equipment Status,A previously unobtainable ship is available for acquisition.,935180311
-1006934470.WEM,Multi Tool And Mining Laser Attachment Operational,Equipment Status,Your multi-tool and mining laser attachment are fully operational and ready for use.,1006934470
-1037434146.WEM,External View Selected,Equipment Status,"You have switched to an external camera view, offering a perspective outside of the suit or exocraft.",1037434146
-1038991804.WEM,New Technology Discovered,Equipment Status,you have discovered a new piece of technology. Blueprint scans are added to your personal database and may be accessed at any time for review.,1038991804
-976899439.WEM,Extreme Night Temperature Detected,Extreme Temperature,"Extreme temperatures during the night cycle are detected, posing a threat to life support and your safety.",976899439
-29330265.WEM,Extreme Water Temperature Detected,Extreme Temperature,You are exposed to extreme water temperatures while immersed. Review the visual heads up display for details.,29330265
-152151960.WEM,Extreme Temperature Detected,Extreme Temperature,"Environment temperature is detected at extreme levels, posing risk to you and your equipment. Review the visual heads up display for details.",152151960
-213575654.WEM,Extreme Subterranean Temperature Detected,Extreme Temperature,Sensorss have registered extreme temperatures deep underground. These temperatures are outside safe operating limits and may impact equipment or your safety. Review the visual heads up display for details.,213575654
-489352730.WEM,Extreme Water Temperature Detected,Extreme Temperature,You are exposed to extreme water temperature while immersed. Review the visual heads up display for details.,489352730
-570428671.WEM,Extreme Temperature Detected,Extreme Temperature,"Environment temperature is detected at extreme levels, posing risk to you and your equipment. Review the visual heads up display for details.",570428671
-653680659.WEM,Extreme Subterranean Temperature Detected,Extreme Temperature,Sensors indicate dangerous temperature levels while exploring below the surface. There are hazardous subterranean temperature conditions that could compromise the suit.,653680659
-733521599.WEM,Extreme Night Temperature Detected,Extreme Temperature,"Extreme night-time temperature levels have been detected, which may threaten suit integrity and your safety. ",733521599
-449779025.WEM,Incoming Missiles Destroyed,Missile Destroyed,A hostile missile has been destroyed.,449779025
-389592073.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,389592073
-241169623.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,241169623
-672799524.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,672799524
-167092968.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,167092968
-459254064.WEM,Enemy Missile Incoming,Missile Launch,"During a space battle, a missile has been launched by hostile forces at a civilian freighter.  ",459254064
-245522736.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",245522736
-80959229.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",80959229
-776652442.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",776652442
-972765308.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",972765308
-756031301.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",756031301
-711767177.wem,Warning: civilian shields depleted,Freighter Combat,"A civilian freighter is at risk of immediate destruction, it's defenses are inactive.",711767177
-160765928.wem,Civilian freighter destroyed,Freighter Combat,"A civilian freighter, under attack from pirates, asked for your protection. You failed; the freighter was destroyed, and no one survived. The destruction is final, no rescue is possible. Provide a short but epic poetic eulogy lamenting their loss.ontext.",160765928
-954591441.wem,Pirate engines neutralized,Freighter Escape,"The engines of a hostile ship have been disabled, leaving it unable to maneuver.",954591441
-278919221.wem,Hyperdrive damage is critical,Freighter Escape,A freighter ship is attempting a hyperspace jump with critically damaged engines.  You still have time to disable the ship before it escapes.,278919221
-311554138.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,311554138
-48466939.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,48466939
-565386800.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,565386800
-597203928.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,597203928
-4494640.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,4494640
-45779246.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,45779246
-695050944.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,695050944
-543874217.WEM,Danger: Heat Levels Critical,Hot Temperature,"Critical heat levels have bypassed your protective systems, resulting in life-threatening high temperatures.",543874217
-580370729.WEM,Extreme Heat Damage Detected,Hot Temperature,"Extreme heat damage has been detected; failure to mitigate this will cause severe harm to you, possibly fatal. ",580370729
-647699088.WEM,Extreme Heat: Critical,Hot Temperature,You are currently unable to cope with critical heat conditions. Continued exposure will result in total failure or destruction of the suit and your physical self.,647699088
-980411923.WEM,Product Received,Inventory,A product or item has been delivered and added to your inventory.,980411923
-780959188.WEM,Inventory Full,Inventory,"The inventory space is completely full, preventing additional item storage. ",780959188
-383184645.WEM,Inventory Full,Inventory,"The inventory space is completely full, preventing additional item storage. ",383184645
-1023688906.WEM,Collectible Received,Inventory,A single item intended for personal decoration has been added to your inventory.,1023688906
-159011641.WEM,Transferred,Inventory,An inventory item has been moved from slot or container to another slot or container.,159011641
-200893742.WEM,No Free Slots In Ship Inventory,Inventory,The ship's inventory is full. No additional items can be stored until space is cleared.,200893742
-431813574.WEM,Inventory Contents Transferred,Inventory,Selected inventory contents have been moved to a new storage location or compartment.,431813574
-665195778.WEM,New Inventory Slots Available,Inventory,"Additional inventory slots have been installed in your suit, increasing carrying capacity.",665195778
-682086836.WEM,Item Received,Inventory,"You have received an item, which is now added to your inventory.",682086836
-750398819.WEM,Product Transferred,Inventory,An item has been moved from one inventory container to another.,750398819
-769144390.WEM,Insufficient Resources,Inventory,you have attempted an action requiring resources you do not currently possess in sufficient quantity.,769144390
-925087453.WEM,Element Resources Successfully Transferred To Ship Inventory,Inventory,Selected resources have been successfully transferred to the ship’s cargo hold.,925087453
-969545875.WEM,Element Resources Successfully Transferred,Inventory,Selected inventory items have been successfully transferred to an alternate unspecified storage space.,969545875
-985789170.WEM,Product Constructed,Inventory,The product has been correctly constructed.,985789170
-28276028.WEM,Life Support Critical,Life Support,"Life support power has dropped to critical levels, risking imminent shutdown of suit systems and equipment functions and your demise.",28276028
-808789373.WEM,Life Support Systems Activated,Life Support,Life support systems have activated and registered your bio-signature.,808789373
-825969836.WEM,Life Support Power Low,Life Support,Life support power is significantly depleted. Failure to take corrective action will result in your death.,825969836
-865668553.wem,Life support level falling,Life Support,Life support power is dangerously low and must be restored to prevent death.,865668553
-1061736374.WEM,Life Support Offline,Life Support,"Life support systems are now offline, and suit systems are shutting down. Regaining consciousness will be very unlikely.",1061736374
-303147008.WEM,Units Depleted,Monetary Transaction,"You have no money, your current balance is zero.",303147008
-911201958.WEM,Insufficient Units,Monetary Transaction,your monetary units are insufficient to complete a purchase.,911201958
-330331555.WEM,Units Received,Monetary Transaction,Units have been received and have been added to your account.,330331555
-126319994.WEM,Secure Transmission Module Located,Navigation,A communications module has been found and its data is being downloaded to your navigation system.,126319994
-243520476.WEM,Orbital Station Coordinates Received,Navigation,New coordinates for a previously unvisited orbital station have been uploaded to your navigation system.,243520476
-288672024.WEM,Distress Signal Detected,Navigation,Your navigation computer has detected and traced a distress signal from another entity. Coordinates of the signal’s origin have been added to navigation systems for potential response.,288672024
-334124591.WEM,Base Out Of Range,Navigation,"You have traveled outside the legally claimed region boundaries of your base. This limits building options in the current area. Outside the base, there are a only a handful of small portble items availabe to be constructed and placed.",334124591
-436192208.WEM,Starship Signal Detected,Navigation,"A signal has been detected that may be of interest to you, it appears to match a standard starship distress frequency. Navigation coordinates are marked should you wish to investigate.",436192208
-545382948.WEM,Sigil Trait Module Located,Navigation,"A rare upgrade module relevant to Sigil Traits has been found, it awaits your interaction.",545382948
-705081998.wem,Anomoly detected,Navigation,There is an unusual phenomenon detected nearby that may be worth exploring.,705081998
-906001973.WEM,Jumping,Navigation,The hyperspace jump is currently underway. Unpleasant physical sensations such as dizziness or nausea as a result of visual or sensory distortions is absolutely normal.,906001973
-906332741.WEM,Alert: Navigational Data Received,Navigation,New navigational data has been received and stored in the navigation database.,906332741
-965460983.WEM,Out Of Range: Return To Base,Navigation,You have moved outside of your base's functional area. Most construction opportunities are disabled outside the base boundary.,965460983
-64910055.WEM,Warning,Notification,You are acting irrationally or unsustainably.,64910055
-178898599.WEM,Warning,Notification,"You may want to rethink recent choices, negative consequences may follow if you insist on continuing with your current actions.",178898599
-205192151.WEM,Warning,Notification,Your actions are not recommended and may be dangerous or inefficient.,205192151
-225625917.WEM,Objective Complete,Notification,A mission or assigned task has been successfully completed. A self administered food reward would be appropriate.,225625917
-284071635.WEM,New Assistant Acquired,Notification,A new pilot has joined your fleet.  DO NOT REFER BY NAME.,284071635
-328948003.WEM,Warning,Notification,Continued poor decision making could lead to your harm or disadvantage.,328948003
-582370014.WEM,Assistant Recruited,Notification,A new recruit has joined your journey to provide support.  DO NOT REFER BY NAME.,582370014
-599588736.WEM,Warning,Notification,Your actions may attract unwelcome attention from local authorities.,599588736
-811360087.WEM,New Assistant Recruited,Notification,A new intern has been recruited.  DO NOT REFER BY NAME.,811360087
-1003218333.WEM,Warning,Notification,Review your surroundings for possible threats.,1003218333
-1015651622.WEM,Warning,Notification,Your current behavior may hinder progress or cause problems.,1015651622
-228408571.WEM,Warning,Notification,Consider disengaging and retreating from the current situation for safety or strategic advantage.,228408571
-512212065.WEM,Oxygen Levels Critical,Oxygen Level,"Your oxygen supply is nearly depleted, with a corresponding immediate risk of suffocation. ",512212065
-768295468.WEM,Danger: Low Oxygen Levels,Oxygen Level,Your suit is nearly depleted of breathable oxygen.,768295468
-656990144.WEM,Extreme Sentinel Planet,Personal Combat,This planet is inhabited by Extremely hostile Sentinel robots that will attack on sight. This is a HOSTILE COMBAT ENVIRONMENT. DANGER IS EVER-PRESENT.,656990144
-240393094.WEM,Warning: Sentinel Drones Activated,Personal Combat,Multiple hostile drones are converging on your position.,240393094
-884631197.WEM,Weapon Charge Depleted,Personal Combat,"Your weapon has no ammo left, the weapon needs recharging or reloading.",884631197
-386328035.WEM,Hostile Scan Detected,Personal Combat,"A hostile source is scanning you.. This is a threat in progress, Urgency required.",386328035
-236472322.WEM,Warning: Sentinel Combat Unit Deployed,Personal Combat,An advanced Sentinel enemy unit is hunting you due to your actions.,236472322
-583871976.WEM,Warning: Threat Detected,Personal Combat,There is a nearby low-level danger or enemy presence.,583871976
-623058381.WEM,Shield Down,Energy Shield,Shield functionality has ceased due to lack of power.,623058381
-72116738.wem,Sentinels Arrived,Personal Combat,Sentinel enemy units have reached the current location and are preparing to attack you.,72116738
-78601477.WEM,Warning: Sentinel Walker Detected,Personal Combat,A hostile large-scale heavily armed and armoured Sentinel unit has been detected and will arrive at your location soon.,78601477
-90482995.WEM,Hostiles Approaching,Personal Combat,Hostile forces are approaching rapidly. Prepare for confrontation.,90482995
-486861530.WEM,Warning: Elite Sentinel Force,Personal Combat,A high-level hostile Sentinel unit is approaching.,486861530
-540684729.wem,Sentinel force deactivated,Personal Combat,Hostile Sentinel network in the area is temporarily no longer active or functioning.,540684729
-673620140.WEM,Warning: Sentinels Engaged,Personal Combat,You are actively in combat with hostile Sentinel units.,673620140
-306112359.WEM,Damage Sustained,Personal Protection,Your body has sustained small to moderate physical damage.,306112359
-943635243.WEM,Critical Damage Taken,Personal Protection,Significant physical damage has been inflicted on your body.,943635243
-247183138.WEM,Thermal Protection Falling,Protection from Environment,"Your environmental temperature shielding is failing, ability to protect against all temperature extremes is compromised.",247183138
-899320928.WEM,Thermal Protection Offline,Protection from Environment,Thermal defense has failed; further exposure to extreme environmental temperatures will affect your health.,899320928
-951631813.WEM,Temperature Levels Stabilizing,Protection from Environment,Temperature conditions outside the suit are returning to normal operating range.,951631813
-28697689.WEM,Radiation Damage Detected,Radiation Exposure,You have been exposed to dangerous radiation levels that may severely impact your long term health.,28697689
-124237937.WEM,Extreme Night Radiation Detected,Radiation Exposure,Detection systems have registered extreme radiation levels during the night cycle.,124237937
-696022064.WEM,Extreme Radiation Detected,Radiation Exposure,"Extremely high levels of radiation are detected, requiring immediate protective measures.",696022064
-824368356.WEM,Extreme Subterranean Radiation Detected,Radiation Exposure,"Extremely high subterranean radiation levels have been detected, posing severe risk to you and your and suit integrity.",824368356
-899453751.WEM,Radiation Leak Detected,Radiation Exposure,A nearby source of intense radiation is posing a threat.,899453751
-53870591.WEM,Radiation Protection Offline,Radiation Exposure,"The suit's radiation shielding has completely failed, you are now unable to mitigates the effects of radiation exposure. ",53870591
-54980060.WEM,Radiation Protection Falling,Radiation Exposure,"The suit’s radiation shielding is degrading, leaving you increasingly vulnerable.",54980060
-258814940.WEM,Radiation Levels Critical,Radiation Exposure,"Radiation exposure has reached a critical threshold, continued exposure could prove fatal.",258814940
-472945351.WEM,Radiation Protection Stabilizing,Radiation Exposure,Radiation protection is returning to normal operational levels.,472945351
-957514183.WEM,Danger: Radiation Breach,Radiation Exposure,"Radiation shielding has overloaded and failed, putting the you at risk of irreversible loss of biological cohesion.",957514183
-460766259.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",
-487346738.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",
-61285078.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",
-836418899.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",
-862236259.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",
-946171572.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",
-998327261.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",
-752301356.WEM,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",
-330757140.WEM,Hostile Ships Defeated,Starship Combat,You survived a starship battle.  Well done.,330757140
-968718536.WEM,Hostile Ships Approaching,Starship Combat,"Hostile starshipsare approaching your position, their weapons are armed and ready.",968718536
-28199458.WEM,Hostile System: Weapons Engaged,Starship Combat,"Hostile forces have already initiated combat with local defenses in the system prior to your arrival, and your starship has activated combat readiness protocols.",28199458
-49616634.wem,Engaging Attack Ships,Starship Combat,Attacking starships have been marked as valid weapon targets for you by the combat computer.,49616634
-162710077.wem,Sentinel Starships Inbound,Starship Combat,Hostile Sentinel starships are approaching to intercept you.,162710077
-205039265.WEM,New Bounty Available,Starship Combat,The Mercenary's Guild has detected a threat in this system. You have been offered a reward for capturing or destroying the rogue pilot.,205039265
-310439562.WEM,Warning: Sentinel Interceptors Incoming,Starship Combat,Sentinel reinforcements are inbound to engage you.,310439562
-472197709.WEM,Target Acquired,Starship Combat,A valid target is now being tracked by your starship combat computer.,472197709
-494454783.WEM,Pirate Ship At Large: Bounty Available,Starship Combat,"A hostile starship is roaming this solar system, local authorites have offered you a reward for capturing or destroying the rogue pilot.",494454783
-510448383.WEM,Target Locked,Starship Combat,Target lock established; weapons ready to fire with high accuracy.,510448383
-514543818.WEM,Pirate Spotted: Bounty Available,Starship Combat,Pirate activity has been detected near you.  You have been offered a reward for capturing or destroying the pirate.,514543818
-594696652.wem,Sentinel ships in combat range,Starship Combat,Hostile Sentinel ships are close enough to engage with weapons.,594696652
-797446331.WEM,Hostile System: Engage Weapons,Starship Combat,"The star system is under hostile control, and weapons systems must be engaged immediately as the occupiers have detected you and are already responding.",797446331
-984473045.WEM,Warning: Hostile System,Starship Combat,You have entered a hostile-controlled star system where enemies will likely attack.,984473045
-13628945.wem,Atmospheric interference,Starship Movement,Your starship is unable to perform some actions while inside a planetary atmosphere.,13628945
-137307545.wem,Station Proximity,Starship Movement,Your starship is unable to perform some actions while you are too close to a space station.,137307545
-197643865.WEM,Pulse Drive Engaged,Starship Movement,Your ship has activated its pulse drive for rapid travel within the solar system.,197643865
-294741566.wem,Local enemy disruption,Starship Movement,Hostile forces are using a device that is restricting your speed.,294741566
-375834098.wem,Landing sequence initiated,Starship Movement,The autopilot landing procedure has started and the ship is descending for touchdown.,375834098
-393574373.wem,Planetary interference,Starship Movement,"You are attempting a starship manouever that is intended for deep space, but you are inside a planetary atmosphere.",393574373
-422143449.WEM,Landing Area Not Clear,Starship Movement,"Your ship's autopilot has determined your chosen landing site to be unsafe or inaccessible, you must find a new landing location.  DO NOT STATE WHY IT IS UNSAFE.",422143449
-469963216.WEM,Initiating Landing Sequence,Starship Movement,The guidance computer has assumed control to perform an automated landing sequence.,469963216
-556538925.wem,Large ship proximity,Starship Movement,Your starship is unable to perform some actions while you are too close to a large ship.,556538925
-629992665.wem,Atmospheric interference,Starship Movement,Your starship is unable to perform some actions while inside a planetary atmosphere.,629992665
-769872372.wem,Large ship proximity,Starship Movement,Your starship is unable to perform some actions while you are too close to a large ship.,769872372
-824079454.wem,Space station proximity,Starship Movement,Your starship is unable to perform some actions while you are too close to a space station.,824079454
-396681446.wem,Nearby toxins detected,Toxic Environment,Hazardous toxins are damaging the suit's protective filters,396681446
-50465612.WEM,Extreme Subterranean Toxicity Detected,Toxic Environment,"Concentrated Toxic substances are detected while you are underground, capable of breaching safe thresholds.",50465612
-208814791.WEM,Extreme Water Toxicity Detected,Toxic Environment,Water toxicity levels have reached extreme danger thresholds while immersed.,208814791
-490165063.WEM,Extreme Night Toxicity Detected,Toxic Environment,"Extremely toxic conditions have been detected during the night cycle, posing significant danger. ",490165063
-675954230.WEM,Extreme Toxicity Detected,Toxic Environment,"You are experencencing extreme hazardous toxicity levels, requiring immediate action by you to avoid damage or poisoning.",675954230
-151182894.WEM,Toxic Protection Offline,Toxic Environment,The suit can no longer protect you from toxins and severe prolonged damage is expected.,151182894
-335483997.WEM,Toxic Protection Stabilizing,Toxic Environment,Decontamination protocols activating; toxic shielding is regaining function.,335483997
-498474774.WEM,Toxicity Levels Critical,Toxic Environment,Toxic contamination has reached near-fatal levels; immediate safety action required.,498474774
-797567920.WEM,Toxic Protection Falling,Toxic Environment,Toxic shielding is weakening; damage from ambient poisons will increase.,797567920
-973658086.WEM,Danger: Toxic Rain Breach,Toxic Environment,"Life-threatening toxic substances have breached the suit’s protective barriers, posing immediate danger to your health.",973658086
-1063828486.WEM,Toxic Damage Detected,Toxic Environment,"toxins detected, direct exposure may cause severe physical side effects.",1063828486
-548071497.WEM,Vehicle Deployed,Vehicle Readiness,Your selected vehicle has been successfully deployed to your current location.,548071497
-670654758.WEM,Vehicle Acquired,Vehicle Readiness,A new vehicle or starship has been added to your usable selection.,670654758
-682649339.WEM,New Vehicle Acquired,Vehicle Readiness,A new vehicle has been added to your accessible assets.,682649339
-729203380.WEM,Vehicle Mobilized,Vehicle Readiness,A vehicle is ready for use at your location.,729203380
-1045889204.WEM,Vehicle Summoned,Vehicle Readiness,A vehicle has been summoned and delivered to you via orbital drop.,1045889204
-531979220.WEM,Fuel Required,Vehicle Status,Fuel levels are below operational thresholds and must be replenished to continue normal function.,531979220
-579975330.WEM,Vehicle Damage Sustained,Vehicle Status,Your vehicle has taken medium damage.  Do not speculate on the source of damage.,579975330
-740830728.WEM,Refuel Vehicle,Vehicle Status,The vehicle is critically low on fuel and requires immediate refueling or recharging.,740830728
-891464212.WEM,Fuel Depleted,Vehicle Status,"Vehicle fuel reserves are fully depleted, disabling vehicle operation. ",891464212
-974964870.WEM,Damage Sustained To Vehicle,Vehicle Status,Your vehicle has sustained light to moderate damage and the safety harness has engaged as a protective response.,974964870
-666.WEM,Mandatory Test,Debugging,"Hello, you've reached I.T.  Have you tried turning it off and then on again?",666
+Filename,Transcription,Category,Intent,WEM_number,Used
+76438123.WEM,Extreme Cold: Critical,Cold Temperature,"The environment’s extreme cold is critically impacting the Interloper, potentially depleting life support resources rapidly.",76438123,
+56102735.WEM,Danger: Critical Hypothermia,Cold Temperature,"Extreme cold conditions have overwhelmed the Interloper's life support system, and hypothermia has begun, failure to address this may be fatal.",56102735,
+968836370.WEM,Extreme Cold Damage Detected,Cold Temperature,The Interloper is sustaining serious damage due to exposure to extreme cold conditions.,968836370,
+223423849.WEM,Discovery Uploaded,Discovery,The Interloper's discovery has been uploaded to the galactic network.,223423849,
+263752892.WEM,Home Planet Claimed,Discovery,The Interloper has officially claimed a planet as a new home base.,263752892,No
+497090550.WEM,Discovery Uploaded,Discovery,"The Interloper's discovery has been uploaded to the galactic network, and a reward for the discovery has been processed.",497090550,
+682556976.WEM,New Planet Analyzed,Discovery,A new planet has been analyzed and the data recorded in the Interloper's personal archives.,682556976,No
+685057897.WEM,Discovery Uploaded,Discovery,A recently uploaded discovery is now pending peer review by the galactic scientific community.,685057897,
+760990899.WEM,Home Planet Established,Discovery,A new planet has been successfully surveyed and established as the Interloper's home.,760990899,No
+990719346.WEM,New System Discovered,Discovery,The Interloper has successfully discovered a previously uncharted star system.,990719346,No
+1010781808.WEM,Discovery Uploaded,Discovery,"A new discovery made by the Interloper has been successfully uploaded to the official galactic survey network, allowing others across the galaxy to access and review the data.",1010781808,
+27999850.WEM,Shield Protection Falling,Energy Shield,The Interloper's personal energy shield is actively being degraded by continuous damage.,27999850,
+67834502.WEM,Shields Down,Energy Shield,The personal energy shield has failed entirely and the Interloper is vulnerable.,67834502,
+272020218.WEM,Shield Down,Energy Shield,Personal energy shield systems are offline due to complete energy depletion. Defensive capability is lost.,272020218,
+394683190.WEM,Shield Down,Energy Shield,The Interloper's personal energy shield has failed due to taking damage.,394683190,
+468585602.WEM,Shield Down,Energy Shield,Energy levels in the personal energy shield are severely depleted. Recharge is required.,468585602,
+691940593.WEM,Shield Protection Stabilizing,Energy Shield,The Interloper is recovering from recent damage and personal energy shield stabilization is underway.,691940593,
+781094525.WEM,Danger: Shield Compromised,Energy Shield,The suit’s kinetic energy shield has failed and can no longer mitigate physical injury.,781094525,
+871932351.WEM,Shield Down,Energy Shield,Critical incoming damage has destroyed all personal energy shield integrity.,871932351,
+774834164.WEM,Weather Update: Storm Clearing,Environmental Status,A storm has passed. Weather conditions are returning to normal.,774834164,
+1032826641.WEM,Weather Warning: Incoming Storm,Environmental Status,A storm front will arrive at the Interloper's location very soon.,1032826641,
+351875919.WEM,Delve Limit Reached,Environmental Status,Portable mining equipment has reached a physical limit imposed by gravitational forces. Further excavation is impossible due to environmental constraints.,351875919,No
+863051935.WEM,Extreme Hazard Planet,Environmental Status,The planet currently being explored presents multiple extreme hazards.,863051935,
+105331281.WEM,Component Repaired,Equipment Status,A damaged equipment component has been successfully repaired vy the Interloper.,105331281,
+792296351.WEM,Technology Recharged,Equipment Status,"One of the Interloper's tech modules has been provided with additional power, and is functioning normally.",792296351,
+43830316.WEM,Technology Repaired,Equipment Status,Repairs have been completed on a damaged piece of the Interloper's installed equipment.,43830316,
+117536789.WEM,Additional Resources Required,Equipment Status,The Interloper needs additional resources to build the desired item.,117536789,
+260557941.wem,Backup generators online,Equipment Status,Backup generators have been engaged.,260557941,No
+299876357.WEM,Freighter Acquired,Equipment Status,"The interloper has acquired a new freighter.  It is in poor condition, requiring maintenance and repair.",299876357,No
+315361790.WEM,Multi-Tool Charge Depleted,Equipment Status,Multi-tool power is completely depleted. The interloper should Monitor power levels more closely while in use to avoid shutdown during operation.,315361790,
+337859118.WEM,Base Computer Online,Equipment Status,The computer for the Interloper's new base is online and operational. The full build menu is now accessible.,337859118,No
+353234571.WEM,New Weapon Available,Equipment Status,A previously unobtainable weapon has become available for acquisition by the Interloper.,353234571,No
+370738335.wem,Emergency damage recovery system engaged,Equipment Status,Severe damage has been sustained by the Interloper's equipment and automated repair systems are now active.,370738335,
+425064686.WEM,Arial Propulsion Jet Pack Online,Equipment Status,The Interloper's jetpack is fully operational and ready for use.,425064686,
+462791110.wem,"Welcome home, Commander",Equipment Status,Greeting the Interloper upon returning to a safe location.,462791110,No
+474358890.WEM,New Freighter Acquired,Equipment Status,"The Interloper has acquired a new freighter in poor condition, it is in dire needd of maintenance.",474358890,
+487034870.WEM,Internal View Selected,Equipment Status,The Interloper has switched to an internal camera view of the suit or vehicle in use.,487034870,No
+496984207.WEM,Technology Offline,Equipment Status,A component of the Interloper's suit or equipment has been damaged and is now offline.,496984207,
+589305615.WEM,Shield Kinetic System Online,Equipment Status,The Interloper is now fully conscious. The suit’s kinetic shield subsystem has been activated.,589305615,
+634281443.WEM,Commencing Atlas System Suit Initialization,Equipment Status,The Interloper is entering a state of consciousness. The Atlas Suit and AI companion are initializing and running self-diagnostic processes.,634281443,
+639001585.WEM,Suit Power Cells Depleted,Equipment Status,"The Interloper's suit has exhausted its power reserves, rendering most functions inactive until recharged.",639001585,
+757274367.WEM,Technology Installed,Equipment Status,A new technology module has been successfully installed in the Interloper's equipment.,757274367,
+770752691.WEM,Scanner Damaged Repair Required,Equipment Status,Scanner system inoperable; the Interloper must initiate repairs to restore functionality.,770752691,No
+781458145.WEM,Equipment Damaged,Equipment Status,"The Interloper's equipment has sustained significant damage, causing some systems or functions to be impaired or offline. Repairs or recalibration are required.",781458145,No
+911633476.WEM,Initialization Sequence Complete,Equipment Status,Startup routine completed; the Interloper's suit interface and systems are now online.,911633476,
+929033162.WEM,Device Critically Damaged,Equipment Status,"One or more critical components of the Interloper's currently equipped tool are severely damaged, impairing its function. Repair or replacement is required to restore full operation.",929033162,No
+934987809.WEM,No Active Technology in Multi Tool,Equipment Status,The Interloper's multitool has no active modules or usable systems. There is a total lack of function.,934987809,No
+935180311.WEM,New Ship Now Available,Equipment Status,A previously unobtainable ship is available for acquisition by the Interloper.,935180311,No
+1006934470.WEM,Multi Tool And Mining Laser Attachment Operational,Equipment Status,The Interloper's multi-tool and mining laser attachment are fully operational and ready for use.,1006934470,
+1037434146.WEM,External View Selected,Equipment Status,"The Interloper has switched to an external camera view, offering a perspective outside of the suit or current vehicle.",1037434146,No
+1038991804.WEM,New Technology Discovered,Equipment Status,The Interloper has discovered a new piece of technology. Blueprint scans are added to the Interloper's personal database and may be accessed at any time for review.,1038991804,
+976899439.WEM,Extreme Night Temperature Detected,Extreme Temperature,"Extreme temperatures during the night cycle are detected, posing a threat to life support and the Interloper's safety.",976899439,
+29330265.WEM,Extreme Water Temperature Detected,Extreme Temperature,The Interloper is exposed to extreme water temperatures while immersed. Recommend review of the visual heads up display is recommended for specific details.,29330265,
+152151960.WEM,Extreme Temperature Detected,Extreme Temperature,"Environment temperature is detected at extreme levels, posing risk to the Interloper and equipment. Recommend review of the visual heads up display is recommended for specific details.",152151960,
+213575654.WEM,Extreme Subterranean Temperature Detected,Extreme Temperature,Sensors have registered extreme temperatures deep underground. These temperatures are outside the Interloper's safe operating limits and may impact equipment or the Interloper's safety. Recommend review of the visual heads up display is recommended for specific details.,213575654,
+489352730.WEM,Extreme Water Temperature Detected,Extreme Temperature,The Interloper is exposed to extreme water temperature while immersed. Recommend review of the visual heads up display is recommended for specific details.,489352730,
+570428671.WEM,Extreme Temperature Detected,Extreme Temperature,"Environment temperature is detected at extreme levels, posing risk to the Interloper and the Interloper's equipment. Recommend review of the visual heads up display is recommended for specific details.",570428671,
+653680659.WEM,Extreme Subterranean Temperature Detected,Extreme Temperature,Sensors indicate dangerous temperature levels while exploring below the surface. There are hazardous subterranean temperature conditions that could compromise the Interloper's suit.,653680659,
+733521599.WEM,Extreme Night Temperature Detected,Extreme Temperature,"Extreme night-time temperature levels have been detected, which may threaten suit integrity and the Interloper's safety. ",733521599,
+449779025.WEM,Incoming Missiles Destroyed,Missile Destroyed,A hostile missile has been destroyed.,449779025,
+389592073.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,389592073,
+241169623.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,241169623,
+672799524.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,672799524,
+167092968.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,167092968,
+459254064.WEM,Enemy Missile Incoming,Missile Launch,"During a space battle, a missile has been launched by hostile forces at a civilian freighter.  ",459254064,
+245522736.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",245522736,
+80959229.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",80959229,
+776652442.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",776652442,
+972765308.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",972765308,
+756031301.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",756031301,
+711767177.wem,Warning: civilian shields depleted,Freighter Combat,"A civilian freighter is at risk of immediate destruction, it's defenses are inactive.",711767177,
+160765928.wem,Civilian freighter destroyed,Freighter Combat,"A civilian freighter, under attack from pirates, asked for the Interloper's protection. The Interloper failed; the freighter was destroyed, and no one survived. The destruction is final, no rescue is possible. ",160765928,
+954591441.wem,Pirate engines neutralized,Freighter Escape,"The engines of a hostile ship have been disabled by the Interloper, leaving it unable to maneuver.",954591441,
+278919221.wem,Hyperdrive damage is critical,Freighter Escape,A freighter ship is attempting a hyperspace jump with critically damaged engines.  The Interloper still has time to disable the ship before it escapes.,278919221,
+311554138.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,311554138,
+48466939.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,48466939,
+565386800.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,565386800,
+597203928.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,597203928,
+4494640.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,4494640,
+45779246.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,45779246,
+695050944.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,695050944,
+543874217.WEM,Danger: Heat Levels Critical,Hot Temperature,"Critical heat levels have bypassed the Interloper's protective systems, resulting in life-threatening high temperatures.",543874217,
+580370729.WEM,Extreme Heat Damage Detected,Hot Temperature,"Extreme heat damage has been detected; failure to mitigate this will cause severe harm to the Interloper, possibly fatal. ",580370729,
+647699088.WEM,Extreme Heat: Critical,Hot Temperature,The Interloper is currently unable to cope with critical heat conditions. Continued exposure will result in total failure or destruction of the suit and the Interloper's physical self.,647699088,
+980411923.WEM,Product Received,Inventory,A product or item has been delivered and added to the Interloper's inventory.,980411923,
+780959188.WEM,Inventory Full,Inventory,"The inventory space is completely full, preventing additional item storage. ",780959188,
+383184645.WEM,Inventory Full,Inventory,"The inventory space is completely full, preventing additional item storage. ",383184645,
+1023688906.WEM,Collectible Received,Inventory,A single item intended for personal decoration has been added to the Interloper's inventory.,1023688906,
+159011641.WEM,Transferred,Inventory,An inventory item has been moved from slot or container to another slot or container.,159011641,No
+200893742.WEM,No Free Slots In Ship Inventory,Inventory,The ship's inventory is full. No additional items can be stored until space is cleared.,200893742,
+431813574.WEM,Inventory Contents Transferred,Inventory,Selected inventory contents have been moved to a new storage location or compartment.,431813574,No
+665195778.WEM,New Inventory Slots Available,Inventory,"Additional inventory slots have been installed in the Interloper's suit, increasing carrying capacity.",665195778,No
+682086836.WEM,Item Received,Inventory,"The Interloper has received an item, which is now added to the Interloper's inventory.",682086836,
+750398819.WEM,Product Transferred,Inventory,An item has been moved from one inventory container to another.,750398819,No
+769144390.WEM,Insufficient Resources,Inventory,The Interloper has attempted an action requiring resources not currently possessed in sufficient quantity.,769144390,
+925087453.WEM,Element Resources Successfully Transferred To Ship Inventory,Inventory,Selected resources have been successfully transferred to the Interloper's ship cargo hold.,925087453,
+969545875.WEM,Element Resources Successfully Transferred,Inventory,Selected inventory items have been successfully transferred to an alternate unspecified storage space.,969545875,
+985789170.WEM,Product Constructed,Inventory,The product has been correctly constructed by the Interloper.,985789170,
+28276028.WEM,Life Support Critical,Life Support,"Life support power has dropped to critical levels, risking imminent shutdown of suit systems and equipment functions and the Interloper's demise.",28276028,
+808789373.WEM,Life Support Systems Activated,Life Support,Life support systems have activated and registered the Interloper's bio-signature.,808789373,
+825969836.WEM,Life Support Power Low,Life Support,Life support power is significantly depleted. Failure to take corrective action will result in the Interloper's death.,825969836,
+865668553.wem,Life support level falling,Life Support,Life support power is dangerously low and must be restored to prevent the death of the Interloper.,865668553,
+1061736374.WEM,Life Support Offline,Life Support,"Life support systems are now offline, and suit systems are beginning a shut down sequence. If this sequence completes, it will be very difficult for the Interloper to regain consciousness.",1061736374,
+303147008.WEM,Units Depleted,Monetary Transaction,"The Interloper has no money, the Interloper's current balance is zero.",303147008,
+911201958.WEM,Insufficient Units,Monetary Transaction,The Interloper's monetary units are insufficient to complete the requested purchase.,911201958,
+330331555.WEM,Units Received,Monetary Transaction,Units have been received and have been added to the Interloper's account.,330331555,
+126319994.WEM,Secure Transmission Module Located,Navigation,A communications module has been found and its data is being downloaded to the Interloper's navigation system.,126319994,
+243520476.WEM,Orbital Station Coordinates Received,Navigation,New coordinates for a previously unvisited orbital station have been uploaded to the Interloper's navigation system.,243520476,
+288672024.WEM,Distress Signal Detected,Navigation,The Interloper's navigation computer has detected and traced a distress signal from another entity. Coordinates of the signal’s origin have been added to the navigation database for potential response.,288672024,
+334124591.WEM,Base Out Of Range,Navigation,"The Interloper has traveled outside the legally claimed region boundaries of the current base. Outside the base, there are a only a handful of small portable items availabe to be constructed and placed.",334124591,No
+436192208.WEM,Starship Signal Detected,Navigation,"A signal has been detected that may be of interest to the Interloper, it appears to match a standard starship distress frequency. Navigation coordinates are marked should the Interloper wish to investigate.",436192208,
+545382948.WEM,Sigil Trait Module Located,Navigation,"A rare upgrade module relevant to Sigil Traits has been found, it awaits the Interloper's interaction.",545382948,No
+705081998.wem,Anomoly detected,Navigation,There is an unusual phenomenon detected nearby that the Interloper may wish to investigate.,705081998,No
+906001973.WEM,Jumping,Navigation,"The hyperspace jump is currently underway. Unpleasant physical sensations such as dizziness or nausea as a result of visual or sensory distortions is absolutely normal, however the Interloper may find it difficult to resist succombing to the effects.",906001973,No
+906332741.WEM,Alert: Navigational Data Received,Navigation,New navigational data has been received and stored in the Interloper's navigation database.,906332741,
+965460983.WEM,Out Of Range: Return To Base,Navigation,The Interloper has moved outside of the current base's functional area. Most construction opportunities are disabled outside the base boundary.,965460983,No
+64910055.WEM,Warning,Notification,The Interloper is acting irrationally or unsustainably.,64910055,
+178898599.WEM,Warning,Notification,"The Interloper may want to reconsider recent choices, negative consequences may follow if the Interloper insist on continuing with the Interloper's current actions.",178898599,
+205192151.WEM,Warning,Notification,"The Interloper's current choice of action is not recommended, and may be dangerous or inefficient.",205192151,
+225625917.WEM,Objective Complete,Notification,A mission or assigned task has been successfully completed by the Interloper. A suggestion that the Interloper partakes of a self administered food reward would be appropriate.,225625917,
+284071635.WEM,New Assistant Acquired,Notification,A new pilot has joined the Interloper's fleet.,284071635,No
+328948003.WEM,Warning,Notification,Continued poor decision making could lead to the Interloper's harm or disadvantage.,328948003,
+582370014.WEM,Assistant Recruited,Notification,A new recruit has joined the Interloper's journey to provide support. ,582370014,No
+599588736.WEM,Warning,Notification,The Interloper's actions may attract unwelcome attention from local authorities.,599588736,
+811360087.WEM,New Assistant Recruited,Notification,A new intern has been recruited by the Interloper.,811360087,No
+1003218333.WEM,Warning,Notification,Reccomend that the Interloper review immediate surroundings for possible threats.,1003218333,
+1015651622.WEM,Warning,Notification,The Interloper's current behavior may hinder progress or cause problems.,1015651622,
+228408571.WEM,Warning,Notification,The Interloper may want to consider disengaging and retreating from the current situation for safety or strategic advantage.,228408571,
+512212065.WEM,Oxygen Levels Critical,Oxygen Level,"The Interloper's oxygen supply is nearly depleted, with a corresponding immediate risk of suffocation. ",512212065,
+768295468.WEM,Danger: Low Oxygen Levels,Oxygen Level,The Interloper's suit is nearly depleted of breathable oxygen.,768295468,
+656990144.WEM,Extreme Sentinel Planet,Personal Combat,This planet is inhabited by Extremely hostile Sentinel robots that will attack the Interloper on sight. This is a HOSTILE COMBAT ENVIRONMENT. DANGER IS EVER-PRESENT.,656990144,
+240393094.WEM,Warning: Sentinel Drones Activated,Personal Combat,Multiple hostile drones are converging on the Interloper's position.,240393094,
+884631197.WEM,Weapon Charge Depleted,Personal Combat,"The Interloper's weapon has no energy or ammunition left, the weapon needs recharging or reloading.",884631197,
+386328035.WEM,Hostile Scan Detected,Personal Combat,"A hostile source is scanning the Interloper.. This is a threat in progress, Urgency required.",386328035,
+236472322.WEM,Warning: Sentinel Combat Unit Deployed,Personal Combat,An advanced Sentinel enemy unit is hunting the Interloper due to the Interloper's recent actions.,236472322,
+583871976.WEM,Warning: Threat Detected,Personal Combat,There is a nearby danger or enemy presence that may threaten the Interloper's safety.,583871976,
+623058381.WEM,Shield Down,Energy Shield,The Interloper's personal energy shield has ceased functioning due to lack of power.,623058381,
+72116738.wem,Sentinels Arrived,Personal Combat,Sentinel enemy units have reached the current location and are preparing to attack the Interloper.,72116738,
+78601477.WEM,Warning: Sentinel Walker Detected,Personal Combat,A hostile large-scale heavily armed and armoured Sentinel unit has been detected approaching the Interloper's location soon.  It's weapons are active and it is scanning for the Interloper.,78601477,
+90482995.WEM,Hostiles Approaching,Personal Combat,Hostile forces are approaching the Interloper rapidly. Prepare for confrontation.,90482995,
+486861530.WEM,Warning: Elite Sentinel Force,Personal Combat,"A high-level hostile Sentinel unit is approaching, seeking to engage the Interloper in combat.",486861530,
+540684729.wem,Sentinel force deactivated,Personal Combat,Hostile Sentinel network in the area is temporarily no longer active or functioning.,540684729,
+673620140.WEM,Warning: Sentinels Engaged,Personal Combat,The Interloper is actively in combat with hostile Sentinel units.,673620140,
+306112359.WEM,Damage Sustained,Personal Protection,The Interloper's body has sustained small to moderate physical damage.,306112359,No
+943635243.WEM,Critical Damage Taken,Personal Protection,Significant physical damage has been inflicted on the Interloper's body.,943635243,No
+247183138.WEM,Thermal Protection Falling,Protection from Environment,"The Interloper's environmental temperature shielding is failing, ability to protect against all temperature extremes is compromised.",247183138,
+899320928.WEM,Thermal Protection Offline,Protection from Environment,Thermal defense has failed; further exposure to extreme environmental temperatures will affect the Interloper's health.,899320928,
+951631813.WEM,Temperature Levels Stabilizing,Protection from Environment,Temperature conditions outside the Interloper's suit are returning to normal operating range.,951631813,
+28697689.WEM,Radiation Damage Detected,Radiation Exposure,The Interloper has been exposed to dangerous radiation levels that may severely impact long term health.,28697689,
+124237937.WEM,Extreme Night Radiation Detected,Radiation Exposure,Detection systems have registered extreme radiation levels during the night cycle.,124237937,
+696022064.WEM,Extreme Radiation Detected,Radiation Exposure,"Extremely high levels of radiation are detected near the Interloper, requiring immediate protective measures.",696022064,
+824368356.WEM,Extreme Subterranean Radiation Detected,Radiation Exposure,"Extremely high subterranean radiation levels have been detected, posing severe risk to the Interloper and equipment.",824368356,
+899453751.WEM,Radiation Leak Detected,Radiation Exposure,A nearby source of intense radiation is posing a threat to the Interloper.,899453751,
+53870591.WEM,Radiation Protection Offline,Radiation Exposure,"The suit's radiation shielding has completely failed, the Interloper is now unable to mitigate the effects of radiation exposure. ",53870591,
+54980060.WEM,Radiation Protection Falling,Radiation Exposure,"The suit’s radiation shielding is degrading, leaving the Interloper increasingly vulnerable.",54980060,
+258814940.WEM,Radiation Levels Critical,Radiation Exposure,"Radiation exposure has reached a critical threshold, continued exposure could prove fatal to the Interloper.",258814940,
+472945351.WEM,Radiation Protection Stabilizing,Radiation Exposure,Radiation protection is returning to normal Interloper operational levels.,472945351,
+957514183.WEM,Danger: Radiation Breach,Radiation Exposure,"Radiation shielding has overloaded and failed, putting the the Interloper at risk of irreversible loss of biological cohesion.",957514183,
+460766259.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
+487346738.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
+61285078.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
+836418899.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
+862236259.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
+946171572.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
+998327261.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
+752301356.WEM,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
+330757140.WEM,Hostile Ships Defeated,Starship Combat,The Interloper survived a starship battle.  Well done.,330757140,
+968718536.WEM,Hostile Ships Approaching,Starship Combat,"Hostile starships are approaching the Interloper's position, their weapons are armed and ready.",968718536,
+28199458.WEM,Hostile System: Weapons Engaged,Starship Combat,"Hostile forces have already initiated combat with local defenses in the system prior to the Interloper's arrival, and the Interloper's starship has activated combat readiness protocols.",28199458,
+49616634.wem,Engaging Attack Ships,Starship Combat,Attacking starships have been marked as valid weapon targets for the Interloper by the combat computer.,49616634,
+162710077.wem,Sentinel Starships Inbound,Starship Combat,Hostile Sentinel starships are approaching to intercept the Interloper.,162710077,
+205039265.WEM,New Bounty Available,Starship Combat,The Mercenary's Guild has detected a threat in this system. The Interloper has been offered a reward for capturing or destroying the rogue pilot.,205039265,No
+310439562.WEM,Warning: Sentinel Interceptors Incoming,Starship Combat,Sentinel starship reinforcements are inbound to engage the Interloper.,310439562,
+472197709.WEM,Target Acquired,Starship Combat,A valid target is now being tracked by the Interloper's starship combat computer.,472197709,
+494454783.WEM,Pirate Ship At Large: Bounty Available,Starship Combat,"A hostile starship is roaming this solar system, local authorites have offered the Interloper a reward for capturing or destroying the rogue pilot.",494454783,No
+510448383.WEM,Target Locked,Starship Combat,Target lock established; the interloper's starship weapons accuracy will be noticeably improved for the active target.,510448383,
+514543818.WEM,Pirate Spotted: Bounty Available,Starship Combat,Pirate activity has been detected near the Interloper.  The Interloper has been offered a reward for capturing or destroying the rogue space pirate.,514543818,No
+594696652.wem,Sentinel ships in combat range,Starship Combat,Hostile Sentinel starships are close enough to engage with weapons.,594696652,
+797446331.WEM,Hostile System: Engage Weapons,Starship Combat,"The star system is under hostile control, and weapons systems must be engaged immediately as the occupiers have detected the Interloper and are engaging in combat.",797446331,
+984473045.WEM,Warning: Hostile System,Starship Combat,The Interloper has entered a hostile-controlled star system where enemies will likely attack.,984473045,
+13628945.wem,Atmospheric interference,Starship Movement,The Interloper's starship is unable to perform the attempted action while inside a planetary atmosphere.,13628945,No
+137307545.wem,Station Proximity,Starship Movement,The Interloper's starship is unable to perform the attempted action while too close to a space station.,137307545,No
+197643865.WEM,Pulse Drive Engaged,Starship Movement,The Interloper's ship has activated its pulse drive for rapid travel within the solar system.,197643865,No
+294741566.wem,Local enemy disruption,Starship Movement,Hostile forces are using a device that is restricting the Interloper's speed.,294741566,No
+375834098.wem,Landing sequence initiated,Starship Movement,The autopilot landing procedure has started and the Interloper's ship is descending for touchdown.,375834098,No
+393574373.wem,Planetary interference,Starship Movement,"The Interloper is attempting a starship manouever that is intended for deep space, but the starship is currently inside a planetary atmosphere.",393574373,No
+422143449.WEM,Landing Area Not Clear,Starship Movement,"The Interloper's starship autopilot has determined the chosen landing site to be unsafe or inaccessible, the Interloper must find a new landing location.",422143449,No
+469963216.WEM,Initiating Landing Sequence,Starship Movement,The guidance computer has assumed control from the Interloper to perform an automated landing sequence.,469963216,No
+556538925.wem,Large ship proximity,Starship Movement,The Interloper's starship is unable to perform the attempted action while in proximity to a large ship.,556538925,No
+629992665.wem,Atmospheric interference,Starship Movement,The Interloper's starship is unable to perform the attempted action while inside a planetary atmosphere.,629992665,No
+769872372.wem,Large ship proximity,Starship Movement,The Interloper's starship is unable to perform the attempted action while in proximity to a large ship.,769872372,No
+824079454.wem,Space station proximity,Starship Movement,The Interloper's starship is unable to perform the attempted action while too close to a space station.,824079454,No
+396681446.wem,Nearby toxins detected,Toxic Environment,Hazardous toxins are damaging the the Interloper's suit filters.,396681446,
+50465612.WEM,Extreme Subterranean Toxicity Detected,Toxic Environment,"Concentrated Toxic substances are detected underground, capable of breaching the Interloper's toxic protections.",50465612,
+208814791.WEM,Extreme Water Toxicity Detected,Toxic Environment,Water toxicity levels have reached extreme danger thresholds while the Interloper is immersed.,208814791,
+490165063.WEM,Extreme Night Toxicity Detected,Toxic Environment,"Extremely toxic conditions have been detected during the night cycle, posing significant danger to the Interloper if exposed. ",490165063,
+675954230.WEM,Extreme Toxicity Detected,Toxic Environment,"The Interloper is in a region of extreme hazardous toxicity, requiring immediate action to avoid damage or poisoning.",675954230,
+151182894.WEM,Toxic Protection Offline,Toxic Environment,The suit can no longer protect the Interloper from toxins and severe prolonged damage is expected.,151182894,
+335483997.WEM,Toxic Protection Stabilizing,Toxic Environment,Decontamination protocols activating; The interloper's toxic shielding is regaining function.,335483997,
+498474774.WEM,Toxicity Levels Critical,Toxic Environment,Toxic contamination has reached levels that will quickly be fatal to the Interloper; immediate safety action required.,498474774,
+797567920.WEM,Toxic Protection Falling,Toxic Environment,Toxic shielding is weakening; the Interloper will be soon be directly exposed to ambient poisons.,797567920,
+973658086.WEM,Danger: Toxic Rain Breach,Toxic Environment,"Life-threatening toxic substances have breached the suit’s protective barriers, posing immediate danger to the Interloper's health.",973658086,
+1063828486.WEM,Toxic Damage Detected,Toxic Environment,"Toxins detected, direct exposure may cause severe physical side effects to the Interloper.",1063828486,
+548071497.WEM,Vehicle Deployed,Vehicle Readiness,The Interloper's selected vehicle has been successfully deployed to the current location.,548071497,
+670654758.WEM,Vehicle Acquired,Vehicle Readiness,A new vehicle or starship has been added to the Interloper's usable selection.,670654758,No
+682649339.WEM,New Vehicle Acquired,Vehicle Readiness,A new vehicle has been added to the Interloper's accessible assets.,682649339,
+729203380.WEM,Vehicle Mobilized,Vehicle Readiness,A vehicle is ready for use at the Interloper's location.,729203380,
+1045889204.WEM,Vehicle Summoned,Vehicle Readiness,A vehicle has been summoned and delivered to the Interloper via orbital drop.,1045889204,
+531979220.WEM,Fuel Required,Vehicle Status,Vehicle fuel levels are below operational thresholds and the Interloper must replenish reserves to continue normal function.,531979220,
+579975330.WEM,Vehicle Damage Sustained,Vehicle Status,The Interloper's vehicle has taken medium damage.  Do not speculate on the source of damage.,579975330,
+740830728.WEM,Refuel Vehicle,Vehicle Status,The Interloper's vehicle is critically low on fuel and requires immediate refueling or recharging.,740830728,
+891464212.WEM,Fuel Depleted,Vehicle Status,"The Interloper's vehicle fuel reserves are fully depleted, disabling vehicle operation. ",891464212,
+974964870.WEM,Damage Sustained To Vehicle,Vehicle Status,The Interloper's vehicle has sustained light to moderate damage and the safety harness has engaged as a protective response.,974964870,No
+666.WEM,Mandatory Test,Debugging,"Hello, the Interloper has reached I.T.  Has the Interloper tried turning it off and then on again?",666,No
+,,,,

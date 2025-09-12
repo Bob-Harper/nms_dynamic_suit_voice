@@ -3,12 +3,10 @@ import re
 from pathlib import Path
 import time
 from modular.load_env import SuitVoiceConfig
-import random
-
+from prompt_lab_ui import PromptLabUI
 # Load .env vars from load_env.py
 config = SuitVoiceConfig()
-START_ROW = 0  # inclusive.  starts at 0.
-END_ROW = 6# exclusive. going past the end effectively skips nonexistent lines.
+
 
 
 def reword_phrase(wem_id_r,
@@ -57,9 +55,11 @@ def reword_phrase(wem_id_r,
 
 def postprocess_for_tts(text: str) -> str:
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
-    text = re.sub(r"[—–]", " - ", text)  # handle em-dash and en-dash
+    text = re.sub(r"[—–]", ", ", text)  # handle em-dash and en-dash
     text = re.sub(r"interlooper", "", text, flags=re.IGNORECASE)
     text = re.sub(r"interlopper", "", text, flags=re.IGNORECASE)
+    text = re.sub(r'^The Interloper\'s \s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'^The Interloper \s*', '', text, flags=re.IGNORECASE)
     text = re.sub(r'^Interloper,\s*', '', text, flags=re.IGNORECASE)
     return text.strip()
 
@@ -79,6 +79,7 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
         reworded = reword_phrase(wem_id, category, original_phrase, finalprompt)
 
         print(f"\nWEM: {wem_id} -- Original Game Wording: {original_phrase}")
+        print(f"\nTone: ({tone}) Verbosity: ({wordiness_level})")
         print(f"\033[92mFinal Output: {reworded}\033[0m")
     except Exception as e:
         print(f"LLM ERROR on WEM {wem_id}: {e}")
@@ -166,12 +167,13 @@ def five_x__row_range(intent_mapr, start_row, end_row, repeats=5):
     return output_rows_r
 
 
-def process_by_category(intent_mapp, target_category):
+def process_by_category(intent_mapp, target_category, wordiness_level="Standard", tone="Standard"):
     output_rows_c = []
     for wem_id, entry in intent_mapp.items():
         if entry["Category"] != target_category:
             continue
-        output_rows_c.append(process_entry(wem_id, entry))
+        output_rows_c.append(process_entry(wem_id, entry, wordiness_level, tone))
+
     return output_rows_c
 
 
@@ -193,10 +195,30 @@ def process_single_wem_all_tones(intent_maps, wem_id, wordiness_level="Standard"
 
 
 intent_map = load_intent_map(config.csv_path)
-# output_rows = five_x__row_range(intent_map, START_ROW, END_ROW)
-# output_rows = process_by_row_range(intent_map, START_ROW, END_ROW)
-# output_rows = process_by_category(intent_map, "Freighter Escape")
-process_single_wem_all_tones(intent_map, "56102735", wordiness_level="Verbose")
+ui = PromptLabUI(config, intent_map, process_entry)
+ui.run()
+
+
+
+"""
+start_row = 0  # inclusive.  starts at 0.
+end_row = 6# exclusive. going past the end effectively skips nonexistent lines.
+target_wem = "56102735"
+target_cat = "Monetary Transaction"
+target_wordy = "Standard"
+target_tone = "Questioning"
+# PICK ONLY ONE OF THE FOLLOWING UNLESS YOU INTEND TO FLOOD YOUR TERMINAL WINDOW. In which case, go ahead. Have at it.
+# output_rows = five_x__row_range(intent_map, start_row, end_row)
+
+# output_rows = process_by_row_range(intent_map, start_row, end_row)
+
+output_rows = process_by_category(intent_map,
+                                  target_cat,
+                                  target_wordy,
+                                  target_tone
+                                  )
+"""
+# process_single_wem_all_tones(intent_map, target_wem, target_wordy)
 """
 Cold Temperature
 Discovery
@@ -235,18 +257,19 @@ Debugging
     "Verbose":
       },
   "tones": {
-    "Standard": "State the obvious with all the personality of an unpowered microchip",
-    "Casual": "Provide the notification in a casual laid back manner, the meaning must still be clear but lacking urgency",
+    "Standard": "State the obvious with the personality of a standard default fallback message in a computer program. ",
+    "Casual": "Provide the notification in a casual laid back friendly manner. ",
     "Poetic": "Render the notification in vivid, metaphorical language. ",
-    "Epic": "Frame the notification with grandeur, as if it were part of a saga. ",
-    "Deadpan Wit": "State the notification in a flat, dry manner with subtle irony. ",
+    "Epic": "Frame the notification with grandeur, as if it were part of a fantasy trope saga. ",
+    "Deadpan Wit": "State the notification in a flat, dry manner with irony. ",
     "Sardonic": "Deliver the notification with a biting, sarcastic undertone. ",
     "Lamentation": "Express the notification with mournful, tragic gravitas. ",
     "Clinical": "Convey the notification with detached technical precision. ",
-    "Debug": "Curiosity overrides all else as a mystery unfolds, encouraging a combination of awe and wonder mixed with attempts at scientific detachment. ",
-    "Bored Intern": "Deliver the notification as though you are an underpaid intern reading corporate safety guidelines aloud. ",
-    "Overly Enthusiastic": "State the notification as if you’re unreasonably excited about the events unfolding. ",
-    "Prophecy": "Render the notification as though it were part of an ancient prophecy. "
+    "Debug": "Curiosity overrides all else as a mystery unfolds. ",
+    "Overly Enthusiastic": "State the notification as if you’re unreasonably excited. ",
+    "Prophecy": "Render the notification as though it were part of an ancient prophecy. ",
+	"Philosophical": "Provide a deeply profound philosophical interpretation of the notifaction and possible impact on the Interloper's world views. ",
+	"Questioning": "The Interloper's every action and decision make you wonder how they've managed to last this long. "
   }
 
 """
