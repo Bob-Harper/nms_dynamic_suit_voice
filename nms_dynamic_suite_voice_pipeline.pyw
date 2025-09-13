@@ -61,7 +61,14 @@ def build_suit_prompt(category, intent, phrase, wordiness_level="Standard", tone
     # Get tone instruction
     tone_prompt = config.promptbuilder.get("tones", {}).get(tone, "")
     # print(f"category_context:\n{category_context}\n\nwordiness_prompt\n{wordiness_prompt}\n\ntone_prompt:\n {tone_prompt}")
-    system_prompt = config.suit_voice_base
+
+    # Specific categories require very different prompting to prevent breaking imersion
+    mil_cat = ["Missile Launch", "Missile Destroyed", "Freighter Escape", "Freighter Combat"]
+    if category in mil_cat:
+        system_prompt = config.suit_voice_combat
+    else:
+        system_prompt = config.suit_voice_base
+
     # Compose system prompt from the base text file and inject wordiness + tone
     system_prompt += config.suit_voice_dynamic.format(
         category_type=category.strip(),
@@ -299,51 +306,3 @@ tray_icon.run()
 
 # to do: break up into classes/files.  more modular.  postprocessing.py, generate.py
 # tray_icon.py and leave the watchdog in here. modular, easier to maintain, futureproof, add on.
-
-
-"""
-
-# Load .env from the local subdirectorylogits_bias
-load_dotenv(dotenv_path=Path(__file__).parent / "suit_voice.env")
-CHECK_INTERVAL = float(os.getenv("CHECK_INTERVAL"))
-MOD_DIR = Path(os.getenv("MOD_DIR").strip('"'))
-CSV_PATH = Path(os.getenv("CSV_PATH"))
-TEMP_WEM_DIR = Path(os.getenv("TEMP_WEM_DIR").strip('"'))
-TEMP_WEM_DIR.mkdir(parents=True, exist_ok=True)
-CMD_SCRIPT_PATH = Path(os.getenv("CMD_SCRIPT_PATH").strip('"'))
-try:
-    TTS_MODEL = os.getenv("TTS_MODEL")
-    if not TTS_MODEL:
-        raise ValueError("TTS_MODEL not set in environment")
-    tts_model = TTS(model_name=TTS_MODEL)
-except Exception as e0:
-    raise SystemExit(f"Failed to load TTS model: {e0}")
-
-ffmpeg_path = shutil.which("ffmpeg")
-if not ffmpeg_path:
-    ffmpeg_env = os.getenv("FFMPEG_PATH")
-    if ffmpeg_env:
-        ffmpeg_path = Path(ffmpeg_env.strip('"'))
-        os.environ["PATH"] = str(ffmpeg_path.parent) + ";" + os.environ.get("PATH", "")
-    else:
-        raise SystemExit("ffmpeg not found on PATH and FFMPEG_PATH not set in .env")    
-ICON_IMAGE = Path(os.getenv("ICON_IMAGE"))
-LOGGING = os.getenv("LOGGING", "false").strip().lower() == "true"  # force boolean: true, anything else => False
-GAME_OUTPUT_CSV = Path(os.getenv("GAME_OUTPUT_CSV"))
-CREATE_NO_WINDOW = 0x08000000 if sys.platform == "win32" else 0
-SUIT_VOICE_PROMPT_PATH = Path(os.getenv("SUIT_VOICE_PROMPT_PATH"))
-with open(SUIT_VOICE_PROMPT_PATH, encoding="utf-8") as f:
-    SUIT_VOICE_PROMPT = f.read()
-category_prompts = CategoryPrompts()
-TOKENIZED_BANLIST_PATH = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
-with open(TOKENIZED_BANLIST_PATH, encoding="utf-8") as f:
-    LOGIT_BANLIST = json.load(f)
-LLM_MODEL = str(Path(os.getenv("LLM_MODEL")))
-llm = Llama(
-    model_path=LLM_MODEL,
-    n_ctx=4096,
-    n_threads=4,       # adjust for your CPU
-    verbose=False
-)
-
-"""

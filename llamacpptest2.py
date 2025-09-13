@@ -51,7 +51,14 @@ def build_suit_prompt(category, intent, phrase, wordiness_level="Standard", tone
     # Get tone instruction
     tone_prompt = config.promptbuilder.get("tones", {}).get(tone, "")
     # print(f"category_context:\n{category_context}\n\nwordiness_prompt\n{wordiness_prompt}\n\ntone_prompt:\n {tone_prompt}")
-    system_prompt = config.suit_voice_base
+
+    # Specific categories require very different prompting to prevent breaking imersion
+    mil_cat = ["Missile Launch", "Missile Destroyed", "Freighter Escape", "Freighter Combat"]
+    if category in mil_cat:
+        system_prompt = config.suit_voice_combat
+    else:
+        system_prompt = config.suit_voice_base
+
     # Compose system prompt from the base text file and inject wordiness + tone
     system_prompt += config.suit_voice_dynamic.format(
         category_type=category.strip(),
@@ -143,23 +150,15 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
     return wem_id, reworded
 
 
-def process_by_row_range(intent_mapr, start_row, end_row):
-    output_rows_r = []
-    for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
-        if idx < start_row:
-            continue
-        if idx >= end_row:
-            break
-        output_rows_r.append(process_entry(wem_id, entry))
-    return output_rows_r
-
-
 intent_map = load_intent_map(config.csv_path)
 
 
-start_row = 0  # inclusive.  starts at 0.
-end_row = 6  # exclusive. going past the end effectively skips nonexistent lines.
-output_rows = process_by_row_range(intent_map, start_row, end_row)
+ui = PromptLabUI(config, intent_map, process_entry)
+ui.run()
+
+# start_row = 0  # inclusive.  starts at 0.
+# end_row = 6  # exclusive. going past the end effectively skips nonexistent lines.
+# output_rows = process_by_row_range(intent_map, start_row, end_row)
 
 """
 start_row = 0  # inclusive.  starts at 0.
@@ -274,5 +273,14 @@ def process_single_wem_all_tones(intent_maps, wem_id, wordiness_level="Standard"
     return results
 
 
-# ui = PromptLabUI(config, intent_map, process_entry)
-# ui.run()
+def process_by_row_range(intent_mapr, start_row, end_row):
+    output_rows_r = []
+    for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
+        if idx < start_row:
+            continue
+        if idx >= end_row:
+            break
+        output_rows_r.append(process_entry(wem_id, entry))
+    return output_rows_r
+
+
