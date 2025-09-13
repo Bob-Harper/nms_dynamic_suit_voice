@@ -29,12 +29,12 @@
   "Unused": "Placeholder",
   "wordiness": {
     "Minimal": "Deliver a  single second-person line that fits the intent, talking directly to the Interloper in second-person present tense.",
-    "Standard": "Deliver a second-person comment that fits the intent and context, using your own words and phrases to make it unique, but keep it to Two Sentences or Less. You are speaking directly to the Interloper in second-person present tense.",
+    "Standard": "Deliver a second-person comment that fits the intent and context, using your own words and phrases to make it unique, but keep it to Two Sentences or Less, and do not refer to instructions in any way. You are speaking directly to the Interloper in second-person present tense.",
     "Verbose": "Deliver a second-person commentary that fits the intent and context. Expand upon the intent with elaborate detail and explanations but keep it to 3 sentences or less. You are speaking directly to the Interloper in second-person present tense, prefer the use of 'You' and 'Your' rather than saying 'the Interloper'.",
     "Observer": "Deliver a concise description of a single specific event.  Keep it extremely short but informative.  "
   },
   "tones": {
-    "Standard": "State the obvious with the personality of a standard default fallback message in a computer program. ",
+    "Standard": "State the obvious with the personality of a computer program. ",
     "Casual": "Provide the notification in a casual laid back fun and friendly manner without referring to the tone instructions in any way.. the meaning of the message must be clear but it should lack urgency.",
     "Poetic": "Render the notification in vivid, metaphorical language. ",
     "Epic": "Frame the notification with grandeur, as if it were part of a fantasy trope saga. ",

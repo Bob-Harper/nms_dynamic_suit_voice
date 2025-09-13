@@ -45,9 +45,17 @@ class SuitVoiceConfig:
         self.create_no_window = 0x08000000 if sys.platform == "win32" else 0
 
         # Suit voice prompt
-        self.suit_voice_prompt_path = Path(os.getenv("SUIT_VOICE_PROMPT_PATH"))
-        with open(self.suit_voice_prompt_path, encoding="utf-8") as f:
-            self.suit_voice_prompt = f.read()
+        self.suit_voice_base_path = Path(os.getenv("SUIT_VOICE_BASE_PATH"))
+        with open(self.suit_voice_base_path, encoding="utf-8") as f:
+            self.suit_voice_base = f.read()
+
+        self.suit_voice_dynamic_path = Path(os.getenv("SUIT_VOICE_DYNAMIC_PATH"))
+        with open(self.suit_voice_dynamic_path, encoding="utf-8") as f:
+            self.suit_voice_dynamic = f.read()
+
+        self.suit_voice_combat_path = Path(os.getenv("SUIT_VOICE_COMBAT_PATH"))
+        with open(self.suit_voice_combat_path, encoding="utf-8") as f:
+            self.suit_voice_combat = f.read()
 
         self.promptbuilder_path = Path(os.getenv("PROMPTBUILDER_PATH"))
         with open(self.promptbuilder_path, encoding="utf-8") as f:
@@ -62,27 +70,9 @@ class SuitVoiceConfig:
         self.llm_model = str(Path(os.getenv("LLM_MODEL")))
         self.llm = Llama(
             model_path=self.llm_model,
-            n_ctx=4096,
+            # n_ctx=4096, # does it help?
+            n_ctx=32768,  # full context window
+            n_batch=1024,  # helps performance
             n_threads=4,   # adjust as needed
             verbose=False
-        )
-
-    def __repr__(self):
-        return (
-            f"<SuitVoiceConfig("
-            f"CHECK_INTERVAL={self.check_interval}, "
-            f"MOD_DIR={self.mod_dir}, "
-            f"CSV_PATH={self.csv_path}, "
-            f"TEMP_WEM_DIR={self.temp_wem_dir}, "
-            f"CMD_SCRIPT_PATH={self.cmd_script_path}, "
-            f"TTS_MODEL={self.tts_model.model_name}, "
-            f"FFMPEG={self.ffmpeg_path}, "
-            f"ICON_IMAGE={self.icon_image}, "
-            f"LOGGING={self.logging}, "
-            f"GAME_OUTPUT_CSV={self.game_output_csv}, "
-            f"SUIT_VOICE_PROMPT_PATH={self.suit_voice_prompt_path}, "
-            f"PROMPTBUILDER_PATH={self.promptbuilder_path}, "
-            f"TOKENIZED_BANLIST_PATH={self.tokenized_banlist_path}, "
-            f"LLM_MODEL={self.llm_model}"
-            f")>"
         )
