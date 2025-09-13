@@ -3,7 +3,6 @@ import re
 import csv
 import time
 import shutil
-import random
 import threading
 import subprocess
 from PIL import Image
@@ -15,10 +14,6 @@ config = SuitVoiceConfig()
 
 RUNNING = True
 
-# simple rolling buffer approach
-session_messages = [
-  {"role":"system", "content": config.suit_voice_prompt},
-]
 
 def load_intent_map(csv_path: Path) -> dict:
     i_intent_map = {}
@@ -43,6 +38,14 @@ def load_intent_map(csv_path: Path) -> dict:
     return i_intent_map
 
 
+def create_logit_bias(category_l):
+    logit_bias = {
+        **extract_token_ids(config.logit_banlist.get(category_l, {})),
+        **extract_token_ids(config.logit_banlist.get("Default", {})),
+    }  # add more categorys like Encoraged or Discouraged if needed, use Default as template
+    return logit_bias
+
+
 def extract_token_ids(data: dict):
     """Flatten token dict and ignore non-integer keys like 'bias'."""
     return {int(k): v for k, v in data.get("tokens", {}).items()}
@@ -56,19 +59,11 @@ def build_suit_prompt(category, intent, phrase, wordiness_level="Standard", tone
     wordiness_prompt = config.promptbuilder.get("wordiness", {}).get(wordiness_level, "")
 
     # Get tone instruction
-    # Pick random tone if none explicitly provided
-    if tone == "Random":
-        tone = random.choice(list(config.promptbuilder.get("tones", {}).keys()))
-
     tone_prompt = config.promptbuilder.get("tones", {}).get(tone, "")
-    print(f"input_phrase: {phrase}\n"
-          f"category_context: {category}\n"
-          f"wordiness_level: {wordiness_level}\n"
-          f"tone_prompt: {tone}"
-          )
-
+    # print(f"category_context:\n{category_context}\n\nwordiness_prompt\n{wordiness_prompt}\n\ntone_prompt:\n {tone_prompt}")
+    system_prompt = config.suit_voice_base
     # Compose system prompt from the base text file and inject wordiness + tone
-    system_prompt = config.suit_voice_prompt.format(
+    system_prompt += config.suit_voice_dynamic.format(
         category_type=category.strip(),
         input_intent=intent.strip(),
         input_phrase=phrase.strip(),
@@ -83,42 +78,32 @@ def build_suit_prompt(category, intent, phrase, wordiness_level="Standard", tone
 def reword_phrase(wem_id_r,
                   category_r,
                   original_phrase_r,
-                  finalprompt,
-                  session_messages=None
-                  ):
-    if session_messages is None:
-        session_messages = [{"role": "system", "content": finalprompt}]
+                  finalprompt):
 
-    logit_bias = {
-        **extract_token_ids(config.logit_banlist.get(category_r, {})),
-        **extract_token_ids(config.logit_banlist.get("Default", {})),
-        **extract_token_ids(config.logit_banlist.get("Thinking", {})),
-    }
+    logit_bias_list = create_logit_bias(category_r)
 
+    # Build the full messages payload
+    messages = [{"role": "system", "content": finalprompt}]
+    # print(f"Output:\n {messages}")
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            # add current user line
-            session_messages.append({"role": "user", "content": original_phrase_r})
-
+            print(f"Raw Input:\n {messages}")
             output = config.llm.create_chat_completion(
-                messages=session_messages,
-                max_tokens=1024,
+                messages=messages,
+                max_tokens=2048,
                 temperature=0.8,
                 top_k=90,
                 top_p=0.9,
                 repeat_penalty=1.25,
-                logit_bias=logit_bias,
+                logit_bias=logit_bias_list,
                 seed=-1
             )
-
+            print(f"Raw Output:\n {output}")
             result = output["choices"][0]["message"]["content"].strip()
+            # print(f"Output:\n {result}")
             result = postprocess_for_tts(result)
 
-            # add assistant reply into session
-            session_messages.append({"role": "assistant", "content": result})
-
-            print(f"Message::\n {result}")
             return result
 
         except Exception as e:
@@ -134,11 +119,8 @@ def reword_phrase(wem_id_r,
 def postprocess_for_tts(text: str) -> str:
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
     text = re.sub(r"[—–]", ", ", text)  # handle em-dash and en-dash
-    text = re.sub(r"interlooper", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"interlopper", "", text, flags=re.IGNORECASE)
-    # text = re.sub(r'^The Interloper\'s \s*', '', text, flags=re.IGNORECASE)
-    # text = re.sub(r'^The Interloper \s*', '', text, flags=re.IGNORECASE)
-    # text = re.sub(r'^Interloper,\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r"interlooper", "Interloper", text, flags=re.IGNORECASE)
+    text = re.sub(r"interlopper", "Interloper", text, flags=re.IGNORECASE)
     return text.strip()
 
 

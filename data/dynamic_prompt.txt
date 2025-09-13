@@ -1,0 +1,8 @@
+Details for context:
+- Category: {category_type}
+- Context: {category_context}
+- Intent: {input_intent}
+- Current Input: {input_phrase}
+
+{wordiness_prompt}
+{tone_prompt}
