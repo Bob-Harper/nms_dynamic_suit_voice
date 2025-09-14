@@ -387,7 +387,7 @@ class PromptLabUI:
             tone = random.choice(list(self.promptbuilder.get("tones", {}).keys()))
 
         # run in background so UI doesn't block
-        thr = threading.Thread(target=self._run_generation, args=(wem_id, wordiness, tone), daemon=True)
+        thr = threading.Thread(target=self._run_generation, args=(wem_id,), daemon=True)
         thr.start()
 
     def _on_run_all_tones(self):
@@ -403,9 +403,9 @@ class PromptLabUI:
         tones = list(self.promptbuilder.get("tones", {}).keys())
         for tone in tones:
             self._log(f"--- Tone: {tone} ---")
-            self._run_generation(wem_id, self.wordiness_var.get(), tone)
+            self._run_generation(wem_id)
 
-    def _run_generation(self, wem_id, wordiness, tone):
+    def _run_generation(self, wem_id):
         wem_id_str = str(wem_id)
         entry = self.intent_map.get(wem_id_str)
         if not entry:
@@ -413,7 +413,8 @@ class PromptLabUI:
             return
         try:
             # call process_entry; it's expected to return (wem_id, reworded)
-            res = self.process_entry(wem_id_str, entry, wordiness, tone)
+            print(f"passed in tone: {self.config.current_tone}")
+            res = self.process_entry(wem_id_str, entry, self.config.current_wordiness, self.config.current_tone)
             if isinstance(res, tuple) and len(res) >= 2:
                 _, reworded = res
             else:

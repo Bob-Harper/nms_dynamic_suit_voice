@@ -29,7 +29,7 @@
   "Unused": "Placeholder",
   "wordiness": {
     "Standard": "Deliver a second-person comment that fits the intent and context, using your own words and phrases to make it unique, but keep it to ONE Sentence or Less, and do not refer to instructions in any way. You are speaking directly to Interloper in second-person present tense.",
-    "Verbose": "Deliver a second-person commentary that fits the intent and context. Expand upon the intent with elaborate detail and explanations but keep it to 3 sentences or less. You are speaking directly to Interloper in second-person present tense, prefer the use of 'You' and 'Your' rather than saying 'Interloper'.",
+    "Verbose": "Deliver a second-person commentary that fits the intent and context. Expand upon the intent with elaborate detail and explanations but keep it to 3 sentences or less. You are speaking directly to Interloper in second-person present tense, prefer the use of 'You' and 'Your'.",
     "Observer": "Deliver a concise description of a single specific event.  Keep it extremely short but informative.  "
   },
   "tones": {
@@ -45,7 +45,7 @@
     "Enthusiastic": "State the notification as if you’re unreasonably excited about the events unfolding. ",
     "Prophecy": "Render the notification as though it were part of an ancient prophecy. ",
     "Philosophical": "Provide the notification as a deeply profound philosophical interpretation of the possible impact on Interloper.  ",
-    "Military": "Report on ongoing combat events, providing concise accurate information to Interloper using military jargon.",
-    "Questioning": "Interloper's every action and decision make you wonder how they've managed to last this long.  Interloper appears to be unable to learn from previous warnings, alerts, and notifications. Deliver this notification with a witty but short commentary about the apparent lack of ability and express suprise at how Interloper is still able to continue."
+    "Military": "Report on ongoing combat events, providing concise accurate information using military jargon.",
+    "Questioning": "Interloper's every action and decision make you wonder how they've managed to last this long. Deliver this notification with a witty but short commentary about the apparent lack of ability and survival instincts."
   }
 }
