@@ -17,9 +17,11 @@ When the game makes a call to use a suit voice line, it will use the file it fin
 
 ## Key Features
 
-- No repetition – each line is freshly generated, so you rarely hear the same thing twice.
+- No repetition – each line is freshly generated, so you rarely/never hear the same thing twice.
 - Drop-in replacement for default suit AI audio files.
 - Local-only – no cloud processing or internet connection required. Completely Offline game compatible.
+- no fees, no subscriptions, no paid API
+- Current implementation uses CPU inference, leaving the GPU free for the game
 
 ## Examples:
 <br>Original Game Wording: Nearby toxins detected
@@ -38,11 +40,8 @@ Original Game Wording: Extreme Night Temperature Detected
 
 ## Limitations / Disclaimer
 
-- This mod is incompatible with other mods that change the suit voice.
-- This mod (and the notes regarding it's capabilities) assume minimizing VRAM occupation. If you have a high end Nvidia card, I would love to hear how it fares.
-- Larger LLM's give better dynamic results, at the expense of eating your VRAM and gpu cycles.  
-- Larger LLM's tend to take longer to process, meaning it will take longer to create a new voice line and save it, decreasing the chances of being able to create a new file fast enough if doing repetitive actions that call the same suit line (crafting or selling, typically)
-- Smaller LLM's are better for speed - The prompting used currently is very heavily optimized for qwen3:0.6b, if you choose to swap that out, you may need to take some time testing the output results.  A transcript test script is included to help with this.
+- This is incompatible with mods that change the suit voice by placing sound files in the MODS folder.
+- This project (and the notes regarding it's capabilities) assume minimizing VRAM and GPU necessity. It is not currently enabled to take advantage of a GPU so as not to impact actual gameplay.
 
 
 ⚠️ WARNING
@@ -53,18 +52,18 @@ This has only been tested on my personal development machine:
 - Performance and results may vary wildly on other hardware.
 - This is not tested on any other system, OS, or GPU configuration.
 
-This should be started BEFORE NMS is started up, or there may be fights over your VRAM and GPU usage and the game will stutter to the point where a well tuned Powerpoint presentation would be smoother.  The model I use and recommend takes up 1GB of VRAm - on my machine that is a large hit to the amount available for the game, but honestly I dont notice a difference - unless I forget and load the game before I load the generator.
-<img width="3274" height="286" alt="image" src="https://github.com/user-attachments/assets/d4c88904-f197-45f2-a0c3-ba0bc5c0b491" />
+This should be started BEFORE NMS is started up,  The model I use and recommend takes up 1.6 GB of RAM and is surprisingly coherent and usable for it's size.
 
 ## Installation
+automatic: run setup.cmd
 
+manual:
 [For detailed instructions refer to the Setup.md in the docs folder](docs/Setup.md)
-
 Short version:
 - Clone this repository
-- Install Python venv and dependencies
-- Install Ollama if you don't have it, download a model.
-- Clone/Download sound2wem
+- Install Python venv and requirements including llama-cpp-python (no separate llama.cpp install required).
+- Download the model files
+- Clone/Download sound2wem (and wwise plus ffmpeg)
 - Copy pre-generated .wem files from the "DYNAMIC_SUIT_VOICE" folder into your No Man’s Sky MODS folder (NOT PCBANKS).
 - Review and modify the supplied .env example
 - Run the generator.
@@ -80,10 +79,9 @@ hear that same notification, the wording will be different.
 
 ## Future Plans (Version 2 Goals)
 - Context-aware lines (react to in-game events with tailored responses).
-- Expanded voice profiles and personalities.
+- Persistent memory, keeping track of events that have taken place
+- Expanded voice profiles and personalities with on-the-fly choosing/updating.
 - User Adjustable creativity and tone parameters.
-- setup script to help with configuring the .env paramaters and filepaths
-- voice embeddings to clone your voice (or your kid's voices.  Use voice cloning technology responsibly.  Don't be evil.)
 
 ## License
 
