@@ -1,33 +1,9 @@
-import csv
 import re
-from pathlib import Path
 import time
 from modular.config import SuitVoiceConfig
-from prompt_lab_ui import PromptLabUI
-# Load .env vars from config.py
+from extras.prompt_lab_ui import PromptLabUI
 config = SuitVoiceConfig()
 
-def load_intent_map(csv_path: Path) -> dict:
-    i_intent_map = {}
-    try:
-        with open(csv_path, newline='', encoding='utf-8') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                wem_number = (row.get('WEM_number') or '').strip()
-                original_phrase = (row.get('Transcription') or '').strip()
-                category = (row.get('Category') or '').strip()
-                intent = (row.get('Intent') or '').strip()
-                context = (row.get('Context') or '').strip()
-
-                i_intent_map[wem_number] = {
-                    "Transcription": original_phrase,
-                    "Category": category,
-                    "Intent": intent,
-                    "Context": context,
-                    }
-    except Exception as e1:
-        print(f"Error loading intent map: {e1}")
-    return i_intent_map
 
 def create_logit_bias(category_l):
     logit_bias = {
@@ -41,25 +17,22 @@ def extract_token_ids(data: dict):
     return {int(k): v for k, v in data.get("tokens", {}).items()}
 
 
-def build_suit_prompt(category, intent, phrase, wordiness_level="Standard", tone="Standard"):
-    # Get base category context (Default fallback)
+def build_suit_prompt(config, category, intent, phrase, wordiness_level=None, tone=None):
+    # fallback to config's current values if not explicitly passed
+    wordiness_level = wordiness_level or config.current_wordiness
+    tone = tone or config.current_tone
+
     category_context = config.promptbuilder.get(category, config.promptbuilder.get("Default", ""))
 
-    # Get wordiness instruction
-    wordiness_prompt = config.promptbuilder.get("wordiness", {}).get(wordiness_level, "")
-
-    # Get tone instruction
-    tone_prompt = config.promptbuilder.get("tones", {}).get(tone, "")
-    # print(f"category_context:\n{category_context}\n\nwordiness_prompt\n{wordiness_prompt}\n\ntone_prompt:\n {tone_prompt}")
-
-    # Specific categories require very different prompting to prevent breaking imersion
-    mil_cat = ["Missile Launch", "Missile Destroyed", "Freighter Escape", "Freighter Combat"]
-    if category in mil_cat:
+    if category in config.mil_cat:
         system_prompt = config.suit_voice_combat
+        wordiness_prompt = "Observer"
     else:
         system_prompt = config.suit_voice_base
+        wordiness_prompt = config.promptbuilder.get("wordiness", {}).get(wordiness_level, "")
 
-    # Compose system prompt from the base text file and inject wordiness + tone
+    tone_prompt = config.promptbuilder.get("tones", {}).get(tone, "")
+
     system_prompt += config.suit_voice_dynamic.format(
         category_type=category.strip(),
         input_intent=intent.strip(),
@@ -68,7 +41,6 @@ def build_suit_prompt(category, intent, phrase, wordiness_level="Standard", tone
         wordiness_prompt=wordiness_prompt.strip(),
         tone_prompt=tone_prompt.strip()
     )
-
     return system_prompt
 
 
@@ -77,30 +49,27 @@ def reword_phrase(wem_id_r,
                   original_phrase_r,
                   finalprompt):
 
+    # enforce usage or avoidance of specific tokens using logits
     logit_bias_list = create_logit_bias(category_r)
 
-    # Build the full messages payload
     messages = [{"role": "system", "content": finalprompt}]
-    # print(f"Output:\n {messages}")
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            print(f"Raw Input:\n {messages}")
+            # print(f"Raw Input:\n {messages}")
             output = config.llm.create_chat_completion(
                 messages=messages,
-                max_tokens=2048,
+                max_tokens=2048,  # less can be faster but can cut off thinking, breaking the result
                 temperature=0.8,
                 top_k=90,
                 top_p=0.9,
                 repeat_penalty=1.25,
                 logit_bias=logit_bias_list,
-                seed=-1
+                seed=-1  # must add this to randomize the results
             )
-            print(f"Raw Output:\n {output}")
+            # print(f"Raw Output:\n {output}")
             result = output["choices"][0]["message"]["content"].strip()
-            # print(f"Output:\n {result}")
             result = postprocess_for_tts(result)
-
             return result
 
         except Exception as e:
@@ -109,15 +78,12 @@ def reword_phrase(wem_id_r,
             else:
                 print(f"LLM ERROR on WEM {wem_id_r}: {e}")
                 return f"WEM ERROR {wem_id_r}, {e}. {original_phrase_r}"
-
-    return original_phrase_r
-
+    print(f"ERROR on WEM {wem_id_r}")
+    return f"External Reality Failure. {original_phrase_r}"
 
 def postprocess_for_tts(text: str) -> str:
-    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
-    text = re.sub(r"[—–]", ", ", text)  # handle em-dash and en-dash
-    text = re.sub(r"interlooper", "Interloper", text, flags=re.IGNORECASE)
-    text = re.sub(r"interlopper", "Interloper", text, flags=re.IGNORECASE)
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Strip Thinking before sending to TTS
+    text = re.sub(r"[—–]", ", ", text)  # convert em-dash and en-dash combo that the model likes to use
     return text.strip()
 
 
@@ -128,7 +94,7 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
     intent = entry["Intent"]
 
     # Build the structured prompt
-    prompt = build_suit_prompt(category, intent, original_phrase, wordiness_level, tone)
+    prompt = build_suit_prompt(config, category, intent, original_phrase, wordiness_level, tone)
 
     start_time = time.time()
     try:
@@ -150,7 +116,7 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
     return wem_id, reworded
 
 
-intent_map = load_intent_map(config.csv_path)
+intent_map = config.intent_map
 
 
 ui = PromptLabUI(config, intent_map, process_entry)

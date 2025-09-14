@@ -78,7 +78,7 @@ class SuitVoiceConfig:
         )
 
         # Runtime state
-        self.current_tone = "Questioning"
+        self.current_tone = "Default"
         self.current_wordiness = "Default"
 
         # Categories that override prompting rules
