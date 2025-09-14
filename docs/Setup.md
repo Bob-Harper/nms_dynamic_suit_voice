@@ -11,17 +11,17 @@ to ensure those with FIFO memory retention tendencies (I am one of them) recall 
 most other configurations, but the two biggest factors are:
 - for this to run at speed, it assumes a decent CPU and RAM quantity.
 - Windows OS.
-<br>If you are on a different OS and still want to try installing and running, I suggest reviewing the Advanced.md in the docs folder.
+If you are on a different OS and still want to try installing and running, or want to give a go at using your GPU, I suggest reviewing the Advanced.md in the docs folder.
 
 ## Requirements
 
 Tested setup:
--Windows 11 (likely works on any OS that runs NMS and Python 3.10, with the exception of the systray icon)
--64GB RAM (Less should still be fine but may affect speed and may also impact gameplay if not carefully balanced)
--NVIDIA GPU with 4GB VRAM minimum (1650 Ti or better recommended).  I leave this mentioned as I can and have run this with the GPU even if I am now running CPU inference only.
--Python 3.10
--Installed dependencies
--Sound2Wem https://github.com/EternalLeo/sound2wem (will prompt and walk you through installing required dependencies if needed, otherwise it just..  runs.)
+- Windows 11 (likely works on any OS that runs NMS and Python 3.10, with the exception of the systray icon)
+- 64GB RAM (Less should still be fine but may affect speed and may also impact gameplay if not carefully balanced)
+- NVIDIA GPU with 4GB VRAM minimum (1650 Ti or better recommended).  I leave this mentioned as I can and have run this with the GPU even if I am now running CPU inference only.
+- Python 3.10
+- Installed dependencies
+- Sound2Wem https://github.com/EternalLeo/sound2wem (will prompt and walk you through installing required dependencies if needed, otherwise it just..  runs.)
 
 
 ## Installation
@@ -73,7 +73,7 @@ In the project folder you’ll see `suit_voice.env.example`.
 This file tells the pipeline where to find everything. If you skip this step and the pipeline errors when started - this is the most likely culprit.
 
 ### Run the generator. 
-Curse because something didn't go right.  Read back through, recheck every step, doublecheck your .env file paths and options..
+Curse because something didn't go right.  Read back through, recheck every step, doublecheck your .env file paths and options.
 ```
 cd c:\NMS_SUIT_VOICE
 .\venv\Scripts\activate
@@ -85,7 +85,7 @@ It will take a few moments to initialize the reources it needs and ensure the mo
 Once the tray icon is visible, it is actively monitoring. If you started through a shortcut, that will be the only indicator.  If you started in a terminal, you will see "Watching for file access..."
 
 ## IF CONFIGURED TO USE GPU, DO NOT START THE GAME UNTIL YOU SEE THE ICON
-Using it on CPU inference should have no impact to startup, but i recommend waiting until it is done because general principles.
+Using it on CPU inference should have no impact to startup, but I recommend waiting until it is done because general principles.
 If you've modified to use your GPU, improper startup timing may lead to severe game stuttering and eyestrain caused by FPS rates of 1 or less.  Refer to Advanced FAQS for why it's essential to wait.
 
 ### Start No Man's Sky 
@@ -96,19 +96,20 @@ Win!
 
 ### To shut down the script when done
 
-You can shut the script back down at any time, wether you are playing or not.  This will also free up the VRAM for the NMS though the game may not see it until restarted.
+You can shut the script down at any time, wether you are playing or not.  This will free up memory for NMS if you need it.
 
-Four ways to shut down:
+Shut down techniques:
 - Lawful Good: Right click the tray icon and choose "Quit".
-- Lawful Neutral: (If you started using a terminal window) Use Ctrl-C
-- Chaotic Neutral: (If you started using a terminal window) Close the terminal window
-- Chaotic Evil: kill the process in task manager
+- Lawful Neutral: Use Ctrl-C (If you started by using a terminal window)
+- Chaotic Neutral: Close the terminal window (If you started by using a terminal window)
+- Chaotic Evil: kill the process in Task Manager
+There may be other methods, but at that point the DM will likely ask you to leave because you are being disruptive.
 
 ## Uninstall
 
 But why?
 
-If you must, remove the install directory nms_dynamic_suit_voice.  Also remove the directory from the MODS directory.  You could remove/uninstall wwise from wherever you installed it.  sound2wem, if installed per instructions, will be inside the project folder and disappear when you delete the directory structure.
+If you must, remove the install directory nms_dynamic_suit_voice.  Also remove the folder from the MODS directory.  You could remove/uninstall wwise from wherever you installed it.  sound2wem, if installed per instructions, will be inside the project folder and disappear when you delete the directory structure.
 That's it.  
 - Note: If you choose to leave the MODS directory alone, the game will continue to use any voice lines left behind.  This could complicate your setup if you have another suit voice mod, or could be an awesome result if you really like those specific generated phrases.  If for some reason you choose to remove the voice files but leave the pipeline, there will be nothing for the pipeline to watch for changes.
 
