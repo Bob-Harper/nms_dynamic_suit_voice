@@ -1,65 +1,91 @@
+# tray_ui.py
+import os
+import threading
 from pathlib import Path
 from PIL import Image
 from pystray import Icon, Menu, MenuItem
-import os
-from ollama import Client
 
 
-def create_tray_icon(on_quit_callback, icon_path=None):
-    """Create a pystray icon using existing logic, with optional icon_path."""
+class TrayUI:
+    def __init__(self, config, watch_target):
+        self.config = config
+        self.intent_map = config.intent_map
+        self.watch_target = watch_target
+        self.running = True
 
-    client = Client()  # <-- pass server here
+        # Load icon
+        try:
+            icon_path = Path(os.getenv("ICON_IMAGE"))
+            if icon_path.exists():
+                img = Image.open(icon_path)
+            else:
+                raise FileNotFoundError(f"Icon not found at {icon_path}")
+        except Exception as e:
+            print(f"Warning: Could not load icon: {e}. Falling back to blank icon.")
+            img = Image.new('RGB', (64, 64), color='black')
 
-    # Create menu
-    tray_menu = Menu(MenuItem('Quit', on_quit_callback))
+        self.icon = Icon(
+            "NMS_DynamicSuitVoice",
+            img,
+            self._make_tooltip(),
+            self._make_menu()
+        )
 
-    # Load icon image
-    try:
-        if icon_path:
-            icon_image = Path(icon_path)
-        else:
-            icon_image = Path(os.getenv("icon_image"))
-        if icon_image.exists():
-            img = Image.open(icon_image)
-        else:
-            raise FileNotFoundError(f"Icon not found at {icon_image}")
-    except Exception as e:
-        print(f"Warning: Could not load icon: {e}. Falling back to blank icon.")
-        img = Image.new('RGB', (64, 64), color='black')
+    # === Menu builders ===
+    def _make_menu(self):
 
-    # Query models from the Ollama client
-    try:
-        models = client.ps()
-        models_list = models.models
-        model_names = [m.model for m in models_list]
-    except Exception as e:
-        print(f"Warning: Could not query models from Ollama: {e}")
-        model_names = []
+        return Menu(
+            MenuItem('Quit', self.on_quit)
+        )
 
-    # Compose tooltip
-    tooltip_lines = ["NMS DynamicSuitVoice"]
-    warning_lines = []
+    def _make_tooltip(self):
+        return f"No Man's Sky Dynamic Suit Voice"
 
-    if len(model_names) == 1:
-        prefix = "Loaded: "
-        suffix = ""
-    else:
-        prefix = "Loaded: "
-        suffix = f" +{len(model_names) - 1} more"
-        warning_lines = [
-            "Warning: Multiple ollama models loaded",
-            "Game performance may be compromised"
-        ]
+    # === Actions ===
+    def on_quit(self, _icon, _item):
+        self.running = False
+        self.icon.stop()
 
-    reserved = len("\n".join(tooltip_lines + warning_lines)) + len(prefix) + len(suffix) + 1
-    max_model_len = 128 - reserved
-    model_name = model_names[0] if model_names else "N/A"
-    if len(model_name) > max_model_len:
-        model_name = model_name[:max_model_len - 3] + "..."
-    tooltip_lines.append(f"{prefix}{model_name}{suffix}")
-    tooltip_lines += warning_lines
+    # === Runner ===
+    def run(self):
+        watcher = threading.Thread(target=self.watch_target, args=(self,), daemon=True)
+        watcher.start()
+        self.icon.run()
 
-    tooltip_text = "\n".join(tooltip_lines)
+    # === Set aside for future implementation ===
+    def set_tone(self, selected):
+        self.config.current_tone = selected
+        self._refresh()
 
-    return Icon("NMS_DynamicSuitVoice", img, tooltip_text, tray_menu)
+    def set_wordiness(self, selected):
+        self.config.current_wordiness = selected
+        self._refresh()
 
+    def _refresh(self):
+        self.icon.title = self._make_tooltip()
+        self.icon.update_menu()
+
+    def _make_tooltip_with_options(self):
+        return f"No Man's Sky Dynamic Voice\nStyle: {self.config.current_wordiness}\nTone: {self.config.current_tone}"
+
+    def _make_menu_with_options(self):
+        tone_menu = Menu(
+            *(MenuItem(
+                tone,
+                lambda _, t=tone: self.set_tone(t),
+                checked=lambda item, t=tone: self.config.current_tone == t
+            ) for tone in self.config.promptbuilder["tones"].keys())
+        )
+        wordiness_menu = Menu(
+            *(MenuItem(
+                level,
+                lambda _, w=level: self.set_wordiness(w),
+                checked=lambda item, w=level: self.config.current_wordiness == w
+            ) for level in self.config.promptbuilder["wordiness"].keys() if level != "Observer")
+        )
+
+        return Menu(
+            MenuItem('Tone', tone_menu),
+            MenuItem('Wordiness', wordiness_menu),
+            MenuItem('Quit', self.on_quit)
+        )

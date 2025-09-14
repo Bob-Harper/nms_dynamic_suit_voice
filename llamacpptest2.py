@@ -2,9 +2,9 @@ import csv
 import re
 from pathlib import Path
 import time
-from modular.load_env import SuitVoiceConfig
+from modular.config import SuitVoiceConfig
 from prompt_lab_ui import PromptLabUI
-# Load .env vars from load_env.py
+# Load .env vars from config.py
 config = SuitVoiceConfig()
 
 def load_intent_map(csv_path: Path) -> dict:
