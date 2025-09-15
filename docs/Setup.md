@@ -103,7 +103,7 @@ Shut down techniques:
 - Lawful Neutral: Use Ctrl-C (If you started by using a terminal window)
 - Chaotic Neutral: Close the terminal window (If you started by using a terminal window)
 - Chaotic Evil: kill the process in Task Manager
-There may be other methods, but at that point the DM will likely ask you to leave because you are being disruptive.
+<br>There may be other methods, but at that point the DM will likely ask you to leave because you are being disruptive.
 
 ## Uninstall
 
