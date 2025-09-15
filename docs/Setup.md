@@ -80,13 +80,13 @@ cd c:\NMS_SUIT_VOICE
 python nms_dynamic_suite_voice_pipeline.pyw
 ```
 I recommend starting your first session in a terminal window with the above command so you can see what it is doing, and when. If you have a second monitor, even better, you can watch the pipeline do it's thing as you play.
-I saved as a .pyw because I wanted to make a shortcut and eventually just run it directly without messing with .bat files and such.  It does not take any command line arguments so starting it through a simple shortcut (right click, create shortcut) on the desktop is quick and easy.
+It does not take any command line arguments at this time.
 It will take a few moments to initialize the reources it needs and ensure the model is pre-loaded.
 Once the tray icon is visible, it is actively monitoring. If you started through a shortcut, that will be the only indicator.  If you started in a terminal, you will see "Watching for file access..."
 
 ## IF CONFIGURED TO USE GPU, DO NOT START THE GAME UNTIL YOU SEE THE ICON
 Using it on CPU inference should have no impact to startup, but I recommend waiting until it is done because general principles.
-If you've modified to use your GPU, improper startup timing may lead to severe game stuttering and eyestrain caused by FPS rates of 1 or less.  Refer to Advanced FAQS for why it's essential to wait.
+If you've modified to use your GPU, improper startup timing may lead to severe game stuttering, eyestrain, and excessive cursing caused by FPS rates of 1 or less.  [Refer to Advanced FAQS for more detail on why it's essential to wait](docs/Advanced.md).
 
 ### Start No Man's Sky 
 Play until your suit notifies you of something important. Keep playing until you get another notification for the same
