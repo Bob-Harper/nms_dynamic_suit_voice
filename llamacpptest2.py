@@ -1,7 +1,7 @@
 import re
 import time
 from modular.config import SuitVoiceConfig
-from extras.prompt_lab_ui import PromptLabUI
+from modular.prompt_lab_ui import PromptLabUI
 config = SuitVoiceConfig()
 
 
