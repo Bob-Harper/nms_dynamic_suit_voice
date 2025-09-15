@@ -6,6 +6,7 @@ import shutil
 import subprocess
 from pathlib import Path
 from modular.tray_ui import TrayUI
+from modular.tts_utils import run_tts
 from modular.config import SuitVoiceConfig
 config = SuitVoiceConfig()
 
@@ -95,35 +96,6 @@ def postprocess_for_tts(text: str) -> str:
     return text.strip()
 
 
-def run_tts(text: str, wem_num: str) -> Path:
-    final_wav = config.temp_wem_dir / f"{wem_num}.wav"
-    temp_wav = final_wav.with_suffix(".temp.wav")
-    embed_dir = r"C:\NMS_SUIT_VOICE\embeds"
-    ref_wav_dir = os.path.join(embed_dir, "reference")
-    gain_db = 5
-    atempo = 1.05
-    rate = 0.5
-    asetrate = int(44100 * rate)
-    speaker_wav = ["base_extended.wav"]
-    speaker_wav_path = [os.path.join(ref_wav_dir, w) for w in speaker_wav]
-    config.tts_model.tts_to_file(text=text,
-                          speaker_wav=speaker_wav_path,
-                          file_path=str(final_wav)
-                          )  # to clone voice define and use speaker_wav=speaker_wav_path, remove/#comment out if not
-    if gain_db and gain_db != 0:  # tweak the file to up the gain, or it is too quiet in game
-        subprocess.run([
-            "ffmpeg", "-hide_banner", "-y",
-            "-i", str(final_wav),
-            "-af", f"volume={gain_db}dB,atempo={atempo},asetrate={asetrate}",
-            str(temp_wav)
-        ], check=True, creationflags=config.create_no_window)
-        temp_wav.replace(final_wav)
-
-    if not final_wav.exists():
-        raise FileNotFoundError(f"TTS output WAV not found: {final_wav}")
-    return final_wav
-
-
 def convert_to_wem(wav_file_path: Path, output_dir: Path, conversion_quality="Vorbis Quality High"):
     # Resolve both input and output paths to absolute to ensure sound2wem has no issues
     wav_file_path = wav_file_path.resolve()
@@ -182,7 +154,7 @@ def watch_wems(tray_ui):  # Main watchdog and pipeline
                                     writer.writeheader()
                                 writer.writerow(log_entry)
                         try:
-                            wav_path = run_tts(reworded, wem_id)
+                            wav_path = run_tts(config, reworded, wem_id)
                         except Exception as e3:
                             print(f"Error creating WAV: {e3}")
                             continue
@@ -219,6 +191,7 @@ def watch_wems(tray_ui):  # Main watchdog and pipeline
 
         time.sleep(config.check_interval)
 
+if __name__ == "__main__":
+    tray_ui = TrayUI(config, watch_wems)
+    watch_wems(tray_ui)
 
-tray = TrayUI(config, watch_wems)
-tray.run()
