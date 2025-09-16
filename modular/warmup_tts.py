@@ -3,7 +3,7 @@ from config import SuitVoiceConfig
 from tts_utils import test_tts
 
 def main():
-    config = SuitVoiceConfig()
+    config = SuitVoiceConfig(init_llm=False)
     wem_num = "warmup"
     test_text = (
         "The required models and files for voice synthesis are now installed. "
