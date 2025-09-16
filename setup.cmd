@@ -117,8 +117,14 @@ if exist sound2wem (
             rmdir /s /q sound2wem
             echo Re-cloning repository...
             git clone https://github.com/EternalLeo/sound2wem sound2wem
+            if errorlevel 1 (
+                echo Failed to clone Sound2WEM. Check your internet connection or Git install.
+                exit /b 1
+            )
         ) else (
-            echo Cannot continue setup without CMD. Aborting.
+            echo Cannot continue setup without zSound2wem.cmd, aborting.
+            echo Please manually resolve the reason for declining to continue.
+            echo Restart the setup when you are ready to proceed past this point.
             exit /b 1
         )
     ) else (
@@ -128,15 +134,19 @@ if exist sound2wem (
     :: Case 2: folder does not exist
     echo Sound2WEM not found. Cloning repository...
     git clone https://github.com/EternalLeo/sound2wem sound2wem
+    if errorlevel 1 (
+        echo Failed to clone Sound2WEM. Check your internet connection or Git install.
+        exit /b 1
+    )
 )
 
 :: At this point: folder exists and CMD exists
 echo.
 echo Please run Sound2WEM setup:
-echo   1) Navigate to the folder: sound2wem
+echo   1) Review the newly opened Explorer window, it should be opened to the sound2wem folder.
 echo   2) Double-click zSound2wem.cmd
-echo   3) Follow the on-screen instructions (install Wwise/FFmpeg)
-echo   4) Come back to this window when you are done, and press the Space bar.
+echo   3) Follow the on-screen instructions for sound2wem (install Wwise/FFmpeg)
+echo   4) Come back to this window when you are done, and press a key to continue.
 start "" "%CD%\sound2wem"
 pause
 
@@ -147,15 +157,17 @@ if not exist suit_voice.env copy suit_voice.env.example suit_voice.env
 exit /b
 
 :warmup_tts
-:: activate virtual environment
-call venv\Scripts\activate.bat
-
-:: run warmup_tts.py
+:: run warmup_tts.py to pre-download TTS models
+set "PATH=%CD%\venv\Scripts;%PATH%"
 python modular\warmup_tts.py
     exit /b 0
 
 :done
 echo.
-echo === Setup complete. ===
+=== Setup Complete ===
+• LLM model: OK
+• Sound2WEM: OK
+• TTS models: OK
+• Config: OK
 pause
 exit /b
