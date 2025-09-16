@@ -9,8 +9,9 @@ from llama_cpp import Llama
 from dotenv import load_dotenv
 from TTS.api import TTS  # coqui-tts fork
 
+
 class SuitVoiceConfig:
-    def __init__(self, env_file: str = "suit_voice.env"):
+    def __init__(self, env_file: str = "suit_voice.env", init_llm: bool = True):
         load_dotenv(dotenv_path=Path(__file__).parent.parent / env_file)
         self.check_interval = float(os.getenv("CHECK_INTERVAL"))
         self.mod_dir = Path(os.getenv("MOD_DIR").strip('"'))
@@ -66,16 +67,17 @@ class SuitVoiceConfig:
         with open(self.tokenized_banlist_path, encoding="utf-8") as f:
             self.logit_banlist = json.load(f)
 
-        # LLM
+        # LLM model path is always set
         self.llm_model = str(Path(os.getenv("LLM_MODEL")))
-        self.llm = Llama(
-            model_path=self.llm_model,
-            # n_ctx=4096, # does it help?
-            n_ctx=32768,  # full context window
-            n_batch=1024,  # helps performance
-            n_threads=4,   # adjust as needed
-            verbose=False
-        )
+        self.llm = None
+        if init_llm:
+            self.llm = Llama(
+                model_path=self.llm_model,
+                n_ctx=32768,
+                n_batch=1024,
+                n_threads=4,
+                verbose=False
+            )
 
         # Runtime state
         self.current_tone = "Default"
