@@ -5,22 +5,23 @@ from pathlib import Path
 def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
     final_wav = config.temp_wem_dir / f"{wem_num}.wav"
     temp_wav = final_wav.with_suffix(".temp.wav")
-    base_wav_path = None
     if config.embed_dir:
         ref_path = config.embed_dir / "reference" / "base_extended.wav"
         if ref_path.exists():
             base_wav_path = str(ref_path)
-
-    speaker_wav = [base_wav_path] if base_wav_path else None
+    # If using voice cloning, uncomment and put the kw back into the tts_to_file call.
+    # ensure directories are set up and wav exists
+    # base_wav_path = None
+    # speaker_wav = [base_wav_path] if base_wav_path else None
+        # speaker_wav=speaker_wav,
 
     # Generate base TTS wav
     config.tts_model.tts_to_file(
         text=text,
-        speaker_wav=speaker_wav,
         file_path=str(final_wav)
     )
 
-    if postprocess:
+    if postprocess:  # gain_db is the only one required, or the sound is too quiet in game.  Recommend =5
         apply_ffmpeg_filters(final_wav, temp_wav, gain_db=5, atempo=1.05, rate=0.5)
         temp_wav.replace(final_wav)
 
