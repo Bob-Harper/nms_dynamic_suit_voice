@@ -5,15 +5,6 @@ from pathlib import Path
 def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
     final_wav = config.temp_wem_dir / f"{wem_num}.wav"
     temp_wav = final_wav.with_suffix(".temp.wav")
-    if config.embed_dir:
-        ref_path = config.embed_dir / "reference" / "base_extended.wav"
-        if ref_path.exists():
-            base_wav_path = str(ref_path)
-    # If using voice cloning, uncomment and put the kw back into the tts_to_file call.
-    # ensure directories are set up and wav exists
-    # base_wav_path = None
-    # speaker_wav = [base_wav_path] if base_wav_path else None
-        # speaker_wav=speaker_wav,
 
     # Generate base TTS wav
     config.tts_model.tts_to_file(

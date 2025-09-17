@@ -80,7 +80,7 @@ class SuitVoiceConfig:
             )
 
         # Runtime state
-        self.current_tone = "Default"
+        self.current_tone = "Philosophical"
         self.current_wordiness = "Default"
 
         # Categories that override prompting rules
