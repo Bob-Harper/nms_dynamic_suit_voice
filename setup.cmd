@@ -3,21 +3,14 @@ setlocal enabledelayedexpansion
 
 REM === User chooses auto vs guided ===
 set "AUTOALL=N"
-set "TESTMODE=N"
 
 echo.
 echo === NMS Dynamic Suit Voice Auto Setup ===
-set /p AUTOALL="Do you want me to do EVERYTHING automatically? (Y/N): "
+set /p AUTOALL="Do you want me to do EVERYTHING automatically and assume defaults? (Y/N): "
 if /i "%AUTOALL%"=="Y" (
   echo Auto mode enabled.
 ) else (
   echo Guided mode enabled.
-)
-
-REM Optionally enable TEST mode (for devs)
-if "%1"=="--test" (
-  set "TESTMODE=Y"
-  echo TEST MODE: Model download will be truncated to 1MB.
 )
 
 REM === Run all steps ===
@@ -27,6 +20,7 @@ call :step "Install Python dependencies" install_reqs
 call :step "Download LLM model" download_model
 call :step "Setup sound2wem" setup_sound2wem
 call :step "Prepare .env file" copy_env
+call :step "Prepare MOD directory" copy_starter_wems
 call :step "Initialize TTS model" warmup_tts
 
 goto :done
@@ -53,7 +47,7 @@ exit /b
 ::------------------------------------
 :check_python
 python --version || (
-  echo Python not found. Install 3.10+ and re-run.
+  echo Python not found. Install 3.10+ and try again.
   exit /b 1
 )
 exit /b
@@ -84,15 +78,10 @@ exit /b
 echo --- Entering download_model ---
 set "MODELURL=https://huggingface.co/lmstudio-community/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf"
 set "MODELDIR=assets\qwen3_06b_q4"
-REM inside setup.cmd :download_model
+
 if not exist "%MODELDIR%" mkdir "%MODELDIR%"
 
-REM Set target filename based on test mode
-if /i "%TESTMODE%"=="Y" (
-    set "TARGETFILE=%MODELDIR%\Qwen3_test.gguf"
-) else (
-    set "TARGETFILE=%MODELDIR%\Qwen3-0.6B-Q4_K_M.gguf"
-)
+set "TARGETFILE=%MODELDIR%\Qwen3-0.6B-Q4_K_M.gguf"
 
 REM Only download if the file doesn't already exist
 if exist "%TARGETFILE%" (
@@ -112,7 +101,7 @@ if exist sound2wem (
     :: Check if the CMD file exists
     if not exist sound2wem\zSound2wem.cmd (
         echo Warning: sound2wem directory exists but zSound2wem.cmd is missing.
-        set /p CHOICE="Delete existing folder and re-clone? (Y/N): "
+        set /p CHOICE="Delete existing folder and re-clone? (this will delete everything in the folder) (Y/N): "
         if /i "!CHOICE!"=="Y" (
             rmdir /s /q sound2wem
             echo Re-cloning repository...
@@ -135,7 +124,7 @@ if exist sound2wem (
     echo Sound2WEM not found. Cloning repository...
     git clone https://github.com/EternalLeo/sound2wem sound2wem
     if errorlevel 1 (
-        echo Failed to clone Sound2WEM. Check your internet connection or Git install.
+        echo Failed to clone Sound2WEM. Check your internet connection or Git install and try again.
         exit /b 1
     )
 )
@@ -154,13 +143,40 @@ exit /b
 
 :copy_env
 if not exist suit_voice.env copy suit_voice.env.example suit_voice.env
+echo Environment configs are available.
+echo In case of errors regarding paths or nonexistent files, check the values in suit_voice.env first.
+exit /b
+
+:copy_starter_wems
+set "STARTERWEMS=%~dp0DYNAMIC_SUIT_VOICE\AUDIO\WINDOWS\MEDIA\ENGLISH(US)"
+set "STARTERWEMSTEAM=C:\Program Files (x86)\Steam\steamapps\common\No Man's Sky\GAMEDATA\MODS\DYNAMIC_SUIT_VOICE\AUDIO\WINDOWS\MEDIA\ENGLISH(US)"
+
+if not exist "%STARTERWEMSTEAM%" mkdir "%STARTERWEMSTEAM%"
+
+set /a copied=0
+set /a total=0
+echo Checking starter WEMs...
+
+for %%F in (%STARTERWEMS%\*.*) do (
+    set /a total+=1
+    if not exist "%STARTERWEMSTEAM%\%%~nxF" (
+        copy "%%F" "%STARTERWEMSTEAM%\"
+        set /a copied+=1
+    )
+)
+
+if !total! EQU 0 (
+    echo Warning: no starter WEMs found in "%STARTERWEMS%"
+)
+
+echo !copied! voice files updated
 exit /b
 
 :warmup_tts
 :: run warmup_tts.py to pre-download TTS models
 set "PATH=%CD%\venv\Scripts;%PATH%"
 python modular\warmup_tts.py
-    exit /b 0
+exit /b 0
 
 :done
 echo.
@@ -168,6 +184,8 @@ echo.
 • LLM model: OK
 • Sound2WEM: OK
 • TTS models: OK
+• WEMs updated: !copied!
+• Total WEMs: !total!
 • Config: OK
 pause
 exit /b
