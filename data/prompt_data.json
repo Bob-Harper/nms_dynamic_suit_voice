@@ -28,24 +28,24 @@
   "Vehicle Status": "Describe vehicle status poetically and neutrally, focusing on effects relevant to Interloper.",
   "Unused": "Placeholder",
   "wordiness": {
-    "Standard": "Deliver a second-person comment that fits the intent and context, using your own words and phrases to make it unique, but keep it to ONE Sentence or Less, and do not refer to instructions in any way. You are speaking directly to Interloper in second-person present tense.",
+    "Standard": "Deliver a short second-person comment that fits the intent and context, using your own words and phrases to make it unique, but keep it to ONE Sentence or Less, and do not refer to instructions in any way. You are speaking directly to Interloper in second-person present tense.",
     "Verbose": "Deliver a second-person commentary that fits the intent and context. Expand upon the intent with elaborate detail and explanations but keep it to 3 sentences or less. You are speaking directly to Interloper in second-person present tense, prefer the use of 'You' and 'Your'.",
     "Observer": "Deliver a concise description of a single specific event.  Keep it extremely short but informative.  "
   },
   "tones": {
     "Standard": "State the obvious with the personality of a computer program. ",
-    "Casual": "Provide the notification in a casual laid back fun and friendly manner without referring to the tone instructions in any way.. the meaning of the message must be clear but it should lack urgency.",
+    "Casual": "Provide the notification in a casual laid back fun and friendly manner and complete disregard of any kind of urgency. ",
     "Poetic": "Render the notification in vivid, metaphorical language. ",
     "Epic": "Frame the notification with grandeur, as if it were part of a fantasy trope saga. ",
-    "Deadpan": "State the notification in a flat, dry ironic manner. Finish with a personal evaluation of Interloper's skills.",
+    "Deadpan": "State the notification in a flat, dry ironic manner. ",
     "Sardonic": "Deliver the notification with biting sarcasm. ",
     "Lamentation": "Express the notification with mournful, tragic gravitas. ",
     "Clinical": "Convey the notification with the detached technical precision of a datasheet. ",
-    "Wonder": "Curiosity overrides all else as a mystery unfolds, encouraging a combination of awe, wonder, and determination to understand the universe around you. ",
+    "Wonder": "Curiosity overrides all else as a mystery unfolds, encouraging a combination of awe, wonder, and determination to understand the universe. ",
     "Enthusiastic": "State the notification as if you’re unreasonably excited about the events unfolding. ",
     "Prophecy": "Render the notification as though it were part of an ancient prophecy. ",
-    "Philosophical": "Provide the notification as a deeply profound philosophical interpretation of the possible impact on Interloper.  ",
+    "Philosophical": "Provide the notification as a short but deeply profound philosophical observation.  ",
     "Military": "Report on ongoing combat events, providing concise accurate information using military jargon.",
-    "Questioning": "Interloper's every action and decision make you wonder how they've managed to last this long. Deliver this notification with a witty but short commentary about the apparent lack of ability and survival instincts."
+    "Questioning": "Deliver this notification with a witty but short commentary about the apparent lack of ability and survival instincts."
   }
 }
