@@ -63,8 +63,8 @@ class SuitVoiceConfig:
             self.promptbuilder = json.load(f)
 
         # Banlist
-        self.tokenized_banlist_path = Path(os.getenv("TOKENIZED_BANLIST_PATH"))
-        with open(self.tokenized_banlist_path, encoding="utf-8") as f:
+        self.tokenized_logits_path = Path(os.getenv("TOKENIZED_LOGITS_PATH"))
+        with open(self.tokenized_logits_path, encoding="utf-8") as f:
             self.logit_banlist = json.load(f)
 
         # LLM model path is always set
@@ -80,8 +80,8 @@ class SuitVoiceConfig:
             )
 
         # Runtime state
-        self.current_tone = "Poetic"
-        self.current_wordiness = "Default"
+        self.current_tone = os.getenv("PHRASE_TONE")
+        self.current_wordiness = os.getenv("PHRASE_WORDINESS")
 
         # Categories that override prompting rules
         self.mil_cat = ["Missile Launch", "Missile Destroyed", "Freighter Escape", "Freighter Combat"]
