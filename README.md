@@ -37,6 +37,10 @@ Original Game Wording: Extreme Night Temperature Detected
 <br> Final Output: Extreme night cold temperatures are reported. This is concerning as it could lead to reduced life support and potential danger for You.
 <br> Final Output: Extreme cold temperatures during the night cycle are detected, posing a significant threat to life support and your safety.
 
+## Demo Video
+
+[![Dynamic Suit Voice Demo](https://img.youtube.com/vi/L1BsYxOSzSk/0.jpg)](https://youtu.be/L1BsYxOSzSk)
+
 
 ## Limitations / Disclaimer
 

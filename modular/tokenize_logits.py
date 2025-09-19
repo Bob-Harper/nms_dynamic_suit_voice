@@ -56,7 +56,7 @@ for cat_name, cat_data in categories.items():
 with open(INPUT_JSON, "w", encoding="utf-8") as f:
     json.dump(categories, f, indent=2, ensure_ascii=False)
 
-print("Banlist updated with tokenized entries.")
+print("Logits updated with tokenized entries.")
 
 # Helper
 def get_logit_bias(category: str) -> dict:

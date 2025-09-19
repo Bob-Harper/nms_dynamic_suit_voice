@@ -119,12 +119,9 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
 intent_map = config.intent_map
 
 
-ui = PromptLabUI(config, intent_map, process_entry)
-ui.run()
+# ui = PromptLabUI(config, intent_map, process_entry)
+# ui.run()
 
-# start_row = 0  # inclusive.  starts at 0.
-# end_row = 6  # exclusive. going past the end effectively skips nonexistent lines.
-# output_rows = process_by_row_range(intent_map, start_row, end_row)
 
 """
 start_row = 0  # inclusive.  starts at 0.
@@ -249,4 +246,7 @@ def process_by_row_range(intent_mapr, start_row, end_row):
         output_rows_r.append(process_entry(wem_id, entry))
     return output_rows_r
 
+start_row = 0  # inclusive.  starts at 0.
+end_row = 222  # exclusive. going past the end effectively skips nonexistent lines.
+output_rows = process_by_row_range(intent_map, start_row, end_row)
 
