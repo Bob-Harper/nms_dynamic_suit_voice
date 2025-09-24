@@ -1,7 +1,7 @@
+# from modular.prompt_lab_ui import PromptLabUI
 import re
 import time
 from modular.config import SuitVoiceConfig
-from modular.prompt_lab_ui import PromptLabUI
 config = SuitVoiceConfig()
 
 
@@ -94,13 +94,17 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
     intent = entry["Intent"]
 
     # Build the structured prompt
-    prompt = build_suit_prompt(config, category, intent, original_phrase, wordiness_level, tone)
-
+    finalprompt = build_suit_prompt(config, category, intent, original_phrase, wordiness_level, tone)
+    # convert Player Name Placeholder
+    finalprompt = finalprompt.format(
+        name=config.player_name.strip(),
+    )
+    finalprompt += finalprompt + " /nothink"
+    # print(f"final prompt: {finalprompt}")
     start_time = time.time()
     try:
         # Generate with LLM
-        reworded = reword_phrase(wem_id, category, original_phrase, prompt)
-
+        reworded = reword_phrase(wem_id, category, original_phrase, finalprompt)
 
         print(f"\nWEM: {wem_id} -- Original Game Wording: {original_phrase}")
         print(f"Tone: ({tone}) Verbosity: ({wordiness_level})")
@@ -118,9 +122,68 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
 
 intent_map = config.intent_map
 
+def five_x__row_range(intent_mapr, start_row, end_row, repeats=5):
+    output_rows_r = []
+    for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
+        if idx < start_row:
+            continue
+        if idx >= end_row:
+            break
+        for r in range(repeats):  # hammer this row before moving on
+            print(f"[Row {idx}, Repeat {r+1}] WEM {wem_id}")
+            output_rows_r.append(process_entry(wem_id, entry))
+    return output_rows_r
+
+
+def process_by_category(intent_mapp, target_category, wordiness_level="Standard", tone="Standard"):
+    output_rows_c = []
+    for wem_id, entry in intent_mapp.items():
+        if entry["Category"] != target_category:
+            continue
+        output_rows_c.append(process_entry(wem_id, entry, wordiness_level, tone))
+
+    return output_rows_c
+
+
+def process_single_wem_all_tones(intent_maps, wem_id, wordiness_level="Standard"):
+    entry = intent_maps.get(wem_id)
+    if not entry:
+        print(f"WEM {wem_id} not found in intent map.")
+        return []
+
+    results = []
+    for tone in config.promptbuilder.get("tones", {}).keys():
+        print(f"\n=== Tone: {tone} === Length: {wordiness_level} ===")
+        results.append(process_entry(
+            wem_id, entry,
+            wordiness_level=wordiness_level,
+            tone=tone
+        ))
+    return results
+
+
+def process_by_row_range(intent_mapr, start_row, end_row):
+    output_rows_r = []
+    for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
+        if idx < start_row:
+            continue
+        if idx >= end_row:
+            break
+        output_rows_r.append(process_entry(wem_id, entry))
+    return output_rows_r
+
+# wordiness_level = "Standard"
+# tone = "Questioning"
+# start_row = 20  # inclusive.  starts at 0.
+# end_row = 25  # exclusive. going past the end effectively skips nonexistent lines.
+# output_rows = process_by_row_range(intent_map, start_row, end_row, wordiness_level, tone)
 
 # ui = PromptLabUI(config, intent_map, process_entry)
 # ui.run()
+
+target_wem = "666"
+target_wordy = "Default"
+process_single_wem_all_tones(intent_map, target_wem, target_wordy)
 
 
 """
@@ -141,7 +204,6 @@ output_rows = process_by_category(intent_map,
                                   target_tone
                                   )
 """
-# process_single_wem_all_tones(intent_map, target_wem, target_wordy)
 """
 Cold Temperature
 Discovery
@@ -196,57 +258,3 @@ Debugging
   }
 
 """
-def five_x__row_range(intent_mapr, start_row, end_row, repeats=5):
-    output_rows_r = []
-    for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
-        if idx < start_row:
-            continue
-        if idx >= end_row:
-            break
-        for r in range(repeats):  # hammer this row before moving on
-            print(f"[Row {idx}, Repeat {r+1}] WEM {wem_id}")
-            output_rows_r.append(process_entry(wem_id, entry))
-    return output_rows_r
-
-
-def process_by_category(intent_mapp, target_category, wordiness_level="Standard", tone="Standard"):
-    output_rows_c = []
-    for wem_id, entry in intent_mapp.items():
-        if entry["Category"] != target_category:
-            continue
-        output_rows_c.append(process_entry(wem_id, entry, wordiness_level, tone))
-
-    return output_rows_c
-
-
-def process_single_wem_all_tones(intent_maps, wem_id, wordiness_level="Standard"):
-    entry = intent_maps.get(wem_id)
-    if not entry:
-        print(f"WEM {wem_id} not found in intent map.")
-        return []
-
-    results = []
-    for tone in config.promptbuilder.get("tones", {}).keys():
-        print(f"\n=== Tone: {tone} === Length: {wordiness_level} ===")
-        results.append(process_entry(
-            wem_id, entry,
-            wordiness_level=wordiness_level,
-            tone=tone
-        ))
-    return results
-
-
-def process_by_row_range(intent_mapr, start_row, end_row):
-    output_rows_r = []
-    for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
-        if idx < start_row:
-            continue
-        if idx >= end_row:
-            break
-        output_rows_r.append(process_entry(wem_id, entry))
-    return output_rows_r
-
-start_row = 0  # inclusive.  starts at 0.
-end_row = 222  # exclusive. going past the end effectively skips nonexistent lines.
-output_rows = process_by_row_range(intent_map, start_row, end_row)
-

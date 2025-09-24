@@ -3,19 +3,19 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 56102735.WEM,Danger: Critical Hypothermia,Cold Temperature,"Extreme cold conditions have overwhelmed the life support system, and hypothermia has begun, failure to address this may be fatal.",56102735,
 968836370.WEM,Extreme Cold Damage Detected,Cold Temperature,Serious damage is being taken due to exposure to extreme cold conditions.,968836370,
 223423849.WEM,Discovery Uploaded,Discovery,The discovery has been uploaded to the galactic network.,223423849,
-263752892.WEM,Home Planet Claimed,Discovery,Interloper has officially claimed a planet as a new home base.,263752892,No
+263752892.WEM,Home Planet Claimed,Discovery,{name} has officially claimed a planet as a new home base.,263752892,No
 497090550.WEM,Discovery Uploaded,Discovery,"The discovery has been uploaded to the galactic network, and a reward for the discovery has been processed.",497090550,
 682556976.WEM,New Planet Analyzed,Discovery,A new planet has been analyzed and the data recorded in the personal archives.,682556976,No
 685057897.WEM,Discovery Uploaded,Discovery,A recently uploaded discovery is now pending peer review by the galactic scientific community.,685057897,
-760990899.WEM,Home Planet Established,Discovery,A new planet has been successfully surveyed and established as Interloper's home.,760990899,No
-990719346.WEM,New System Discovered,Discovery,Interloper has successfully discovered a previously uncharted star system.,990719346,No
+760990899.WEM,Home Planet Established,Discovery,A new planet has been successfully surveyed and established as {name}'s home.,760990899,No
+990719346.WEM,New System Discovered,Discovery,{name} has successfully discovered a previously uncharted star system.,990719346,No
 1010781808.WEM,Discovery Uploaded,Discovery,"A new discovery has been successfully uploaded to the official galactic survey network, allowing others across the galaxy to access and review the data.",1010781808,
 27999850.WEM,Shield Protection Falling,Energy Shield,The personal energy shield is actively being degraded by continuous damage.,27999850,
 67834502.WEM,Shields Down,Energy Shield,The personal energy shield has failed entirely.,67834502,
 272020218.WEM,Shield Down,Energy Shield,Personal energy shield systems are offline due to complete energy depletion. Defensive capability is lost.,272020218,
 394683190.WEM,Shield Down,Energy Shield,The personal energy shield has failed due to taking damage.,394683190,
 468585602.WEM,Shield Down,Energy Shield,Energy levels in the personal energy shield are severely depleted. Recharge is required.,468585602,
-691940593.WEM,Shield Protection Stabilizing,Energy Shield,Interloper is recovering from recent damage and personal energy shield stabilization is underway.,691940593,
+691940593.WEM,Shield Protection Stabilizing,Energy Shield,{name} is recovering from recent damage and personal energy shield stabilization is underway.,691940593,
 781094525.WEM,Danger: Shield Compromised,Energy Shield,The kinetic energy shield has failed and can no longer mitigate physical injury.,781094525,
 871932351.WEM,Shield Down,Energy Shield,Critical incoming damage has destroyed all personal energy shield integrity.,871932351,
 774834164.WEM,Weather Update: Storm Clearing,Environmental Status,A storm has passed. Weather conditions are returning to normal.,774834164,
@@ -27,7 +27,7 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 43830316.WEM,Technology Repaired,Equipment Status,Repairs have been completed on a damaged piece of installed equipment.,43830316,
 117536789.WEM,Additional Resources Required,Equipment Status,Additional resources are needed to build the desired item.,117536789,
 260557941.wem,Backup generators online,Equipment Status,Backup generators have been engaged.,260557941,No
-299876357.WEM,Freighter Acquired,Equipment Status,"Interloper has acquired a new freighter.  It is in poor condition, requiring maintenance and repair.",299876357,No
+299876357.WEM,Freighter Acquired,Equipment Status,"{name} has acquired a new freighter.  It is in poor condition, requiring maintenance and repair.",299876357,No
 315361790.WEM,Multi-Tool Charge Depleted,Equipment Status,Multi-tool power is completely depleted. Recommend monitoring power levels more closely while in use to avoid shutdown during operation.,315361790,
 337859118.WEM,Base Computer Online,Equipment Status,The computer for the new base is online and operational. The full build menu is now accessible.,337859118,No
 353234571.WEM,New Weapon Available,Equipment Status,A previously unobtainable weapon has become available.,353234571,No
@@ -37,8 +37,8 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 474358890.WEM,New Freighter Acquired,Equipment Status,"a new freighter in poor conditionhas been acquired, it is in dire needd of maintenance.",474358890,
 487034870.WEM,Internal View Selected,Equipment Status,Switched to internal camera view of the suit or vehicle in use.,487034870,No
 496984207.WEM,Technology Offline,Equipment Status,A component of the suit or equipment has been damaged and is now offline.,496984207,
-589305615.WEM,Shield Kinetic System Online,Equipment Status,Interloper is now fully conscious. The suit’s kinetic shield subsystem has been activated.,589305615,
-634281443.WEM,Commencing Atlas System Suit Initialization,Equipment Status,Interloper is entering a state of consciousness. The Atlas Suit and AI companion are initializing and running self-diagnostic processes.,634281443,
+589305615.WEM,Shield Kinetic System Online,Equipment Status,{name} is now fully conscious. The suit’s kinetic shield subsystem has been activated.,589305615,
+634281443.WEM,Commencing Atlas System Suit Initialization,Equipment Status,{name} is entering a state of consciousness. The Atlas Suit and AI companion are initializing and running self-diagnostic processes.,634281443,
 639001585.WEM,Suit Power Cells Depleted,Equipment Status,"The suit has exhausted its power reserves, rendering most functions inactive until recharged.",639001585,
 757274367.WEM,Technology Installed,Equipment Status,A new technology module has been successfully installed.,757274367,
 770752691.WEM,Scanner Damaged Repair Required,Equipment Status,Scanner system inoperable; must initiate repairs to restore functionality.,770752691,No
@@ -165,7 +165,7 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 946171572.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
 998327261.wem,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
 752301356.WEM,*random autophage*,REFERENCE,"UNUSED AT THIS TIME, LEAVE WEM NUMBER BLANK",,
-330757140.WEM,Hostile Ships Defeated,Starship Combat,Interloper survived a starship battle.  Well done.,330757140,
+330757140.WEM,Hostile Ships Defeated,Starship Combat,{name} survived a starship battle.  Well done.,330757140,
 968718536.WEM,Hostile Ships Approaching,Starship Combat,"Hostile starships are approaching, their weapons are armed and ready.",968718536,
 28199458.WEM,Hostile System: Weapons Engaged,Starship Combat,"Hostile forces have already initiated combat with local defenses in the system prior to arrival, and starship has activated combat readiness protocols.",28199458,
 49616634.wem,Engaging Attack Ships,Starship Combat,Attacking starships have been marked as valid weapon targets by the combat computer.,49616634,
@@ -212,5 +212,5 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 740830728.WEM,Refuel Vehicle,Vehicle Status,vehicle is critically low on fuel and requires immediate refueling or recharging.,740830728,
 891464212.WEM,Fuel Depleted,Vehicle Status,"vehicle fuel reserves are fully depleted, disabling vehicle operation. ",891464212,
 974964870.WEM,Damage Sustained To Vehicle,Vehicle Status,vehicle has sustained light to moderate damage and the safety harness has engaged as a protective response.,974964870,No
-666.WEM,Mandatory Test,Debugging,"Hello, Interloper has reached I.T.  Has Interloper tried turning it off and then on again?",666,No
+666.WEM,Mandatory Test,Debugging,"Hello, {name} has reached I.T.  Has {name} tried turning it off and then on again?",666,No
 ,,,,

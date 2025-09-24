@@ -1,4 +1,3 @@
-import os
 import re
 import csv
 import time
@@ -56,7 +55,6 @@ def reword_phrase(wem_id_r,
                   category_r,
                   original_phrase_r,
                   finalprompt):
-
     # enforce usage or avoidance of specific tokens using logits
     logit_bias_list = create_logit_bias(category_r)
 
@@ -132,7 +130,10 @@ def watch_wems(tray_ui):  # Main watchdog and pipeline
 
                         # pass the same config object the tray is updating
                         finalprompt = build_suit_prompt(config, category, intent_w, original_phrase_w)
-
+                        finalprompt = finalprompt.format(
+                            name=config.player_name.strip(),
+                        )
+                        finalprompt += finalprompt + " /nothink"
                         reworded = reword_phrase(wem_id, original_phrase_w, intent_w, finalprompt)
                         if config.logging:
                             fieldnames = ["WEM number", "Category", "Original", "Intent Phrase", "Context",

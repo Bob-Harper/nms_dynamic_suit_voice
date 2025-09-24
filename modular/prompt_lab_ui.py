@@ -1,10 +1,14 @@
 # prompt_lab_ui.py
+from modular.llamacpptest2 import SuitVoiceTest
+from modular.config import SuitVoiceConfig
 import json
 import threading
 import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox, filedialog, font
 
 from pathlib import Path
+config = SuitVoiceConfig()
+processor = SuitVoiceTest(config)
 
 class PromptLabUI:
     def __init__(self, config, intent_map, process_entry_fn, process_single_all_fn=None):
@@ -429,3 +433,8 @@ class PromptLabUI:
         self.wordiness_cb.bind("<<ComboboxSelected>>", lambda e: self._populate_editors())
         self.tone_cb.bind("<<ComboboxSelected>>", lambda e: self._populate_editors())
         self.root.mainloop()
+
+
+intent_map = config.intent_map
+ui = PromptLabUI(config, intent_map, processor.process_entry)
+ui.run()
