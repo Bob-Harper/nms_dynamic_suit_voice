@@ -73,7 +73,7 @@ class SuitVoiceConfig:
         if init_llm:
             self.llm = Llama(
                 model_path=self.llm_model,
-                n_ctx=32768,
+                n_ctx=40960,
                 n_batch=1024,
                 n_threads=4,
                 verbose=False
@@ -82,6 +82,7 @@ class SuitVoiceConfig:
         # Runtime state
         self.current_tone = os.getenv("PHRASE_TONE")
         self.current_wordiness = os.getenv("PHRASE_WORDINESS")
+        self.player_name= os.getenv("PLAYER_NAME")
 
         # Categories that override prompting rules
         self.mil_cat = ["Missile Launch", "Missile Destroyed", "Freighter Escape", "Freighter Combat"]
