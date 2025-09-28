@@ -1,6 +1,6 @@
 # prompt_lab_ui.py
-from modular.llamacpptest2 import SuitVoiceTest
 from modular.config import SuitVoiceConfig
+from llamacpptest2 import process_entry
 import json
 import threading
 import tkinter as tk
@@ -8,12 +8,12 @@ from tkinter import ttk, scrolledtext, messagebox, filedialog, font
 
 from pathlib import Path
 config = SuitVoiceConfig()
-processor = SuitVoiceTest(config)
+
 
 class PromptLabUI:
     def __init__(self, config, intent_map, process_entry_fn, process_single_all_fn=None):
         """
-        config: instance of SuitVoiceConfig (must have .promptbuilder (dict) and optionally .promptbuilder_path (Path))
+        config: instance of SuitVoiceConfig (must have .promptdata (dict) and optionally .promptdata_path (Path))
         intent_map: dict loaded from load_intent_map(config.csv_path)
         process_entry_fn: function signature process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard")
         process_single_all_fn (optional): convenience function to run single WEM across all tones
@@ -30,13 +30,13 @@ class PromptLabUI:
         self.process_single_all = process_single_all_fn
 
         # backend data
-        self.promptbuilder = config.promptbuilder  # live dict
-        self.promptbuilder_path = getattr(config, "promptbuilder_path", None)
+        self.promptdata = config.promptdata  # live dict
+        self.promptdata_path = getattr(config, "promptdata_path", None)
 
         # prepare lists
         self.categories = list(self._collect_categories())
-        self.tones = list(self.promptbuilder.get("tones", {}).keys())
-        self.wordiness_levels = list(self.promptbuilder.get("wordiness", {}).keys())
+        self.tones = list(self.promptdata.get("tones", {}).keys())
+        self.wordiness_levels = list(self.promptdata.get("wordiness", {}).keys())
 
         # defaults
         if "Standard" not in self.wordiness_levels:
@@ -97,12 +97,12 @@ class PromptLabUI:
             self.wem_var.set(wem_list[0] if wem_list else "")
 
     def _collect_categories(self):
-        # promptbuilder may mix strings and dicts at top level. gather keys except 'tones'/'wordiness'
-        for k in self.promptbuilder.keys():
+        # promptdata may mix strings and dicts at top level. gather keys except 'tones'/'wordiness'
+        for k in self.promptdata.keys():
             if k not in ("tones", "wordiness", "Default", "Unused"):
                 yield k
         # always include Default
-        if "Default" in self.promptbuilder:
+        if "Default" in self.promptdata:
             yield "Default"
 
     def _build_ui(self):
@@ -256,7 +256,7 @@ class PromptLabUI:
         # Footer buttons
         frm_footer = ttk.Frame(self.root)
         frm_footer.pack(fill="x", padx=pad, pady=(4,8))
-        ttk.Button(frm_footer, text="Save Promptbuilder JSON As...", command=self._save_as).pack(side="left")
+        ttk.Button(frm_footer, text="Save promptdata JSON As...", command=self._save_as).pack(side="left")
         ttk.Button(frm_footer, text="Clear Log", command=lambda: self.log.delete('1.0', tk.END)).pack(side="left", padx=(6,0))
         ttk.Button(frm_footer, text="Quit", command=self.root.destroy).pack(side="right")
 
@@ -265,22 +265,22 @@ class PromptLabUI:
 
     def _reload_prompts(self):
         # reload the prompting JSON if path exists
-        if self.promptbuilder_path and Path(self.promptbuilder_path).exists():
-            with open(self.promptbuilder_path, encoding="utf-8") as f:
-                self.promptbuilder = json.load(f)
-                self.config.promptbuilder = self.promptbuilder
+        if self.promptdata_path and Path(self.promptdata_path).exists():
+            with open(self.promptdata_path, encoding="utf-8") as f:
+                self.promptdata = json.load(f)
+                self.config.promptdata = self.promptdata
             self.categories = list(self._collect_categories())
-            self.tones = list(self.promptbuilder.get("tones", {}).keys())
-            self.wordiness_levels = list(self.promptbuilder.get("wordiness", {}).keys())
+            self.tones = list(self.promptdata.get("tones", {}).keys())
+            self.wordiness_levels = list(self.promptdata.get("wordiness", {}).keys())
             self._populate_editors()
-            self._log("Reloaded promptbuilder from disk.")
+            self._log("Reloaded promptdata from disk.")
         else:
-            self._log("No promptbuilder_path set; using in-memory prompts.")
+            self._log("No promptdata_path set; using in-memory prompts.")
 
     def _populate_editors(self):
         cat = self.category_var.get()
         # category context could be string or dict; handle both
-        category_context = self.promptbuilder.get(cat, self.promptbuilder.get("Default", ""))
+        category_context = self.promptdata.get(cat, self.promptdata.get("Default", ""))
         if isinstance(category_context, dict):
             # if it's dict, try to get a human-readable default key
             cat_text = category_context.get("Default", json.dumps(category_context, indent=2))
@@ -291,14 +291,14 @@ class PromptLabUI:
 
         # wordiness
         w = self.wordiness_var.get()
-        w_text = self.promptbuilder.get("wordiness", {}).get(w, "")
+        w_text = self.promptdata.get("wordiness", {}).get(w, "")
         self.word_text.delete('1.0', tk.END)
         self.word_text.insert(tk.END, w_text)
 
         # tone
         t = self.tone_var.get()
         tone_key = t if t != "Random" else self.tones[0] if self.tones else ""
-        t_text = self.promptbuilder.get("tones", {}).get(tone_key, "")
+        t_text = self.promptdata.get("tones", {}).get(tone_key, "")
         self.tone_text.delete('1.0', tk.END)
         self.tone_text.insert(tk.END, t_text)
 
@@ -311,9 +311,9 @@ class PromptLabUI:
         if not new:
             messagebox.showwarning("Empty", "Category prompt is empty, aborting save.")
             return
-        self.promptbuilder[cat] = new
-        self.config.promptbuilder = self.promptbuilder
-        self._persist_promptbuilder()
+        self.promptdata[cat] = new
+        self.config.promptdata = self.promptdata
+        self._persist_promptdata()
         self._log(f"Saved Category prompt for '{cat}'")
 
     def _save_wordiness_prompt(self):
@@ -322,11 +322,11 @@ class PromptLabUI:
         if not new:
             messagebox.showwarning("Empty", "Wordiness prompt is empty, aborting save.")
             return
-        if "wordiness" not in self.promptbuilder:
-            self.promptbuilder["wordiness"] = {}
-        self.promptbuilder["wordiness"][w] = new
-        self.config.promptbuilder = self.promptbuilder
-        self._persist_promptbuilder()
+        if "wordiness" not in self.promptdata:
+            self.promptdata["wordiness"] = {}
+        self.promptdata["wordiness"][w] = new
+        self.config.promptdata = self.promptdata
+        self._persist_promptdata()
         self._log(f"Saved Wordiness prompt for '{w}'")
 
     def _save_tone_prompt(self):
@@ -338,24 +338,24 @@ class PromptLabUI:
         if not new:
             messagebox.showwarning("Empty", "Tone prompt is empty, aborting save.")
             return
-        if "tones" not in self.promptbuilder:
-            self.promptbuilder["tones"] = {}
-        self.promptbuilder["tones"][t] = new
-        self.config.promptbuilder = self.promptbuilder
-        self._persist_promptbuilder()
+        if "tones" not in self.promptdata:
+            self.promptdata["tones"] = {}
+        self.promptdata["tones"][t] = new
+        self.config.promptdata = self.promptdata
+        self._persist_promptdata()
         self._log(f"Saved Tone prompt for '{t}'")
 
-    def _persist_promptbuilder(self):
+    def _persist_promptdata(self):
         # write back to file if path available
-        if not self.promptbuilder_path:
-            self._log("No promptbuilder_path available in config; changes saved in memory only.")
+        if not self.promptdata_path:
+            self._log("No promptdata_path available in config; changes saved in memory only.")
             return
         try:
-            with open(self.promptbuilder_path, "w", encoding="utf-8") as f:
-                json.dump(self.promptbuilder, f, indent=2, ensure_ascii=False)
-            self._log(f"Persisted promptbuilder to {self.promptbuilder_path}")
+            with open(self.promptdata_path, "w", encoding="utf-8") as f:
+                json.dump(self.promptdata, f, indent=2, ensure_ascii=False)
+            self._log(f"Persisted promptdata to {self.promptdata_path}")
         except Exception as e:
-            self._log(f"Error persisting promptbuilder: {e}")
+            self._log(f"Error persisting promptdata: {e}")
 
     def _save_as(self):
         p = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON", "*.json")])
@@ -363,8 +363,8 @@ class PromptLabUI:
             return
         try:
             with open(p, "w", encoding="utf-8") as f:
-                json.dump(self.promptbuilder, f, indent=2, ensure_ascii=False)
-            self._log(f"Saved promptbuilder copy to {p}")
+                json.dump(self.promptdata, f, indent=2, ensure_ascii=False)
+            self._log(f"Saved promptdata copy to {p}")
         except Exception as e:
             self._log(f"Error saving: {e}")
 
@@ -388,7 +388,7 @@ class PromptLabUI:
         tone = self.tone_var.get()
         if tone == "Random":
             import random
-            tone = random.choice(list(self.promptbuilder.get("tones", {}).keys()))
+            tone = random.choice(list(self.promptdata.get("tones", {}).keys()))
 
         # run in background so UI doesn't block
         thr = threading.Thread(target=self._run_generation, args=(wem_id,), daemon=True)
@@ -404,7 +404,7 @@ class PromptLabUI:
         thr.start()
 
     def _run_all_tones_thread(self, wem_id):
-        tones = list(self.promptbuilder.get("tones", {}).keys())
+        tones = list(self.promptdata.get("tones", {}).keys())
         for tone in tones:
             self._log(f"--- Tone: {tone} ---")
             self._run_generation(wem_id)
@@ -436,5 +436,5 @@ class PromptLabUI:
 
 
 intent_map = config.intent_map
-ui = PromptLabUI(config, intent_map, processor.process_entry)
+ui = PromptLabUI(config, intent_map, process_entry)
 ui.run()
