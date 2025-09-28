@@ -26,6 +26,7 @@ class SuitVoiceConfig:
         tts_model_name = os.getenv("TTS_MODEL")
         if not tts_model_name:
             raise ValueError("TTS_MODEL not set in environment")
+        self.tts_model_name = tts_model_name
         self.tts_model = TTS(model_name=tts_model_name)
 
         # FFMPEG
@@ -58,9 +59,9 @@ class SuitVoiceConfig:
         with open(self.suit_voice_combat_path, encoding="utf-8") as f:
             self.suit_voice_combat = f.read()
 
-        self.promptbuilder_path = Path(os.getenv("PROMPTBUILDER_PATH"))
-        with open(self.promptbuilder_path, encoding="utf-8") as f:
-            self.promptbuilder = json.load(f)
+        self.promptdata_path = Path(os.getenv("PROMPTdata_PATH"))
+        with open(self.promptdata_path, encoding="utf-8") as f:
+            self.promptdata = json.load(f)
 
         # Banlist
         self.tokenized_logits_path = Path(os.getenv("TOKENIZED_LOGITS_PATH"))
@@ -106,13 +107,11 @@ class SuitVoiceConfig:
                     original_phrase = (row.get('Transcription') or '').strip()
                     category = (row.get('Category') or '').strip()
                     intent = (row.get('Intent') or '').strip()
-                    context = (row.get('Context') or '').strip()
 
                     i_intent_map[wem_number] = {
                         "Transcription": original_phrase,
                         "Category": category,
                         "Intent": intent,
-                        "Context": context,
                         }
         except Exception as e1:
             print(f"Error loading intent map: {e1}")
