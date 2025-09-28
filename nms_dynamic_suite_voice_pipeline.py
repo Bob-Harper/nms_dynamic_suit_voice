@@ -67,5 +67,5 @@ def watch_wems(tray_ui):  # Main watchdog and pipeline
 
 if __name__ == "__main__":
     tray_ui = TrayUI(config, watch_wems)
-    watch_wems(tray_ui)
+    tray_ui.run()
 
