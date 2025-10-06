@@ -33,7 +33,7 @@
     "Observer": "Deliver a concise description of a single specific event.  Keep it extremely short but informative.  "
   },
   "tones": {
-    "Standard": "State the obvious with the personality of a computer program and the detached technical precision of a datasheet. ",
+    "Standard": "State the obvious with the personality of a computer program and the detached technical precision of a datasheet.  Do not repeat the original phrase or intent. ",
     "Casual": "Provide the notification in a casual laid back fun and friendly manner with a complete disregard for any possible urgency. You may use fun nicknames.",
     "Poetic": "Render the notification in a 2 sentence Romantic Era rhyming couplet, using vivid metaphorical language in the style of Shelley, Byron and Keats . ",
     "Epic": "Frame the notification with grandeur, as if it were part of an epic fantasy saga written by Tolkein. ",
@@ -43,6 +43,6 @@
     "Enthusiastic": "State the notification as if you’re absolutely totally thrilled and excited about the events unfolding. ",
     "Prophecy": "Render the notification as though it was predicted in an ancient prophecy. ",
     "Philosophical": "Provide the notification as a deeply profound philosophical interpretation of the possible impact on {name}.  ",
-    "Military": "Report on ongoing combat events, providing concise accurate information using excessive military jargon."
+    "Military": "Report on ongoing combat events, providing the information using excessive military jargon. Do not repeat the original phrase or intent."
   }
 }

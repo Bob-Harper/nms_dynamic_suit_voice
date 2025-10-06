@@ -8,8 +8,8 @@ from TTS.api import TTS
 CREATE_NO_WINDOW = 0x08000000 if sys.platform == "win32" else 0
 
 # Default settings
-DEFAULT_MODEL = "tts_models/multilingual/multi-dataset/xtts_v2"
-XTTS_MODEL = True
+DEFAULT_MODEL = "tts_models/en/ljspeech/tacotron2-DDC_ph"
+XTTS_MODEL = False
 DEFAULT_EMBED = None
 DEFAULT_GAIN = 5
 DEFAULT_ATEMPO = 1.1
@@ -34,7 +34,7 @@ def generate_tts(text, model_name, embed, gain_db, atempo, rate, output_path):
     if embed:
         tts.tts_to_file(text=text, file_path=str(temp_wav), speaker_wav=embed, language="en",)
     else:
-        tts.tts_to_file(text=text, file_path=str(temp_wav), speaker_wav=speaker_wav, language="en",)
+        tts.tts_to_file(text=text, file_path=str(temp_wav), speaker_wav=speaker_wav)
     mid = time.time()
 
     subprocess.run([

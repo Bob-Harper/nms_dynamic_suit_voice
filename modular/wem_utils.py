@@ -15,5 +15,3 @@ def convert_to_wem(config, temp_wav_path, conversion_quality="Vorbis Quality Hig
         f'--out:{str(output_dir)}',
         str(temp_wav_path)
     ], check=True, creationflags=config.create_no_window)
-
-    print(f"Conversion attempt complete for {temp_wav_path.name}")

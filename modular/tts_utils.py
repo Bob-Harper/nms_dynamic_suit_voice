@@ -2,6 +2,9 @@
 import subprocess
 from pathlib import Path
 import sys
+import wave
+import numpy as np
+from scipy.signal import resample
 
 def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
     final_wav = config.temp_wem_dir / f"{wem_num}.wav"
@@ -35,8 +38,15 @@ def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
     return final_wav
 
 
-def apply_ffmpeg_filters(input_wav: Path, output_wav: Path, gain_db=5, atempo=1.0, rate=1.0):
-    """Apply volume/tempo/sample-rate adjustments to a wav file."""
+def apply_ffmpeg_filters(input_wav: Path, output_wav: Path,
+                         gain_db=5, atempo=1.0, rate=1.0,
+                         ring_freq=300, pitch_semitones=4, formant_percent=80,
+                         target_sr=22050):
+    """
+    Single postprocessing function: applies FFmpeg adjustments + aggressive robotic effects.
+    Saves the final WAV to output_wav.
+    """
+    # ---- Step 1: FFmpeg volume/tempo/rate ----
     asetrate = int(44100 * rate)
     subprocess.run([
         "ffmpeg", "-hide_banner", "-y",
@@ -47,15 +57,41 @@ def apply_ffmpeg_filters(input_wav: Path, output_wav: Path, gain_db=5, atempo=1.
     check=True,
     creationflags=0x08000000 if sys.platform == "win32" else 0,
     stdout=subprocess.DEVNULL,
-    stderr=subprocess.DEVNULL  # suppress all output
+    stderr=subprocess.DEVNULL
     )
 
-def test_tts(config, text: str, wem_num: str) -> Path:
-    final_wav = config.temp_wem_dir / f"{wem_num}.wav"
-    # Generate base TTS wav
-    config.tts_model.tts_to_file(
-        text=text,
-        file_path=str(final_wav)
-    )
+    # ---- Step 2: Load FFmpeg output ----
+    with wave.open(str(output_wav), "rb") as wf:
+        sr = wf.getframerate()
+        audio = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16).astype(np.float32)
+        if wf.getnchannels() > 1:
+            audio = audio[::wf.getnchannels()]  # mono
 
-    return final_wav
+    # ---- Step 3: Robotic effects ----
+    t = np.arange(len(audio)) / sr
+    audio *= np.sin(2 * np.pi * ring_freq * t)           # ring modulation
+
+    factor_pitch = 2 ** (pitch_semitones / 12)
+    n_samples_pitch = int(len(audio) / factor_pitch)
+    audio = resample(audio, n_samples_pitch)             # pitch quantize
+
+    factor_formant = formant_percent / 100
+    n_samples_formant = int(len(audio) / factor_formant)
+    audio = resample(audio, n_samples_formant)           # formant shift
+
+    # ---- Step 4: Resample to target sample rate ----
+    if sr != target_sr:
+        n_samples = int(len(audio) * target_sr / sr)
+        audio = resample(audio, n_samples)
+        sr = target_sr
+
+    # ---- Step 5: Normalize and save ----
+    if np.max(np.abs(audio)) > 0:
+        audio = audio / np.max(np.abs(audio)) * 32767
+    audio = audio.astype(np.int16)
+
+    with wave.open(str(output_wav), "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(sr)
+        wf.writeframes(audio.tobytes())

@@ -178,6 +178,45 @@ set "PATH=%CD%\venv\Scripts;%PATH%"
 python modular\warmup_tts.py
 exit /b 0
 
+
+::------------------------------------
+:: Create Desktop Shortcut for NMS DSV
+echo.
+echo === Creating Desktop Shortcut ===
+
+set "SHORTCUT_NAME=NMS Dynamic Suit Voice"
+set "DESKTOP=%USERPROFILE%\Desktop"
+set "TARGET=%CD%\venv\Scripts\python.exe"
+set "ARGS=%CD%\nms_dynamic_suite_voice_pipeline.py"
+set "ICON=%CD%\assets\nms_dsv_256.ico"
+set "VBS=%TEMP%\create_shortcut.vbs"
+
+echo Set WshShell = WScript.CreateObject("WScript.Shell") > "%VBS%"
+echo Set Shortcut = WshShell.CreateShortcut("%DESKTOP%\%SHORTCUT_NAME%.lnk") >> "%VBS%"
+echo Shortcut.TargetPath = "%TARGET%" >> "%VBS%"
+echo Shortcut.Arguments = "%ARGS%" >> "%VBS%"
+echo Shortcut.WorkingDirectory = "%CD%" >> "%VBS%"
+echo Shortcut.IconLocation = "%ICON%" >> "%VBS%"
+echo Shortcut.Save >> "%VBS%"
+
+:: Ask user if they want terminal visible
+set /p VIS="Should the terminal be visible when launched? (Y/N): "
+if /i "%VIS%"=="N" (
+    echo Hiding terminal window...
+    echo Set WshShell = WScript.CreateObject("WScript.Shell") > "%VBS%"
+    echo Set Shortcut = WshShell.CreateShortcut("%DESKTOP%\%SHORTCUT_NAME%.lnk") >> "%VBS%"
+    echo Shortcut.TargetPath = "cmd.exe" >> "%VBS%"
+    echo Shortcut.Arguments = "/c \"%TARGET% %ARGS%\"" >> "%VBS%"
+    echo Shortcut.WorkingDirectory = "%CD%" >> "%VBS%"
+    echo Shortcut.IconLocation = "%ICON%" >> "%VBS%"
+    echo Shortcut.Save >> "%VBS%"
+)
+
+cscript //nologo "%VBS%"
+del "%VBS%"
+
+echo Shortcut created on Desktop: %SHORTCUT_NAME%.lnk
+
 :done
 echo.
 === Setup Complete ===
@@ -187,5 +226,6 @@ echo.
 • WEMs updated: !copied!
 • Total WEMs: !total!
 • Config: OK
+• Desktop Shortcut: OK
 pause
 exit /b
