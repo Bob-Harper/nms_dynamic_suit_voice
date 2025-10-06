@@ -30,7 +30,7 @@ def reword_phrase(config, wem_id_r,
             output = config.llm.create_chat_completion(
                 messages=messages,
                 max_tokens=2048,  # less can be faster but can cut off thinking, breaking the result
-                temperature=0.8,
+                temperature=0.85,
                 top_k=90,
                 top_p=0.9,
                 repeat_penalty=1.25,
