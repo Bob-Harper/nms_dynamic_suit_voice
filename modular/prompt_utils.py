@@ -38,6 +38,10 @@ def determine_tone(config):
     tones = list(config.promptdata.get("tones", {}).keys())
     current_tone = config.current_tone
 
+    # If current_tone is explicitly set as Military, never override it
+    if current_tone == "Military":
+        return current_tone
+
     # 90% chance stick with default
     if random.random() < 0.9 or not tones:
         return current_tone
