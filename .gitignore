@@ -8,7 +8,7 @@ __pycache__/
 *.pyc
 *.log
 /bullshit.py
-/tmp_wem_dir/*
+/tmp_wav_dir/*
 
 /test_voices/
 /embeds/

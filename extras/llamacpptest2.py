@@ -100,7 +100,7 @@ def process_by_row_range(intent_mapr, start_row, end_row):
 # ui = PromptLabUI(config, intent_map, process_entry)
 # ui.run()
 
-target_wem = "934987809"
+target_wem = "330331555"
 target_wordy = "Default"
 process_single_wem_all_tones(intent_map, target_wem, target_wordy)
 

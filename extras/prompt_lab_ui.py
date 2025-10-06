@@ -1,6 +1,6 @@
 # prompt_lab_ui.py
 from modular.config import SuitVoiceConfig
-from llamacpptest2 import process_entry
+from extras.llamacpptest2 import process_entry
 import json
 import threading
 import tkinter as tk
