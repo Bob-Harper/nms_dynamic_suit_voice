@@ -22,7 +22,8 @@ def build_suit_prompt(config, category, intent, phrase):
         input_phrase=phrase.strip(),
         category_context=category_context.strip(),
         wordiness_prompt=wordiness_prompt.strip(),
-        tone_prompt=tone_prompt.strip()
+        tone_prompt=tone_prompt.strip(),
+        name = config.player_name.strip(),
     )
 
     system_prompt = system_prompt.format(

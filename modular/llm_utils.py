@@ -39,6 +39,7 @@ def reword_phrase(config, wem_id_r,
             )
             # print(f"Raw Output:\n {output}")
             result = output["choices"][0]["message"]["content"].strip()
+            result = postprocess_units(config, result, category_r)
             result = postprocess_for_tts(result)
             return result
 
@@ -51,6 +52,13 @@ def reword_phrase(config, wem_id_r,
     print(f"ERROR on WEM {wem_id_r}")
     return f"External Reality Failure. {original_phrase_r}"
 
+
+def postprocess_units(config, text: str, category: str) -> str:
+    # Check if this category matches your in-game currency categories
+    if category == config.units_received or category == config.units_insufficient:
+        # Replace "Funds" with "Units" safely
+        text = text.replace("Funds", "Units").replace("funds", "Units")
+    return text
 
 def postprocess_for_tts(text: str) -> str:
     # Existing cleanup
