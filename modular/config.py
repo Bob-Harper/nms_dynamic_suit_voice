@@ -96,7 +96,8 @@ class SuitVoiceConfig:
         self.current_tone = os.getenv("PHRASE_TONE")
         self.current_wordiness = os.getenv("PHRASE_WORDINESS")
         self.player_name = os.getenv("PLAYER_NAME")
-
+        self.units_received = os.getenv("UNITS_CATEGORY_RECEIVED")
+        self.units_insufficient = os.getenv("UNITS_CATEGORY_INSUFFICIENT")
         # Categories that override prompting rules
         self.mil_cat = ["Missile Launch", "Missile Destroyed", "Freighter Escape", "Freighter Combat"]
 

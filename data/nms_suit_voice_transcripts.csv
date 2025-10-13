@@ -10,59 +10,59 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 760990899.WEM,Home Planet Established,Discovery,A new planet has been successfully surveyed and established as {name}'s home.,760990899,No
 990719346.WEM,New System Discovered,Discovery,{name} has successfully discovered a previously uncharted star system.,990719346,No
 1010781808.WEM,Discovery Uploaded,Discovery,"A new discovery has been successfully uploaded to the official galactic survey network, allowing others across the galaxy to access and review the data.",1010781808,
-27999850.WEM,Shield Protection Falling,Energy Shield,The personal energy shield is actively being degraded by continuous damage.,27999850,
-67834502.WEM,Shields Down,Energy Shield,The personal energy shield has failed entirely.,67834502,
-272020218.WEM,Shield Down,Energy Shield,Personal energy shield systems are offline due to complete energy depletion. Defensive capability is lost.,272020218,
-394683190.WEM,Shield Down,Energy Shield,The personal energy shield has failed due to taking damage.,394683190,
-468585602.WEM,Shield Down,Energy Shield,Energy levels in the personal energy shield are severely depleted. Recharge is required.,468585602,
+27999850.WEM,Shield Protection Falling,Energy Shield,The personal protective energy shield is failing due to continuous damage.,27999850,
+67834502.WEM,Shields Down,Energy Shield,The personal protective energy shield has failed entirely.,67834502,
+272020218.WEM,Shield Down,Energy Shield,Persona protective energy shield systems are offline due to complete energy depletion. Defensive capability is lost.,272020218,
+394683190.WEM,Shield Down,Energy Shield,The personal protective energy shield has failed due to taking damage.,394683190,
+468585602.WEM,Shield Down,Energy Shield,Energy levels in the personal protective energy shield are severely depleted. Immediate Recharge is required in order to restore function.,468585602,
 691940593.WEM,Shield Protection Stabilizing,Energy Shield,{name} is recovering from recent damage and personal energy shield stabilization is underway.,691940593,
-781094525.WEM,Danger: Shield Compromised,Energy Shield,The kinetic energy shield has failed and can no longer mitigate physical injury.,781094525,
+781094525.WEM,Danger: Shield Compromised,Energy Shield,The kinetic energy shield has failed and can no longer negate or reduce physical injury.,781094525,
 871932351.WEM,Shield Down,Energy Shield,Critical incoming damage has destroyed all personal energy shield integrity.,871932351,
-774834164.WEM,Weather Update: Storm Clearing,Environmental Status,A storm has passed. Weather conditions are returning to normal.,774834164,
+774834164.WEM,Weather Update: Storm Clearing,Environmental Status,A storm has passed. Weather conditions will soon return to normal.,774834164,
 1032826641.WEM,Weather Warning: Incoming Storm,Environmental Status,A storm front will arrive at this location very soon.,1032826641,
 351875919.WEM,Delve Limit Reached,Environmental Status,Portable mining equipment has reached a physical limit imposed by gravitational forces. Further excavation is impossible due to environmental constraints.,351875919,No
 863051935.WEM,Extreme Hazard Planet,Environmental Status,The planet currently being explored presents multiple extreme hazards.,863051935,
 105331281.WEM,Component Repaired,Equipment Status,A damaged equipment component has been successfully repaired.,105331281,
-792296351.WEM,Technology Recharged,Equipment Status,"A tech module has been provided with additional power, and is functioning normally.",792296351,
+792296351.WEM,Technology Recharged,Equipment Status,"A technology module has been provided with additional power, and is now functioning normally.",792296351,
 43830316.WEM,Technology Repaired,Equipment Status,Repairs have been completed on a damaged piece of installed equipment.,43830316,
 117536789.WEM,Additional Resources Required,Equipment Status,Additional resources are needed to build the desired item.,117536789,
 260557941.wem,Backup generators online,Equipment Status,Backup generators have been engaged.,260557941,No
 299876357.WEM,Freighter Acquired,Equipment Status,"{name} has acquired a new freighter.  It is in poor condition, requiring maintenance and repair.",299876357,No
 315361790.WEM,Multi-Tool Charge Depleted,Equipment Status,Multi-tool power is completely depleted. Recommend monitoring power levels more closely while in use to avoid shutdown during operation.,315361790,
 337859118.WEM,Base Computer Online,Equipment Status,The computer for the new base is online and operational. The full build menu is now accessible.,337859118,No
-353234571.WEM,New Weapon Available,Equipment Status,A previously unobtainable weapon has become available.,353234571,No
+353234571.WEM,New Weapon Available,Equipment Status,"A new weapon has become available for {name}'s use, and may be retrieved when desired.",353234571,No
 370738335.wem,Emergency damage recovery system engaged,Equipment Status,Severe damage has been sustained by equipment and automated repair systems are now active.,370738335,
-425064686.WEM,Arial Propulsion Jet Pack Online,Equipment Status,The jetpack is fully operational and ready for use.,425064686,
+425064686.WEM,Arial Propulsion Jet Pack Online,Equipment Status,The jetpack has passed all status checks and is fully operational. Flight control systems have been linked to the Suit subsystems.,425064686,
 462791110.wem,"Welcome home, Commander",Equipment Status,Greeting upon returning to a safe location.,462791110,No
 474358890.WEM,New Freighter Acquired,Equipment Status,"a new freighter in poor conditionhas been acquired, it is in dire needd of maintenance.",474358890,
 487034870.WEM,Internal View Selected,Equipment Status,Switched to internal camera view of the suit or vehicle in use.,487034870,No
 496984207.WEM,Technology Offline,Equipment Status,A component of the suit or equipment has been damaged and is now offline.,496984207,
-589305615.WEM,Shield Kinetic System Online,Equipment Status,{name} is now fully conscious. The suit’s kinetic shield subsystem has been activated.,589305615,
-634281443.WEM,Commencing Atlas System Suit Initialization,Equipment Status,{name} is entering a state of consciousness. The Atlas Suit and AI companion are initializing and running self-diagnostic processes.,634281443,
+589305615.WEM,Shield Kinetic System Online,Equipment Status,{name} Has gained full consciousness. The suit’s protective kinetic shield subsystem has been activated.,589305615,
+634281443.WEM,Commencing Atlas System Suit Initialization,Equipment Status,It is time for {name} to wake up.  The Atlas Suit and AI companion are initializing and running self-diagnostic processes to prepare for user integration.,634281443,
 639001585.WEM,Suit Power Cells Depleted,Equipment Status,"The suit has exhausted its power reserves, rendering most functions inactive until recharged.",639001585,
 757274367.WEM,Technology Installed,Equipment Status,A new technology module has been successfully installed.,757274367,
-770752691.WEM,Scanner Damaged Repair Required,Equipment Status,Scanner system inoperable; must initiate repairs to restore functionality.,770752691,No
+770752691.WEM,Scanner Damaged Repair Required,Equipment Status,Scanner system inoperable; {name} must initiate repairs to restore functionality.,770752691,No
 781458145.WEM,Equipment Damaged,Equipment Status,"equipment has sustained significant damage, causing some systems or functions to be impaired or offline. Repairs or recalibration are required.",781458145,No
-911633476.WEM,Initialization Sequence Complete,Equipment Status,Startup routine completed; suit interface and systems are now online.,911633476,
+911633476.WEM,Initialization Sequence Complete,Equipment Status,"Startup routine completed; suit interface and systems are now online, and ready for {name} to engage in decision making tasks.",911633476,
 929033162.WEM,Device Critically Damaged,Equipment Status,"One or more critical components of currently equipped tool are severely damaged, impairing its function. Repair or replacement is required to restore full operation.",929033162,No
 934987809.WEM,No Active Technology in Multi Tool,Equipment Status,multitool has no active modules or usable systems. There is a total lack of function.,934987809,No
-935180311.WEM,New Ship Now Available,Equipment Status,A previously unobtainable ship is available for acquisition.,935180311,No
+935180311.WEM,New Ship Now Available,Equipment Status,A new starship is available for {name} to acquire.,935180311,No
 1006934470.WEM,Multi Tool And Mining Laser Attachment Operational,Equipment Status,multi-tool and mining laser attachment are fully operational and ready for use.,1006934470,
-1037434146.WEM,External View Selected,Equipment Status,"has switched to an external camera view, offering a perspective outside of the suit or current vehicle.",1037434146,No
+1037434146.WEM,External View Selected,Equipment Status,"Switched to external camera view, offering a perspective outside of the suit or current vehicle.",1037434146,No
 1038991804.WEM,New Technology Discovered,Equipment Status,a new piece of technology has been obtained. Blueprint scans are added to the personal database and may be accessed at any time for review.,1038991804,
 976899439.WEM,Extreme Night Temperature Detected,Extreme Temperature,"Extreme temperatures during the night cycle are detected, posing a threat to life support and safety.",976899439,
-29330265.WEM,Extreme Water Temperature Detected,Extreme Temperature,exposure to extreme water temperatures while immersed. Recommend review of the visual heads up display is recommended for specific details.,29330265,
-152151960.WEM,Extreme Temperature Detected,Extreme Temperature,"Environment temperature is detected at extreme levels, posing risk to health and equipment. Recommend review of the visual heads up display is recommended for specific details.",152151960,
-213575654.WEM,Extreme Subterranean Temperature Detected,Extreme Temperature,Sensors have registered extreme temperatures deep underground. These temperatures are outside safe operating limits and may impact equipment or safety. Recommend review of the visual heads up display is recommended for specific details.,213575654,
-489352730.WEM,Extreme Water Temperature Detected,Extreme Temperature,exposure to extreme water temperature while immersed. Recommend review of the visual heads up display is recommended for specific details.,489352730,
-570428671.WEM,Extreme Temperature Detected,Extreme Temperature,"Environment temperature is detected at extreme levels, posing risk to health and equipment. Recommend review of the visual heads up display is recommended for specific details.",570428671,
-653680659.WEM,Extreme Subterranean Temperature Detected,Extreme Temperature,Sensors indicate dangerous temperature levels while exploring below the surface. There are hazardous subterranean temperature conditions that could compromise life expectancy.,653680659,
-733521599.WEM,Extreme Night Temperature Detected,Extreme Temperature,"Extreme night-time temperature levels have been detected, which may threaten suit integrity and safety. ",733521599,
-449779025.WEM,Incoming Missiles Destroyed,Missile Destroyed,A hostile missile has been destroyed.,449779025,
-389592073.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,389592073,
-241169623.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,241169623,
-672799524.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,672799524,
-167092968.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,167092968,
+29330265.WEM,Extreme Water Temperature Detected,Extreme Temperature,exposure to extreme water temperatures while immersed. Recommend review of the visual heads up display for specific details.,29330265,
+152151960.WEM,Extreme Temperature Detected,Extreme Temperature,"Environment temperature is detected at extreme levels, posing risk to health and equipment. Recommend review of the visual heads up display for specific details.",152151960,
+213575654.WEM,Extreme Subterranean Temperature Detected,Extreme Temperature,Sensors have registered extreme temperatures deep underground. These temperatures are outside safe operating limits and may impact equipment or safety. Recommend review of the visual heads up display for specific details.,213575654,
+489352730.WEM,Extreme Water Temperature Detected,Extreme Temperature,exposure to extreme water temperature while immersed. Recommend review of the visual heads up display for specific details.,489352730,
+570428671.WEM,Extreme Temperature Detected,Extreme Temperature,"Environment temperature is detected at extreme levels, posing risk to health and equipment. Recommend review of the visual heads up display for specific details.",570428671,
+653680659.WEM,Extreme Subterranean Temperature Detected,Extreme Temperature,Sensors indicate dangerous temperature levels while exploring below the surface. There are hazardous subterranean temperature conditions that could compromise life expectancy. . Recommend review of the visual heads up display for specific details.,653680659,
+733521599.WEM,Extreme Night Temperature Detected,Extreme Temperature,"Extreme night-time temperature levels have been detected, which may threaten suit integrity and safety. . Recommend review of the visual heads up display for specific details.",733521599,
+449779025.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,449779025,
+389592073.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,389592073,
+241169623.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,241169623,
+672799524.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,672799524,
+167092968.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,167092968,
 459254064.WEM,Enemy Missile Incoming,Missile Launch,"During a space battle, a missile has been launched by hostile forces at a civilian freighter.  ",459254064,
 245522736.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",245522736,
 80959229.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",80959229,
@@ -70,19 +70,19 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 972765308.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",972765308,
 756031301.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.  If the missile hits, it will cause severe damage to the freighter.",756031301,
 711767177.wem,Warning: civilian shields depleted,Freighter Combat,"A civilian freighter is at risk of immediate destruction, it's defenses are inactive.",711767177,
-160765928.wem,Civilian freighter destroyed,Freighter Combat,"A civilian freighter, under attack from pirates, asked for protection. Help did not arrive in time, the freighter was destroyed, and no one survived. The destruction is final, no rescue is possible. ",160765928,
+160765928.wem,Civilian freighter destroyed,Freighter Combat,"A civilian freighter under attack from pirates asked for protection but help did not arrive in time. the freighter was destroyed, all personnel onboard have perished. The destruction is final, no rescue is possible. ",160765928,
 954591441.wem,Pirate engines neutralized,Freighter Escape,"The engines of a hostile ship have been disabled, leaving it unable to maneuver.",954591441,
-278919221.wem,Hyperdrive damage is critical,Freighter Escape,A freighter ship is attempting a hyperspace jump with critically damaged engines.  There is still time to disable the ship before it escapes.,278919221,
-311554138.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,311554138,
-48466939.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,48466939,
-565386800.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,565386800,
-597203928.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital freigher's warp system is activating and a jump is imminent.,597203928,
-4494640.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,4494640,
-45779246.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,45779246,
-695050944.WEM,Incoming Missiles Destroyed,Missile Destroyed,All hostile missiles have been destroyed.,695050944,
+278919221.wem,Hyperdrive damage is critical,Freighter Escape,A hostile capital starship is attempting a hyperspace jump with critically damaged engines.  There is still time to disable the ship before it escapes.,278919221,
+311554138.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital starship's warp system is activating and a jump is imminent.,311554138,
+48466939.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital starship's warp system is activating and a jump is imminent.,48466939,
+565386800.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital starship's warp system is activating and a jump is imminent.,565386800,
+597203928.WEM,Freighter Warp Initiated,Freighter Escape,A hostile capital starship's warp system is activating and a jump is imminent.,597203928,
+4494640.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,4494640,
+45779246.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,45779246,
+695050944.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,695050944,
 543874217.WEM,Danger: Heat Levels Critical,Hot Temperature,"Critical heat levels have bypassed protective systems, resulting in life-threatening high temperatures.",543874217,
 580370729.WEM,Extreme Heat Damage Detected,Hot Temperature,"Extreme heat damage has been detected; failure to mitigate this will cause severe harm, possibly fatal. ",580370729,
-647699088.WEM,Extreme Heat: Critical,Hot Temperature,unable to cope with critical heat conditions. Continued exposure will result in total failure or destruction of the suit and it's biological contents.,647699088,
+647699088.WEM,Extreme Heat: Critical,Hot Temperature,"unable to cope with critical heat conditions. Continued exposure will result in total destruction of the suit, and complete carbonizaton of it's biological contents.",647699088,
 980411923.WEM,Product Received,Inventory,A product or item has been delivered and added to inventory.,980411923,
 780959188.WEM,Inventory Full,Inventory,"The inventory space is completely full, preventing additional item storage. ",780959188,
 383184645.WEM,Inventory Full,Inventory,"The inventory space is completely full, preventing additional item storage. ",383184645,
@@ -102,9 +102,9 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 825969836.WEM,Life Support Power Low,Life Support,Life support power is significantly depleted. Failure to take corrective action will result in recalculation of expiration date of the suit's biological contents.,825969836,
 865668553.wem,Life support level falling,Life Support,Life support power is dangerously low and must be restored to prevent death.,865668553,
 1061736374.WEM,Life Support Offline,Life Support,"Life support systems are now offline, and suit systems are beginning a shut down sequence. If this sequence completes, it will be very difficult to regain consciousness.",1061736374,
-303147008.WEM,Units Depleted,Insufficent Money,"no money, current balance is zero.",303147008,
-911201958.WEM,Insufficient Units,Insufficent Money,monetary units are insufficient to complete the requested purchase.,911201958,
-330331555.WEM,Units Received,Money Gained,Units have been received and have been added to funds available.,330331555,
+303147008.WEM,Funds Depleted,Insufficent Funds,"no Funds, current balance is zero.",303147008,
+911201958.WEM,Insufficient Funds,Insufficent Funds,The amount of Funds on hand is insufficient to complete the requested purchase.,911201958,
+330331555.WEM,Income Received,Funds Gained,Funds have been received and has been added to the existing balance.,330331555,
 126319994.WEM,Secure Transmission Module Located,Navigation,A communications module has been found and its data is being downloaded to navigation system.,126319994,
 243520476.WEM,Orbital Station Coordinates Received,Navigation,New coordinates for a previously unvisited orbital station have been uploaded to navigation system.,243520476,
 288672024.WEM,Distress Signal Detected,Navigation,navigation computer has detected and traced a distress signal from another entity. Coordinates of the signal’s origin have been added to the navigation database for potential response.,288672024,
@@ -119,20 +119,20 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 178898599.WEM,Warning,Notification,"may want to reconsider recent choices, negative consequences may follow if insistance on continuing with current actions.",178898599,
 205192151.WEM,Warning,Notification,"current choice of action is not recommended, and may be dangerous or inefficient.",205192151,
 225625917.WEM,Objective Complete,Notification,A mission or assigned task has been successfully completed. A suggestion to partake of a self administered food reward would be appropriate.,225625917,
-284071635.WEM,New Assistant Acquired,Notification,A new pilot has joined the fleet.,284071635,No
+284071635.WEM,New Assistant Acquired,Notification,A new pilot has joined {name}'s fleet.,284071635,No
 328948003.WEM,Warning,Notification,Continued poor decision making could lead to harm or disadvantage.,328948003,
-582370014.WEM,Assistant Recruited,Notification,A new recruit has joined the journey. ,582370014,No
+582370014.WEM,Assistant Recruited,Notification,A new recruit has joined {name}'s journey. ,582370014,No
 599588736.WEM,Warning,Notification,actions may attract unwelcome attention from local authorities.,599588736,
-811360087.WEM,New Assistant Recruited,Notification,A new intern has been recruited.,811360087,No
-1003218333.WEM,Warning,Notification,Reccomend review immediate surroundings for possible threats.,1003218333,
+811360087.WEM,New Assistant Recruited,Notification,A new intern has been recruited to assist {name}.,811360087,No
+1003218333.WEM,Warning,Notification,Reccommend reviewal of immediate surroundings for possible threats.,1003218333,
 1015651622.WEM,Warning,Notification,current behavior may hinder progress or cause problems.,1015651622,
-228408571.WEM,Warning,Notification,consider disengaging and retreating from the current situation for safety or strategic advantage.,228408571,
+228408571.WEM,Warning,Notification,{name} should consider disengaging and retreating from the current situation for safety or strategic advantage.,228408571,
 512212065.WEM,Oxygen Levels Critical,Oxygen Level,"oxygen supply is nearly depleted, with a corresponding immediate risk of suffocation. ",512212065,
 768295468.WEM,Danger: Low Oxygen Levels,Oxygen Level,suit is nearly depleted of breathable oxygen.,768295468,
 656990144.WEM,Extreme Sentinel Planet,Personal Combat,This planet is inhabited by Extremely hostile Sentinel robots that will attack on sight. This is a HOSTILE COMBAT ENVIRONMENT. DANGER IS EVER-PRESENT.,656990144,
 240393094.WEM,Warning: Sentinel Drones Activated,Personal Combat,Multiple hostile drones are converging on position.,240393094,
 884631197.WEM,Weapon Charge Depleted,Personal Combat,"weapon has no energy or ammunition left, the weapon needs recharging or reloading.",884631197,
-386328035.WEM,Hostile Scan Detected,Personal Combat,"A hostile source is scanning. This is a threat in progress, Urgency required.",386328035,
+386328035.WEM,Hostile Scan Detected,Personal Combat,"A hostile source is scanning {name}. This is a threat in progress, Urgency required.",386328035,
 236472322.WEM,Warning: Sentinel Combat Unit Deployed,Personal Combat,An advanced Sentinel enemy unit is hunting due to recent actions.,236472322,
 583871976.WEM,Warning: Threat Detected,Personal Combat,There is a nearby danger or enemy presence that may threaten safety.,583871976,
 623058381.WEM,Shield Down,Energy Shield,personal energy shield has ceased functioning due to lack of power.,623058381,
@@ -213,5 +213,3 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 891464212.WEM,Fuel Depleted,Vehicle Status,"vehicle fuel reserves are fully depleted, disabling vehicle operation. ",891464212,
 974964870.WEM,Damage Sustained To Vehicle,Vehicle Status,vehicle has sustained light to moderate damage and the safety harness has engaged as a protective response.,974964870,No
 666.WEM,Mandatory Test,Debugging,"Hello, {name} has reached I.T.  Has {name} tried turning it off and then on again?",666,No
-,,,,
-,,,
