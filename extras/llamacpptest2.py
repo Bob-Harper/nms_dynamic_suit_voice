@@ -6,7 +6,7 @@ from modular.prompt_utils import build_suit_prompt
 config = SuitVoiceConfig()
 
 
-def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
+def process_entry(wem_id, entry, wordiness_level="Standard", tone="Deadpan"):
     """Shared processing of a single intent-map entry."""
     category = entry["Category"]
     original_phrase = entry["Transcription"]
@@ -100,7 +100,7 @@ def process_by_row_range(intent_mapr, start_row, end_row):
 # ui = PromptLabUI(config, intent_map, process_entry)
 # ui.run()
 
-target_wem = "330331555"
+target_wem = "911201958"
 target_wordy = "Default"
 process_single_wem_all_tones(intent_map, target_wem, target_wordy)
 
