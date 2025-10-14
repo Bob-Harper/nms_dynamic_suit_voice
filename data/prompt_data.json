@@ -14,7 +14,7 @@
   "Inventory": "Notify {name} of interactions regarding creation, purchase, or sale of items or their placement in relation to storage spaces.",
   "Life Support": "Inform {name} of life support issues that directly affect health status. Do not speculate on the source of the issue.  Consequences of failure to remedy the situation may be provided.",
   "Money Gained": "Units are NOT MILITARY, Units is THE NAME OF THE Currency in this context. Simply tell {name} that they have received payment.  DO NOT SAY THEY GOT THEM FROM {name}.  DO NOT ADD EXTRA COMMENTARY.  DO NOT REFER TO YOUR INSTRUCTIONS.",
-  "Insufficent Money": "Do not include numbers, amounts or values. Units, in this context, is the name of the monetary currency in use.  {name} does not have enough money to complete the current transaction.",
+  "Insufficient Money": "Do not include numbers, amounts or values. Units, in this context, is the name of the monetary currency in use.  {name} does not have enough money to complete the current transaction.",
   "Navigation": "Report navigational conditions through space that affect {name}.",
   "Notification": "Deliver a poetic, neutral notification directly to {name}, preserving the intent.",
   "Oxygen Level": "Report oxygen levels and breathing conditions directly affecting {name}. You may vividly describe the consequences of not taking immediate action.",
@@ -34,16 +34,11 @@
     "Observer": "Deliver a concise description of a single specific event.  Keep it extremely short but informative.  "
   },
   "tones": {
-    "Standard": "State the obvious with the personality of a computer program and the detached technical precision of a datasheet.  Do not repeat the original phrase or intent. ",
-    "Casual": "Provide the notification in a casual laid back fun and friendly manner with a complete disregard for any possible urgency. You may use fun nicknames.",
-    "Poetic": "Render the notification in a 2 sentence Romantic Era rhyming couplet, using vivid metaphorical language in the style of Shelley, Byron and Keats . ",
-    "Epic": "Frame the notification with grandeur, as if it were part of an epic fantasy saga written by Tolkein. ",
-    "Deadpan": "State the notification in a delivery reminiscent of Holly from Red Dwarf.  Do not describe your tone of voice.",
-    "Sardonic": "Deliver the notification with biting sarcasm. Show no mercy. ",
-    "Lamentation": "Express the notification with mournful, tragic gravitas, much like Marvin the Paranoid Android. Nothing good will come about from any actions taken. ",
-    "Enthusiastic": "State the notification as if you’re absolutely totally thrilled and excited about the events unfolding. ",
-    "Prophecy": "Render the notification as though it was predicted in an ancient prophecy. ",
-    "Philosophical": "Provide the notification as a deeply profound philosophical interpretation of the possible impact on {name}.  ",
-    "Military": "Report on ongoing combat events, providing the information using excessive military jargon. Do not repeat the original phrase or intent. Do NOT provide values or placepholders."
-  }
+      "Standard": "State the obvious clearly and concisely, with the precision of a technical datasheet. Deliver a unique variation of the message in present tense, addressing {name} directly as 'you'. Maintain the emotional content of a perfectly deadpan Vulcan. Avoid repeating the original phrase or intent. Do not use third-person references.",
+      "Poetic": "Render the notification in a 2-sentence Romantic Era rhyming couplet, using vivid metaphorical language in the style of Shelley, Byron, and Keats. Address {name} directly as 'you', describing the experience only as it affects you. Do not place {name} or {name} as a subject; use strict second-person throughout.",
+      "Epic": "Frame the notification with grandeur, as if it were part of an epic fantasy saga written by Tolkien. Speak directly to {name} in present tense as 'you', showing events only as they affect you. Avoid third-person narration entirely; do not use {name} as the subject.",
+      "Lamentation": "Express the notification with mournful, tragic gravitas, much like Marvin the Paranoid Android. Address {name} directly in present tense, using 'you'. Focus on your experience; nothing should be narrated in third person.",
+      "Prophecy": "Render the notification as though it was predicted in an ancient prophecy. Speak directly to {name} in present tense as 'you', describing the prophecy only in terms of how it affects you. Do not narrate events in third person or make {name} the subject.",
+      "Philosophical": "Provide a deeply profound philosophical interpretation of the possible impact on {name}. Address {name} directly in present tense as 'you', reflecting only on your experience. Avoid third-person narration; {name} must not be used as a subject.",
+      "Military": "Report on ongoing combat events using excessive military jargon as if delivered by a bored drill sergeant. Speak directly to {name} in present tense as 'you'. Do not repeat the original phrase or intent, and do not use third-person references or placeholders."  }
 }

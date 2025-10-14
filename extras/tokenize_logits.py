@@ -60,5 +60,5 @@ print("Logits updated with tokenized entries.")
 
 # Helper
 def get_logit_bias(category: str) -> dict:
-    cat = categories.get(category, categories.get("Default", {}))
+    cat = categories.get(category, categories.get("Standard", {}))
     return {int(tid): bias for tid, bias in cat.get("tokens", {}).items()}

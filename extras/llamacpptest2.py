@@ -6,8 +6,9 @@ from modular.prompt_utils import build_suit_prompt
 config = SuitVoiceConfig()
 
 
-def process_entry(wem_id, entry, wordiness_level="Standard", tone="Deadpan"):
+def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
     """Shared processing of a single intent-map entry."""
+    config.current_tone = tone  # <— refresh tone
     category = entry["Category"]
     original_phrase = entry["Transcription"]
     intent = entry["Intent"]
@@ -18,7 +19,7 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Deadpan"):
     finalprompt = finalprompt.format(
         name=config.player_name.strip(),
     )
-    finalprompt += " /nothink"
+    # finalprompt += " /nothink"
     # print(f"final prompt: {finalprompt}")
     start_time = time.time()
     try:
@@ -100,8 +101,8 @@ def process_by_row_range(intent_mapr, start_row, end_row):
 # ui = PromptLabUI(config, intent_map, process_entry)
 # ui.run()
 
-target_wem = "911201958"
-target_wordy = "Default"
+target_wem = "911633476"
+target_wordy = "Standard"
 process_single_wem_all_tones(intent_map, target_wem, target_wordy)
 
 

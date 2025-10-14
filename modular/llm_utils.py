@@ -5,7 +5,7 @@ import re
 def create_logit_bias(config, category_l):
     logit_bias = {
         **extract_token_ids(config.logit_banlist.get(category_l, {})),
-        **extract_token_ids(config.logit_banlist.get("Default", {})),
+        **extract_token_ids(config.logit_banlist.get("Standard", {})),
     }  # to add more categorys like Encouraged or Discouraged with different scores use Default as template
     return logit_bias
 
@@ -37,7 +37,7 @@ def reword_phrase(config, wem_id_r,
                 logit_bias=logit_bias_list,
                 seed=-1  # must add this to randomize the results
             )
-            # print(f"Raw Output:\n {output}")
+            print(f"Raw Output:\n {output}")
             result = output["choices"][0]["message"]["content"].strip()
             result = postprocess_units(config, result, category_r)
             result = postprocess_for_tts(result)
