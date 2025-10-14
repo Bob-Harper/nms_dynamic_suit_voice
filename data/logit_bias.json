@@ -1,5 +1,5 @@
 {
-  "Default": {
+  "Standard": {
     "bias": -100,
     "human_readable": [
       "I",
@@ -269,7 +269,7 @@
       "4287": -100
     }
   },
-  "Insufficent Funds": {
+  "Insufficient Funds": {
     "bias": -100,
     "human_readable": [
       "paid",

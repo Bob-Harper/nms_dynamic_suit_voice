@@ -5,7 +5,7 @@ def build_suit_prompt(config, category, intent, phrase):
     wordiness_level = determine_wordiness(config)
     tone = determine_tone(config)
 
-    category_context = config.promptdata.get(category, config.promptdata.get("Default", ""))
+    category_context = config.promptdata.get(category, config.promptdata.get("Standard", ""))
 
     if category in config.mil_cat:
         system_prompt = config.suit_voice_combat
