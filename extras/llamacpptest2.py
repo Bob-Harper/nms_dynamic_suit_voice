@@ -19,7 +19,6 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
     finalprompt = finalprompt.format(
         name=config.player_name.strip(),
     )
-    # finalprompt += " /nothink"
     # print(f"final prompt: {finalprompt}")
     start_time = time.time()
     try:
@@ -82,30 +81,37 @@ def process_single_wem_all_tones(intent_maps, wem_id, wordiness_level="Standard"
     return results
 
 
-def process_by_row_range(intent_mapr, start_row, end_row):
+def process_by_row_range(intent_mapr, start_row, end_row, wordiness_level, tone):
     output_rows_r = []
     for idx, (wem_id, entry) in enumerate(intent_mapr.items()):
         if idx < start_row:
             continue
         if idx >= end_row:
             break
-        output_rows_r.append(process_entry(wem_id, entry))
+        output_rows_r.append(process_entry(wem_id, entry, wordiness_level, tone))
     return output_rows_r
 
 # wordiness_level = "Standard"
-# tone = "Questioning"
-# start_row = 20  # inclusive.  starts at 0.
-# end_row = 25  # exclusive. going past the end effectively skips nonexistent lines.
+# tone = "Standard"
+# start_row = 54  # inclusive.  starts at 0.
+# end_row = 62  # exclusive. going past the end effectively skips nonexistent lines.
 # output_rows = process_by_row_range(intent_map, start_row, end_row, wordiness_level, tone)
 
 # ui = PromptLabUI(config, intent_map, process_entry)
 # ui.run()
 
-target_wem = "911633476"
-target_wordy = "Standard"
-process_single_wem_all_tones(intent_map, target_wem, target_wordy)
+# target_wem = "315361790"
+# target_wordy = "Standard"
+# process_single_wem_all_tones(intent_map, target_wem, target_wordy)
 
-
+target_cat = "Extreme Conditions"
+target_wordy = "Observer"
+target_tone = "Military"
+output_rows = process_by_category(intent_map,
+                                  target_cat,
+                                  target_wordy,
+                                  target_tone
+                                  )
 """
 start_row = 0  # inclusive.  starts at 0.
 end_row = 6  # exclusive. going past the end effectively skips nonexistent lines.

@@ -85,3 +85,34 @@ def watch_wems(tray_ui):  # Main watchdog and pipeline
 if __name__ == "__main__":
     tray_ui = TrayUI(config, watch_wems)
     tray_ui.run()
+
+"""
+thoughts, notes, to do list, ideas
+
+rebase the prompts around Standard -  emotionally stunted Vulcan reading from a technical datasheet persona is effective, wording gives consistent (i think) results.
+
+update console output to show the final output?  or leave it a surprise.
+
+New tone idea:  Fortune Cookie, complete with Your Lucky Numbers are 
+
+turn off Thinking output and see how it does with the new prompting setup now that we can see what it's thinking and why it ignores instruction.
+
+csv fixed the units/money issue.  the prompt_data.json STILL has older references, we need to bring them inline with the csv.
+
+what was i thinking this needs serious rewording:
+"Poetic": "Render the notification in a 2-sentence Romantic Era rhyming couplet, using vivid metaphorical language in the style of Shelley, Byron, and Keats. Address {name} directly as 'you', describing the experience only as it affects you. Do not place {name} or {name} as a subject; use strict second-person throughout.",
+same with epic.  Speak directly to {name} in present tense as 'you', showing events only as they affect you
+. Focus on how this experience relates to {name} and possible absurd outcome where the outcome will eventually be futile; nothing should be narrated in third person.",
+Speak directly to {name} in present tense as 'you', describing the prophecy only in terms of how it affects you.
+"Philosophical": "Provide a deeply profound philosophical interpretation of the possible impact on {name}. Address {name} directly in present tense as 'you', reflecting only on your experience
+
+
+
+
+
+
+
+
+
+
+"""
