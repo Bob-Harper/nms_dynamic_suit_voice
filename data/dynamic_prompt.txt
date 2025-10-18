@@ -6,3 +6,4 @@ Details for context:
 {wordiness_prompt}
 {tone_prompt}
 YOU ARE SPEAKING DIRECTLY TO {name} - DO NOT EVER INSULT THEM BY REFERRING TO THEM IN THIRD PERSON.
+MANDATORY INSTRUCTION: {category_context}

@@ -37,9 +37,10 @@ def reword_phrase(config, wem_id_r,
                 logit_bias=logit_bias_list,
                 seed=-1  # must add this to randomize the results
             )
-            print(f"Raw Output:\n {output}")
+            # print(f"Raw Output:\n {output}")
             result = output["choices"][0]["message"]["content"].strip()
-            result = postprocess_units(config, result, category_r)
+            # result = postprocess_units(config, result, category_r)
+            result = result.replace("Funds", "Units").replace("funds", "Units")
             result = postprocess_for_tts(result)
             return result
 
@@ -56,7 +57,7 @@ def reword_phrase(config, wem_id_r,
 def postprocess_units(config, text: str, category: str) -> str:
     # Check if this category matches your in-game currency categories
     if category == config.units_received or category == config.units_insufficient:
-        # Replace "Funds" with "Units" safely
+    #     # Replace "Funds" with "Units" safely
         text = text.replace("Funds", "Units").replace("funds", "Units")
     return text
 
@@ -64,6 +65,8 @@ def postprocess_for_tts(text: str) -> str:
     # Existing cleanup
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Strip Thinking
     text = re.sub(r"[—–]", ", ", text)  # convert em-dash / en-dash
+    text = re.sub(r"\(es\)", "es", text)  # convert em-dash / en-dash
+    text = re.sub(r"-ing", "ing", text)  # convert em-dash / en-dash
 
     # --- Kernel-safe additions ---
     text = text.rstrip("*")              # remove trailing asterisks
@@ -71,7 +74,7 @@ def postprocess_for_tts(text: str) -> str:
     text = text.replace("\r*", "\r")
     text = text.strip()                  # final strip of whitespace
 
-    if not text.endswith("."):           # optional safe sentence ending
+    if not text.endswith("."):           # optional safe sentence ending -ing
         text += "."
 
     return text
