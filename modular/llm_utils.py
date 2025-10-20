@@ -26,7 +26,7 @@ def reword_phrase(config, wem_id_r,
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            print(f"Raw Input:\n {messages}")
+            # print(f"Raw Input:\n {messages}")
             output = config.llm.create_chat_completion(
                 messages=messages,
                 max_tokens=4096,  # less can be faster but can cut off thinking, breaking the result
@@ -37,7 +37,7 @@ def reword_phrase(config, wem_id_r,
                 logit_bias=logit_bias_list,
                 seed=-1  # must add this to randomize the results
             )
-            print(f"Raw Output:\n {output}")
+            # print(f"Raw Output:\n {output}")
             result = output["choices"][0]["message"]["content"].strip()
             result = postprocess_for_tts(result)
             return result
