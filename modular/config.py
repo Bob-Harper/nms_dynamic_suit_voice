@@ -102,8 +102,8 @@ class SuitVoiceConfig:
         # Categories that override prompting rules
         self.mil_cat = ["Missile Launch",
                         "Missile Destroyed",
-                        "Dreadnaught Departure",
-                        "Dreadnaught Disabled",
+                        "Dreadnought Departure",
+                        "Dreadnought Disabled",
                         "Freighter Combat",
                         "Freighter Destroyed"
                         ]

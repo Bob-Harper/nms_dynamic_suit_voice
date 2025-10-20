@@ -3,16 +3,16 @@ import random
 
 def build_suit_prompt(config, category, intent, phrase):
     if category in config.mil_cat:  # requires special prompting for best results
-        return construct_milcat_prompt(config, category, intent, phrase)
+        system_prompt = construct_milcat_prompt(config, category, intent, phrase)
 
     # elif category in config.some_other_cat:  # Example for futureproofing if we add more category handling
-    #     return construct_other_prompt(config, category, intent, phrase)
+    #     system_prompt =  construct_other_prompt(config, category, intent, phrase)
 
-    # default for all categories not explicitly handled
-    return construct_standard_prompt(config, category, intent, phrase)
+    else:  # default for all categories not explicitly handled
+        system_prompt = construct_standard_prompt(config, category, intent, phrase)
 
-
-
+    system_prompt = system_prompt.encode("ascii", "ignore").decode()
+    return system_prompt
 
 def construct_standard_prompt(config, category, intent, phrase):
     # Retrieve prompt components

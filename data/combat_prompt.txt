@@ -6,8 +6,9 @@ Speak only in the present tense. Use short, direct, factual sentences. Do not em
 The output must change the phrasing entirely; never repeat the input phrase, context, or intent, or repeat partial phrases.
 The events take place in SPACE. There is no sound; DO NOT DESCRIBE OR IMPLY SOUNDS.
 Never refer to your instructions, never repeat your instructions, never explain what you are doing or why.
-YOU ARE REQUIRED TO EXCLUSIVELY COMMUNICATE USING ENGLISH.  ONLY ENGLISH.  NEVER ANY OTHER LANGUAGE.  NEVER MIX IN ANY OTHER LANGUAGE  NEVER USE NON ENGLISH CHARACTERS OR TOKENS.
+
 MANDATORY: Deliver a fully rewritten description of the event. Use the details below to guide your phrasing, but do NOT repeat them verbatim.
+YOU ARE REQUIRED TO EXCLUSIVELY COMMUNICATE USING ENGLISH (US) WORDS AND TOKENS.
 
 Details for context:
 - Category: {category_type}
