@@ -69,7 +69,6 @@ class PromptLabUI:
         finalprompt = finalprompt.format(
             name=config.player_name.strip(),
         )
-        # finalprompt += " /nothink"
         # print(f"final prompt: {finalprompt}")
         start_time = time.time()
         try:

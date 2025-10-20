@@ -26,7 +26,7 @@ def reword_phrase(config, wem_id_r,
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            # print(f"Raw Input:\n {messages}")
+            print(f"Raw Input:\n {messages}")
             output = config.llm.create_chat_completion(
                 messages=messages,
                 max_tokens=4096,  # less can be faster but can cut off thinking, breaking the result
@@ -37,10 +37,8 @@ def reword_phrase(config, wem_id_r,
                 logit_bias=logit_bias_list,
                 seed=-1  # must add this to randomize the results
             )
-            # print(f"Raw Output:\n {output}")
+            print(f"Raw Output:\n {output}")
             result = output["choices"][0]["message"]["content"].strip()
-            # result = postprocess_units(config, result, category_r)
-            result = result.replace("Funds", "Units").replace("funds", "Units")
             result = postprocess_for_tts(result)
             return result
 
@@ -54,27 +52,22 @@ def reword_phrase(config, wem_id_r,
     return f"External Reality Failure. {original_phrase_r}"
 
 
-def postprocess_units(config, text: str, category: str) -> str:
-    # Check if this category matches your in-game currency categories
-    if category == config.units_received or category == config.units_insufficient:
-    #     # Replace "Funds" with "Units" safely
-        text = text.replace("Funds", "Units").replace("funds", "Units")
-    return text
-
 def postprocess_for_tts(text: str) -> str:
     # Existing cleanup
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Strip Thinking
+    text = re.sub(r"<think>\s*", "", text)  # Strip rogue opening think tags with no matching close
+    text = re.sub(r'\bfunds\b', 'Units', text, flags=re.IGNORECASE)  # In-Game Currency for immersion
     text = re.sub(r"[—–]", ", ", text)  # convert em-dash / en-dash
-    text = re.sub(r"\(es\)", "es", text)  # convert em-dash / en-dash
-    text = re.sub(r"-ing", "ing", text)  # convert em-dash / en-dash
+    text = re.sub(r"\(es\)", "es", text)  # fix pluralization artifact
+    text = re.sub(r"-ing", "ing", text)  # remove hyphenation from suffix
 
-    # --- Kernel-safe additions ---
+    # --- Kernel-safe additions, solves Kernel Mismatch errors---
     text = text.rstrip("*")              # remove trailing asterisks
     text = text.replace("\n*", "\n")    # fix newline + asterisk
     text = text.replace("\r*", "\r")
-    text = text.strip()                  # final strip of whitespace
 
-    if not text.endswith("."):           # optional safe sentence ending -ing
+    text = text.strip()                  # final strip of whitespace
+    if not re.search(r"[.!?]$", text):  # add a period of not ended with sentence-ending punctuation
         text += "."
 
     return text
