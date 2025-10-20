@@ -72,6 +72,7 @@ class SuitVoiceConfig:
 
         self.suit_voice_combat_path = resolve_path("SUIT_VOICE_COMBAT_PATH", root_dir)
         self.suit_voice_combat = self.suit_voice_combat_path.read_text(encoding="utf-8")
+        self.milcat_enable_reasoning = os.getenv("COMBAT_CATEGORIES_ALLOW_REASONING")
 
         self.promptdata_path = resolve_path("PROMPTdata_PATH", root_dir)
         self.promptdata = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
@@ -99,7 +100,13 @@ class SuitVoiceConfig:
         self.units_received = os.getenv("UNITS_CATEGORY_RECEIVED")
         self.units_insufficient = os.getenv("UNITS_CATEGORY_INSUFFICIENT")
         # Categories that override prompting rules
-        self.mil_cat = ["Missile Launch", "Missile Destroyed", "Freighter Escape", "Freighter Combat"]
+        self.mil_cat = ["Missile Launch",
+                        "Missile Destroyed",
+                        "Dreadnaught Departure",
+                        "Dreadnaught Disabled",
+                        "Freighter Combat",
+                        "Freighter Destroyed"
+                        ]
 
     def get_tone(self) -> str:
         return self.current_tone
