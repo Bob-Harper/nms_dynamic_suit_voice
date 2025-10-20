@@ -21,7 +21,7 @@ def convert_to_wem(config, temp_wav_path):
         wem_file = output_dir / temp_wav_path.with_suffix(".wem").name
         final_wem_file = final_dir / wem_file.name
 
-        max_attempts = 5
+        max_attempts = 10
         for attempt in range(1, max_attempts + 1):
             try:
                 wem_file.replace(final_wem_file)
