@@ -100,13 +100,11 @@ class SuitVoiceConfig:
         self.units_received = os.getenv("UNITS_CATEGORY_RECEIVED")
         self.units_insufficient = os.getenv("UNITS_CATEGORY_INSUFFICIENT")
         # Categories that override prompting rules
-        self.mil_cat = ["Missile Launch",
-                        "Missile Destroyed",
-                        "Dreadnought Departure",
-                        "Dreadnought Disabled",
-                        "Freighter Combat",
-                        "Freighter Destroyed"
-                        ]
+        mil_cat_str = os.getenv("MIL_CATEGORIES", "")
+        self.mil_cat = [x.strip() for x in mil_cat_str.split(",") if x.strip()]
+        # parse comma-separated quick response IDs as string NOT integer
+        quick_response_str = os.getenv("QUICK_RESPONSE_IDS", "")
+        self.quick_response_ids = [x.strip() for x in quick_response_str.split(",") if x.strip()]
 
     def get_tone(self) -> str:
         return self.current_tone

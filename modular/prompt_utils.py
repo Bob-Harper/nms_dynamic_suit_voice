@@ -71,7 +71,7 @@ def determine_wordiness(config):
     current = config.current_wordiness
 
     # If observer is explicitly set, never override it
-    if current == "observer":
+    if current == "Observer":
         return current
 
     # 95% chance stick with whatever's configured
@@ -79,5 +79,5 @@ def determine_wordiness(config):
         return current
 
     # 5% chance: override with verbose
-    return "verbose"
+    return "Verbose"
 
