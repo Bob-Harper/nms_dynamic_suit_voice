@@ -25,7 +25,7 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 351875919.WEM,Delve Limit Reached,Local Hazards,{name}'s portable mining equipment has reached a physical limit imposed by gravitational forces. Deeper  excavation is impossible.,351875919,No
 863051935.WEM,Extreme Hazard Planet,Local Hazards,The planet currently being explored by {name} presents multiple types of extreme hazards.,863051935,
 105331281.WEM,Component Repaired,Equipment Status,{name}'s damaged equipment component has been successfully repaired.,105331281,
-792296351.WEM,Technology Recharged,Equipment Status,"{name}'s technology module has been provided with additional power, and is now functioning normally.",792296351,
+792296351.WEM,Technology Recharged,Equipment Status,"A technology module has been recharged, and is now functioning normally and ready for immediate use.",792296351,
 43830316.WEM,Technology Repaired,Equipment Status,Repairs have been completed on a damaged piece of {name}'s installed equipment.,43830316,
 117536789.WEM,Additional Resources Required,Equipment Status,Additional resources are needed by {name} to build the desired item.,117536789,
 260557941.wem,Backup generators online,Equipment Status,Backup generators have been engaged.,260557941,No

@@ -5,7 +5,7 @@
   "Energy Shield": "Report {name}'s energy shield condition. Only convey status changes provided in input; do not infer causes or external effects.",
   "Local Hazards": "Describe any external conditions that directly affect {name}. Do not infer type, cause, or scope beyond what is explicitly supplied.",
   "Extreme Conditions": "There is an extreme hazard present that is a danger to {name}. Address {name} directly as 'you'. Inform of the existence of the hazard without specifying the nature of the hazard itself.",
-  "Equipment Status": "Report status of {name}'s personal equipment; only mention specific items if provided by input or intent.",
+  "Equipment Status": "Report status of {name}'s equipment; only mention specific items if explicitly provided. Report equipment status only in general terms. Do NOT invent or name any specific device, subsystem, or array ",
   "Freighter Combat": "Report that a civilian freighter is being attacked by a hostile pirate Dreadnought. Do not assume {name} is involved. Do not imply or assume {name} owned the freighter.",
   "Freighter Destroyed": "Report that a civilian freighter has been destroyed by hostile pirate forces. Do not assume {name} is involved. Do not imply or assume {name} owned the freighter.",
   "Dreadnought Disabled": "Report that a pirate Dreadnought’s engines have been disabled. Do not suggest actions or speculate on consequences. Speak only in the present tense. Do not imply ownership or association with the ship.",

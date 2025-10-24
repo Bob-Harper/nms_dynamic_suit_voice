@@ -26,7 +26,7 @@ def reword_phrase(config, wem_id_r,
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            # print(f"Raw Input:\n {messages}")
+            print(f"Raw Input:\n {messages}")
             output = config.llm.create_chat_completion(
                 messages=messages,
                 max_tokens=4096,  # less can be faster but can cut off thinking, breaking the result
@@ -40,6 +40,9 @@ def reword_phrase(config, wem_id_r,
             # print(f"Raw Output:\n {output}")
             result = output["choices"][0]["message"]["content"].strip()
             result = postprocess_for_tts(result)
+            add_final_output_line(config, wem_id_r, result)
+            print(f"add_final_output_line:\n {add_final_output_line}")
+
             return result
 
         except Exception as e:
@@ -71,3 +74,22 @@ def postprocess_for_tts(text: str) -> str:
         text += "."
 
     return text
+
+
+def add_final_output_line(config, wem_id, line):
+    """Add a new line (or sublines) to the recent lines list for a WEM ID, trimming if necessary."""
+    if wem_id not in config.recent_lines_text:
+        config.recent_lines_text[wem_id] = []
+
+    # Split on sentence-ending punctuation or certain common words, keep trailing whitespace
+    split_pattern = r'(?<=[.!?])|(?=\bwith\b)|(?=\band\b)|(?=\bfor\b)|(?=\bof\b)'
+    sublines = [s.strip() for s in re.split(split_pattern, line) if s.strip()]
+
+    lines = config.recent_lines_text[wem_id]
+    lines.extend(sublines)
+
+    # Trim oldest if over max
+    while len(lines) > config.max_session_lines:
+        lines.pop(0)
+
+    config.recent_lines_text[wem_id] = lines

@@ -102,7 +102,12 @@ class SuitVoiceConfig:
         # Categories that override prompting rules
         mil_cat_str = os.getenv("MIL_CATEGORIES", "")
         self.mil_cat = [x.strip() for x in mil_cat_str.split(",") if x.strip()]
-        # parse comma-separated quick response IDs as string NOT integer
+        # Max recent lines per session from .env
+        self.max_session_lines = int(os.getenv("MAX_SESSION_LINES", 25))
+
+        # Recent lines store: dict keyed by WEM ID
+        self.recent_lines_text = {}  # {wem_id_str: [line1, line2, ...]}
+         # parse comma-separated quick response IDs as string NOT integer
         quick_response_str = os.getenv("QUICK_RESPONSE_IDS", "")
         self.quick_response_ids = [x.strip() for x in quick_response_str.split(",") if x.strip()]
 
