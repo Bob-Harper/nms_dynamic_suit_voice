@@ -64,7 +64,7 @@ class PromptLabUI:
         intent = entry["Intent"]
 
         # Build the structured prompt
-        finalprompt = build_suit_prompt(config, category, intent, original_phrase)
+        finalprompt = build_suit_prompt(config, category, intent, original_phrase, wem_id)
         # convert Player Name Placeholder
         finalprompt = finalprompt.format(
             name=config.player_name.strip(),
@@ -395,10 +395,8 @@ class PromptLabUI:
         category = entry.get("Category", "")
         intent = entry.get("Intent", "")
         transcription = entry.get("Transcription", "")
-        context = self.context_var.get().strip()
-
         # Build prompt using live pipeline logic
-        prompt = build_suit_prompt(self.config, category, intent, transcription)
+        prompt = build_suit_prompt(self.config, category, intent, transcription, wem_id)
         prompt = prompt.format(name=self.config.player_name.strip())
 
         self._log(f"Prompt for WEM {wem_id}:\n{prompt}")

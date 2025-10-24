@@ -54,7 +54,7 @@ def watch_wems(tray_ui):  # Main watchdog and pipeline
                         category = intent_entry["Category"]
                         intent_w = intent_entry["Intent"]
 
-                        finalprompt = build_suit_prompt(config, category, intent_w, original_phrase_w)
+                        finalprompt = build_suit_prompt(config, category, intent_w, original_phrase_w, wem_id)
 
                         reworded = reword_phrase(config, wem_id, original_phrase_w, intent_w, finalprompt)
 
