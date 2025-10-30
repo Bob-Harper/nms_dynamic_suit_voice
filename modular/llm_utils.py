@@ -1,5 +1,6 @@
 import time
 import re
+from debug.log_config import debug_print
 
 
 def create_logit_bias(config, category_l):
@@ -19,6 +20,7 @@ def reword_phrase(config, wem_id_r,
                   category_r,
                   original_phrase_r,
                   finalprompt):
+    debug_print("llm_utils.py: reword_phrase")   # works, just seeing it get called during the trail
     # enforce usage or avoidance of specific tokens using logits
     logit_bias_list = create_logit_bias(config, category_r)
 
@@ -26,7 +28,7 @@ def reword_phrase(config, wem_id_r,
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            print(f"Raw Input:\n {messages}")
+            # print(f"Raw Input:\n {messages}")
             output = config.llm.create_chat_completion(
                 messages=messages,
                 max_tokens=4096,  # less can be faster but can cut off thinking, breaking the result
@@ -41,7 +43,7 @@ def reword_phrase(config, wem_id_r,
             result = output["choices"][0]["message"]["content"].strip()
             result = postprocess_for_tts(result)
             add_final_output_line(config, wem_id_r, result)
-            print(f"add_final_output_line:\n {add_final_output_line}")
+            # print(f"add_final_output_line:\n {add_final_output_line}")
 
             return result
 

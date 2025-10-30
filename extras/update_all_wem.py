@@ -1,5 +1,7 @@
 import os
 import time
+# from debug.log_config import debug_print  # this page works fine
+
 
 WEM_DIR = r"C:\Program Files (x86)\Steam\steamapps\common\No Man's Sky\GAMEDATA\MODS\DYNAMIC_SUIT_VOICE\AUDIO\WINDOWS\MEDIA\ENGLISH(US)"
 now = time.time()

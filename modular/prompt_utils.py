@@ -1,7 +1,9 @@
 import random
+from debug.log_config import debug_print
 
 
 def build_suit_prompt(config, category, intent, phrase, wem_id):
+    debug_print("prompt_utils.py: build_suit_prompt")   # works, just seeing it get called during the trail
     if category in config.mil_cat:  # requires special prompting for best results
         system_prompt = construct_milcat_prompt(config, category, intent, phrase, wem_id)
 
