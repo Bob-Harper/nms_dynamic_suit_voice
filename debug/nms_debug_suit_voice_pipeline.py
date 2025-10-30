@@ -6,7 +6,7 @@ from modular.tts_utils import run_tts
 from modular.config import SuitVoiceConfig
 from modular.llm_utils import reword_phrase
 from modular.wem_utils import convert_to_wem
-from modular.logging_utils import log_to_file
+from debug.logging_utils import log_to_file
 from modular.prompt_utils import build_suit_prompt
 from debug.log_config import logger  # <-- Loguru setup
 

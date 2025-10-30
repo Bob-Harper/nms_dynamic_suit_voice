@@ -1,5 +1,6 @@
 import csv
 from pathlib import Path
+# from debug.log_config import debug_print
 
 
 def log_to_file(config, wem_id, category, intent, original_phrase, reworded):

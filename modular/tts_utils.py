@@ -5,10 +5,12 @@ import sys
 import wave
 import numpy as np
 from scipy.signal import resample
+from debug.log_config import debug_print
 
 MIN_SAMPLES = 1024  # absolute minimum number of samples per channel
 
 def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
+    debug_print("tts_utils.py: run_tts")   # works, just seeing it get called during the trail
     final_wav = config.temp_wav_dir / f"{wem_num}.wav"
     temp_wav = final_wav.with_suffix(".temp.wav")
     speaker_wav = [

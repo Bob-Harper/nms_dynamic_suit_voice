@@ -3,7 +3,7 @@
   "Severe Cold": "Describe conditions directly affecting {name} caused by extreme cold. Only convey how this impacts {name}; do not specify numeric values.  Vividly describe the consequences of not taking immediate action.",
   "Discovery": "{name} has made a discovery. Do not specify locations or identifiers; focus on the event and its significance for {name} alone.",
   "Energy Shield": "Report {name}'s energy shield condition. Only convey status changes provided in input; do not infer causes or external effects.",
-  "Local Hazards": "Describe any external conditions that directly affect {name}. Do not infer type, cause, or scope beyond what is explicitly supplied.",
+  "Local Hazards": "Describe any external conditions that directly affect {name}. Do not infer type, cause, or scope beyond what is explicitly supplied.  Never refer to temperature values, ranges, or changes.",
   "Extreme Conditions": "There is an extreme hazard present that is a danger to {name}. Address {name} directly as 'you'. Inform of the existence of the hazard without specifying the nature of the hazard itself.",
   "Equipment Status": "Report status of {name}'s equipment; only mention specific items if explicitly provided. Report equipment status only in general terms. Do NOT invent or name any specific device, subsystem, or array ",
   "Freighter Combat": "Report that a civilian freighter is being attacked by a hostile pirate Dreadnought. Do not assume {name} is involved. Do not imply or assume {name} owned the freighter.",

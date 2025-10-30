@@ -8,6 +8,7 @@ from pathlib import Path
 from llama_cpp import Llama
 from dotenv import load_dotenv
 from TTS.api import TTS  # coqui-tts fork
+# from debug.log_config import debug_print  # we do not need to log config building, it works
 
 
 def resolve_path(env_var: str, root: Path, must_exist=True) -> Path:
@@ -33,10 +34,6 @@ class SuitVoiceConfig:
         self.mod_dir = resolve_path("MOD_DIR", root_dir, must_exist=False)
         self.csv_path = resolve_path("CSV_PATH", root_dir)
         self.intent_map = self.load_intent_map(self.csv_path)
-        self.temp_wem_dir = resolve_path("TEMP_WEM_DIR", root_dir, must_exist=False)
-        self.temp_wem_dir.mkdir(parents=True, exist_ok=True)
-        self.temp_wav_dir = resolve_path("TEMP_WAV_DIR", root_dir, must_exist=False)
-        self.temp_wav_dir.mkdir(parents=True, exist_ok=True)
 
         self.cmd_script_path = resolve_path("CMD_SCRIPT_PATH", root_dir, must_exist=False)
 
@@ -93,23 +90,27 @@ class SuitVoiceConfig:
                 verbose=False
             )
 
-        # Runtime state
+        # for specific explanations or notes on any of the following, check the env file comments
         self.current_tone = os.getenv("PHRASE_TONE")
         self.current_wordiness = os.getenv("PHRASE_WORDINESS")
         self.player_name = os.getenv("PLAYER_NAME")
         self.units_received = os.getenv("UNITS_CATEGORY_RECEIVED")
         self.units_insufficient = os.getenv("UNITS_CATEGORY_INSUFFICIENT")
-        # Categories that override prompting rules
+
         mil_cat_str = os.getenv("MIL_CATEGORIES", "")
         self.mil_cat = [x.strip() for x in mil_cat_str.split(",") if x.strip()]
-        # Max recent lines per session from .env
-        self.max_session_lines = int(os.getenv("MAX_SESSION_LINES", 25))
 
-        # Recent lines store: dict keyed by WEM ID
+        self.max_session_lines = int(os.getenv("MAX_SESSION_LINES", 25))
         self.recent_lines_text = {}  # {wem_id_str: [line1, line2, ...]}
-         # parse comma-separated quick response IDs as string NOT integer
-        quick_response_str = os.getenv("QUICK_RESPONSE_IDS", "")
-        self.quick_response_ids = [x.strip() for x in quick_response_str.split(",") if x.strip()]
+
+        self.quick_cache_max = int(os.getenv("QUICK_CACHE_MAX", 25))
+        self.quick_cache_dir = resolve_path("QUICK_CACHE_DIR", root_dir, must_exist=False)
+        self.cache_log_dir = resolve_path("CACHE_LOG_DIR", root_dir, must_exist=False)
+
+        self.temp_wem_dir = resolve_path("TEMP_WEM_DIR", root_dir, must_exist=False)
+        self.temp_wav_dir = resolve_path("TEMP_WAV_DIR", root_dir, must_exist=False)
+        for d in [self.temp_wem_dir, self.temp_wav_dir, self.quick_cache_dir, self.cache_log_dir]:
+            d.mkdir(parents=True, exist_ok=True)
 
     def get_tone(self) -> str:
         return self.current_tone
