@@ -2,7 +2,7 @@
 import subprocess
 from pathlib import Path
 import time
-from debug.log_config import debug_print
+from debug.logging_utils import debug_print
 
 
 def convert_to_wem(config, temp_wav_path, output_path: Path):

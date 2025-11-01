@@ -475,7 +475,7 @@ class PromptLabUI:
         new = self.tone_text.get('1.0', tk.END).strip()
         if not new:
             messagebox.showwarning("Empty", "Tone prompt is empty, aborting save.")
-            return
+            returndebug_print
         if "tones" not in self.promptdata:
             self.promptdata["tones"] = {}
         self.promptdata["tones"][t] = new

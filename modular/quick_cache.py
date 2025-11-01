@@ -3,7 +3,7 @@ import threading
 from queue import Queue
 from pathlib import Path
 from modular.cache_replenishment import generate_replacement_voice_line
-from debug.log_config import debug_print
+from debug.logging_utils import debug_print
 
 _job_queue = Queue()
 _worker_thread: threading.Thread | None = None

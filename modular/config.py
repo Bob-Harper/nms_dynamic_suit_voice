@@ -8,7 +8,7 @@ from pathlib import Path
 from llama_cpp import Llama
 from dotenv import load_dotenv
 from TTS.api import TTS  # coqui-tts fork
-# from debug.log_config import debug_print  # we do not need to log config building, it works
+# from debug.logging_utils import debug_printt  # we should not need to log config building, it works
 
 
 def resolve_path(env_var: str, root: Path, must_exist=True) -> Path:
@@ -56,7 +56,9 @@ class SuitVoiceConfig:
         self.ffmpeg_path = Path(ffmpeg_path)
 
         self.icon_image = resolve_path("ICON_IMAGE", root_dir, must_exist=False)
-        self.logging = os.getenv("LOGGING", "false").strip().lower() == "true"
+
+        self.logging = os.getenv("PROMPT_CONSOLE", "false").strip().lower() == "true"
+        self.logging = os.getenv("PROMPT_LOGGING", "false").strip().lower() == "true"
         self.game_output_csv = resolve_path("GAME_OUTPUT_CSV", root_dir, must_exist=False)
         self.create_no_window = 0x08000000 if sys.platform == "win32" else 0
 

@@ -2,7 +2,7 @@
 from time import time
 from modular.config import SuitVoiceConfig
 from modular.quick_cache import _replacement_wrapper
-from debug.log_config import debug_print
+from debug.logging_utils import debug_print
 
 config = SuitVoiceConfig()
 
@@ -25,6 +25,8 @@ wem_ids_raw = {
     531979220
     # … continue your list here
 }
+import os
+print("CWD:", os.getcwd())
 
 def fill_cache_for_ids(wem_ids, max_count=None):
     if max_count is None:

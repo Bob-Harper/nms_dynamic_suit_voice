@@ -25,12 +25,12 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 351875919.WEM,Delve Limit Reached,Local Hazards,{name}'s portable mining equipment has reached a physical limit imposed by gravitational forces. Deeper  excavation is impossible.,351875919,No
 863051935.WEM,Extreme Hazard Planet,Local Hazards,The planet currently being explored by {name} presents multiple types of extreme hazards.,863051935,
 105331281.WEM,Component Repaired,Equipment Status,{name}'s damaged equipment component has been successfully repaired.,105331281,
-792296351.WEM,Technology Recharged,Equipment Status,"A technology module has been recharged, and is now functioning normally and ready for immediate use.",792296351,
+792296351.WEM,Technology Recharged,Equipment Recharge,"A technology module has been recharged, and is now functioning normally and ready for immediate use.",792296351,
 43830316.WEM,Technology Repaired,Equipment Status,Repairs have been completed on a damaged piece of {name}'s installed equipment.,43830316,
 117536789.WEM,Additional Resources Required,Equipment Status,Additional resources are needed by {name} to build the desired item.,117536789,
 260557941.wem,Backup generators online,Equipment Status,Backup generators have been engaged.,260557941,No
 299876357.WEM,Freighter Acquired,Equipment Status,"{name} has acquired a new freighter.  It is in poor condition, requiring maintenance and repair.",299876357,No
-315361790.WEM,Multi-Tool Charge Depleted,Equipment Status,{name}'s Multi-tool power is completely depleted. Also provide a recommendation to monitor power levels more closely while using the equipment to avoid shutdown during operation.,315361790,
+315361790.WEM,Multi-Tool Charge Depleted,Equipment Status,"{name}'s Multi-tool power is completely depleted. Explain this, and provide a recommendation to monitor power levels more closely while using the equipment to avoid shutdown during operation.",315361790,
 337859118.WEM,Base Computer Online,Equipment Status,The computer for the new base is online and operational. The full build menu is now accessible.,337859118,No
 353234571.WEM,New Weapon Available,Equipment Status,"A new weapon has become available for {name}'s use, and may be retrieved when desired.",353234571,No
 370738335.wem,Emergency damage recovery system engaged,Equipment Status,"Severe damage has been sustained by {name}'s equipment, and automated repair systems are now active.",370738335,
@@ -92,7 +92,7 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 808789373.WEM,Life Support Systems Activated,Life Support,Life support systems have activated and registered a bio-signature. Entity's preferred designation is logged as '{name}'.,808789373,
 825969836.WEM,Life Support Power Low,Life Support,Life support power is significantly depleted. Failure to take corrective action will result in recalculation of expiration date of the suit's biological contents.,825969836,
 865668553.wem,Life support level falling,Life Support,Life support power is dangerously low and must be restored to prevent {name}'s death.,865668553,
-1061736374.WEM,Life Support Offline,Life Support,"Life support systems are now offline, and suit systems are beginning a shut down sequence. If this sequence completes, it will be very difficult for {name} to regain consciousness.",1061736374,
+1061736374.WEM,Life Support Offline,Life Support,"Life support systems are now offline, and suit systems are beginning a shut down sequence. If this sequence completes, it will be very difficult for {name} to remain conscious.",1061736374,
 449779025.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,449779025,
 389592073.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,389592073,
 241169623.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,241169623,
@@ -101,11 +101,11 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 4494640.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,4494640,
 45779246.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,45779246,
 695050944.WEM,Incoming Missiles Destroyed,Missile Destroyed,All launched hostile missiles have been destroyed.,695050944,
-459254064.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.",459254064,
-245522736.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.",245522736,
+459254064.WEM,Enemy Missile Incoming,Missile Launch,A hostile missile has been launched at a civilian freighter.,459254064,
+245522736.WEM,Enemy Missile Incoming,Missile Launch,A hostile missile has been launched at a civilian freighter.,245522736,
 80959229.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.",80959229,
 776652442.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.",776652442,
-972765308.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.",972765308,
+972765308.WEM,Enemy Missile Incoming,Missile Launch,A hostile missile has been launched at a civilian freighter.,972765308,
 756031301.WEM,Enemy Missile Incoming,Missile Launch,"A hostile missile has been launched at a civilian freighter.",756031301,
 126319994.WEM,Secure Transmission Module Located,Navigation,A communications module has been found and its data is being downloaded to {name}'s navigation system.,126319994,
 243520476.WEM,Orbital Station Coordinates Received,Navigation,New coordinates for a previously unvisited orbital station have been uploaded to {name}'s navigation system.,243520476,
