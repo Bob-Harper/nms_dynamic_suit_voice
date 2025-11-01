@@ -5,7 +5,7 @@ import sys
 import wave
 import numpy as np
 from scipy.signal import resample
-from debug.log_config import debug_print
+from debug.logging_utils import debug_print
 
 MIN_SAMPLES = 1024  # absolute minimum number of samples per channel
 

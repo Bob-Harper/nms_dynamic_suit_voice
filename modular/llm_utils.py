@@ -1,6 +1,6 @@
 import time
 import re
-from debug.log_config import debug_print
+from debug.logging_utils import debug_print
 
 
 def create_logit_bias(config, category_l):

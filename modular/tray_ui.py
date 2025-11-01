@@ -4,7 +4,7 @@ import threading
 from pathlib import Path
 from PIL import Image
 from pystray import Icon, Menu, MenuItem
-# from debug.log_config import debug_print  # this page works fine
+# from debug.logging_utils import debug_print  # this page works fine
 
 
 class TrayUI:

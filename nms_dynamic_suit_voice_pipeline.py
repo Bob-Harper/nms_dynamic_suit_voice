@@ -2,7 +2,7 @@ import time
 from modular.tray_ui import TrayUI
 from modular.config import SuitVoiceConfig
 from modular.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
-from debug.log_config import debug_print
+from debug.logging_utils import debug_print
 
 config = SuitVoiceConfig()
 

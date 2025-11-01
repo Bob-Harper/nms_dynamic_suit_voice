@@ -4,8 +4,7 @@ from modular.llm_utils import reword_phrase
 from modular.prompt_utils import build_suit_prompt
 from modular.tts_utils import run_tts
 from modular.wem_utils import convert_to_wem
-from debug.logging_utils import log_to_file
-from debug.log_config import debug_print
+from debug.logging_utils import log_to_file, debug_print
 
 
 def generate_replacement_voice_line(config, wem_id, output_path: Path):

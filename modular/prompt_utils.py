@@ -1,5 +1,5 @@
 import random
-from debug.log_config import debug_print
+from debug.logging_utils import debug_print
 
 
 def build_suit_prompt(config, category, intent, phrase, wem_id):
