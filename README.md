@@ -10,6 +10,7 @@ This mod replaces static suit AI voice lines in No Man’s Sky with dynamically 
 Non-negotiable design philosophies guiding every decision made on this project:
 - Local files ONLY.
 - ENHANCE gameplay but NOT at the EXPENSE of gameplay
+- When pre-caching, files are overwritten after use, never reused.
 
 ## Explanation
 
@@ -17,11 +18,12 @@ When the game makes a call to use a suit voice line, it will use the file it fin
 
 ## Key Features
 
-- No repetition – each line is freshly generated, so you rarely/never hear the same thing twice. *depends on inference speed
+- No repetition – each line is discarded after a single use then replaced.
 - Drop-in replacement for default suit AI audio files.
 - Local-only – no cloud processing or internet connection required. Completely Offline game compatible.
-- no fees, no subscriptions, no paid API
-- Current implementation uses CPU inference, leaving the GPU free for the game
+- no paid API required
+- Current implementation uses CPU inference, leaving the GPU free for the game.
+
 
 ## Examples:
 <br>Original Game Wording: Nearby toxins detected
@@ -38,9 +40,9 @@ Original Game Wording: Extreme Night Temperature Detected
 <br> Final Output: Extreme cold temperatures during the night cycle are detected, posing a significant threat to life support and your safety.
 
 ## Demo Video
-
+** OLD!  USES CACHE FREE INFERENCE PIPELNE.
 [![Dynamic Suit Voice Demo](https://img.youtube.com/vi/L1BsYxOSzSk/0.jpg)](https://youtu.be/L1BsYxOSzSk)
-
+** NEW DEMO VIDEO COMING SOON
 
 ## Limitations / Disclaimer
 
@@ -59,6 +61,7 @@ This has only been tested on my personal development machine:
 I recommend starting this BEFORE NMS is started up (Essential if GPU enabled).  The model I use and recommend takes up 1.6 GB of memory.
 
 ## Installation
+** note this may need updating due to recent changes<br>
 Automatic/Guided Mode: run setup.cmd
 <br>This will offer 2 modes - Automatic (as close to 1 click install as I could make it) and Guided.  Both follow the same steps but the Guided mode will ask you for confirmation of paths and installation of items before proceeding.  Auto will assume defaults as provided in the example env file and proceed accordingly.
 
@@ -78,16 +81,18 @@ Automatic/Guided Mode: run setup.cmd
 
 ## Usage
 Once installed, no user interaction required other than starting it up before you play the game and stopping it when you are done.
-The generator will watch for a suit voice trigger and produce a new audio file.
+The generator will watch for a suit voice trigger and determine a new audio file is needed.
 
-Output is sent directly to the mod folder, and overwrites the voice line that was just used in the game. The next time you
-hear that same notification, the wording will be different.  It's that simple.
+The pipeline will move one of the cached files to the mod dir, removing it from cache and overwriting the existing mod file.
+If the cache is below configured capacity, it will queue a task to replace the file and top the cache up.  The next time you
+hear that same notification, the wording will be different.  It's that simple.  If there are NO files in the cache yet, it will
+wait until a file is available, and move that to the mod dir, then continue with queueing as many generations as needed to top up the cache.
 
-## Future Plans (Version 2 Goals)
-- Context-aware lines (react to in-game events with tailored responses).
+## Future Plans (Version 2 and beyond)
+- Context-aware lines (react to in-game events with tailored responses.  this is unlikely to happen any time soon).
 - Persistent memory, keeping track of events that have taken place over the current play session (perhaps saving the data and reload at the start of the next session)
 - Expanded voice profiles and personalities with on-the-fly changes through the systray icon.
-- User Adjustable creativity and tone parameters, either as .
+- Configurable parameters adjustable through an interface.
 
 ## License
 
