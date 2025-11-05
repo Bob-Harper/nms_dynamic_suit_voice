@@ -38,6 +38,13 @@ def watch_wems(tray_ui):
 
 
 if __name__ == "__main__":
-    tray_ui = TrayUI(config, watch_wems)
-    debug_print("nms_dynamic_suit_voice_pipeline.py: Watcher Started...")
-    tray_ui.run()
+    try:
+        tray_ui = TrayUI(config, watch_wems)
+        debug_print("nms_dynamic_suit_voice_pipeline.py: Watcher Started...")
+        tray_ui.run()
+    except Exception as e:
+        import traceback
+        from debug.logging_utils import logger
+        logger.error("Unhandled exception in TrayUI:")
+        logger.error(traceback.format_exc())
+
