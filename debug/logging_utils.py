@@ -6,37 +6,42 @@ from datetime import datetime
 import platform
 import psutil
 import uuid
+import os
+# Redirect stdout/stderr to a file when running headless
+if os.path.basename(sys.executable).lower() == "pythonw.exe":
+    sys.stdout = open("debug/debug_logs/headless_stdout.log", "w")
+    sys.stderr = open("debug/debug_logs/headless_stderr.log", "w")
+
 
 # we do not log the logger.  only a maniac would log the logger.
 # --- Loguru setup (console + file) ---
 logger.remove()
-import os
 print("CWD:", os.getcwd())
-
+DEBUG_ENABLED = os.getenv("PROMPT_CONSOLE", "false").strip().lower() == "true"
 log_format_console = (
     "<green>{time:MM-DD HH:mm:ss.SSS}</green> | "
     "<level>{level: <8}</level> | "
     "{message}"
 )
 
-logger.add(
-    sys.__stdout__,
-    level="DEBUG",
-    format=log_format_console,
-    colorize=False,
-    enqueue=True,
-    backtrace=True,
-    diagnose=False
-)
+if os.path.basename(sys.executable).lower() != "pythonw.exe":
+    logger.add(
+        sys.__stdout__,
+        level="DEBUG",
+        format=log_format_console,
+        colorize=False,
+        enqueue=True,
+        backtrace=True,
+        diagnose=False
+    )
 
-project_root = Path(__file__).resolve().parents[1]
-log_dir = project_root / "debug" / "debug_logs"
+log_dir = Path("C:/NMS_SUIT_VOICE/debug/debug_logs")
 log_dir.mkdir(parents=True, exist_ok=True)
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 log_file = log_dir / f"debug_pipeline_{timestamp}.log"
 
 # format = "{time:YYYY-MM-DD at HH:mm:ss} | {level} | {module}:{function}:{line} - {message}",
-# what??  it's logging it's onw function and line.  log_config.debug_print:69  wtf man.
+# what??  it's logging its own function and line.  log_config.debug_print:69  wtf man.
 logger.add(
     str(log_file),
     level="TRACE",
@@ -65,11 +70,9 @@ log_environment()
 
 # --- Drop-in debug_print replacement ---
 def debug_print(msg, *args, **kwargs):
-    # pass  #turned off for now
-    """
-    Replacement for print(). Sends message to logger.debug().
-    Includes function name and line number automatically.
-    """
+    """Conditional debug print based on PROMPT_CONSOLE env toggle."""
+    if not DEBUG_ENABLED:
+        return
     if args or kwargs:
         msg = msg.format(*args, **kwargs)
     logger.debug(msg)
@@ -79,7 +82,7 @@ def log_to_file(config, wem_id, category, intent, original_phrase, reworded):
 
     fieldnames = ["WEM number", "Category", "Original", "Intent Phrase", "Final Voice Line"]
     file_exists = Path(config.game_output_csv).exists()
-    logger.info(f"SI thsi the problem? file_exists: {file_exists}")
+    logger.info(f"File_exists: {file_exists}")
     log_entry = {
         "WEM number": wem_id,
         "Category": category if wem_id in config.intent_map else "",
