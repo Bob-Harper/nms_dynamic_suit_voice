@@ -56,12 +56,16 @@ class PromptLabUI:
         self._reset_fields()
 
     @staticmethod
-    def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
+    def process_entry(wem_id, entry, wordiness, tone):
         """Shared processing of a single intent-map entry."""
-        config.current_tone = tone  # <— refresh tone
+        # use the passed-in wordiness and tone explicitly
         category = entry["Category"]
         original_phrase = entry["Transcription"]
         intent = entry["Intent"]
+
+        # optionally update config for downstream if needed, but keep local control
+        config.current_tone = tone
+        config.current_wordiness = wordiness
 
         # Build the structured prompt
         finalprompt = build_suit_prompt(config, category, intent, original_phrase, wem_id)
@@ -76,7 +80,7 @@ class PromptLabUI:
             reworded = reword_phrase(config, wem_id, original_phrase, intent, finalprompt)
 
             print(f"\nWEM: {wem_id} -- Original Game Wording: {original_phrase}")
-            print(f"Tone: ({tone}) Verbosity: ({wordiness_level})")
+            print(f"Tone: ({tone}) Verbosity: ({wordiness})")
             print(f"\033[92mFinal Output: {reworded}\033[0m")
 
         except Exception as e:
@@ -475,7 +479,8 @@ class PromptLabUI:
         new = self.tone_text.get('1.0', tk.END).strip()
         if not new:
             messagebox.showwarning("Empty", "Tone prompt is empty, aborting save.")
-            returndebug_print
+            return
+
         if "tones" not in self.promptdata:
             self.promptdata["tones"] = {}
         self.promptdata["tones"][t] = new
@@ -534,7 +539,8 @@ class PromptLabUI:
             messagebox.showwarning("Input Required", "Please select either a WEM ID or a Category.")
 
     def _on_run_all_tones(self):
-        wem_id = str(self.wem_var.get()).strip()
+        wem_id = str(self.wem_var.get()).split("|")[0].strip()
+
         if not wem_id:
             messagebox.showwarning("WEM ID", "Please provide a WEM ID.")
             return
@@ -551,7 +557,7 @@ class PromptLabUI:
     def _run_all_tones_thread(self, wem_id, wordiness):
         tones = list(self.promptdata.get("tones", {}).keys())
         for tone in tones:
-            self._log(f"--- Tone: {tone} ---")
+            self._log(f"--- Tone: {tone} | Wordiness: {wordiness} ---")
             self._run_generation(wem_id, wordiness, tone)
 
     def _run_generation(self, wem_id, wordiness, tone):
