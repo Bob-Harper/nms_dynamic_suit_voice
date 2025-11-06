@@ -147,7 +147,7 @@ Filename,Transcription,Category,Intent,WEM_number,Used
 943635243.WEM,Critical Damage Taken,Personal Protection,Significant physical damage has been inflicted on {name}.,943635243,No
 247183138.WEM,Thermal Protection Falling,Personal Hazard Protection,"{name}'s Personal temperature shielding is failing, ability to protect against all temperature extremes is compromised.",247183138,Yes
 899320928.WEM,Thermal Protection Offline,Personal Hazard Protection,Thermal regulation systems have failed; further exposure to extreme temperatures will negatively affect {name}'s health.,899320928,Yes
-951631813.WEM,Temperature Levels Stabilizing,Personal Hazard Protection,Local temperature conditions are now within {name}'s preferred comfort range.,951631813,Yes
+951631813.WEM,Temperature Levels Stabilizing,Personal Hazard Protection,"The suit's Temperature regulation systems are stabilizing; conditions are now within safe limits for {name}.",951631813,Yes
 28697689.WEM,Radiation Damage Detected,Radiation Exposure,Detected exposure to dangerous radiation levels that may severely impact {name}'s long term health.,28697689,Yes
 124237937.WEM,Extreme Night Radiation Detected,Radiation Exposure,Detection systems have registered extreme radiation levels during the local night cycle.,124237937,Yes
 696022064.WEM,Extreme Radiation Detected,Radiation Exposure,"Extremely high levels of radiation are detected nearby, requiring {name}'s immediate implementation of protective measures.",696022064,Yes

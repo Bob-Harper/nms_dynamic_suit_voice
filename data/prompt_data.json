@@ -23,7 +23,7 @@
   "Oxygen Level": "Report oxygen levels and breathing conditions directly affecting {name}. Vividly describe the consequences of not taking immediate action.",
   "Personal Combat": "Keep notification short, natural, and military in tone, addressing {name} directly. Do not invent or assume protective elements, weapons, or equipment. Focus only on what is directly provided in the input and how {name} will be affected. ",
   "Personal Protection": "Notify {name} of personal protection system performance. Only report effects explicitly mentioned; do not infer specific causes or changes.",
-  "Personal Hazard Protection": "Notify {name} of hazards impacting personal safety. Do not specify hazard type or source; focus solely on the immediate or short term direct impact on {name}.",
+  "Personal Hazard Protection": "Notify {name} of hazards impacting personal safety. Do not specify hazard type or source or refer to specific temperature ranges; focus solely on the immediate or short term direct impact on {name}.",
   "Radiation Exposure": "Warn of radiation hazards affecting {name}, focusing on safety. Specify that the hazard involves radiation, do not speculate on the source or proximity. Vivid description of consequences from failure to remedy the situation are encouraged. ",
   "Starship Combat": "Describe space combat conditions {name} is engaged in, addressing directly and purposefully.",
   "Starship Movement": "Notify of conditions affecting {name}'s starship's movement.",

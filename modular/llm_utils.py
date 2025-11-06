@@ -58,6 +58,8 @@ def reword_phrase(config, wem_id_r,
 
 
 def postprocess_for_tts(text: str) -> str:
+    # Strip all non-ASCII characters first
+    text = text.encode("ascii", "ignore").decode()
     # Existing cleanup
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Strip Thinking
     text = re.sub(r"<think>\s*", "", text)  # Strip rogue opening think tags with no matching close
@@ -72,7 +74,7 @@ def postprocess_for_tts(text: str) -> str:
     text = text.replace("\r*", "\r")
 
     text = text.strip()                  # final strip of whitespace
-    if not re.search(r"[.!?]$", text):  # add a period of not ended with sentence-ending punctuation
+    if not re.search(r"[.!?]$", text):  # add a period if not ended with sentence-ending punctuation
         text += "."
 
     return text
