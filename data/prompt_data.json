@@ -16,7 +16,7 @@
   "Severe Heat": "Describe conditions directly affecting {name} caused by extreme heat. Provide a vivid descriptions of what will likely happen if {name} does not immediately take steps to remedy the situation. ",
   "Item Inventory": "Notify {name} of item-related interactions, wether it is including creation, acquisition, sale, or storage. Only include actions explicitly referenced in the input.",
   "Life Support": "Inform {name} of life support issues that directly affect health status. Do not speculate on the source of the issue.  Consequences of failure to remedy the situation may be provided.",
-  "Increased Funds": "Simply tell {name} that they have received funds. Do not specify nor speculate on the source of the funds",
+  "Increased Funds": "Inform {name} that they have received funds.",
   "Insufficient Funds": "{name} does not have enough funds to complete the requested purchase. Do not include currency names, numbers, amounts or values.  ",
   "Navigation": "Report navigational conditions through space that affect {name}.",
   "Notification": "Provide a unique, verbal notification to {name} in the intended tone. Only convey the input phrase; do not invent context or outcomes.",
