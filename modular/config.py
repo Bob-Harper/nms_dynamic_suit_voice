@@ -8,7 +8,7 @@ from pathlib import Path
 from llama_cpp import Llama
 from dotenv import load_dotenv
 from TTS.api import TTS  # coqui-tts fork
-# from debug.logging_utils import debug_printt  # we should not need to log config building, it works
+# from debug.logging_utils import debug_print  # we should not need to log config building, it works
 
 
 def resolve_path(env_var: str, root: Path, must_exist=True) -> Path:

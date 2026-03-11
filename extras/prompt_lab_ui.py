@@ -13,15 +13,15 @@ config = SuitVoiceConfig()
 
 
 class PromptLabUI:
-    def __init__(self, config, intent_map, process_single_all_fn=None):
+    def __init__(self, p_config, p_intent_map, process_single_all_fn=None):
         """
         config: instance of SuitVoiceConfig (must have .promptdata (dict) and optionally .promptdata_path (Path))
         intent_map: dict loaded from load_intent_map(config.csv_path)
         process_entry_fn: function signature process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard")
         process_single_all_fn (optional): convenience function to run single WEM across all tones
         """
-        self.config = config
-        self.intent_map = intent_map
+        self.config = p_config
+        self.intent_map = p_intent_map
         # Build a human-readable list for the WEM combobox
         self.wem_options = [
             f"{wem_id} | {entry['Category']} | {entry['Intent']}"
@@ -109,7 +109,7 @@ class PromptLabUI:
                 self._log(f"Error during category batch: {e}")
         self._log(f"Batch generation complete for category '{category}'")
 
-    def _on_wem_selected(self, event=None):
+    def _on_wem_selected(self, _event=None):
         wem_selection = self.wem_var.get()
         wem_id = wem_selection.split("|")[0].strip() if "|" in wem_selection else wem_selection
         entry = self.intent_map.get(wem_id)
@@ -134,7 +134,7 @@ class PromptLabUI:
 
         self._log(f"Selected WEM {wem_id}")
 
-    def _on_category_selected(self, event=None):
+    def _on_category_selected(self, _event=None):
 
         self.wem_var.set("")
         self.trans_var.set("")
@@ -248,7 +248,8 @@ class PromptLabUI:
         # Wordiness
         ttk.Label(frm_top, text="Wordiness").grid(row=0, column=2, sticky="w")
         self.wordiness_var = tk.StringVar(value=self.wordiness_levels[0] if self.wordiness_levels else "Standard")
-        self.wordiness_cb = ttk.Combobox(frm_top, values=self.wordiness_levels, textvariable=self.wordiness_var, width=18)
+        self.wordiness_cb = ttk.Combobox(frm_top, values=self.wordiness_levels,
+                                         textvariable=self.wordiness_var, width=18)
         self.wordiness_cb.grid(row=0, column=3, sticky="w", padx=(4, 12))
 
         # Tone
@@ -373,7 +374,8 @@ class PromptLabUI:
         frm_footer = ttk.Frame(self.root)
         frm_footer.pack(fill="x", padx=pad, pady=(4,8))
         ttk.Button(frm_footer, text="Save promptdata JSON As...", command=self._save_as).pack(side="left")
-        ttk.Button(frm_footer, text="Clear Log", command=lambda: self.log.delete('1.0', tk.END)).pack(side="left", padx=(6,0))
+        ttk.Button(frm_footer, text="Clear Log", command=lambda: self.log.delete('1.0',
+                                                                                 tk.END)).pack(side="left", padx=(6,0))
         ttk.Button(frm_footer, text="Quit", command=self.root.destroy).pack(side="right")
 
         # initial load into editors
@@ -533,7 +535,8 @@ class PromptLabUI:
             thr = threading.Thread(target=self._run_generation, args=(wem_id, wordiness, tone), daemon=True)
             thr.start()
         elif category_selection:
-            thr = threading.Thread(target=self._run_category_batch, args=(category_selection, wordiness, tone), daemon=True)
+            thr = threading.Thread(target=self._run_category_batch, args=(category_selection,
+                                                                          wordiness, tone), daemon=True)
             thr.start()
         else:
             messagebox.showwarning("Input Required", "Please select either a WEM ID or a Category.")

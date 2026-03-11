@@ -7,14 +7,14 @@ from debug.logging_utils import debug_print
 config = SuitVoiceConfig()
 
 
-def watch_wems(tray_ui):
+def watch_wems(wtray_ui):
     """Main watchdog loop for WEM files."""
 
     # Build initial access time mapping
-    access_times = {f3.stem: f3.stat().st_atime for f3 in tray_ui.config.mod_dir.glob("*.wem")}
+    access_times = {f3.stem: f3.stat().st_atime for f3 in wtray_ui.config.mod_dir.glob("*.wem")}
     debug_print("nms_dynamic_suit_voice_pipeline.py: Watching for file access...")
 
-    while tray_ui.running:
+    while wtray_ui.running:
         for f3 in config.mod_dir.glob("*.wem"):
             try:
                 current_atime = f3.stat().st_atime
@@ -31,20 +31,21 @@ def watch_wems(tray_ui):
                     update_access_time_to_match_newfile(moved_file, access_times)
                     debug_print(f"nms_dynamic_suit_voice_pipeline.py: {wem_id} access time updated. Returning to Watching.")
 
-            except Exception as e:
-                debug_print(f"nms_dynamic_suit_voice_pipeline.py:  Error handling {f3.name}: {e}")
+            except Exception as w_e:
+                debug_print(f"nms_dynamic_suit_voice_pipeline.py:  Error handling {f3.name}: {w_e}")
 
         time.sleep(config.check_interval)
 
 
 if __name__ == "__main__":
+
     try:
         tray_ui = TrayUI(config, watch_wems)
         debug_print("nms_dynamic_suit_voice_pipeline.py: Watcher Started...")
         tray_ui.run()
+
     except Exception as e:
         import traceback
         from debug.logging_utils import logger
-        logger.error("Unhandled exception in TrayUI:")
+        logger.error(f"Unhandled exception in TrayUI: {e}")
         logger.error(traceback.format_exc())
-
