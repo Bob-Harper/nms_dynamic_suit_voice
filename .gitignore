@@ -6,3 +6,15 @@ __pycache__/
 *.pyc
 *.log
 /cache/tmp_wav_dir/*
+/cache/tmp_quick_dir/*
+debug/
+desktop.ini
+
+# Ignore all model-related stuff
+assets/qwen3_06b_q4/
+assets/qwen3_17b_q8/
+assets/qwen3_4b_q8/
+
+# But keep icons/images
+!assets/**/*.png
+!assets/**/*.ico
