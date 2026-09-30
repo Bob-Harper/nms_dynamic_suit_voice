@@ -1,0 +1,2929 @@
+<!--File Hand Edited by Bob Harper version (1.0)--> 
+<!-- TkNoiseGridData height offset needs to be 0 in relation to the value for TkNoiseUberLayerData --> 
+<!-- Assumedly to take into account the default Beach height which is 0 --> 
+<!-- Otherwise the resource deposit is truncated or reoved entirely if there is no overlap. --> 
+<!-- TurbulenceNoiseLayer appears to set where the resource is allowed to exist --> 
+<!-- TkNoiseGridData appears to set the actual size and shape of the resource deposit --> 
+<!-- Not all biomes are affected. This seems to only affect specific sub-biomes at this time --> 
+<!-- Research into finding the correct names and parameters for ALL biomes is ongoing. --> 
+<!-- Resource names are apparently re-purposed as the names in use are for elements no longer in the game. --> 
+<!-- Original game values for TkNoiseGridData is 0, TkNoiseUberLayerData is 0 -->
+<?xml version='1.0' encoding='utf0'?>
+<Data template="cTkVoxelGeneratorSettingsArray">
+<Property name="TerrainSettings">
+    <Property name="FloatingIslands" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="GrandCanyon" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="MountainRavines" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="HugeArches" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="Alien" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="Craters" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="Caverns" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="Alpine" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="LilyPad" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="Desert" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="WaterworldPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="FloatingIslandsPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="GrandCanyonPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="MountainRavinesPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="HugeArchesPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="AlienPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="CratersPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="CavernsPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="AlpinePrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="LilyPadPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="DesertPrime" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="FloatingIslandsPurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="GrandCanyonPurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="MountainRavinesPurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="HugeArchesPurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="AlienPurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="CratersPurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="CavernsPurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="AlpinePurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="LilyPadPurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+    <Property name="DesertPurple" value="TkVoxelGeneratorSettingsElement">
+        <Property name="Min" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+        <Property name="Max" value="TkVoxelGeneratorData">
+            <Property name="GridLayers">
+               <Property name="Resources_Heridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Iridium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Copper" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Nickel" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Aluminium" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Gold" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+               <Property name="Resources_Emeril" value="TkNoiseGridData">
+                   <Property name="HeightOffset" value="-16" />
+                   <Property name="TurbulenceNoiseLayer" value="TkNoiseUberLayerData">
+                       <Property name="HeightOffset" value="-8" />
+                   </Property>
+               </Property>
+            </Property>
+        </Property>
+    </Property>
+  </Property>
+</Data>

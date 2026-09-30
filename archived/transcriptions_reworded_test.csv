@@ -1,0 +1,15 @@
+WEM number,Original,Seed,Reworded,Tone,Model_Seed,Model
+330331555,Units Received,You did not receive the  maximum return possible on that transaction.,You received a limited return on that transaction.,bored,524837,qwen2.5:0.5b
+980411923,Product Received,An item has been added to your inventory.,A product or item has been delivered and added to your inventory.,suspicious,8860177,qwen2.5:0.5b
+774834164,Weather Update: Storm Clearing,The storm is over and weather conditions are stabilizing.,"The storm has ended, and the weather is now in a stable state.",bored,320095,qwen2.5:0.5b
+105331281,Component Repaired,You have repaired a damaged equipment component with great skill.,You have successfully repaired the damaged equipment component.,amused,1531358,qwen2.5:0.5b
+245522736,Enemy Missile Inbound,a missile is en route to a ship you are to protect.	,"A missile has already departed from your jurisdiction, and it is now on its way towards the civilian freighter you are tasked with protecting.",bored,3220061,qwen2.5:0.5b
+247183138,Thermal Protection Falling,your spacesuit disagrees with your idea of what is comfortable,"Your spacesuit does not align with your preference for comfort. It's essential to find a suit that suits both your physical and mental needs, including temperature protection capabilities.",sarcastic,3685875,qwen2.5:0.5b
+1032826641,Weather Warning: Incoming Storm,nature is preparing a tantrum,nature is preparing for a storm.,amused,3696618,qwen2.5:0.5b
+792296351,Technology Recharged,one less useless chunk of tech,One less useless chunk of tech is now functioning properly.,bored,7514080,qwen2.5:0.5b
+656990144,Extreme Sentinel Planet,prepare for trouble if seen,"If you are in a location where hostile Sentinels patrol, be prepared for potential trouble.",suspicious,53997,qwen2.5:0.5b
+780959188,No Free Slots In Suit Inventory, your storage is full up of random stuffs,"Your storage is now almost empty, and I am about to run out of things.",bored,9612018,qwen2.5:0.5b
+240393094,Warning: Sentinel Drones Activated,Sentinel drones are now active and heading your way,Multiple hostile drones are currently approaching your position.,professional,2608406,qwen2.5:0.5b
+884631197,Weapon Charge Depleted," keep clicking the trigger, see what happens.",Click on the trigger again to recharge the weapon.,suspicious,5420823,qwen2.5:0.5b
+386328035,Hostile Scan Detected,An illegal scanning frequency has been detected and your cargo manifest is being downloaded by an unknown source.,"An enemy ship is actively scanning your cargo to find valuables. This is a threat in progress, urgent action required.",amused,2900890,qwen2.5:0.5b
+396681446,Nearby toxins detected,"Corrosive toxins are attacking your suit integrity, filters are damaged.",Environmental pollutants are eroding the effectiveness of your suit's filtration system.,professional,380736,qwen2.5:0.5b

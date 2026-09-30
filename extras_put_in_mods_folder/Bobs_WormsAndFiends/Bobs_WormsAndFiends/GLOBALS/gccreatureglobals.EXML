@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Data template="cGcCreatureGlobals">	
+	<Property name="SandWormChangeDirectionTime" value="0.001000" />
+	<Property name="SandWormSteerAdjustTime" value="0.200000" />
+	<Property name="SandWormMaxSteer" value="10.000000" />
+	<Property name="SandWormMaxHeightAdjust" value="450.000000" />
+	<Property name="SandWormJumpHeight" value="-15.000000" />
+	<Property name="SandWormJumpTime" value="0.010000" />
+	<Property name="SandWormSubmergeDepth" value="1.400000" />
+	<Property name="SandWormSubmergeTime" value="1.000000" />
+	<Property name="SandWormSurfaceTime" value="4.000000" />
+	<Property name="SandWormMaxJumps" value="10" />
+	<Property name="SandWormDespawnDist" value="1500.000000" />
+	<Property name="SandWormSpawnTimer" value="130.000000" />
+	<Property name="SandWormSpawnChanceMin" value="0.010000" />
+	<Property name="SandWormSpawnChanceMax" value="0.200000" />
+	<Property name="SandWormSpawnChanceInfested" value="1.000000" />
+	<Property name="AllowSleeping" value="True"/>
+	<Property name="FiendHealth" value="10" />
+	<Property name="FiendMaxEngaged" value="30" />
+	<Property name="FiendMaxAttackers" value="20" />	
+	<Property name="MaxFiendsToSpawn" value="30" />
+</Data>

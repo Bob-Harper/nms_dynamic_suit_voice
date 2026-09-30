@@ -1,0 +1,2040 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--File created using MBINCompiler version (6.01.0.2)-->
+<!--File hand modified by Bob Harper-->
+<Data template="cGcRealityManagerData">	
+	<Property name="TradeSettings" value="GcTradeSettings">
+		<Property name="SpaceStation" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="CASING" _index="0" />
+				<Property name="AlwaysPresentProducts" value="POWERCELL" _index="1" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="JELLY" _index="0" />
+				<Property name="OptionalProducts" value="ALLOY1" _index="1" />
+				<Property name="OptionalProducts" value="ALLOY2" _index="2" />
+				<Property name="OptionalProducts" value="ALLOY4" _index="3" />
+				<Property name="OptionalProducts" value="ALLOY5" _index="4" />
+				<Property name="OptionalProducts" value="NANOTUBES" _index="5" />
+				<Property name="OptionalProducts" value="CARBON_SEAL" _index="6" />
+				<Property name="OptionalProducts" value="BIO" _index="7" />
+				<Property name="OptionalProducts" value="MIRROR" _index="8" />
+				<Property name="OptionalProducts" value="MAGNET" _index="9" />
+				<Property name="OptionalProducts" value="COMPUTER" _index="10" />
+				<Property name="OptionalProducts" value="HYDRALIC" _index="11" />
+				<Property name="OptionalProducts" value="MICROCHIP" _index="12" />
+				<Property name="OptionalProducts" value="TECH_COMP" _index="13" />
+				<Property name="OptionalProducts" value="PRODFUEL2" _index="14" />
+				<Property name="OptionalProducts" value="GRENFUEL1" _index="15" />				
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="9" />
+			<Property name="MaxItemsForSale" value="16" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="1.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-1.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="1.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-1.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="10" />
+				<Property name="Average" value="40" />
+				<Property name="Wealthy" value="80" />
+				<Property name="Pirate" value="40" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="40" />
+				<Property name="Average" value="80" />
+				<Property name="Wealthy" value="180" />
+				<Property name="Pirate" value="80" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="3" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="6" />
+				<Property name="Pirate" value="35" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="5" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="4" />
+				<Property name="Wealthy" value="5" />
+				<Property name="Pirate" value="4" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="Shop" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="CASING" _index="0" />
+				<Property name="AlwaysPresentProducts" value="LAUNCHFUEL" _index="1" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="NAV_DATA" _index="0" />
+				<Property name="OptionalProducts" value="NAV_DATA_DROP" _index="1" />
+				<Property name="OptionalProducts" value="JELLY" _index="2" />
+				<Property name="OptionalProducts" value="ALLOY1" _index="3" />
+				<Property name="OptionalProducts" value="ALLOY2" _index="4" />
+				<Property name="OptionalProducts" value="ALLOY4" _index="5" />
+				<Property name="OptionalProducts" value="ALLOY5" _index="6" />
+				<Property name="OptionalProducts" value="NANOTUBES" _index="7" />
+				<Property name="OptionalProducts" value="CARBON_SEAL" _index="8" />
+				<Property name="OptionalProducts" value="BIO" _index="9" />
+				<Property name="OptionalProducts" value="MIRROR" _index="10" />
+				<Property name="OptionalProducts" value="MAGNET" _index="11" />
+				<Property name="OptionalProducts" value="COMPUTER" _index="12" />
+				<Property name="OptionalProducts" value="MICROCHIP" _index="13" />
+				<Property name="OptionalProducts" value="PRODFUEL2" _index="14" />
+				<Property name="OptionalProducts" value="POWERCELL" _index="15" />
+				<Property name="OptionalProducts" value="HYDRALIC" _index="16" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarte>rProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="9" />
+			<Property name="MaxItemsForSale" value="15" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="1.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-1.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="1.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-1.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="10" />
+				<Property name="Average" value="40" />
+				<Property name="Wealthy" value="80" />
+				<Property name="Pirate" value="10" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="40" />
+				<Property name="Average" value="80" />
+				<Property name="Wealthy" value="180" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="5" />
+				<Property name="Pirate" value="2" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="4" />
+				<Property name="Wealthy" value="5" />
+				<Property name="Pirate" value="4" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.300000" />
+				<Property name="Average" value="0.300000" />
+				<Property name="Wealthy" value="0.300000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="TechShop" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="CARBON_SEAL" _index="0" />
+				<Property name="AlwaysPresentProducts" value="AM_HOUSING" _index="1" />
+				<Property name="AlwaysPresentProducts" value="MICROCHIP" _index="2" />
+				<Property name="AlwaysPresentProducts" value="TECH_COMP" _index="3" />
+				<Property name="AlwaysPresentProducts" value="BIO" _index="4" />
+				<Property name="AlwaysPresentProducts" value="MIRROR" _index="5" />
+				<Property name="AlwaysPresentProducts" value="MAGNET" _index="6" />
+				<Property name="AlwaysPresentProducts" value="COMPUTER" _index="7" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="BP_SALVAGE" _index="0" />
+				<Property name="OptionalProducts" value="COMPOUND2" _index="1" />
+				<Property name="OptionalProducts" value="REACTION3" _index="2" />
+				<Property name="OptionalProducts" value="JELLY" _index="3" />
+				<Property name="OptionalProducts" value="FARMPROD3" _index="4" />
+				<Property name="OptionalProducts" value="NAV_DATA" _index="5" />
+				<Property name="OptionalProducts" value="NAV_DATA_DROP" _index="6" />
+				<Property name="OptionalProducts" value="HYDRALIC" _index="7" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="6" />
+			<Property name="MaxItemsForSale" value="12" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="10.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-10.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="3" />
+				<Property name="Average" value="4" />
+				<Property name="Wealthy" value="5" />
+				<Property name="Pirate" value="4" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1000" />
+				<Property name="Average" value="1000" />
+				<Property name="Wealthy" value="1000" />
+				<Property name="Pirate" value="1000" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="2" />
+				<Property name="Wealthy" value="2" />
+				<Property name="Pirate" value="2" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="4" />
+				<Property name="Average" value="4" />
+				<Property name="Wealthy" value="4" />
+				<Property name="Pirate" value="4" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="ShipTechSpecialist" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="SHIP_CORE_C" _index="0" />
+				<Property name="AlwaysPresentProducts" value="SHIP_CORE_B" _index="1" />
+				<Property name="AlwaysPresentProducts" value="SHIP_CORE_A" _index="2" />
+				<Property name="AlwaysPresentProducts" value="SHIP_CORE_S" _index="3" />
+				<Property name="AlwaysPresentProducts" value="U_LAUNCH1" _index="4" />
+				<Property name="AlwaysPresentProducts" value="U_PULSE1" _index="5" />
+				<Property name="AlwaysPresentProducts" value="U_HYPER1" _index="6" />
+				<Property name="AlwaysPresentProducts" value="U_SHIPSHIELD1" _index="7" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="U_SHIPGUN1" _index="0" />
+				<Property name="OptionalProducts" value="U_SHIPLAS1" _index="1" />
+				<Property name="OptionalProducts" value="U_SHIPSHOT1" _index="2" />
+				<Property name="OptionalProducts" value="U_SHIPMINI1" _index="3" />
+				<Property name="OptionalProducts" value="U_SHIPBLOB1" _index="4" />
+				<Property name="OptionalProducts" value="U_LAUNCH2" _index="5" />
+				<Property name="OptionalProducts" value="U_LAUNCH3" _index="6" />
+				<Property name="OptionalProducts" value="U_LAUNCH4" _index="7" />
+				<Property name="OptionalProducts" value="U_PULSE2" _index="8" />
+				<Property name="OptionalProducts" value="U_PULSE3" _index="9" />
+				<Property name="OptionalProducts" value="U_PULSE4" _index="10" />
+				<Property name="OptionalProducts" value="U_HYPER2" _index="11" />
+				<Property name="OptionalProducts" value="U_HYPER3" _index="12" />
+				<Property name="OptionalProducts" value="U_HYPER4" _index="13" />
+				<Property name="OptionalProducts" value="U_SHIPSHIELD2" _index="14" />
+				<Property name="OptionalProducts" value="U_SHIPSHIELD3" _index="15" />
+				<Property name="OptionalProducts" value="U_SHIPSHIELD4" _index="16" />
+				<Property name="OptionalProducts" value="U_SHIPGUN2" _index="17" />
+				<Property name="OptionalProducts" value="U_SHIPGUN3" _index="18" />
+				<Property name="OptionalProducts" value="U_SHIPGUN4" _index="19" />
+				<Property name="OptionalProducts" value="U_SHIPLAS2" _index="20" />
+				<Property name="OptionalProducts" value="U_SHIPLAS3" _index="21" />
+				<Property name="OptionalProducts" value="U_SHIPLAS4" _index="22" />
+				<Property name="OptionalProducts" value="U_SHIPSHOT2" _index="23" />
+				<Property name="OptionalProducts" value="U_SHIPSHOT3" _index="24" />
+				<Property name="OptionalProducts" value="U_SHIPSHOT4" _index="25" />
+				<Property name="OptionalProducts" value="U_SHIPMINI2" _index="26" />
+				<Property name="OptionalProducts" value="U_SHIPMINI3" _index="27" />
+				<Property name="OptionalProducts" value="U_SHIPMINI4" _index="28" />
+				<Property name="OptionalProducts" value="U_SHIPBLOB2" _index="29" />
+				<Property name="OptionalProducts" value="U_SHIPBLOB3" _index="30" />
+				<Property name="OptionalProducts" value="U_SHIPBLOB4" _index="31" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="16" />
+			<Property name="MaxItemsForSale" value="24" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="5.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-5.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="SuitTechSpecialist" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="U_ENERGY1" _index="0" />
+				<Property name="AlwaysPresentProducts" value="U_JETBOOST1" _index="1" />
+				<Property name="AlwaysPresentProducts" value="U_SHIELDBOOST1" _index="2" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="U_UNW1" _index="0" />
+				<Property name="OptionalProducts" value="U_RAD1" _index="1" />
+				<Property name="OptionalProducts" value="U_TOX1" _index="2" />
+				<Property name="OptionalProducts" value="U_COLDPROT1" _index="3" />
+				<Property name="OptionalProducts" value="U_HOTPROT1" _index="4" />
+				<Property name="OptionalProducts" value="U_ENERGY2" _index="5" />
+				<Property name="OptionalProducts" value="U_ENERGY3" _index="6" />
+				<Property name="OptionalProducts" value="U_JETBOOST2" _index="7" />
+				<Property name="OptionalProducts" value="U_JETBOOST3" _index="8" />
+				<Property name="OptionalProducts" value="U_JETBOOST4" _index="9" />
+				<Property name="OptionalProducts" value="U_SHIELDBOOST2" _index="10" />
+				<Property name="OptionalProducts" value="U_SHIELDBOOST3" _index="11" />
+				<Property name="OptionalProducts" value="U_SHIELDBOOST4" _index="12" />
+				<Property name="OptionalProducts" value="U_TOX2" _index="13" />
+				<Property name="OptionalProducts" value="U_TOX3" _index="14" />
+				<Property name="OptionalProducts" value="U_RAD2" _index="15" />
+				<Property name="OptionalProducts" value="U_RAD3" _index="16" />
+				<Property name="OptionalProducts" value="U_COLDPROT2" _index="17" />
+				<Property name="OptionalProducts" value="U_COLDPROT3" _index="18" />
+				<Property name="OptionalProducts" value="U_HOTPROT2" _index="19" />
+				<Property name="OptionalProducts" value="U_HOTPROT3" _index="20" />
+				<Property name="OptionalProducts" value="U_UNW2" _index="21" />
+				<Property name="OptionalProducts" value="U_UNW3" _index="22" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="12" />
+			<Property name="MaxItemsForSale" value="18" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="20.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-10.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="10.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-20.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="WeapTechSpecialist" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="U_LASER1" _index="0" />
+				<Property name="AlwaysPresentProducts" value="U_SCANNER1" _index="1" />
+				<Property name="AlwaysPresentProducts" value="U_BOLT1" _index="2" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="U_TGRENADE1" _index="0" />
+				<Property name="OptionalProducts" value="U_GRENADE1" _index="1" />
+				<Property name="OptionalProducts" value="U_CANNON1" _index="2" />
+				<Property name="OptionalProducts" value="U_SMG1" _index="3" />
+				<Property name="OptionalProducts" value="U_SHOTGUN1" _index="4" />
+				<Property name="OptionalProducts" value="U_RAIL1" _index="5" />
+				<Property name="OptionalProducts" value="U_LASER2" _index="6" />
+				<Property name="OptionalProducts" value="U_LASER3" _index="7" />
+				<Property name="OptionalProducts" value="U_LASER4" _index="8" />
+				<Property name="OptionalProducts" value="U_SCANNER2" _index="9" />
+				<Property name="OptionalProducts" value="U_SCANNER3" _index="10" />
+				<Property name="OptionalProducts" value="U_SCANNER4" _index="11" />
+				<Property name="OptionalProducts" value="U_BOLT2" _index="12" />
+				<Property name="OptionalProducts" value="U_BOLT3" _index="13" />
+				<Property name="OptionalProducts" value="U_BOLT4" _index="14" />
+				<Property name="OptionalProducts" value="U_GRENADE2" _index="15" />
+				<Property name="OptionalProducts" value="U_GRENADE3" _index="16" />
+				<Property name="OptionalProducts" value="U_GRENADE4" _index="17" />
+				<Property name="OptionalProducts" value="U_TGRENADE2" _index="18" />
+				<Property name="OptionalProducts" value="U_TGRENADE3" _index="19" />
+				<Property name="OptionalProducts" value="U_TGRENADE4" _index="20" />
+				<Property name="OptionalProducts" value="U_RAIL2" _index="21" />
+				<Property name="OptionalProducts" value="U_RAIL3" _index="22" />
+				<Property name="OptionalProducts" value="U_RAIL4" _index="23" />
+				<Property name="OptionalProducts" value="U_SHOTGUN2" _index="24" />
+				<Property name="OptionalProducts" value="U_SHOTGUN3" _index="25" />
+				<Property name="OptionalProducts" value="U_SHOTGUN4" _index="26" />
+				<Property name="OptionalProducts" value="U_SMG2" _index="27" />
+				<Property name="OptionalProducts" value="U_SMG3" _index="28" />
+				<Property name="OptionalProducts" value="U_SMG4" _index="29" />
+				<Property name="OptionalProducts" value="U_CANNON2" _index="30" />
+				<Property name="OptionalProducts" value="U_CANNON3" _index="31" />
+				<Property name="OptionalProducts" value="U_CANNON4" _index="32" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="12" />
+			<Property name="MaxItemsForSale" value="18" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="5.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-5.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="VehicleTechSpecialist" value="GcTradeData">
+			<Property name="AlwaysPresentProducts" />
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="U_EXOGUN1" _index="0" />
+				<Property name="OptionalProducts" value="U_EXO_ENG1" _index="1" />
+				<Property name="OptionalProducts" value="U_EXOLAS1" _index="2" />
+				<Property name="OptionalProducts" value="U_EXOBOOST1" _index="3" />
+				<Property name="OptionalProducts" value="U_EXO_SUB1" _index="4" />
+				<Property name="OptionalProducts" value="U_EXO_SUBGUN1" _index="5" />
+				<Property name="OptionalProducts" value="U_MECH_ENG2" _index="6" />
+				<Property name="OptionalProducts" value="U_MECHLAS2" _index="7" />
+				<Property name="OptionalProducts" value="U_MECHGUN2" _index="8" />
+				<Property name="OptionalProducts" value="U_MECHFLAME2" _index="9" />
+				<Property name="OptionalProducts" value="U_EXOGUN2" _index="10" />
+				<Property name="OptionalProducts" value="U_EXOGUN3" _index="11" />
+				<Property name="OptionalProducts" value="U_EXOGUN4" _index="12" />
+				<Property name="OptionalProducts" value="U_EXOLAS2" _index="13" />
+				<Property name="OptionalProducts" value="U_EXOLAS3" _index="14" />
+				<Property name="OptionalProducts" value="U_EXOLAS4" _index="15" />
+				<Property name="OptionalProducts" value="U_EXOBOOST2" _index="16" />
+				<Property name="OptionalProducts" value="U_EXOBOOST3" _index="17" />
+				<Property name="OptionalProducts" value="U_EXOBOOST4" _index="18" />
+				<Property name="OptionalProducts" value="U_EXO_ENG2" _index="19" />
+				<Property name="OptionalProducts" value="U_EXO_ENG3" _index="20" />
+				<Property name="OptionalProducts" value="U_EXO_ENG4" _index="21" />
+				<Property name="OptionalProducts" value="U_EXO_SUB2" _index="22" />
+				<Property name="OptionalProducts" value="U_EXO_SUB3" _index="23" />
+				<Property name="OptionalProducts" value="U_EXO_SUB4" _index="24" />
+				<Property name="OptionalProducts" value="U_EXO_SUBGUN2" _index="25" />
+				<Property name="OptionalProducts" value="U_EXO_SUBGUN3" _index="26" />
+				<Property name="OptionalProducts" value="U_EXO_SUBGUN4" _index="27" />
+				<Property name="OptionalProducts" value="U_MECHGUN3" _index="28" />
+				<Property name="OptionalProducts" value="U_MECHGUN4" _index="29" />
+				<Property name="OptionalProducts" value="U_MECH_ENG4" _index="30" />
+				<Property name="OptionalProducts" value="U_MECH_ENG3" _index="31" />
+				<Property name="OptionalProducts" value="U_MECHLAS4" _index="32" />
+				<Property name="OptionalProducts" value="U_MECHLAS3" _index="33" />
+				<Property name="OptionalProducts" value="U_MECHFLAME3" _index="34" />
+				<Property name="OptionalProducts" value="U_MECHFLAME4" _index="35" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="12" />
+			<Property name="MaxItemsForSale" value="12" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="0.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="0.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="0.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="0.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="NexusTechSpecialist" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="U_LAUNCH1" _index="0" />
+				<Property name="AlwaysPresentProducts" value="U_PULSE1" _index="1" />
+				<Property name="AlwaysPresentProducts" value="U_HYPER1" _index="2" />
+				<Property name="AlwaysPresentProducts" value="U_LASER1" _index="3" />
+				<Property name="AlwaysPresentProducts" value="U_SCANNER1" _index="4" />
+				<Property name="AlwaysPresentProducts" value="U_ENERGY1" _index="5" />
+				<Property name="AlwaysPresentProducts" value="U_JETBOOST1" _index="6" />
+				<Property name="AlwaysPresentProducts" value="U_SHIELDBOOST1" _index="7" />
+				<Property name="AlwaysPresentProducts" value="U_RAD1" _index="8" />
+				<Property name="AlwaysPresentProducts" value="U_TOX1" _index="9" />
+				<Property name="AlwaysPresentProducts" value="U_COLDPROT1" _index="10" />
+				<Property name="AlwaysPresentProducts" value="U_HOTPROT1" _index="11" />
+				<Property name="AlwaysPresentProducts" value="U_SHIPSHIELD1" _index="12" />
+				<Property name="AlwaysPresentProducts" value="U_BOLT1" _index="13" />
+				<Property name="AlwaysPresentProducts" value="U_SHIPGUN1" _index="14" />
+				<Property name="AlwaysPresentProducts" value="U_EXOBOOST1" _index="15" />
+				<Property name="AlwaysPresentProducts" value="U_UNW1" _index="16" />
+				<Property name="AlwaysPresentProducts" value="U_EXO_ENG1" _index="17" />
+				<Property name="AlwaysPresentProducts" value="U_RAIL1" _index="18" />
+				<Property name="AlwaysPresentProducts" value="U_SHOTGUN1" _index="19" />
+				<Property name="AlwaysPresentProducts" value="U_EXOGUN1" _index="20" />
+				<Property name="AlwaysPresentProducts" value="U_SHIPLAS1" _index="21" />
+				<Property name="AlwaysPresentProducts" value="U_TGRENADE1" _index="22" />
+				<Property name="AlwaysPresentProducts" value="U_GRENADE1" _index="23" />
+				<Property name="AlwaysPresentProducts" value="U_SHIPSHOT1" _index="24" />
+				<Property name="AlwaysPresentProducts" value="U_SHIPMINI1" _index="25" />
+				<Property name="AlwaysPresentProducts" value="U_SHIPBLOB1" _index="26" />
+				<Property name="AlwaysPresentProducts" value="U_SMG1" _index="27" />
+				<Property name="AlwaysPresentProducts" value="U_CANNON1" _index="28" />
+				<Property name="AlwaysPresentProducts" value="U_EXO_SUB1" _index="29" />
+				<Property name="AlwaysPresentProducts" value="U_MECH_ENG2" _index="30" />
+				<Property name="AlwaysPresentProducts" value="U_EXO_SUBGUN1" _index="31" />
+				<Property name="AlwaysPresentProducts" value="U_MECHGUN2" _index="32" />
+				<Property name="AlwaysPresentProducts" value="U_MECHLAS2" _index="33" />
+				<Property name="AlwaysPresentProducts" value="U_MECHFLAME2" _index="34" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts" />
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="34" />
+			<Property name="MaxItemsForSale" value="34" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="0.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="0.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="0.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="0.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="Ship" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="LAUNCHFUEL" _index="0" />
+			</Property>
+			<Property name="AlwaysPresentSubstances">
+				<Property name="AlwaysPresentSubstances" value="ASTEROID1" _index="0" />
+			</Property>
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="HYPERFUEL1" _index="0" />
+				<Property name="OptionalProducts" value="ANTIMATTER" _index="1" />
+				<Property name="OptionalProducts" value="NAV_DATA" _index="2" />
+				<Property name="OptionalProducts" value="POLICE_TOKEN" _index="3" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_TRA" _index="8" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_EXP" _index="9" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_MIN" _index="10" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_COM" _index="11" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_SPD" _index="12" />
+				<Property name="OptionalProducts" value="TRA_COMMODITY1" _index="13" />
+				<Property name="OptionalProducts" value="TRA_COMPONENT1" _index="14" />
+				<Property name="OptionalProducts" value="TRA_ENERGY1" _index="15" />
+				<Property name="OptionalProducts" value="TRA_EXOTICS1" _index="16" />
+				<Property name="OptionalProducts" value="TRA_MINERALS1" _index="17" />
+				<Property name="OptionalProducts" value="TRA_TECH1" _index="18" />
+			</Property>
+			<Property name="OptionalSubstances">
+				<Property name="OptionalSubstances" value="ASTEROID2" _index="0" />
+				<Property name="OptionalSubstances" value="ASTEROID3" _index="1" />
+			</Property>
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="6" />
+			<Property name="MaxItemsForSale" value="6" />
+			<Property name="PercentageOfItemsAreProducts" value="0.900000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="5.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-5.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="6" />
+				<Property name="Pirate" value="5" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="200" />
+				<Property name="Average" value="200" />
+				<Property name="Wealthy" value="200" />
+				<Property name="Pirate" value="200" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="ExpShip" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="EXP_CURIO1" _index="0" />
+				<Property name="AlwaysPresentProducts" value="EXP_CURIO2" _index="1" />
+				<Property name="AlwaysPresentProducts" value="LAUNCHFUEL" _index="2" />
+			</Property>
+			<Property name="AlwaysPresentSubstances">
+				<Property name="AlwaysPresentSubstances" value="ROCKETSUB" _index="0" />
+			</Property>
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="NAV_DATA" _index="0" />
+				<Property name="OptionalProducts" value="NAV_DATA_DROP" _index="1" />
+				<Property name="OptionalProducts" value="EXP_CURIO1" _index="2" />
+				<Property name="OptionalProducts" value="EXP_CURIO2" _index="3" />
+				<Property name="OptionalProducts" value="HYPERFUEL1" _index="4" />
+				<Property name="OptionalProducts" value="ANTIMATTER" _index="5" />
+				<Property name="OptionalProducts" value="NAV_DATA" _index="6" />
+				<Property name="OptionalProducts" value="POLICE_TOKEN" _index="7" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_TRA" _index="12" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_EXP" _index="13" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_MIN" _index="14" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_COM" _index="15" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_SPD" _index="16" />
+				<Property name="OptionalProducts" value="TRA_COMMODITY1" _index="17" />
+				<Property name="OptionalProducts" value="TRA_COMPONENT1" _index="18" />
+				<Property name="OptionalProducts" value="TRA_ENERGY1" _index="19" />
+				<Property name="OptionalProducts" value="TRA_EXOTICS1" _index="20" />
+				<Property name="OptionalProducts" value="TRA_MINERALS1" _index="21" />
+				<Property name="OptionalProducts" value="TRA_TECH1" _index="22" />
+			</Property>
+			<Property name="OptionalSubstances">
+				<Property name="OptionalSubstances" value="ASTEROID1" _index="0" />
+				<Property name="OptionalSubstances" value="ASTEROID2" _index="1" />
+				<Property name="OptionalSubstances" value="ASTEROID3" _index="2" />
+			</Property>
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="6" />
+			<Property name="MaxItemsForSale" value="6" />
+			<Property name="PercentageOfItemsAreProducts" value="0.900000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="10.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-10.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="6" />
+				<Property name="Pirate" value="5" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="200" />
+				<Property name="Average" value="200" />
+				<Property name="Wealthy" value="200" />
+				<Property name="Pirate" value="200" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="TraShip" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="TRA_CURIO1" _index="0" />
+				<Property name="AlwaysPresentProducts" value="TRA_CURIO2" _index="1" />
+				<Property name="AlwaysPresentProducts" value="LAUNCHFUEL" _index="2" />
+			</Property>
+			<Property name="AlwaysPresentSubstances">
+				<Property name="AlwaysPresentSubstances" value="ROCKETSUB" _index="0" />
+			</Property>
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="NAV_DATA" _index="0" />
+				<Property name="OptionalProducts" value="NAV_DATA_DROP" _index="1" />
+				<Property name="OptionalProducts" value="TRA_CURIO1" _index="2" />
+				<Property name="OptionalProducts" value="TRA_CURIO2" _index="3" />
+				<Property name="OptionalProducts" value="HYPERFUEL1" _index="4" />
+				<Property name="OptionalProducts" value="ANTIMATTER" _index="5" />
+				<Property name="OptionalProducts" value="NAV_DATA" _index="6" />
+				<Property name="OptionalProducts" value="POLICE_TOKEN" _index="7" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_TRA" _index="12" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_EXP" _index="13" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_MIN" _index="14" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_COM" _index="15" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_SPD" _index="16" />
+				<Property name="OptionalProducts" value="TRA_COMMODITY1" _index="17" />
+				<Property name="OptionalProducts" value="TRA_COMPONENT1" _index="18" />
+				<Property name="OptionalProducts" value="TRA_ENERGY1" _index="19" />
+				<Property name="OptionalProducts" value="TRA_EXOTICS1" _index="20" />
+				<Property name="OptionalProducts" value="TRA_MINERALS1" _index="21" />
+				<Property name="OptionalProducts" value="TRA_TECH1" _index="22" />
+				<Property name="OptionalProducts" value="NIPNIPBUDS" _index="23" />
+			</Property>
+			<Property name="OptionalSubstances">
+				<Property name="OptionalSubstances" value="ASTEROID1" _index="0" />
+				<Property name="OptionalSubstances" value="ASTEROID2" _index="1" />
+				<Property name="OptionalSubstances" value="ASTEROID3" _index="2" />
+			</Property>
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="6" />
+			<Property name="MaxItemsForSale" value="6" />
+			<Property name="PercentageOfItemsAreProducts" value="0.900000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="10.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-10.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="6" />
+				<Property name="Pirate" value="5" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="200" />
+				<Property name="Average" value="200" />
+				<Property name="Wealthy" value="200" />
+				<Property name="Pirate" value="200" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="WarShip" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="WAR_CURIO1" _index="0" />
+				<Property name="AlwaysPresentProducts" value="WAR_CURIO2" _index="1" />
+				<Property name="AlwaysPresentProducts" value="LAUNCHFUEL" _index="2" />
+			</Property>
+			<Property name="AlwaysPresentSubstances">
+				<Property name="AlwaysPresentSubstances" value="ROBOT1" _index="0" />
+			</Property>
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="NAV_DATA" _index="0" />
+				<Property name="OptionalProducts" value="NAV_DATA_DROP" _index="1" />
+				<Property name="OptionalProducts" value="WAR_CURIO1" _index="2" />
+				<Property name="OptionalProducts" value="WAR_CURIO2" _index="3" />
+				<Property name="OptionalProducts" value="HYPERFUEL1" _index="4" />
+				<Property name="OptionalProducts" value="ANTIMATTER" _index="5" />
+				<Property name="OptionalProducts" value="NAV_DATA" _index="6" />
+				<Property name="OptionalProducts" value="POLICE_TOKEN" _index="7" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_TRA" _index="12" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_EXP" _index="13" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_MIN" _index="14" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_COM" _index="15" />
+				<Property name="OptionalProducts" value="FRIG_BOOST_SPD" _index="16" />
+				<Property name="OptionalProducts" value="TRA_COMMODITY1" _index="17" />
+				<Property name="OptionalProducts" value="TRA_COMPONENT1" _index="18" />
+				<Property name="OptionalProducts" value="TRA_ENERGY1" _index="19" />
+				<Property name="OptionalProducts" value="TRA_EXOTICS1" _index="20" />
+				<Property name="OptionalProducts" value="TRA_MINERALS1" _index="21" />
+				<Property name="OptionalProducts" value="TRA_TECH1" _index="22" />
+			</Property>
+			<Property name="OptionalSubstances">
+				<Property name="OptionalSubstances" value="ROCKETSUB" _index="0" />
+				<Property name="OptionalSubstances" value="ASTEROID1" _index="1" />
+				<Property name="OptionalSubstances" value="ASTEROID2" _index="2" />
+				<Property name="OptionalSubstances" value="ASTEROID3" _index="3" />
+			</Property>
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="6" />
+			<Property name="MaxItemsForSale" value="6" />
+			<Property name="PercentageOfItemsAreProducts" value="0.900000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="10.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-10.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="6" />
+				<Property name="Pirate" value="5" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="200" />
+				<Property name="Average" value="200" />
+				<Property name="Wealthy" value="200" />
+				<Property name="Pirate" value="200" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="LoneExp" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="EXP_CURIO1" _index="0" />
+				<Property name="AlwaysPresentProducts" value="EXP_CURIO2" _index="1" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="NAV_DATA" _index="0" />
+				<Property name="OptionalProducts" value="NAV_DATA_DROP" _index="1" />
+				<Property name="OptionalProducts" value="EXP_CURIO1" _index="2" />
+				<Property name="OptionalProducts" value="EXP_CURIO2" _index="3" />
+				<Property name="OptionalProducts" value="HYPERFUEL1" _index="4" />
+				<Property name="OptionalProducts" value="ANTIMATTER" _index="5" />
+				<Property name="OptionalProducts" value="NAV_DATA" _index="6" />
+				<Property name="OptionalProducts" value="POLICE_TOKEN" _index="7" />
+				<Property name="OptionalProducts" value="TRA_COMMODITY1" _index="12" />
+				<Property name="OptionalProducts" value="TRA_COMPONENT1" _index="13" />
+				<Property name="OptionalProducts" value="TRA_ENERGY1" _index="14" />
+				<Property name="OptionalProducts" value="TRA_EXOTICS1" _index="15" />
+				<Property name="OptionalProducts" value="TRA_MINERALS1" _index="16" />
+				<Property name="OptionalProducts" value="TRA_TECH1" _index="17" />
+			</Property>
+			<Property name="OptionalSubstances">
+				<Property name="OptionalSubstances" value="ASTEROID1" _index="0" />
+				<Property name="OptionalSubstances" value="ASTEROID2" _index="1" />
+				<Property name="OptionalSubstances" value="ASTEROID3" _index="2" />
+			</Property>
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="6" />
+			<Property name="MaxItemsForSale" value="6" />
+			<Property name="PercentageOfItemsAreProducts" value="0.900000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="10.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-10.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="6" />
+				<Property name="Pirate" value="5" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="200" />
+				<Property name="Average" value="200" />
+				<Property name="Wealthy" value="200" />
+				<Property name="Pirate" value="200" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="LoneTra" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="TRA_CURIO1" _index="0" />
+				<Property name="AlwaysPresentProducts" value="TRA_CURIO2" _index="1" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="NAV_DATA" _index="0" />
+				<Property name="OptionalProducts" value="NAV_DATA_DROP" _index="1" />
+				<Property name="OptionalProducts" value="TRA_CURIO1" _index="2" />
+				<Property name="OptionalProducts" value="TRA_CURIO2" _index="3" />
+				<Property name="OptionalProducts" value="HYPERFUEL1" _index="4" />
+				<Property name="OptionalProducts" value="ANTIMATTER" _index="5" />
+				<Property name="OptionalProducts" value="NAV_DATA" _index="6" />
+				<Property name="OptionalProducts" value="POLICE_TOKEN" _index="7" />
+				<Property name="OptionalProducts" value="TRA_COMMODITY1" _index="12" />
+				<Property name="OptionalProducts" value="TRA_COMPONENT1" _index="13" />
+				<Property name="OptionalProducts" value="TRA_ENERGY1" _index="14" />
+				<Property name="OptionalProducts" value="TRA_EXOTICS1" _index="15" />
+				<Property name="OptionalProducts" value="TRA_MINERALS1" _index="16" />
+				<Property name="OptionalProducts" value="TRA_TECH1" _index="17" />
+				<Property name="OptionalProducts" value="NIPNIPBUDS" _index="18" />
+			</Property>
+			<Property name="OptionalSubstances">
+				<Property name="OptionalSubstances" value="ASTEROID1" _index="0" />
+				<Property name="OptionalSubstances" value="ASTEROID2" _index="1" />
+				<Property name="OptionalSubstances" value="ASTEROID3" _index="2" />
+			</Property>
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="6" />
+			<Property name="MaxItemsForSale" value="6" />
+			<Property name="PercentageOfItemsAreProducts" value="0.900000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="10.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-10.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="6" />
+				<Property name="Pirate" value="5" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="5" />
+				<Property name="Average" value="10" />
+				<Property name="Wealthy" value="25" />
+				<Property name="Pirate" value="20" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="40" />
+				<Property name="Average" value="75" />
+				<Property name="Wealthy" value="105" />
+				<Property name="Pirate" value="75" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="LoneWar" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="WAR_CURIO1" _index="0" />
+				<Property name="AlwaysPresentProducts" value="WAR_CURIO2" _index="1" />
+			</Property>
+			<Property name="AlwaysPresentSubstances">
+				<Property name="AlwaysPresentSubstances" value="ROBOT1" _index="0" />
+			</Property>
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="NAV_DATA" _index="0" />
+				<Property name="OptionalProducts" value="WAR_CURIO1" _index="1" />
+				<Property name="OptionalProducts" value="WAR_CURIO2" _index="2" />
+				<Property name="OptionalProducts" value="HYPERFUEL1" _index="3" />
+				<Property name="OptionalProducts" value="ANTIMATTER" _index="4" />
+				<Property name="OptionalProducts" value="NAV_DATA" _index="5" />
+				<Property name="OptionalProducts" value="POLICE_TOKEN" _index="6" />
+				<Property name="OptionalProducts" value="TRA_COMMODITY1" _index="11" />
+				<Property name="OptionalProducts" value="TRA_COMPONENT1" _index="12" />
+				<Property name="OptionalProducts" value="TRA_ENERGY1" _index="13" />
+				<Property name="OptionalProducts" value="TRA_EXOTICS1" _index="14" />
+				<Property name="OptionalProducts" value="TRA_MINERALS1" _index="15" />
+				<Property name="OptionalProducts" value="TRA_TECH1" _index="16" />
+			</Property>
+			<Property name="OptionalSubstances">
+				<Property name="OptionalSubstances" value="ROCKETSUB" _index="0" />
+				<Property name="OptionalSubstances" value="ASTEROID1" _index="1" />
+				<Property name="OptionalSubstances" value="ASTEROID2" _index="2" />
+				<Property name="OptionalSubstances" value="ASTEROID3" _index="3" />
+			</Property>
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="6" />
+			<Property name="MaxItemsForSale" value="6" />
+			<Property name="PercentageOfItemsAreProducts" value="0.900000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="10.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-10.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="6" />
+				<Property name="Pirate" value="5" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="200" />
+				<Property name="Average" value="200" />
+				<Property name="Wealthy" value="200" />
+				<Property name="Pirate" value="200" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="MapShop" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="STARCHART_A" _index="0" />
+				<Property name="AlwaysPresentProducts" value="STARCHART_B" _index="1" />
+				<Property name="AlwaysPresentProducts" value="STARCHART_C" _index="2" />
+				<Property name="AlwaysPresentProducts" value="STARCHART_D" _index="3" />
+				<Property name="AlwaysPresentProducts" value="CHART_TREASURE" _index="4" />
+				<Property name="AlwaysPresentProducts" value="NAV_DATA_DROP" _index="5" />
+				<Property name="AlwaysPresentProducts" value="CHART_SETTLE" _index="6" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts" />
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="7" />
+			<Property name="MaxItemsForSale" value="7" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="0.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="0.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="0.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="0.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="99" />
+				<Property name="Average" value="99" />
+				<Property name="Wealthy" value="99" />
+				<Property name="Pirate" value="99" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="99" />
+				<Property name="Average" value="99" />
+				<Property name="Wealthy" value="99" />
+				<Property name="Pirate" value="99" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1000" />
+				<Property name="Average" value="1000" />
+				<Property name="Wealthy" value="1000" />
+				<Property name="Pirate" value="1000" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="IllegalProds" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="U_LAUNCHX" _index="0" />
+				<Property name="AlwaysPresentProducts" value="U_LASERX" _index="1" />
+				<Property name="AlwaysPresentProducts" value="U_SCANNERX" _index="2" />
+				<Property name="AlwaysPresentProducts" value="U_ENERGYX" _index="3" />
+				<Property name="AlwaysPresentProducts" value="U_HAZARDX" _index="4" />
+				<Property name="AlwaysPresentProducts" value="U_JETBOOSTX" _index="5" />
+				<Property name="AlwaysPresentProducts" value="U_SHIELDBOOSTX" _index="6" />
+				<Property name="AlwaysPresentProducts" value="U_HYPERX" _index="7" />
+				<Property name="AlwaysPresentProducts" value="U_PULSEX" _index="8" />
+				<Property name="AlwaysPresentProducts" value="U_SHIPSHIELDX" _index="9" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="U_SHIPBLOBX" _index="0" />
+				<Property name="OptionalProducts" value="U_SHIPMINIX" _index="1" />
+				<Property name="OptionalProducts" value="U_SHIPSHOTX" _index="2" />
+				<Property name="OptionalProducts" value="U_SHIPLASX" _index="3" />
+				<Property name="OptionalProducts" value="U_SHIPGUNX" _index="4" />
+				<Property name="OptionalProducts" value="U_SMGX" _index="5" />
+				<Property name="OptionalProducts" value="U_SHOTGUNX" _index="6" />
+				<Property name="OptionalProducts" value="U_RAILX" _index="7" />
+				<Property name="OptionalProducts" value="U_TGRENADEX" _index="8" />
+				<Property name="OptionalProducts" value="U_GRENADEX" _index="9" />
+				<Property name="OptionalProducts" value="U_BOLTX" _index="10" />
+				<Property name="OptionalProducts" value="NIPNIPBUDS" _index="11" />
+				<Property name="OptionalProducts" value="U_CANNONX" _index="12" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="10" />
+			<Property name="MaxItemsForSale" value="14" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="5.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-5.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="3" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1000" />
+				<Property name="Average" value="1000" />
+				<Property name="Wealthy" value="1000" />
+				<Property name="Pirate" value="1000" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="Scrap" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="SCRAP_GOODS" _index="0" />
+				<Property name="AlwaysPresentProducts" value="SCRAP_TECH" _index="1" />
+				<Property name="AlwaysPresentProducts" value="SCRAP_WEAP" _index="2" />
+				<Property name="AlwaysPresentProducts" value="REPAIRKIT" _index="3" />
+				<Property name="AlwaysPresentProducts" value="SPOOKY_PLANT" _index="4" />
+				<Property name="AlwaysPresentProducts" value="SLIME_MED" _index="5" />
+				<Property name="AlwaysPresentProducts" value="BANNER_SPOOKY" _index="6" />
+				<Property name="AlwaysPresentProducts" value="BANNER_SLIMY" _index="7" />
+				<Property name="AlwaysPresentProducts" value="BASE_TOYJELLY" _index="8" />
+				<Property name="AlwaysPresentProducts" value="SPEC_SPOOKYHEAD" _index="9" />
+				<Property name="AlwaysPresentProducts" value="DECAL_SKULL" _index="10" />
+				<Property name="AlwaysPresentProducts" value="DECAL_HORROR" _index="11" />
+				<Property name="AlwaysPresentProducts" value="DECAL_JELLY" _index="12" />
+				<Property name="AlwaysPresentProducts" value="DECAL_HAZARD" _index="13" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="U_LAUNCHX" _index="0" />
+				<Property name="OptionalProducts" value="U_LASERX" _index="1" />
+				<Property name="OptionalProducts" value="U_SCANNERX" _index="2" />
+				<Property name="OptionalProducts" value="U_BOLTX" _index="3" />
+				<Property name="OptionalProducts" value="U_HAZARDX" _index="4" />
+				<Property name="OptionalProducts" value="U_JETBOOSTX" _index="5" />
+				<Property name="OptionalProducts" value="U_PULSEX" _index="6" />
+				<Property name="OptionalProducts" value="MEDTUBE" _index="7" />
+				<Property name="OptionalProducts" value="HEATER" _index="8" />
+				<Property name="OptionalProducts" value="FOORLIGHT" _index="9" />
+				<Property name="OptionalProducts" value="PLANTTUBE" _index="10" />
+				<Property name="OptionalProducts" value="LOCKER2" _index="11" />
+				<Property name="OptionalProducts" value="ABAND_CRATE_M" _index="12" />
+				<Property name="OptionalProducts" value="ABAND_SHELF" _index="13" />
+				<Property name="OptionalProducts" value="ABAND_CRATE_L" _index="14" />
+				<Property name="OptionalProducts" value="ABAND_CRATE_XL" _index="15" />
+				<Property name="OptionalProducts" value="ABAND_CASE" _index="16" />
+				<Property name="OptionalProducts" value="FOOTLOCKER" _index="17" />
+				<Property name="OptionalProducts" value="ABAND_BENCH" _index="18" />
+				<Property name="OptionalProducts" value="PALLET" _index="19" />
+				<Property name="OptionalProducts" value="ABAND_BARREL" _index="20" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="16" />
+			<Property name="MaxItemsForSale" value="16" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="5.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-5.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="3" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1000" />
+				<Property name="Average" value="1000" />
+				<Property name="Wealthy" value="1000" />
+				<Property name="Pirate" value="1000" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="SeasonRewardsShop" value="GcTradeData">
+			<Property name="AlwaysPresentProducts" />
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts" />
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="0" />
+			<Property name="MaxItemsForSale" value="0" />
+			<Property name="PercentageOfItemsAreProducts" value="0.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="0.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="0.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="0.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="0.000000" />
+			<Property name="ShowSeasonRewards" value="true" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="SmugglerStation" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="SHIPCHARGE" _index="0" />
+				<Property name="AlwaysPresentProducts" value="SCRAP_WEAP" _index="1" />
+				<Property name="AlwaysPresentProducts" value="SCRAP_TECH" _index="2" />
+				<Property name="AlwaysPresentProducts" value="SCRAP_GOODS" _index="3" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="FISHCORE" _index="0" />
+				<Property name="OptionalProducts" value="EYEBALL" _index="1" />
+				<Property name="OptionalProducts" value="FIENDCORE" _index="2" />
+				<Property name="OptionalProducts" value="REPAIRKIT" _index="3" />
+			</Property>
+			<Property name="OptionalSubstances">
+				<Property name="OptionalSubstances" value="SPECIAL_POOP" _index="0" />
+				<Property name="OptionalSubstances" value="SPACEGUNK1" _index="1" />
+				<Property name="OptionalSubstances" value="SPACEGUNK2" _index="2" />
+				<Property name="OptionalSubstances" value="SPACEGUNK3" _index="3" />
+				<Property name="OptionalSubstances" value="SPACEGUNK4" _index="4" />
+				<Property name="OptionalSubstances" value="SPACEGUNK5" _index="5" />
+				<Property name="OptionalSubstances" value="ROBOT1" _index="6" />
+				<Property name="OptionalSubstances" value="CREATURE1" _index="7" />
+			</Property>
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="10" />
+			<Property name="MaxItemsForSale" value="14" />
+			<Property name="PercentageOfItemsAreProducts" value="0.900000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="1.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-1.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="1.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-1.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="2" />
+				<Property name="Wealthy" value="2" />
+				<Property name="Pirate" value="2" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="8" />
+				<Property name="Average" value="8" />
+				<Property name="Wealthy" value="8" />
+				<Property name="Pirate" value="8" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="500" />
+				<Property name="Average" value="500" />
+				<Property name="Wealthy" value="500" />
+				<Property name="Pirate" value="500" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="PirateTech" value="GcTradeData">
+			<Property name="AlwaysPresentProducts" />
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="U_SHIPBLOBX" _index="0" />
+				<Property name="OptionalProducts" value="U_SHIPMINIX" _index="1" />
+				<Property name="OptionalProducts" value="U_SHIPSHOTX" _index="2" />
+				<Property name="OptionalProducts" value="U_SHIPLASX" _index="3" />
+				<Property name="OptionalProducts" value="U_SHIPGUNX" _index="4" />
+				<Property name="OptionalProducts" value="U_SMGX" _index="5" />
+				<Property name="OptionalProducts" value="U_SHOTGUNX" _index="6" />
+				<Property name="OptionalProducts" value="U_RAILX" _index="7" />
+				<Property name="OptionalProducts" value="U_TGRENADEX" _index="8" />
+				<Property name="OptionalProducts" value="U_GRENADEX" _index="9" />
+				<Property name="OptionalProducts" value="U_BOLTX" _index="10" />
+				<Property name="OptionalProducts" value="U_CANNONX" _index="11" />
+				<Property name="OptionalProducts" value="U_LAUNCHX" _index="12" />
+				<Property name="OptionalProducts" value="U_LASERX" _index="13" />
+				<Property name="OptionalProducts" value="U_SCANNERX" _index="14" />
+				<Property name="OptionalProducts" value="U_ENERGYX" _index="15" />
+				<Property name="OptionalProducts" value="U_HAZARDX" _index="16" />
+				<Property name="OptionalProducts" value="U_JETBOOSTX" _index="17" />
+				<Property name="OptionalProducts" value="U_SHIELDBOOSTX" _index="18" />
+				<Property name="OptionalProducts" value="U_HYPERX" _index="19" />
+				<Property name="OptionalProducts" value="U_PULSEX" _index="20" />
+				<Property name="OptionalProducts" value="U_SHIPSHIELDX" _index="21" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="12" />
+			<Property name="MaxItemsForSale" value="12" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="5.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-5.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="1" />
+				<Property name="Wealthy" value="1" />
+				<Property name="Pirate" value="1" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1000" />
+				<Property name="Average" value="1000" />
+				<Property name="Wealthy" value="1000" />
+				<Property name="Pirate" value="1000" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="PirateVisitor" value="GcTradeData">
+			<Property name="AlwaysPresentProducts" />
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="POLICE_TOKEN" _index="0" />
+				<Property name="OptionalProducts" value="SACVENOM" _index="1" />
+				<Property name="OptionalProducts" value="GRAVBALL" _index="2" />
+				<Property name="OptionalProducts" value="CAVECUBE" _index="3" />
+				<Property name="OptionalProducts" value="ALBUMENPEARL" _index="4" />
+				<Property name="OptionalProducts" value="TRA_COMMODITY1" _index="5" />
+				<Property name="OptionalProducts" value="TRA_COMPONENT1" _index="6" />
+				<Property name="OptionalProducts" value="TRA_ENERGY1" _index="7" />
+				<Property name="OptionalProducts" value="TRA_EXOTICS1" _index="8" />
+				<Property name="OptionalProducts" value="TRA_MINERALS1" _index="9" />
+				<Property name="OptionalProducts" value="TRA_TECH1" _index="10" />
+				<Property name="OptionalProducts" value="ILLEGAL_PROD1" _index="11" />
+				<Property name="OptionalProducts" value="ILLEGAL_PROD2" _index="12" />
+				<Property name="OptionalProducts" value="ILLEGAL_PROD7" _index="13" />
+				<Property name="OptionalProducts" value="NIPNIPBUDS" _index="14" />
+				<Property name="OptionalProducts" value="REP_TOKEN" _index="15" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="6" />
+			<Property name="MaxItemsForSale" value="6" />
+			<Property name="PercentageOfItemsAreProducts" value="0.900000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="5.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-5.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="1" />
+				<Property name="Average" value="3" />
+				<Property name="Wealthy" value="3" />
+				<Property name="Pirate" value="3" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="6" />
+				<Property name="Pirate" value="5" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="200" />
+				<Property name="Average" value="200" />
+				<Property name="Wealthy" value="200" />
+				<Property name="Pirate" value="200" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+		<Property name="BuilderShop" value="GcTradeData">
+			<Property name="AlwaysPresentProducts">
+				<Property name="AlwaysPresentProducts" value="REPAIRKIT" _index="0" />
+				<Property name="AlwaysPresentProducts" value="CHART_BUI_SETTL" _index="1" />
+				<Property name="AlwaysPresentProducts" value="U_ROBOSUIT" _index="2" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_1" _index="3" />
+				<Property name="AlwaysPresentProducts" value="S10_PART2" _index="4" />
+				<Property name="AlwaysPresentProducts" value="S10_PART3" _index="5" />
+				<Property name="AlwaysPresentProducts" value="S10_PART4" _index="6" />
+				<Property name="AlwaysPresentProducts" value="S10_PART5" _index="7" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_2" _index="8" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_3" _index="9" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_4" _index="10" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_5" _index="11" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_6" _index="12" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_7" _index="13" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_8" _index="14" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_9" _index="15" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_10" _index="16" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_11" _index="17" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_12" _index="18" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_13" _index="19" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_14" _index="20" />
+				<Property name="AlwaysPresentProducts" value="BUI_HEAD_15" _index="21" />
+				<Property name="AlwaysPresentProducts" value="BUI_ARMOUR_1" _index="22" />
+				<Property name="AlwaysPresentProducts" value="BUI_ARMOUR_2" _index="23" />
+				<Property name="AlwaysPresentProducts" value="BUI_CLOTH_1" _index="24" />
+				<Property name="AlwaysPresentProducts" value="BUI_CLOTH_2" _index="25" />
+			</Property>
+			<Property name="AlwaysPresentSubstances" />
+			<Property name="OptionalProducts">
+				<Property name="OptionalProducts" value="BUI_CLOTH_3" _index="0" />
+				<Property name="OptionalProducts" value="BUI_ARMOUR_3" _index="1" />
+				<Property name="OptionalProducts" value="BUI_ARMOUR_4" _index="2" />
+			</Property>
+			<Property name="OptionalSubstances" />
+			<Property name="AlwaysConsideredBarterProducts" />
+			<Property name="BarterAcceptanceCurve" value="TkCurveType">
+				<Property name="Curve" value="Linear" />
+			</Property>
+			<Property name="BarterPriceMultiplier" value="1.000000" />
+			<Property name="BarterItemPreferenceFloor" value="0.500000" />
+			<Property name="MinItemsForSale" value="32" />
+			<Property name="MaxItemsForSale" value="32" />
+			<Property name="PercentageOfItemsAreProducts" value="1.000000" />
+			<Property name="BuyPriceIncreaseRedThreshold" value="5.000000" />
+			<Property name="BuyPriceDecreaseGreenThreshold" value="-5.000000" />
+			<Property name="SellPriceIncreaseGreenThreshold" value="5.000000" />
+			<Property name="SellPriceDecreaseRedThreshold" value="-5.000000" />
+			<Property name="ShowSeasonRewards" value="false" />
+			<Property name="UseBarterForBuy" value="false" />
+			<Property name="MinAmountOfProductAvailable">
+				<Property name="Poor" value="2" />
+				<Property name="Average" value="2" />
+				<Property name="Wealthy" value="2" />
+				<Property name="Pirate" value="2" />
+			</Property>
+			<Property name="MaxAmountOfProductAvailable">
+				<Property name="Poor" value="5" />
+				<Property name="Average" value="5" />
+				<Property name="Wealthy" value="5" />
+				<Property name="Pirate" value="5" />
+			</Property>
+			<Property name="MinAmountOfSubstanceAvailable">
+				<Property name="Poor" value="100" />
+				<Property name="Average" value="100" />
+				<Property name="Wealthy" value="100" />
+				<Property name="Pirate" value="100" />
+			</Property>
+			<Property name="MaxAmountOfSubstanceAvailable">
+				<Property name="Poor" value="1000" />
+				<Property name="Average" value="1000" />
+				<Property name="Wealthy" value="1000" />
+				<Property name="Pirate" value="1000" />
+			</Property>
+			<Property name="MinExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="MaxExtraSystemProducts">
+				<Property name="Poor" value="0" />
+				<Property name="Average" value="0" />
+				<Property name="Wealthy" value="0" />
+				<Property name="Pirate" value="0" />
+			</Property>
+			<Property name="TradeProductsPriceImprovements">
+				<Property name="Poor" value="0.000000" />
+				<Property name="Average" value="0.000000" />
+				<Property name="Wealthy" value="0.000000" />
+				<Property name="Pirate" value="0.000000" />
+			</Property>
+		</Property>
+	</Property>
+</Data>
