@@ -34,10 +34,10 @@ class PromptLabUI:
         self.promptdata = config.promptdata  # live dict
         self.promptdata_path = getattr(config, "promptdata_path", None)
 
-        # prepare lists
-        self.category_list = list(self._collect_categories())
-        self.tones = list(self.promptdata.get("tones", {}).keys())
-        self.wordiness_levels = list(self.promptdata.get("wordiness", {}).keys())
+        # prepare lists as concrete strings for ttk.Combobox values
+        self.category_list = [str(item) for item in self._collect_categories()]
+        self.tones = [str(item) for item in self.promptdata.get("tones", {}).keys()]
+        self.wordiness_levels = [str(item) for item in self.promptdata.get("wordiness", {}).keys()]
 
         # defaults
         if "Standard" not in self.wordiness_levels:
@@ -70,8 +70,9 @@ class PromptLabUI:
         # Build the structured prompt
         finalprompt = build_suit_prompt(config, category, intent, original_phrase, wem_id)
         # convert Player Name Placeholder
+        player_name = (getattr(config, "player_name", None) or "Traveller").strip()
         finalprompt = finalprompt.format(
-            name=config.player_name.strip(),
+            name=player_name,
         )
         # print(f"final prompt: {finalprompt}")
         start_time = time.time()

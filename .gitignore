@@ -1,15 +1,8 @@
 sound2wem/*
-tools/
 venv/
-suit_voice.env
 .idea/
 *.DS_Store
 __pycache__/
 *.pyc
 *.log
-/bullshit.py
 /cache/tmp_wav_dir/*
-
-/test_voices/
-/embeds/
-/extras/embeds/

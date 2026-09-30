@@ -10,7 +10,14 @@ def main():
     load_dotenv(env_path)
 
     tts_model_name = os.getenv("TTS_MODEL")
-    temp_wem_dir = Path(os.getenv("TEMP_WEM_DIR").strip('"'))
+    if not tts_model_name:
+        raise RuntimeError("TTS_MODEL is not set in the environment.")
+
+    temp_wem_dir_value = os.getenv("TEMP_WEM_DIR")
+    if not temp_wem_dir_value:
+        raise RuntimeError("TEMP_WEM_DIR is not set in the environment.")
+
+    temp_wem_dir = Path(temp_wem_dir_value.strip('"'))
     temp_wem_dir.mkdir(parents=True, exist_ok=True)
 
     tts_model = TTS(model_name=tts_model_name)

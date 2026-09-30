@@ -30,7 +30,10 @@ class SuitVoiceConfig:
         root_dir = Path(__file__).parent.parent
         load_dotenv(dotenv_path=root_dir / env_file)
 
-        self.check_interval = float(os.getenv("CHECK_INTERVAL"))
+        check_interval_raw = os.getenv("CHECK_INTERVAL")
+        if check_interval_raw is None or check_interval_raw.strip() == "":
+            raise ValueError("CHECK_INTERVAL not set in environment")
+        self.check_interval = float(check_interval_raw)
         self.mod_dir = resolve_path("MOD_DIR", root_dir, must_exist=False)
         self.csv_path = resolve_path("CSV_PATH", root_dir)
         self.intent_map = self.load_intent_map(self.csv_path)
@@ -115,12 +118,12 @@ class SuitVoiceConfig:
             d.mkdir(parents=True, exist_ok=True)
 
     def get_tone(self) -> str:
-        return self.current_tone
+        return self.current_tone or "Standard"
 
     def get_wordiness(self, category: str) -> str:
         if category in self.mil_cat:
             return "Observer"
-        return self.current_wordiness
+        return self.current_wordiness or "Standard"
 
     @staticmethod
     def load_intent_map(csv_path: Path) -> dict:

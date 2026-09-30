@@ -14,10 +14,11 @@ def process_entry(wem_id, entry, wordiness_level="Standard", tone="Standard"):
     intent = entry["Intent"]
 
     # Build the structured prompt
-    finalprompt = build_suit_prompt(config, category, intent, original_phrase)
+    finalprompt = build_suit_prompt(config, category, intent, original_phrase, wem_id=wem_id)
     # convert Player Name Placeholder
+    player_name = (config.player_name or "Traveller").strip()
     finalprompt = finalprompt.format(
-        name=config.player_name.strip(),
+        name=player_name,
     )
     # print(f"final prompt: {finalprompt}")
     start_time = time.time()

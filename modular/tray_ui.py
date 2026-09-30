@@ -16,7 +16,8 @@ class TrayUI:
 
         # Load icon
         try:
-            icon_path = Path(os.getenv("ICON_IMAGE"))
+            icon_image = os.getenv("ICON_IMAGE")
+            icon_path = Path(icon_image) if icon_image is not None else Path()
             if icon_path.exists():
                 img = Image.open(icon_path)
             else:

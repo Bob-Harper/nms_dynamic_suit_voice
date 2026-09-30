@@ -23,9 +23,15 @@ def watch_wems(wtray_ui):
                     debug_print(f"nms_dynamic_suit_voice_pipeline.py: Access detected for {f3.name} (ID: {wem_id})")
 
                     cached_file = get_cached_wem(config, wem_id)
+                    if cached_file is None:
+                        debug_print(f"nms_dynamic_suit_voice_pipeline.py: No cached file found for ID {wem_id}.")
+                        continue
                     debug_print(f"nms_dynamic_suit_voice_pipeline.py: Cached file obtained for ID {wem_id}: {cached_file.name}")
 
                     moved_file = move_cachedfile_to_mod_dir(cached_file, config.mod_dir, wem_id)
+                    if moved_file is None:
+                        debug_print(f"nms_dynamic_suit_voice_pipeline.py: Failed to move cached file for ID {wem_id}.")
+                        continue
                     debug_print(f"nms_dynamic_suit_voice_pipeline.py: File moved to mod_dir for ID {wem_id}: {moved_file.name}")
 
                     update_access_time_to_match_newfile(moved_file, access_times)
