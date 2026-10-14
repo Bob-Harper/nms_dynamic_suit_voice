@@ -5,7 +5,7 @@ echo ============================================
 echo.
 
 REM Try local python first
-python "%~dp0installer.py"
+py -3.12 "%~dp0installer.py"
 IF %ERRORLEVEL% EQU 0 GOTO :end
 
 REM If python isn't in PATH, try the Windows Store python launcher

@@ -1,5 +1,6 @@
 import subprocess
 import sys
+print("INTERPRETER:", sys.executable)
 import os
 import shutil
 from pathlib import Path
