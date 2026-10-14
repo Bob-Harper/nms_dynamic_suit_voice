@@ -4,8 +4,10 @@ print("INTERPRETER:", sys.executable)
 import os
 import shutil
 from pathlib import Path
+import requests
 
 AUTOALL = False
+
 
 # -------------------------
 # Utility: fail-fast runner
@@ -18,6 +20,7 @@ def run(cmd, desc):
         print(f"ERROR: {desc} failed.")
         sys.exit(1)
 
+
 # -------------------------
 # Prompt: auto vs guided
 # -------------------------
@@ -26,6 +29,7 @@ def choose_mode():
     choice = input("Do you want EVERYTHING automatically? (Y/N): ").strip().lower()
     AUTOALL = (choice == "y")
     print("Auto mode enabled." if AUTOALL else "Guided mode enabled.")
+
 
 def step(desc, func):
     print(f"\n=== {desc} ===")
@@ -38,6 +42,7 @@ def step(desc, func):
         else:
             print(f"Skipping: {desc}")
 
+
 # -------------------------
 # Step: Check Python
 # -------------------------
@@ -48,6 +53,7 @@ def check_python():
     if not out.startswith("Python 3.11"):
         print("ERROR: Installer must be run using Python 3.11.")
         sys.exit(1)
+
 
 # -------------------------
 # Step: Setup venv
@@ -60,6 +66,7 @@ def setup_venv():
         run([python_exe, "-m", "venv", "venv"], "Create virtual environment")
 
     print("Virtual environment ready.")
+
 
 def validate_env():
     env_path = Path("suit_voice.env")
@@ -109,6 +116,7 @@ def validate_env():
 
     print("Environment file validated.")
 
+
 # -------------------------
 # Step: Install requirements
 # -------------------------
@@ -121,23 +129,30 @@ def install_reqs():
     run([str(python_exe), "-m", "pip", "install", "--upgrade", "pip"], "Upgrade pip")
     run([str(python_exe), "-m", "pip", "install", "-r", "requirements.txt"], "Install dependencies")
 
+
 # -------------------------
 # Step: Download LLM model
 # -------------------------
 def download_model():
-    model_url = "https://huggingface.co/lmstudio-community/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf"
+    url = "https://huggingface.co/lmstudio-community/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf"
     model_dir = Path("assets/qwen3_06b_q4")
     target_file = model_dir / "Qwen3-0.6B-Q4_K_M.gguf"
 
     model_dir.mkdir(parents=True, exist_ok=True)
 
     if target_file.exists():
-        print(f"Model already exists at {target_file}, skipping.")
+        print("Model already exists, skipping.")
         return
 
-    run(["powershell", "-File", "extras/download_model.ps1",
-         "-url", model_url,
-         "-outfile", str(target_file)], "Download LLM model")
+    print("Downloading model...")
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(target_file, "wb") as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+
+    print("Download complete.")
+
 
 # -------------------------
 # Step: Setup Sound2WEM
@@ -196,12 +211,14 @@ def copy_starter_wems():
 
     print(f"{copied} voice files updated")
 
+
 # -------------------------
 # Step: Warmup TTS
 # -------------------------
 def warmup_tts():
     python_exe = Path("venv/Scripts/python.exe")
     run([str(python_exe), "modular/warmup_tts.py"], "Warmup TTS")
+
 
 # -------------------------
 # Step: Create Desktop Shortcut
@@ -236,6 +253,7 @@ def create_shortcut():
 
     run(["cscript", "//nologo", str(vbs)], "Create desktop shortcut")
     vbs.unlink()
+
 
 # -------------------------
 # Main
