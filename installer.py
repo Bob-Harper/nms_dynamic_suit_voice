@@ -135,7 +135,7 @@ def download_model():
         print(f"Model already exists at {target_file}, skipping.")
         return
 
-    run(["powershell", "-File", "download_model.ps1",
+    run(["powershell", "-File", "extras/download_model.ps1",
          "-url", model_url,
          "-outfile", str(target_file)], "Download LLM model")
 
