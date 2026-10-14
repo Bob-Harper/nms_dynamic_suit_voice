@@ -5,7 +5,7 @@ echo Creating desktop shortcut...
 set "DESKTOP=%USERPROFILE%\Desktop"
 set "SCRIPT_DIR=%~dp0"
 set "SHORTCUT_PATH=%DESKTOP%\NMS Dynamic Suit Voice.lnk"
-set "TARGET_PY=%SCRIPT_DIR%nms_dynamic_suite_voice_pipeline.py"
+set "TARGET_PY=%SCRIPT_DIR%nms_dynamic_suit_voice_pipeline.py"
 set "PYTHON_EXE=%SCRIPT_DIR%venv\Scripts\python.exe"
 set "ICON_FILE=%SCRIPT_DIR%assets\nms_dsv_256.ico"
 set WINDOW_STYLE=1

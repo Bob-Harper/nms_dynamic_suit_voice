@@ -187,7 +187,7 @@ echo === Creating Desktop Shortcut ===
 set "SHORTCUT_NAME=NMS Dynamic Suit Voice"
 set "DESKTOP=%USERPROFILE%\Desktop"
 set "TARGET=%CD%\venv\Scripts\python.exe"
-set "ARGS=%CD%\nms_dynamic_suite_voice_pipeline.py"
+set "ARGS=%CD%\nms_dynamic_suit_voice_pipeline.py"
 set "ICON=%CD%\assets\nms_dsv_256.ico"
 set "VBS=%TEMP%\create_shortcut.vbs"
 

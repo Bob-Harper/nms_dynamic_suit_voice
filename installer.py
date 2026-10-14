@@ -231,15 +231,17 @@ def warmup_tts():
 def create_shortcut():
     desktop = Path.home() / "Desktop"
     shortcut = desktop / "NMS Dynamic Suit Voice.lnk"
-
+    if shortcut.exists():
+        print("Shortcut already exists, skipping.")
+        return
     temp_dir = os.getenv("TEMP") or os.getenv("TMP") or str(Path.home())
     vbs = Path(temp_dir) / "create_shortcut.vbs"
 
     target = Path.cwd() / "venv/Scripts/python.exe"
-    args = Path.cwd() / "nms_dynamic_suite_voice_pipeline.py"
+    args = Path.cwd() / "nms_dynamic_suit_voice_pipeline.py"
     icon = Path.cwd() / "assets/nms_dsv_256.ico"
 
-    visible = input("Should the terminal be visible? (Y/N): ").strip().lower() == "y"
+    visible = input("Should the terminal be visible? (Good for Debugging or just to watch it work) (Y/N): ").strip().lower() == "y"
 
     with open(vbs, "w") as f:
         f.write('Set WshShell = WScript.CreateObject("WScript.Shell")\n')

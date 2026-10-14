@@ -44,10 +44,10 @@ You’ll know it worked if your prompt now starts with (venv).
 
 ### Install Python dependencies
 
-Installing dependencies may take some time for a new venv — great time for a sandwich break.  
+Installing dependencies may take some time for a new venv — great time for a sandwich break.
 If it looks like it is frozen after listing 80+ dependencies that are going to be installed all at once, don’t believe it. Just let it run.
 This also installs llama-cpp-python automatically — you do not need to separately install llama.cpp.
-(Optional but recommended) Update pip before installing requirements.  
+(Optional but recommended) Update pip before installing requirements.
 This can help avoid compatibility issues.
 
 ```
@@ -63,21 +63,21 @@ pip install -r requirements.txt
 
 ### Configure your environment file
 
-In the project folder you’ll see `suit_voice.env.example`.  
+In the project folder you’ll see `suit_voice.env.example`.
 
-1. Rename it to `suit_voice.env` (remove the `.example` part).  
-2. Open it in a text editor and update the paths and values to match your setup if needed.  I have saved with values that SHOULD work assuming you followed the above instrutions and installed Steam to it's default.  .  
-   - Example: the location where you installed `sound2wem`  
-   - Example: your No Man’s Sky MODS folder  
+1. Rename it to `suit_voice.env` (remove the `.example` part).
+2. Open it in a text editor and update the paths and values to match your setup if needed.  I have saved with values that SHOULD work assuming you followed the above instrutions and installed Steam to it's default.  .
+   - Example: the location where you installed `sound2wem`
+   - Example: your No Man’s Sky MODS folder
 
 This file tells the pipeline where to find everything. If you skip this step and the pipeline errors when started - this is the most likely culprit.
 
-### Run the generator. 
+### Run the generator.
 Curse because something didn't go right.  Read back through, recheck every step, doublecheck your .env file paths and options.
 ```
 cd c:\NMS_SUIT_VOICE
 .\venv\Scripts\activate
-python nms_dynamic_suite_voice_pipeline.pyw
+python nms_dynamic_suit_voice_pipeline.pyw
 ```
 I recommend starting your first session in a terminal window with the above command so you can see what it is doing, and when. If you have a second monitor, even better, you can watch the pipeline do it's thing as you play.
 It does not take any command line arguments at this time.
@@ -88,7 +88,7 @@ Once the tray icon is visible, it is actively monitoring. If you started through
 Using it on CPU inference should have no impact to startup, but I recommend waiting until it is done because general principles.
 If you've modified to use your GPU, improper startup timing may lead to severe game stuttering, eyestrain, and excessive cursing caused by FPS rates of 1 or less.  [Refer to Advanced FAQS for more detail on why it's essential to wait](docs/Advanced.md).
 
-### Start No Man's Sky 
+### Start No Man's Sky
 Play until your suit notifies you of something important. Keep playing until you get another notification for the same
 thing.  Hey, it's a different phrase this time!
 
@@ -110,6 +110,6 @@ Shut down techniques:
 But why?
 
 If you must, remove the install directory nms_dynamic_suit_voice.  Also remove the folder from the MODS directory.  You could remove/uninstall wwise from wherever you installed it.  sound2wem, if installed per instructions, will be inside the project folder and disappear when you delete the directory structure.
-That's it.  
+That's it.
 - Note: If you choose to leave the MODS directory alone, the game will continue to use any voice lines left behind.  This could complicate your setup if you have another suit voice mod, or could be an awesome result if you really like those specific generated phrases.  If for some reason you choose to remove the voice files but leave the pipeline, there will be nothing for the pipeline to watch for changes.
 
