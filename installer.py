@@ -45,8 +45,8 @@ def check_python():
     out = subprocess.check_output([sys.executable, "--version"], text=True).strip()
     print(out)
 
-    if not out.startswith("Python 3.12"):
-        print("ERROR: Installer must be run using Python 3.12.")
+    if not out.startswith("Python 3.11"):
+        print("ERROR: Installer must be run using Python 3.11.")
         sys.exit(1)
 
 # -------------------------

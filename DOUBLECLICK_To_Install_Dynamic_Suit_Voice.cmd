@@ -5,7 +5,7 @@ echo ============================================
 echo.
 
 REM Try local python first
-py -3.12 "%~dp0installer.py"
+py -3.11 "%~dp0installer.py"
 IF %ERRORLEVEL% EQU 0 GOTO :end
 
 REM If python isn't in PATH, try the Windows Store python launcher
@@ -14,7 +14,7 @@ IF %ERRORLEVEL% EQU 0 GOTO :end
 
 echo.
 echo ERROR: Python is not installed or not found.
-echo Please install Python 3.10+ from https://www.python.org/downloads/
+echo Please install Python 3.11+ from https://www.python.org/downloads/
 echo.
 pause
 exit /b
