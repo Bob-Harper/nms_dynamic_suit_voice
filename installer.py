@@ -1,13 +1,12 @@
 import subprocess
 import sys
+
 print("INTERPRETER:", sys.executable)
 import os
 import shutil
 from pathlib import Path
-import requests
 
 AUTOALL = False
-
 
 # -------------------------
 # Utility: fail-fast runner
@@ -20,6 +19,12 @@ def run(cmd, desc):
         print(f"ERROR: {desc} failed.")
         sys.exit(1)
 
+# -------------------------
+# Wrapper: run download_model() inside venv
+# -------------------------
+def run_download_model():
+    python_exe = Path("venv/Scripts/python.exe")
+    run([str(python_exe), "installer.py", "--download-model"], "Download LLM model")
 
 # -------------------------
 # Prompt: auto vs guided
@@ -29,7 +34,6 @@ def choose_mode():
     choice = input("Do you want EVERYTHING automatically? (Y/N): ").strip().lower()
     AUTOALL = (choice == "y")
     print("Auto mode enabled." if AUTOALL else "Guided mode enabled.")
-
 
 def step(desc, func):
     print(f"\n=== {desc} ===")
@@ -42,7 +46,6 @@ def step(desc, func):
         else:
             print(f"Skipping: {desc}")
 
-
 # -------------------------
 # Step: Check Python
 # -------------------------
@@ -54,13 +57,12 @@ def check_python():
         print("ERROR: Installer must be run using Python 3.11.")
         sys.exit(1)
 
-
 # -------------------------
 # Step: Setup venv
 # -------------------------
 def setup_venv():
     venv_path = Path("venv")
-    python_exe = sys.executable  # FORCE the correct interpreter
+    python_exe = sys.executable
 
     if not venv_path.exists():
         run([python_exe, "-m", "venv", "venv"], "Create virtual environment")
@@ -129,14 +131,13 @@ def install_reqs():
     run([str(python_exe), "-m", "pip", "install", "--upgrade", "pip"], "Upgrade pip")
     run([str(python_exe), "-m", "pip", "install", "-r", "requirements.txt"], "Install dependencies")
 
-
 # -------------------------
 # Step: Download LLM model
 # -------------------------
 def download_model():
-    url = "https://huggingface.co/lmstudio-community/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf"
-    model_dir = Path("assets/qwen3_06b_q4")
-    target_file = model_dir / "Qwen3-0.6B-Q4_K_M.gguf"
+    url = "https://huggingface.co/Qwen/Qwen3-4B-GGUF/resolve/main/Qwen3-4B-Q8_0.gguf"
+    model_dir = Path("assets/qwen3_4b_q8_0")
+    target_file = model_dir / "Qwen3-4B-Q8_0.gguf"
 
     model_dir.mkdir(parents=True, exist_ok=True)
 
@@ -145,6 +146,7 @@ def download_model():
         return
 
     print("Downloading model...")
+    import requests
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(target_file, "wb") as f:
@@ -153,6 +155,12 @@ def download_model():
 
     print("Download complete.")
 
+# -----------------------------------------
+# Handler: run download_model() inside venv
+# -----------------------------------------
+if "--download-model" in sys.argv:
+    download_model()
+    sys.exit(0)
 
 # -------------------------
 # Step: Setup Sound2WEM
@@ -186,7 +194,6 @@ def setup_sound2wem():
     subprocess.Popen(["explorer", str(s2w)])
     input("Press Enter when ready...")
 
-
 # -------------------------
 # Step: Copy starter WEMs
 # -------------------------
@@ -211,14 +218,12 @@ def copy_starter_wems():
 
     print(f"{copied} voice files updated")
 
-
 # -------------------------
 # Step: Warmup TTS
 # -------------------------
 def warmup_tts():
     python_exe = Path("venv/Scripts/python.exe")
     run([str(python_exe), "modular/warmup_tts.py"], "Warmup TTS")
-
 
 # -------------------------
 # Step: Create Desktop Shortcut
@@ -254,7 +259,6 @@ def create_shortcut():
     run(["cscript", "//nologo", str(vbs)], "Create desktop shortcut")
     vbs.unlink()
 
-
 # -------------------------
 # Main
 # -------------------------
@@ -265,8 +269,7 @@ def main():
     step("Check Python", check_python)
     step("Setup virtual environment", setup_venv)
     step("Install Python dependencies", install_reqs)
-
-    step("Download LLM model", download_model)
+    step("Download LLM model", run_download_model)
     step("Setup Sound2WEM", setup_sound2wem)
     step("Prepare MOD directory", copy_starter_wems)
     step("Initialize TTS model", warmup_tts)
@@ -280,7 +283,6 @@ def main():
     print("• WEMs updated: OK")
     print("• Config: OK")
     print("• Desktop Shortcut: OK")
-
 
 if __name__ == "__main__":
     main()
