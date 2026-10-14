@@ -41,11 +41,11 @@ def step(desc, func):
 # Step: Check Python
 # -------------------------
 def check_python():
-    try:
-        out = subprocess.check_output(["py", "-3.12", "--version"], text=True)
-        print(out.strip())
-    except Exception:
-        print("ERROR: Python 3.12 not found. Install Python 3.12 and try again.")
+    out = subprocess.check_output([sys.executable, "--version"], text=True).strip()
+    print(out)
+
+    if not out.startswith("Python 3.12"):
+        print("ERROR: Installer must be run using Python 3.12.")
         sys.exit(1)
 
 # -------------------------
@@ -53,8 +53,11 @@ def check_python():
 # -------------------------
 def setup_venv():
     venv_path = Path("venv")
+    python_exe = sys.executable  # FORCE the correct interpreter
+
     if not venv_path.exists():
-        run(["python", "-m", "venv", "venv"], "Create virtual environment")
+        run([python_exe, "-m", "venv", "venv"], "Create virtual environment")
+
     print("Virtual environment ready.")
 
 def validate_env():
@@ -167,13 +170,6 @@ def setup_sound2wem():
     subprocess.Popen(["explorer", str(s2w)])
     input("Press Enter when ready...")
 
-# -------------------------
-# Step: Copy .env
-# -------------------------
-def copy_env():
-    if not Path("suit_voice.env").exists():
-        shutil.copy("suit_voice.env.example", "suit_voice.env")
-    print("Environment configs ready.")
 
 # -------------------------
 # Step: Copy starter WEMs
@@ -249,15 +245,13 @@ def main():
 
     step("Check Python", check_python)
     step("Setup virtual environment", setup_venv)
-
-    step("Prepare .env file", copy_env)
-    step("Validate environment file", validate_env)
-
     step("Install Python dependencies", install_reqs)
+
     step("Download LLM model", download_model)
     step("Setup Sound2WEM", setup_sound2wem)
     step("Prepare MOD directory", copy_starter_wems)
     step("Initialize TTS model", warmup_tts)
+    step("Validate environment file", validate_env)
     step("Create Desktop Shortcut", create_shortcut)
 
     print("\n=== Setup Complete ===")
