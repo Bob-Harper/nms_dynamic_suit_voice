@@ -10,6 +10,10 @@ __pycache__/
 debug/
 desktop.ini
 
+# Ignore all archived and stored material.
+archived/
+extras_put_in_mods_folder/
+
 # Ignore all model-related stuff
 assets/qwen3_06b_q4/
 assets/qwen3_17b_q8/
