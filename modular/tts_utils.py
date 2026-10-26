@@ -5,37 +5,17 @@ import sys
 import wave
 import numpy as np
 from scipy.signal import resample
-from debug.logging_utils import debug_print
 
 MIN_SAMPLES = 1024  # absolute minimum number of samples per channel
 
 def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
-    debug_print("tts_utils.py: run_tts")   # works, just seeing it get called during the trail
     final_wav = config.temp_wav_dir / f"{wem_num}.wav"
     temp_wav = final_wav.with_suffix(".temp.wav")
-    speaker_wav = [
-        r"C:\NMS_SUIT_VOICE\embeds\onna\amused.wav",
-        r"C:\NMS_SUIT_VOICE\embeds\onna\base_extended.wav",
-        r"C:\NMS_SUIT_VOICE\embeds\onna\concerned.wav",
-        r"C:\NMS_SUIT_VOICE\embeds\onna\emphasis.wav",
-        r"C:\NMS_SUIT_VOICE\embeds\onna\standard.wav",
-        r"C:\NMS_SUIT_VOICE\embeds\onna\trimmed_emphasis.wav",
-        r"C:\NMS_SUIT_VOICE\embeds\onna\whatever.wav",
-    ]
 
-    # Generate base TTS wav
-    if "xtts" in config.tts_model_name.lower():
-        config.tts_model.tts_to_file(
-            text=text,
-            file_path=str(final_wav),
-            speaker_wav=speaker_wav,
-            language="en"
-        )
-    else:
-        config.tts_model.tts_to_file(
-            text=text,
-            file_path=str(final_wav),
-        )
+    config.tts_model.tts_to_file(
+        text=text,
+        file_path=str(final_wav),
+    )
 
     if postprocess:
         apply_ffmpeg_filters(final_wav, temp_wav, atempo=1.02, rate=0.51)

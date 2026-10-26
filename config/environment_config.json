@@ -1,0 +1,32 @@
+{
+    "logging": {
+        "console": false,
+        "prompt_logging": false,
+        "cache_log_dir": "debug/standard_logs",
+        "game_output_csv": "debug/standard_logs/transcriptions_reworded_game_log.csv",
+        "test_output_csv": "debug/standard_logs/transcriptions_reworded_test_log.csv"
+    },
+
+    "paths": {
+        "mod_dir": "C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/GAMEDATA/MODS/DYNAMIC_SUIT_VOICE/AUDIO/WINDOWS/MEDIA/ENGLISH(US)",
+        "temp_wem_dir": "cache/tmp_wem_dir",
+        "temp_wav_dir": "cache/tmp_wav_dir",
+        "quick_cache_dir": "cache/tmp_quick_dir",
+        "icon_image": "assets/nms_dsv.png"
+    },
+
+    "runtime": {
+        "check_interval": 0.1,
+        "max_session_lines": 10,
+        "quick_cache_max": 16
+    },
+
+    "models": {
+        "llm_model": "assets/qwen3_4b_q8_0/Qwen3-4B-Q8_0.gguf",
+        "tts_model": "tts_models/en/ljspeech/tacotron2-DDC_ph"
+    },
+
+    "external_tools": {
+        "sound2wem_cmd": "sound2wem/zSound2wem.cmd"
+    }
+}

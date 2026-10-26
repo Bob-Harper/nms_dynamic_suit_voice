@@ -1,9 +1,11 @@
+# installer.py
 import subprocess
 import sys
 
 print("INTERPRETER:", sys.executable)
 import os
 import shutil
+import json
 from pathlib import Path
 
 AUTOALL = False
@@ -69,55 +71,61 @@ def setup_venv():
 
     print("Virtual environment ready.")
 
+# -------------------------
+# Step: Validate & Seed Configuration Layer (Replaces Old .env Loop)
+# -------------------------
+def validate_configuration_layer():
+    config_dir = Path("config")
+    user_config_path = config_dir / "user_customization.json"
+    env_config_path = config_dir / "environment_config.json"
 
-def validate_env():
-    env_path = Path("suit_voice.env")
-    if not env_path.exists():
-        print("ERROR: suit_voice.env missing. Installer should have created it.")
+    # 1. Enforce directory structural rules
+    config_dir.mkdir(parents=True, exist_ok=True)
+
+    # 2. Seed clean user configurations if empty
+    if not user_config_path.exists():
+        with open(user_config_path, "w", encoding="utf-8") as f:
+            json.dump({}, f, indent=4)
+        print("Seeded empty user profile settings successfully.")
+
+    # 3. Check environment profiles
+    if not env_config_path.exists():
+        print(f"ERROR: Crucial project workspace data is missing: {env_config_path}")
         sys.exit(1)
 
-    # Load env file
-    values = {}
-    with env_path.open() as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            if "=" in line:
-                key, val = line.split("=", 1)
-                values[key.strip()] = val.strip().strip('"')
+    try:
+        with open(env_config_path, "r", encoding="utf-8") as f:
+            env_data = json.load(f)
+    except Exception as e:
+        print(f"ERROR: environment_config.json format is corrupt: {e}")
+        sys.exit(1)
 
-    # Required keys
-    required = ["MOD_DIR", "CMD_SCRIPT_PATH", "LLM_MODEL"]
+    # 4. Extract nested paths safely
+    paths = env_data.get("paths", {})
+    mod_dir = Path(paths.get("mod_dir", ""))
 
-    for key in required:
-        if key not in values:
-            print(f"ERROR: Missing required key in env: {key}")
-            sys.exit(1)
+    ext_tools = env_data.get("external_tools", {})
+    cmd_script = Path(ext_tools.get("sound2wem_cmd", ""))
 
-    # Validate MOD_DIR
-    mod_dir = Path(values["MOD_DIR"])
+    models = env_data.get("models", {})
+    llm_model = Path(models.get("llm_model", ""))
+
+    # Validate target structures match physical filesystems
     if not mod_dir.exists():
-        print(f"ERROR: MOD_DIR does not exist:\n{mod_dir}")
-        print("Fix suit_voice.env and run installer again.")
+        print(f"ERROR: Target game mod folder path missing or unreachable:\n{mod_dir}")
+        print("Please correct the 'mod_dir' value inside config/environment_config.json")
         sys.exit(1)
 
-    # Validate Sound2WEM CMD script
-    cmd_script = Path(values["CMD_SCRIPT_PATH"])
     if not cmd_script.exists():
-        print(f"ERROR: CMD_SCRIPT_PATH does not exist:\n{cmd_script}")
-        print("Sound2WEM setup incomplete. Fix suit_voice.env or rerun Sound2WEM setup.")
+        print(f"ERROR: sound2wem execution macro missing or unreachable:\n{cmd_script}")
+        print("Fix your config paths or run Sound2WEM setup steps again.")
         sys.exit(1)
 
-    # Validate LLM model path (installer will download if missing)
-    llm_model = Path(values["LLM_MODEL"])
     if not llm_model.exists():
-        print(f"LLM model not found at:\n{llm_model}")
-        print("Installer will attempt to download it.")
-        # Do not exit — download_model() handles this
+        print(f"LLM configuration target missing from workspace assets:\n{llm_model}")
+        print("Installer execution loop will download it automatically.")
 
-    print("Environment file validated.")
-
+    print("Native JSON configuration profiles verified successfully.")
 
 # -------------------------
 # Step: Install requirements
@@ -135,7 +143,7 @@ def install_reqs():
 # Step: Download LLM model
 # -------------------------
 def download_model():
-    url = "https://huggingface.co/Qwen/Qwen3-4B-GGUF/resolve/main/Qwen3-4B-Q8_0.gguf"
+    url = "https://huggingface.co"
     model_dir = Path("assets/qwen3_4b_q8_0")
     target_file = model_dir / "Qwen3-4B-Q8_0.gguf"
 
@@ -175,7 +183,7 @@ def setup_sound2wem():
             choice = input("Delete and re-clone? (Y/N): ").strip().lower()
             if choice == "y":
                 shutil.rmtree(s2w)
-                run(["git", "clone", "https://github.com/EternalLeo/sound2wem", "sound2wem"],
+                run(["git", "clone", "https://github.com", "sound2wem"],
                     "Clone Sound2WEM")
             else:
                 print("Cannot continue without zSound2wem.cmd.")
@@ -183,7 +191,7 @@ def setup_sound2wem():
         else:
             print("Sound2WEM directory OK.")
     else:
-        run(["git", "clone", "https://github.com/EternalLeo/sound2wem", "sound2wem"],
+        run(["git", "clone", "https://github.com", "sound2wem"],
             "Clone Sound2WEM")
 
     print("\nPlease run Sound2WEM setup:")
@@ -238,7 +246,9 @@ def create_shortcut():
     vbs = Path(temp_dir) / "create_shortcut.vbs"
 
     target = Path.cwd() / "venv/Scripts/python.exe"
-    args = Path.cwd() / "nms_dynamic_suit_voice_pipeline.py"
+
+    # CRITICAL CHANGE: Target the lightning fast boot loader script instead of the old core loop!
+    args = Path.cwd() / "run_dsv.py"
     icon = Path.cwd() / "assets/nms_dsv_256.ico"
 
     visible = input("Should the terminal be visible? (Good for Debugging or just to watch it work) (Y/N): ").strip().lower() == "y"
@@ -275,7 +285,7 @@ def main():
     step("Setup Sound2WEM", setup_sound2wem)
     step("Prepare MOD directory", copy_starter_wems)
     step("Initialize TTS model", warmup_tts)
-    step("Validate environment file", validate_env)
+    step("Validate configuration matrix", validate_configuration_layer)
     step("Create Desktop Shortcut", create_shortcut)
 
     print("\n=== Setup Complete ===")
@@ -283,8 +293,8 @@ def main():
     print("• Sound2WEM: OK")
     print("• TTS models: OK")
     print("• WEMs updated: OK")
-    print("• Config: OK")
-    print("• Desktop Shortcut: OK")
+    print("• Native JSON Config: OK")
+    print("• Desktop Fast-Boot Shortcut: OK")
 
 if __name__ == "__main__":
     main()

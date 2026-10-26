@@ -1,57 +1,68 @@
+# nms_dynamic_suit_voice_pipeline.py (Streamlined Version)
 import time
-from modular.tray_ui import TrayUI
-from modular.config import SuitVoiceConfig
+from pathlib import Path
 from modular.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
-from debug.logging_utils import debug_print
+from PIL import Image
+# NOTE: No global config or TTS instantiations live at the top of this file anymore!
 
-config = SuitVoiceConfig()
+def watch_wems(wtray_ui, config):
+    """Main watchdog thread invoked after the launcher completes fast boot."""
 
+    # --- PHASE 1: Initialize Coqui-TTS Engine Weights ---
+    wtray_ui.icon.title = "Dynamic Suit Voice - Loading TTS Voice Models..."
 
-def watch_wems(wtray_ui):
-    """Main watchdog loop for WEM files."""
+    from TTS.api import TTS
+    config.tts_model = TTS(model_name=config.tts_model_name)
 
-    # Build initial access time mapping
-    access_times = {f3.stem: f3.stat().st_atime for f3 in wtray_ui.config.mod_dir.glob("*.wem")}
-    debug_print("nms_dynamic_suit_voice_pipeline.py: Watching for file access...")
+    # --- PHASE 2: Initialize Llama-cpp Core Engine weights ---
+    wtray_ui.icon.title = "Dynamic Suit Voice - Loading Local Llama AI..."
+
+    from llama_cpp import Llama
+    config.llm = Llama(
+        model_path=config.llm_model,
+        n_ctx=40960,
+        n_batch=1024,
+        n_threads=4,
+        verbose=False
+    )
+
+    # --- PHASE 3: Verify Filesystem Watches ---
+    wtray_ui.icon.title = "Dynamic Suit Voice - Verifying Directories..."
+    mod_dir = config.mod_dir
+    if not mod_dir or not mod_dir.exists():
+        wtray_ui.icon.title = "Dynamic Suit Voice - Error: Missing Dirs"
+        return
+
+    access_times = {f3.stem: f3.stat().st_atime for f3 in mod_dir.glob("*.wem")}
+
+    # --- PHASE 4: Initialization Complete, Launch Active Watch ---
+    # Restore native transparency by swapping the icon out directly
+    root_dir = Path(__file__).parent
+    if wtray_ui.ready_icon_path.exists():
+        # Open a fresh copy and preserve the full RGBA alpha transparency channel
+        wtray_ui.icon.icon = Image.open(wtray_ui.ready_icon_path).convert("RGBA")
+
+    wtray_ui.icon.title = "Dynamic Suit Voice - Ready"
+    check_interval = config.check_interval
 
     while wtray_ui.running:
-        for f3 in config.mod_dir.glob("*.wem"):
+        for f3 in mod_dir.glob("*.wem"):
             try:
                 current_atime = f3.stat().st_atime
                 wem_id = f3.stem
                 if current_atime != access_times.get(wem_id, 0):
-                    debug_print(f"nms_dynamic_suit_voice_pipeline.py: Access detected for {f3.name} (ID: {wem_id})")
 
                     cached_file = get_cached_wem(config, wem_id)
                     if cached_file is None:
-                        debug_print(f"nms_dynamic_suit_voice_pipeline.py: No cached file found for ID {wem_id}.")
                         continue
-                    debug_print(f"nms_dynamic_suit_voice_pipeline.py: Cached file obtained for ID {wem_id}: {cached_file.name}")
 
-                    moved_file = move_cachedfile_to_mod_dir(cached_file, config.mod_dir, wem_id)
+                    moved_file = move_cachedfile_to_mod_dir(cached_file, mod_dir, wem_id)
                     if moved_file is None:
-                        debug_print(f"nms_dynamic_suit_voice_pipeline.py: Failed to move cached file for ID {wem_id}.")
                         continue
-                    debug_print(f"nms_dynamic_suit_voice_pipeline.py: File moved to mod_dir for ID {wem_id}: {moved_file.name}")
 
                     update_access_time_to_match_newfile(moved_file, access_times)
-                    debug_print(f"nms_dynamic_suit_voice_pipeline.py: {wem_id} access time updated. Returning to Watching.")
 
             except Exception as w_e:
-                debug_print(f"nms_dynamic_suit_voice_pipeline.py:  Error handling {f3.name}: {w_e}")
+                print(f"Error handling {f3.name}: {w_e}")
 
-        time.sleep(config.check_interval)
-
-
-if __name__ == "__main__":
-
-    try:
-        tray_ui = TrayUI(config, watch_wems)
-        debug_print("nms_dynamic_suit_voice_pipeline.py: Watcher Started...")
-        tray_ui.run()
-
-    except Exception as e:
-        import traceback
-        from debug.logging_utils import logger
-        logger.error(f"Unhandled exception in TrayUI: {e}")
-        logger.error(traceback.format_exc())
+        time.sleep(check_interval)

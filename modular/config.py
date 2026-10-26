@@ -1,91 +1,163 @@
 # config.py
-import os
 import csv
-import sys
 import json
+import os
 import shutil
+import sys
 from pathlib import Path
-from llama_cpp import Llama
-from dotenv import load_dotenv
+from llama_cpp import Llama, Optional
 from TTS.api import TTS  # coqui-tts fork
-# from debug.logging_utils import debug_print  # we should not need to log config building, it works
 
+def load_json(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
 
-def resolve_path(env_var: str, root: Path, must_exist=True) -> Path:
-    """Resolve env var into an absolute Path relative to project root if needed."""
-    val = os.getenv(env_var)
-    if not val:
-        raise ValueError(f"{env_var} not set in environment")
-    p = Path(val.strip('"'))
-    if not p.is_absolute():
-        p = root / p
-    if must_exist and not p.exists():
-        raise FileNotFoundError(f"{env_var} points to missing file: {p}")
-    return p
-
+def deep_merge(base: dict, override: dict) -> dict:
+    result = base.copy()
+    for key, value in override.items():
+        if (
+            key in result
+            and isinstance(result[key], dict)
+            and isinstance(value, dict)
+        ):
+            result[key] = deep_merge(result[key], value)
+        else:
+            result[key] = value
+    return result
 
 class SuitVoiceConfig:
-    def __init__(self, env_file: str = "suit_voice.env", init_llm: bool = True):
-        # anchor to project root (parent of modular/)
+    def __init__(self, init_llm: bool = True):
+        # Anchor to project root (parent of modular/)
         root_dir = Path(__file__).parent.parent
-        load_dotenv(dotenv_path=root_dir / env_file)
+        config_dir = root_dir / "config"
 
-        check_interval_raw = os.getenv("CHECK_INTERVAL")
-        if check_interval_raw is None or check_interval_raw.strip() == "":
-            raise ValueError("CHECK_INTERVAL not set in environment")
-        self.check_interval = float(check_interval_raw)
-        self.mod_dir = resolve_path("MOD_DIR", root_dir, must_exist=False)
-        self.csv_path = resolve_path("CSV_PATH", root_dir)
+        # Load file structures
+        self.environment = load_json(config_dir / "environment_config.json")
+        self.llm_prompting = load_json(config_dir / "llm_prompting.json")
+        self.default_customization = load_json(config_dir / "default_customization.json")
+        self.user_customization = load_json(config_dir / "user_customization.json")
+
+        # Merge defaults with custom user tweaks cleanly
+        self.customization = deep_merge(
+            self.default_customization,
+            self.user_customization
+        )
+
+        # --- RUNTIME SETTINGS ---
+        runtime = self.environment.get("runtime", {})
+        self.check_interval = float(runtime.get("check_interval", 0.1))
+        self.max_session_lines = int(runtime.get("max_session_lines", 25))
+        self.quick_cache_max = int(runtime.get("quick_cache_max", 25))
+
+        # ====================================================
+        # 1. CORE FILESYSTEM PATHS (From environment_config.json -> "paths")
+        # ====================================================
+        paths = self.environment.get("paths", {})
+
+        # Game Mod Directory (Must exist to track file updates)
+        self.mod_dir = self.resolve_json_path(paths.get("mod_dir"), root_dir, must_exist=True)
+
+        # Tray App UI Icon (Force to clean string format for PIL/pystray compatibility)
+        icon_path_obj = self.resolve_json_path(paths.get("icon_image"), root_dir, must_exist=True)
+        self.icon_image = str(icon_path_obj)
+
+        # Engine Cache Locations (Will be auto-provisioned safely below)
+        self.temp_wem_dir = self.resolve_json_path(paths.get("temp_wem_dir"), root_dir, must_exist=False)
+        self.temp_wav_dir = self.resolve_json_path(paths.get("temp_wav_dir"), root_dir, must_exist=False)
+        self.quick_cache_dir = self.resolve_json_path(paths.get("quick_cache_dir"), root_dir, must_exist=False)
+
+        # ====================================================
+        # 2. LOGGING ENGINE INITIALIZATION (From environment_config.json -> "logging")
+        # ====================================================
+        logging_cfg = self.environment.get("logging", {})
+        self.prompt_console = bool(logging_cfg.get("console", False))
+        self.prompt_logging = bool(logging_cfg.get("prompt_logging", False))
+
+        # Logging Targets
+        self.cache_log_dir = self.resolve_json_path(logging_cfg.get("cache_log_dir"), root_dir, must_exist=False)
+        self.game_output_csv = self.resolve_json_path(logging_cfg.get("game_output_csv"), root_dir, must_exist=False)
+        self.test_output_csv = self.resolve_json_path(logging_cfg.get("test_output_csv"), root_dir, must_exist=False)
+
+        # Window platform subprocess flags
+        self.create_no_window = 0x08000000 if sys.platform == "win32" else 0
+
+        # Enforce workspace directories (Safe loop: all paths are strict non-nullable Path types)
+        for d in [self.temp_wem_dir, self.temp_wav_dir, self.quick_cache_dir, self.cache_log_dir]:
+            d.mkdir(parents=True, exist_ok=True)
+
+        # ====================================================
+        # 3. EXTERNAL SYSTEM UTILITIES (From environment_config.json -> "external_tools")
+        # ====================================================
+        ext_tools = self.environment.get("external_tools", {})
+        self.cmd_script_path = self.resolve_json_path(ext_tools.get("sound2wem_cmd"), root_dir, must_exist=True)
+
+        # --- PROMPT ASSETS & FILES ---
+        files = self.llm_prompting.get("files", {})
+        self.csv_path = self.resolve_json_path(files.get("csv_path"), root_dir, must_exist=True)
         self.intent_map = self.load_intent_map(self.csv_path)
 
-        self.cmd_script_path = resolve_path("CMD_SCRIPT_PATH", root_dir, must_exist=False)
+        self.suit_voice_base_path = self.resolve_json_path(files.get("base_prompt"), root_dir, must_exist=True)
+        self.suit_voice_base = self.suit_voice_base_path.read_text(encoding="utf-8")
 
-        # TTS model
-        tts_model_name = os.getenv("TTS_MODEL")
-        if not tts_model_name:
-            raise ValueError("TTS_MODEL not set in environment")
-        self.tts_model_name = tts_model_name
-        self.tts_model = TTS(model_name=tts_model_name)
+        self.suit_voice_dynamic_path = self.resolve_json_path(files.get("dynamic_prompt"), root_dir, must_exist=True)
+        self.suit_voice_dynamic = self.suit_voice_dynamic_path.read_text(encoding="utf-8")
 
-        # FFMPEG
+        self.suit_voice_combat_path = self.resolve_json_path(files.get("combat_prompt"), root_dir, must_exist=True)
+        self.suit_voice_combat = self.suit_voice_combat_path.read_text(encoding="utf-8")
+
+        self.promptdata_path = self.resolve_json_path(files.get("prompt_data"), root_dir, must_exist=True)
+        self.promptdata = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
+
+        self.tokenized_logits_path = self.resolve_json_path(files.get("tokenized_logits_path"), root_dir, must_exist=True)
+        self.logit_banlist = json.loads(self.tokenized_logits_path.read_text(encoding="utf-8"))
+
+        # --- COMBAT / CATEGORY METRIC SETTING ---
+        combat_cfg = self.llm_prompting.get("combat", {})
+        self.milcat_enable_reasoning = combat_cfg.get("allow_reasoning", True)
+        self.mil_cat = combat_cfg.get("special_categories", [])
+
+        labels = self.llm_prompting.get("category_labels", {})
+        self.units_received = labels.get("units_received", "Increased Funds")
+        self.units_insufficient = labels.get("units_insufficient", "Insufficient Funds")
+
+        # --- USER PROFILE & CUSTOMIZATION ---
+        self.player_name = self.customization.get("player_name", "Interloper")
+        phrase_settings = self.customization.get("phrase_settings", {})
+        self.current_tone = phrase_settings.get("tone", "Standard")
+        self.current_wordiness = phrase_settings.get("wordiness", "Standard")
+
+        # Audio effect mapping dict for processing pipeline reference
+        self.voice_effects = self.customization.get("voice_effects", {})
+
+        # FFMPEG Binary Resolution
         ffmpeg_path = shutil.which("ffmpeg")
         if not ffmpeg_path:
-            ffmpeg_env = os.getenv("FFMPEG_PATH")
+            # Fall back to alternative platform configuration options if explicitly added
+            ffmpeg_env = self.environment.get("external_tools", {}).get("ffmpeg_path")
             if ffmpeg_env:
                 ffmpeg_path = Path(ffmpeg_env.strip('"'))
                 os.environ["PATH"] = str(ffmpeg_path.parent) + ";" + os.environ.get("PATH", "")
             else:
-                raise SystemExit("ffmpeg not found on PATH and FFMPEG_PATH not set in .env")
+                raise SystemExit("ffmpeg not found on PATH. Please install ffmpeg or set up path contexts.")
         self.ffmpeg_path = Path(ffmpeg_path)
 
-        self.icon_image = resolve_path("ICON_IMAGE", root_dir, must_exist=False)
+        # --- ML MODEL INITIALIZATIONS ---
+        # --- ML MODEL INITIALIZATIONS ---
+        models = self.environment.get("models", {})
 
-        self.logging = os.getenv("PROMPT_CONSOLE", "false").strip().lower() == "true"
-        self.logging = os.getenv("PROMPT_LOGGING", "false").strip().lower() == "true"
-        self.game_output_csv = resolve_path("GAME_OUTPUT_CSV", root_dir, must_exist=False)
-        self.create_no_window = 0x08000000 if sys.platform == "win32" else 0
+        # Coqui-TTS Lazy Loading Setup
+        self.tts_model_name = models.get("tts_model")
+        if not self.tts_model_name:
+            raise ValueError("tts_model token signature missing inside configuration targets.")
 
-        # Suit voice prompt files
-        self.suit_voice_base_path = resolve_path("SUIT_VOICE_BASE_PATH", root_dir)
-        self.suit_voice_base = self.suit_voice_base_path.read_text(encoding="utf-8")
+        # Explicit type hint tells Pylance that TTS is allowed here later!
+        self.tts_model: Optional[TTS] = None
 
-        self.suit_voice_dynamic_path = resolve_path("SUIT_VOICE_DYNAMIC_PATH", root_dir)
-        self.suit_voice_dynamic = self.suit_voice_dynamic_path.read_text(encoding="utf-8")
-
-        self.suit_voice_combat_path = resolve_path("SUIT_VOICE_COMBAT_PATH", root_dir)
-        self.suit_voice_combat = self.suit_voice_combat_path.read_text(encoding="utf-8")
-        self.milcat_enable_reasoning = os.getenv("COMBAT_CATEGORIES_ALLOW_REASONING")
-
-        self.promptdata_path = resolve_path("PROMPTdata_PATH", root_dir)
-        self.promptdata = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
-
-        # Banlist
-        self.tokenized_logits_path = resolve_path("TOKENIZED_LOGITS_PATH", root_dir)
-        self.logit_banlist = json.loads(self.tokenized_logits_path.read_text(encoding="utf-8"))
-
-        # LLM model
-        self.llm_model = str(resolve_path("LLM_MODEL", root_dir))
-        self.llm = None
+        # Llama Engine Setup
+        self.llm_model = str(self.resolve_json_path(models.get("llm_model"), root_dir, must_exist=True))
+        self.llm = None  # You can also use self.llm: Optional[Llama] = None if it squawks here too
         if init_llm:
             self.llm = Llama(
                 model_path=self.llm_model,
@@ -95,27 +167,7 @@ class SuitVoiceConfig:
                 verbose=False
             )
 
-        # for specific explanations or notes on any of the following, check the env file comments
-        self.current_tone = os.getenv("PHRASE_TONE")
-        self.current_wordiness = os.getenv("PHRASE_WORDINESS")
-        self.player_name = os.getenv("PLAYER_NAME")
-        self.units_received = os.getenv("UNITS_CATEGORY_RECEIVED")
-        self.units_insufficient = os.getenv("UNITS_CATEGORY_INSUFFICIENT")
-
-        mil_cat_str = os.getenv("MIL_CATEGORIES", "")
-        self.mil_cat = [x.strip() for x in mil_cat_str.split(",") if x.strip()]
-
-        self.max_session_lines = int(os.getenv("MAX_SESSION_LINES", 25))
-        self.recent_lines_text = {}  # {wem_id_str: [line1, line2, ...]}
-
-        self.quick_cache_max = int(os.getenv("QUICK_CACHE_MAX", 25))
-        self.quick_cache_dir = resolve_path("QUICK_CACHE_DIR", root_dir, must_exist=False)
-        self.cache_log_dir = resolve_path("CACHE_LOG_DIR", root_dir, must_exist=False)
-
-        self.temp_wem_dir = resolve_path("TEMP_WEM_DIR", root_dir, must_exist=False)
-        self.temp_wav_dir = resolve_path("TEMP_WAV_DIR", root_dir, must_exist=False)
-        for d in [self.temp_wem_dir, self.temp_wav_dir, self.quick_cache_dir, self.cache_log_dir]:
-            d.mkdir(parents=True, exist_ok=True)
+        self.recent_lines_text = {}  # Runtime session state cache tracker: {wem_id_str: [line1, line2, ...]}
 
     def get_tone(self) -> str:
         return self.current_tone or "Standard"
@@ -125,22 +177,33 @@ class SuitVoiceConfig:
             return "Observer"
         return self.current_wordiness or "Standard"
 
+    def resolve_json_path(self, path_str: str, root: Path, must_exist=True) -> Path:
+        if not path_str:
+            raise ValueError("Required configuration path entry is missing in JSON targets.")
+
+        p = Path(path_str.strip('"'))
+        if not p.is_absolute():
+            p = root / p
+
+        if must_exist and not p.exists():
+            raise FileNotFoundError(f"Configuration file element targets a missing path reference: {p}")
+        return p
+
     @staticmethod
     def load_intent_map(csv_path: Path) -> dict:
         i_intent_map = {}
+        if not csv_path.exists():
+            return i_intent_map
         try:
             with open(csv_path, newline='', encoding='utf-8') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     wem_number = (row.get('WEM_number') or '').strip()
-                    original_phrase = (row.get('Transcription') or '').strip()
-                    category = (row.get('Category') or '').strip()
-                    intent = (row.get('Intent') or '').strip()
                     i_intent_map[wem_number] = {
-                        "Transcription": original_phrase,
-                        "Category": category,
-                        "Intent": intent,
+                        "Transcription": (row.get('Transcription') or '').strip(),
+                        "Category": (row.get('Category') or '').strip(),
+                        "Intent": (row.get('Intent') or '').strip(),
                     }
-        except Exception as e1:
-            print(f"Error loading intent map: {e1}")
+        except Exception as e:
+            print(f"Error loading intent map CSV profile: {e}")
         return i_intent_map

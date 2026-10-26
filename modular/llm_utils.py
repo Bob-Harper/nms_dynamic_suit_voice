@@ -1,6 +1,5 @@
 import time
 import re
-from debug.logging_utils import debug_print
 
 
 def create_logit_bias(config, category_l):
@@ -20,7 +19,6 @@ def reword_phrase(config, wem_id_r,
                   category_r,
                   original_phrase_r,
                   finalprompt):
-    debug_print("llm_utils.py: reword_phrase")   # works, just seeing it get called during the trail
     # enforce usage or avoidance of specific tokens using logits
     logit_bias_list = create_logit_bias(config, category_r)
 

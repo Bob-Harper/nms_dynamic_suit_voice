@@ -9,15 +9,18 @@ __pycache__/
 /cache/tmp_quick_dir/*
 desktop.ini
 
+# Ignore USER CUSTOMIZED FILE, THIS MAY NEVER BE OVERWRITTEN BY UPDATES.
+# Installer will create an empty config as needed.
+config\user_customization.json
+
 # Ignore all archived and stored material.
 archived/
 extras_put_in_mods_folder/
 
 # Ignore all model-related stuff
-assets/qwen3_06b_q4/
-assets/qwen3_17b_q8/
-assets/qwen3_4b_q8/
+assets/qwen3_4b_q8_0/
 
 # But keep icons/images
 !assets/**/*.png
 !assets/**/*.ico
+

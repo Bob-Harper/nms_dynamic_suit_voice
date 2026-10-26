@@ -2,7 +2,7 @@
 from time import time
 from modular.config import SuitVoiceConfig
 from modular.quick_cache import _replacement_wrapper
-from debug.logging_utils import debug_print
+from archived.debug.logging_utils import debug_print
 import csv
 
 config = SuitVoiceConfig()
