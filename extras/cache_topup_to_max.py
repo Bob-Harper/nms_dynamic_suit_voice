@@ -2,7 +2,6 @@
 from time import time
 from modular.config import SuitVoiceConfig
 from modular.quick_cache import _replacement_wrapper
-from archived.debug.logging_utils import debug_print
 import csv
 
 config = SuitVoiceConfig()
@@ -23,7 +22,6 @@ def fill_cache_for_ids(wem_ids, max_count=None):
         max_count = config.quick_cache_max
     wem_ids = [str(w) for w in wem_ids]
     total_ids = len(wem_ids)
-    debug_print("Starting cache fill for {} WEM IDs", total_ids)
 
     for idx, wem_id in enumerate(wem_ids, start=1):
         wem_id = str(wem_id)  # force to string
@@ -34,22 +32,16 @@ def fill_cache_for_ids(wem_ids, max_count=None):
 
         existing_files = list(wem_dir.glob("*.wem"))
         existing_count = len(existing_files)
-        debug_print("({}/{}) [{}] Current count: {} / {}", idx, total_ids, wem_id, existing_count, max_count)
 
         missing_count = max_count - existing_count
         if missing_count <= 0:
-            debug_print("({}/{}) [{}] Already full, skipping", idx, total_ids, wem_id)
             continue
 
         for i in range(missing_count):
             t0 = time()
-            debug_print("({}/{}) [{}] Generating {}/{} missing WEM", idx, total_ids, wem_id, i+1, missing_count)
             _replacement_wrapper(config, wem_id, wem_dir)
-            debug_print("({}/{}) [{}] Done generating {} in {:.3f}s", idx, total_ids, wem_id, i+1, time()-t0)
 
-        debug_print("({}/{}) [{}] Total time for this ID: {:.3f}s", idx, total_ids, wem_id, time()-start_time)
 
-    debug_print("Cache fill complete for all IDs!")
 
 if __name__ == "__main__":
     fill_cache_for_ids(wem_ids_raw)

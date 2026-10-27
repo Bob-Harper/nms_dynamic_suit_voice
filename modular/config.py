@@ -107,9 +107,6 @@ class SuitVoiceConfig:
         self.suit_voice_combat_path = self.resolve_json_path(files.get("combat_prompt"), root_dir, must_exist=True)
         self.suit_voice_combat = self.suit_voice_combat_path.read_text(encoding="utf-8")
 
-        self.promptdata_path = self.resolve_json_path(files.get("prompt_data"), root_dir, must_exist=True)
-        self.promptdata = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
-
         self.tokenized_logits_path = self.resolve_json_path(files.get("tokenized_logits_path"), root_dir, must_exist=True)
         self.logit_banlist = json.loads(self.tokenized_logits_path.read_text(encoding="utf-8"))
 
@@ -125,8 +122,30 @@ class SuitVoiceConfig:
         # --- USER PROFILE & CUSTOMIZATION ---
         self.player_name = self.customization.get("player_name", "Interloper")
         phrase_settings = self.customization.get("phrase_settings", {})
+        # --- Inside your Config Class Initialization ---
+        self.promptdata_path = self.resolve_json_path(files.get("prompt_data"), root_dir, must_exist=True)
+        raw_prompt_json = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
+
+        # 1. Create a structured memory object for the Tkinter UI to read descriptions
+        self.ui_promptdata = raw_prompt_json
+
+        # 2. Flatten the dictionary dynamically in memory for the backend AI engine!
+        # This keeps the rest of your text generation loops 100% stable and untouched.
+        self.promptdata = {
+            "wordiness": {
+                key: (val["prompt"] if isinstance(val, dict) else val)
+                for key, val in raw_prompt_json.get("wordiness", {}).items()
+            },
+            "tones": {
+                key: (val["prompt"] if isinstance(val, dict) else val)
+                for key, val in raw_prompt_json.get("tones", {}).items()
+            }
+        }
+
+        # Keep your existing state trackers exactly as they are
         self.current_tone = phrase_settings.get("tone", "Standard")
         self.current_wordiness = phrase_settings.get("wordiness", "Standard")
+
 
         # Audio effect mapping dict for processing pipeline reference
         self.voice_effects = self.customization.get("voice_effects", {})

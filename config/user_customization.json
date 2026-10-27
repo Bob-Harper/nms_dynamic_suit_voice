@@ -1,2 +1,17 @@
 {
+    "tts_model": "vocoder_models/en/ljspeech/multiband-melgan",
+    "player_name": "Interloper",
+    "phrase_settings": {
+        "tone": "Standard",
+        "wordiness": "Standard"
+    },
+    "voice_effects": {
+        "gain_db": 5,
+        "pitch_semitones": 4,
+        "tempo": 1.02,
+        "rate": 0.51,
+        "ring_freq": 300,
+        "ring_mix": 100,
+        "formant_percent": 80
+    }
 }

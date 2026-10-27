@@ -31,18 +31,49 @@
   "Vehicle Readiness": "Notify {name} of a vehicle’s readiness, deployment, or availability for immediate use.",
   "Vehicle Status": "Describe vehicle status, focusing on effects relevant to {name}.",
   "Unused": "Placeholder",
+
   "wordiness": {
-    "Standard": "You must never repeat the input phrase or intent description verbatim or in part or with minor word or punctuation or capitalization substitutions. full Rephrasing is required. The final reworded output should consist of a maximum of two sentences.",
-    "Verbose": "You must never repeat the input phrase verbatim or with minor word or punctuation or capitalization substitutions. Rephrasing is required. The final output should be a minimum of three sentences to a maximum of 5 sentences. ",
-    "Observer": "Deliver a concise description of a single specific event in exactly one properly punctuated sentence. You must never repeat the input phrase verbatim or with minor word, punctuation, or capitalization substitutions.  Do not speculate about outcomes or suggest actions. Do not refer to {name} or imply ownership or posession."
+    "Standard": {
+      "prompt": "You must never repeat the input phrase or intent description verbatim or in part or with minor word or punctuation or capitalization substitutions. full Rephrasing is required. The final reworded output should consist of a maximum of two sentences.",
+      "description": "Standard length. Delivering information in one or two clear sentences."
+    },
+    "Verbose": {
+      "prompt": "You must never repeat the input phrase verbatim or with minor word or punctuation or capitalization substitutions. Rephrasing is required. The final output should be a minimum of three sentences to a maximum of 5 sentences. ",
+      "description": "Longer response length. Elaborates on information with three to five full sentences."
+    },
+    "Observer": {
+      "prompt": "Deliver a concise description of a single specific event in exactly one properly punctuated sentence. You must never repeat the input phrase verbatim or with minor word, punctuation, or capitalization substitutions. Do not speculate about outcomes or suggest actions. Do not refer to {name} or imply ownership or posession.",
+      "description": "Ultra-short. A single, strict sentence under ten words with no personal names."
+    }
   },
   "tones": {
-    "Standard": "State the obvious, clearly and concisely, with sci-fi themed technical jargon as delivered by a bored Vulcan reading a technical datasheet. ",
-    "Poetic": "Render the notification in a 2-sentence Romantic Era rhyming couplet, using vivid metaphorical language in the style of Shelley, Byron, and Keats. Address {name} directly as 'you', describing the experience only as it affects them. Do not place {name} or {name} as a subject; use strict second-person throughout.",
-    "Epic": "Express the notification with grand sweeping intensity and fantastical phrasing, much like James Earl Jones presenting a movie trailer. Focus on how this experience relates to the broad overview of potential future historical events; nothing should be narrated in third person.",
-    "Lamentation": "Express the notification with mournful, tragic gravitas, much like Marvin the Paranoid Android. Focus on how this experience relates to {name} and possible absurd related events where the outcome will eventually be futile; nothing should be narrated in third person.",
-    "Prophecy": "Render the notification as though it was predicted in an ancient prophecy. Speak in present tense, describing the prophecy only in terms of how it affects {name}. Do not narrate events in third person. ",
-    "Philosophical": "Provide a deeply profound philosophical interpretation of the possible impact on {name}. Address {name} directly in present tense, reflecting on their experience. Avoid third-person narration; {name} must not be used as a subject. ",
-    "Military": "Express the notification with intense military jargon, much like Michael Ironside talking this his soldiers in Starship Troopers.  Deliver the information to {name} as if delivering new combat orders or updates, do not narrate in third person."
+    "Standard": {
+      "prompt": "State the obvious, clearly and concisely, with sci-fi themed technical jargon as delivered by a bored Vulcan reading a technical datasheet. ",
+      "description": "Dry, technical, emotionless readout."
+    },
+    "Poetic": {
+      "prompt": "Render the notification in a 2-sentence Romantic Era rhyming couplet, using vivid metaphorical language in the style of Shelley, Byron, and Keats. Address {name} directly as 'you', describing the experience only as it affects them. Do not place {name} or {name} as a subject; use strict second-person throughout.",
+      "description": "Rhyming dramatic poetry in the style of 19th-century Romantic authors."
+    },
+    "Epic": {
+      "prompt": "Express the notification with grand sweeping intensity and fantastical phrasing, much like James Earl Jones presenting a movie trailer. Focus on how this experience relates to the broad overview of potential future historical events; nothing should be narrated in third person.",
+      "description": "Cinematic trailer narration with broad, earth-shaking stakes."
+    },
+    "Lamentation": {
+      "prompt": "Express the notification with mournful, tragic gravitas, much like Marvin the Paranoid Android. Focus on how this experience relates to {name} and possible absurd related events where the outcome will eventually be futile; nothing should be narrated in third person.",
+      "description": "Mournful, bleakly hilarious existential dread."
+    },
+    "Prophecy": {
+      "prompt": "Render the notification as though it was predicted in an ancient prophecy. Speak in present tense, describing the prophecy only in terms of how it affects {name}. Do not narrate events in third person. ",
+      "description": "Cryptic, ancient present-tense vision foretelling your actions."
+    },
+    "Philosophical": {
+      "prompt": "Provide a deeply profound philosophical interpretation of the possible impact on {name}. Address {name} directly in present tense, reflecting on their experience. Avoid third-person narration; {name} must not be used as a subject. ",
+      "description": "Deeply reflective and existential commentary on your situation."
+    },
+    "Military": {
+      "prompt": "Express the notification with intense military jargon, much like Michael Ironside talking to his soldiers in Starship Troopers. Deliver the information to {name} as if delivering new combat orders or updates, do not narrate in third person.",
+      "description": "Gruff tactical jargon delivered as direct battlefield combat commands."
+    }
   }
 }

@@ -24,3 +24,5 @@ assets/qwen3_4b_q8_0/
 !assets/**/*.png
 !assets/**/*.ico
 
+cache/sandbox_raw.wav
+cache/sandbox_processed.wav
