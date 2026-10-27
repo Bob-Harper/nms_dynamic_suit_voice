@@ -139,29 +139,80 @@ def install_reqs():
     run([str(python_exe), "-m", "pip", "install", "--upgrade", "pip"], "Upgrade pip")
     run([str(python_exe), "-m", "pip", "install", "-r", "requirements.txt"], "Install dependencies")
 
+
 # -------------------------
 # Step: Download LLM model
 # -------------------------
-def download_model():
-    url = "https://huggingface.co"
-    model_dir = Path("assets/qwen3_4b_q8_0")
-    target_file = model_dir / "Qwen3-4B-Q8_0.gguf"
+# installer.py - Streamlined Dynamic Downloader
 
+def download_model():
+    # 1. Force absolute project path mapping relative to the script location
+    project_root = Path(__file__).parent.absolute()
+    config_dir = project_root / "config"
+    env_config_path = config_dir / "environment_config.json"
+
+    if not env_config_path.exists():
+        print(f"ERROR: Cannot download model. Configuration profile missing: {env_config_path}")
+        sys.exit(1)
+
+    with open(env_config_path, "r", encoding="utf-8") as f:
+        env_data = json.load(f)
+
+    # 2. Extract configuration locations and URLs dynamically out of the JSON
+    models_cfg = env_data.get("models", {})
+    llm_model_setting = models_cfg.get("llm_model") # "assets/qwen3_4b_q8_0/Qwen3-4B-Q8_0.gguf"
+
+    model_urls = env_data.get("model_url", {})
+    url = model_urls.get("qwen3_4b_q8_0")
+
+    if not llm_model_setting or not url:
+        print("ERROR: Crucial model keys or URLs are missing inside config/environment_config.json")
+        sys.exit(1)
+
+    # Build explicit target file path destinations
+    target_file = project_root / Path(llm_model_setting.strip('"'))
+    model_dir = target_file.parent
     model_dir.mkdir(parents=True, exist_ok=True)
 
+    # 3. Streamlined File Guard: Just filters out the tiny 172 KB text stubs
     if target_file.exists():
-        print("Model already exists, skipping.")
-        return
+        actual_size = target_file.stat().st_size
+        if actual_size > (10 * 1024 * 1024):  # Safe Baseline: Greater than 10 megabytes
+            print("Model binary verified. Skipping download.")
+            return
+        else:
+            print(f"Warning: Found incomplete configuration file stub. Re-downloading...")
+            target_file.unlink()
 
-    print("Downloading model...")
+    print(f"Downloading model binary (approx 4.4 GB) to config location: {target_file}")
+
+    # 4. Stream the payload safely past server-side socket flushes
     import requests
-    with requests.get(url, stream=True) as r:
-        r.raise_for_status()
-        with open(target_file, "wb") as f:
-            for chunk in r.iter_content(chunk_size=8192):
-                f.write(chunk)
 
-    print("Download complete.")
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+
+    with requests.get(url, headers=headers, stream=True) as r:
+        r.raise_for_status()
+
+        total_size = int(r.headers.get('content-length', 0))
+        downloaded = 0
+
+        with open(target_file, "wb") as f:
+            for chunk in r.iter_content(chunk_size=1024 * 1024): # 1MB stream buffers
+                if chunk:
+                    f.write(chunk)
+                    downloaded += len(chunk)
+
+                    # Print progress marker
+                    if downloaded % (50 * 1024 * 1024) < (1024 * 1024):
+                        mb_done = downloaded / (1024 * 1024)
+                        if total_size:
+                            print(f"Progress: {mb_done:.1f} MB / {total_size / (1024 * 1024):.1f} MB downloaded...", end="\r")
+                        else:
+                            print(f"Progress: {mb_done:.1f} MB downloaded...", end="\r")
+
+    print("\nModel binary download complete via configuration metrics.")
+
 
 # -----------------------------------------
 # Handler: run download_model() inside venv
@@ -170,6 +221,8 @@ if "--download-model" in sys.argv:
     download_model()
     sys.exit(0)
 
+
+
 # -------------------------
 # Step: Setup Sound2WEM
 # -------------------------
@@ -177,22 +230,25 @@ def setup_sound2wem():
     s2w = Path("sound2wem")
     cmd = s2w / "zSound2wem.cmd"
 
+    # Static command string ensures Windows parses the absolute URL token perfectly
+    CLONE_CMD = "git clone https://github.com/EternalLeo/sound2wem"
+
     if s2w.exists():
         if not cmd.exists():
             print("Warning: sound2wem exists but zSound2wem.cmd is missing.")
             choice = input("Delete and re-clone? (Y/N): ").strip().lower()
             if choice == "y":
                 shutil.rmtree(s2w)
-                run(["git", "clone", "https://github.com", "sound2wem"],
-                    "Clone Sound2WEM")
+                print("\n=== Clone Sound2WEM ===")
+                subprocess.run(CLONE_CMD, shell=True, check=True)
             else:
                 print("Cannot continue without zSound2wem.cmd.")
                 sys.exit(1)
         else:
             print("Sound2WEM directory OK.")
     else:
-        run(["git", "clone", "https://github.com", "sound2wem"],
-            "Clone Sound2WEM")
+        print("\n=== Clone Sound2WEM ===")
+        subprocess.run(CLONE_CMD, shell=True, check=True)
 
     print("\nPlease run Sound2WEM setup:")
     print("  1) Explorer window opened.")
@@ -201,6 +257,8 @@ def setup_sound2wem():
     print("  4) Return here and press Enter.")
     subprocess.Popen(["explorer", str(s2w)])
     input("Press Enter when ready...")
+
+
 
 # -------------------------
 # Step: Copy starter WEMs
