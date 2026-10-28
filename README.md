@@ -6,7 +6,7 @@ Repository: [[nms_dynamic_suit_voice](https://github.com/nms_dynamic_suit_voice)
 
 ## Overview
 
-This mod replaces static suit AI voice lines in No Man’s Sky with dynamically generated, non-repetitive lines, powered by a local AI model and localized audio DSP filters.
+This mod replaces static exosuit AI voice lines in No Man’s Sky with dynamically generated, non-repetitive lines, powered by a local AI model and localized audio DSP filters.
 
 ### Non-Negotiable Core Project Philosophies:
 - **Local files ONLY.** No cloud processing, zero internet connection required, and absolutely no paid API subscription keys.
@@ -15,17 +15,24 @@ This mod replaces static suit AI voice lines in No Man’s Sky with dynamically 
 
 ## How the Tech Works
 
-When No Man's Sky makes a sound call to play a suit voice line, it reads the physical file it finds inside your mod directory *at the exact millisecond it searches*. The game does NOT preload mod voice files into system memory when it launches. They load and play **EACH TIME** the game calls for that specific `.wem` file block, then are immediately unloaded until called again.
+When No Man's Sky makes a sound call to play a suit voice line, it reads the physical file it finds inside your mod directory *at the exact moment it searches*. The game does NOT preload mod voice files into system memory when it launches. They load and play **EACH TIME** the game calls for that specific `.wem` file block, then are immediately unloaded until called again.
 
-Because your local pipeline generates variations ahead of time into a protected background cache buffer, the system watcher instantly swaps a fresh file into your game folder the moment a line finishes playing. Every notification is completely new—even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
+Because your local pipeline generates variations ahead of time into a protected background cache buffer, the system watcher instantly swaps a fresh file into your game folder the moment a line is loaded and played by the game. Every notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
 
 ## Key Features (New in v1.1!)
 
-- 🖥️ **Centralized Control Dashboard:** A fully graphical config interface (`960x748`) to customize iteration names, swap engines, or fine-tune signal waves natively.
+- 🖥️ **Centralized Control Dashboard:** A graphical config interface (`960x820) to customize iteration names, swap engines, or fine-tune processing effects.
 - 🎛️ **NumPy Acoustic Modifiers Matrix:** Six standalone sliders to control volume gain, sentence pacing, pitch semitones, rate scalars, throat size resonators, and cybernetic overlay mix balances.
-- 🛸 **Themed Audio Presets:** Pre-calibrated, data-driven JSON presets that instantly transform standard voice clips into lore-friendly signatures like the *Gek NipNip Merchant*, *Vy'keen Juggernaut*, *Caffeinated Korvax*, or *Queeg 500 Tactical Advisor*.
+- 🛸 **Themed Audio Presets:** Pre-calibrated, data-driven JSON presets that instantly transform standard voice clips into lore-friendly signatures like the *Gek NipNip Merchant*, *Vy'keen Juggernaut*, or *Caffeinated Korvax*.
 - 🗄️ **Secure 8-Model Core Roster:** Built-in dynamic asset management for eight verified, high-performance, single-voice English baselines with crash-free automated download or uninstall hooks.
 - 🧠 **Protected VRAM Performance:** Run fully on optimized CPU thread inference layouts, leaving your GPU completely free to push maximum frame rates to the game.
+
+### 🛠️ Persistent User Configuration Matrix
+Customizations are now securely saved directly to `config/user_customization.json`. This architecture ensures your personalized variables will **never be overwritten or wiped out** during future mod updates or repository git pulls.
+
+- **First-Time Installation:** If this configuration file does not exist on your drive, the automated setup script will initialize it cleanly for you.
+- **Upgrading the Mod:** If the file already exists with your custom settings, the engine boundaries will completely shield it from being touched.
+- **Power-User Manipulation:** While changes can be made manually via any plain-text editor, the graphical **DSV Manager** interface reads natively from this profile map and saves your slider adjustments straight back to it when applying or saving changes.
 
 ## Examples of Dynamic Output Variations
 
@@ -40,28 +47,28 @@ Because your local pipeline generates variations ahead of time into a protected 
 
 ## Current Verified Limitations
 
-- **Mod Conflicts:** Completely incompatible with traditional static suit voice mods that drop pre-recorded audio `.pak` files directly into your standard game `MODS` folder.
-- **VITS Architecture Block:** Advanced multi-speaker VITS architectures are intentionally excluded from the scan loader to protect end-users from installing external C++ system binaries (such as eSpeak NG) onto their primary Windows environment paths.
+- **Mod Conflicts:** Completely incompatible with traditional static suit voice mods that drop pre-recorded audio `.wem` files directly into your standard game `MODS` folder.
+- **VITS Architecture Block:** Advanced multi-speaker VITS models are intentionally excluded from the scan loader at this time to protect end-users from installing external C++ system binaries (such as eSpeak NG) onto their primary Windows environment paths.
 
 ## Installation & Deployment
 
-### ⚡ Guided Setup (Recommended)
+### ⚡ Automatic or Guided Installation
 Launch the primary command wrapper script:
 ```bash
 DOUBLECLICK_To_Install_Dynamic_Suit_Voice.cmd
 ```
-Choose **Automatic Mode** for a streamlined, minimal-click environment deployment, or choose **Guided Mode** to manually inspect path mappings, folder targets, and validation configurations line-by-line.
+Choose **Automatic Mode** for a streamlined, minimal-click environment deployment, or choose **Guided Mode** to manually inspect path mappings, folder targets, and validation configurations step-by-step.
 
-### 🛠️ Launching the Control Deck
+### 🛠️ Launching the DSV Manager
 To customize your Exosuit experience, simply double-click the launcher script in your root mod folder:
 ```bash
 run_manager.cmd
 ```
 This instantly boots your graphical dashboard configuration utility, allowing you to fine-tune your **Iteration Designation**, swap active vocal models on the fly, or test-play custom presets inside the live real-time sandbox deck before starting your game session.
 
-2. Set your custom **Iteration Name**, calibrate your **Companion AI Tone Profiles**, or load your favorite alien voice presets inside the live sandbox panel.
-3. Click **Save & Close** (or leave it active via **Apply Changes** to tweak metrics on the fly while playing!).
-4. Fire up the background watchdog thread generator pipeline, launch No Man's Sky, and head out into the stars!
+- Set your custom **Iteration Name**, calibrate your **Companion AI Tone Profiles**, or load your favorite alien voice presets inside the live sandbox panel.
+- Click **Save & Close** (or leave it active via **Apply Changes** to tweak metrics on the fly while playing!).
+- Fire up the background watchdog thread generator pipeline, launch No Man's Sky, and head out into the stars!
 
 ## Future Framework Roadmap (Version 1.2 and Beyond)
 - 💾 **Custom User Profile Saving:** A local profile manager to let users write, name, and archive their own handcrafted audio preset slider files.
@@ -74,5 +81,5 @@ Distributed fully open-source under the MIT License. See `LICENSE` for details.
 
 ## Special Acknowledgments
 - **[[EternalLeo](https://github.com)]:** The excellent [[sound2wem](https://github.com/sound2wem)] utility drives 50% of the back-end compiler pipeline's heavy lifting.
-- **The Nexus Mods Suit Audio Community:** Gratitude to all original voice modders and commenters whose forum feedback helped isolate the exact filesystem directories the game monitors for sound cues.
-- **Sean Murray & Hello Games:** Deep thanks for crafting the definitive cosmic sandbox universe we waited 25 years to explore.
+- **The Nexus Mods Suit Audio Community:** Gratitude to all original voice modders and commenters whose forum feedback helped isolate the exact filesystem directories the game monitors.
+- **Sean Murray & Hello Games:** Deep thanks for crafting the definitive cosmic sandbox universe we waited all these years to explore.
