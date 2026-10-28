@@ -11,7 +11,7 @@ desktop.ini
 
 # Ignore USER CUSTOMIZED FILE, THIS MAY NEVER BE OVERWRITTEN BY UPDATES.
 # Installer will create an empty config as needed.
-config\user_customization.json
+config/user_customization.json
 
 # Ignore all archived and stored material.
 archived/
@@ -26,3 +26,4 @@ assets/qwen3_4b_q8_0/
 
 cache/sandbox_raw.wav
 cache/sandbox_processed.wav
+

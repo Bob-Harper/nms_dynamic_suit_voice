@@ -5,6 +5,8 @@ from tkinter import ttk, messagebox
 import threading
 from pathlib import Path
 import sys
+from manager.tooltip import bind_tooltip
+
 
 class VoiceModelTab(ttk.Frame):
     def __init__(self, parent, controller):

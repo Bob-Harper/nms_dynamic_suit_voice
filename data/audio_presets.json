@@ -10,31 +10,31 @@
         "ring_freq": 300,
         "formant_percent": 80
     },
-    "Queeg 500 Tactical Matrix": {
+    "Gek NipNip Merchant": {
         "target_model": "tts_models/en/ljspeech/tacotron2-DDC_ph",
-        "description": "Loaded Queeg 500 configuration. Red Alert state protocols operational.",
-        "gain_db": 6,
-        "tempo": 1.44,
-        "pitch_semitones": 0,
-        "ring_mix": 10,
-        "rate": 1.21,
-        "ring_freq": 260,
-        "formant_percent": 30
+        "description": "Warning, you are too high to land.",
+        "gain_db": 5,
+        "tempo": 0.69,
+        "pitch_semitones": 5,
+        "ring_mix": 25,
+        "rate": 1.26,
+        "ring_freq": 830,
+        "formant_percent": 50
     },
-    "Drunken Juggernaut Diagnostic Mode": {
+    "Vy'Keen Juggernaut": {
         "target_model": "tts_models/en/ljspeech/tacotron2-DDC_ph",
-        "description": "Loaded Drunken Juggernaut tuning matrix. Primary synchronization heavily slurred.",
-        "gain_db": 4,
-        "tempo": 0.65,
-        "pitch_semitones": -3,
-        "ring_mix": 75,
-        "rate": 0.35,
-        "ring_freq": 90,
-        "formant_percent": 110
+        "description": "Extreme vocal cord mutation, subvocal layers active.",
+        "gain_db": 5,
+        "tempo": 2.00,
+        "pitch_semitones": -12,
+        "ring_mix": 100,
+        "rate": 0.50,
+        "ring_freq": 300,
+        "formant_percent": 80
     },
-    "Alien Queen Structural Hiss": {
+    "Caffeinated Korvax": {
         "target_model": "tts_models/en/ljspeech/tacotron2-DDC_ph",
-        "description": "WARNING: Extreme frequency mutation loaded. Hiss layers active.",
+        "description": "Quantum frequency distortion enabled.",
         "gain_db": 5,
         "tempo": 1.35,
         "pitch_semitones": 9,
@@ -43,26 +43,26 @@
         "ring_freq": 850,
         "formant_percent": 45
     },
-    "Shirley Temple Sub-Vocal Filter": {
+    "Queeg 500 Tactical Advisor": {
         "target_model": "tts_models/en/ljspeech/tacotron2-DDC_ph",
-        "description": "Loaded high-pitch filter matrices. Pacing curves elevated.",
-        "gain_db": 5,
-        "tempo": 1.15,
-        "pitch_semitones": 7,
-        "ring_mix": 35,
-        "rate": 0.95,
-        "ring_freq": 450,
-        "formant_percent": 60
-    },
-    "Lucia Kline, Exobiologist": {
-        "target_model": "tts_models/en/ljspeech/tacotron2-DDC_ph",
-        "description": "Clean, un-effected human researcher recording profile.",
+        "description": "Loaded Queeg 500 configuration. Red Alert state protocols operational.",
         "gain_db": 4,
-        "tempo": 1.05,
-        "pitch_semitones": 4,
-        "ring_mix": 0,
-        "rate": 0.60,
-        "ring_freq": 300,
-        "formant_percent": 0
+        "tempo": 1.84,
+        "pitch_semitones": -6,
+        "ring_mix": 70,
+        "rate": 0.31,
+        "ring_freq": 100,
+        "formant_percent": 150
+    },
+    "Lucia Kline, Exolinguist": {
+        "target_model": "tts_models/en/ljspeech/tacotron2-DDC_ph",
+        "description": "What did you just call me?  You do know I can understand you, right?",
+        "gain_db": 5,
+        "tempo": 1.20,
+        "pitch_semitones": 2,
+        "ring_mix": 10,
+        "rate": 0.55,
+        "ring_freq": 100,
+        "formant_percent": 80
     }
 }

@@ -8,7 +8,7 @@
     "voice_effects": {
         "gain_db": 5,
         "tempo": 1.02,
-        "rate": 0.51,
+        "rate": 0.50,
         "ring_freq": 300,
         "ring_mix": 100,
         "pitch_semitones": 4,

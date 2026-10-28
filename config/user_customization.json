@@ -1,5 +1,5 @@
 {
-    "tts_model": "vocoder_models/en/ljspeech/multiband-melgan",
+    "tts_model": "tts_models/en/ljspeech/tacotron2-DDC_ph",
     "player_name": "Interloper",
     "phrase_settings": {
         "tone": "Standard",

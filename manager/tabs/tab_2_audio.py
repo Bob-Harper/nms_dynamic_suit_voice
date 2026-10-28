@@ -6,6 +6,8 @@ import subprocess
 import threading
 from pathlib import Path
 import sys
+from manager.tooltip import bind_tooltip
+
 
 class AudioTab(ttk.Frame):
     def __init__(self, parent, controller):
@@ -39,10 +41,10 @@ class AudioTab(ttk.Frame):
         presets_container = ttk.LabelFrame(self.left_pane, text=" Quick Exosuit Character Profiles ", padding=12)
         presets_container.pack(fill="x", pady=5)
 
-        ttk.Label(presets_container, text="Select a pre-calibrated vocal matrix signature:").pack(anchor="w", pady=2)
+        ttk.Label(presets_container, text="Precalibrated Vocal Signatures:").pack(anchor="w", pady=2)
 
         # COMBOBOX OPTIONS ARE NOW LOADED DYNAMICALLY FROM DISK KEYS!
-        self.character_preset_var = tk.StringVar(value="Browse Custom Voice Signatures...")
+        self.character_preset_var = tk.StringVar(value="Browse Available Voice Signatures...")
         self.preset_combo = ttk.Combobox(
             presets_container,
             textvariable=self.character_preset_var,
@@ -63,6 +65,7 @@ class AudioTab(ttk.Frame):
         self.gain_scale.set(self.effects_data.get("gain_db", 5))
         self.gain_scale.pack(anchor="w", pady=(0, 5))
         self.controller.ui_vars["gain_db"] = self.gain_scale
+        bind_tooltip([self.gain_scale], "If the voice seems too quiet within the game, increase the Gain value.  Higher values can increase distortion.")
 
         # Sentence Pacing
         ttk.Label(primary_group, text="Sentence Pacing (Speech Speed) [Baseline: 1.00]:").pack(anchor="w", pady=(5, 0))
@@ -70,6 +73,7 @@ class AudioTab(ttk.Frame):
         self.tempo_scale.set(self.effects_data.get("tempo", 1.02))
         self.tempo_scale.pack(anchor="w", pady=(0, 5))
         self.controller.ui_vars["tempo"] = self.tempo_scale
+        bind_tooltip([self.tempo_scale], "Adjust the pace of the synthesized voice without affecting the pitch.")
 
         # Core Voice Tone
         ttk.Label(primary_group, text="Core Voice Tone (Pitch & Speed Shift) [Baseline: 4]:").pack(anchor="w", pady=(5, 0))
@@ -77,6 +81,7 @@ class AudioTab(ttk.Frame):
         self.pitch_scale.set(self.effects_data.get("pitch_semitones", 4))
         self.pitch_scale.pack(anchor="w", pady=(0, 5))
         self.controller.ui_vars["pitch_semitones"] = self.pitch_scale
+        bind_tooltip([self.pitch_scale], "Adjusts the vocal pitch up or down without changing the speed.")
 
         # Synthetic Cybernetic Overlay
         ttk.Label(primary_group, text="Synthetic Cybernetic Overlay % [Baseline: 100]:").pack(anchor="w", pady=(5, 0))
@@ -84,18 +89,19 @@ class AudioTab(ttk.Frame):
         self.mix_scale.set(self.effects_data.get("ring_mix", 100))
         self.mix_scale.pack(anchor="w", pady=(0, 5))
         self.controller.ui_vars["ring_mix"] = self.mix_scale
-        ttk.Label(primary_group, text="↳ Blend slider: 0% is pure human speech, 100% is intense heavy robotics.", font=("TkDefaultFont", 8, "italic"), foreground="#888888").pack(anchor="w", pady=(0, 5))
+        bind_tooltip([self.mix_scale], "Blend unprocessed audio with post-processed audio: 0% is no postprocessing effects at all, 100% is full robotic style distortion.")
 
         # SECTION 2: ADVANCED SIGNAL DIAGNOSTICS (FINE TUNING)
         advanced_group = ttk.LabelFrame(self.left_pane, text=" Advanced Signal Diagnostics (Fine Tuning) ", padding=12)
         advanced_group.pack(fill="x", pady=10)
 
         # Audio Frequency Warp
-        ttk.Label(advanced_group, text="Audio Frequency Warp (Chipmunk Scalar) [Baseline: 0.51]:").pack(anchor="w", pady=(2, 0))
+        ttk.Label(advanced_group, text="Audio Frequency Warp (Chipmunk Scalar) [Baseline: 0.50]:").pack(anchor="w", pady=(2, 0))
         self.rate_scale = tk.Scale(advanced_group, from_=0.1, to=1.5, orient="horizontal", resolution=0.01, length=280, highlightthickness=0)
-        self.rate_scale.set(self.effects_data.get("rate", 0.51))
+        self.rate_scale.set(self.effects_data.get("rate", 0.50))
         self.rate_scale.pack(anchor="w", pady=(0, 5))
         self.controller.ui_vars["rate"] = self.rate_scale
+        bind_tooltip([self.rate_scale], "Alters pitch and speed simultaneously (aka Chipmunk effect). Acts as an additional distortion layer over the vocal baseline.")
 
         # Modulation Carrier Wave Frequency
         ttk.Label(advanced_group, text="Modulation Carrier Wave Frequency (Hz) [Baseline: 300]:").pack(anchor="w", pady=(5, 0))
@@ -103,6 +109,7 @@ class AudioTab(ttk.Frame):
         self.freq_scale.set(self.effects_data.get("ring_freq", 300))
         self.freq_scale.pack(anchor="w", pady=(0, 5))
         self.controller.ui_vars["ring_freq"] = self.freq_scale
+        bind_tooltip([self.freq_scale], "Adjust the frequency of the Robotic distortion effect.  To remove it completely, set the Synthetic Cybernetic Overlay to 0.")
 
         # Vocal Resonator Bandwidth
         ttk.Label(advanced_group, text="Vocal Resonator Bandwidth (Throat Size %) [Baseline: 80]:").pack(anchor="w", pady=(5, 0))
@@ -111,6 +118,7 @@ class AudioTab(ttk.Frame):
         self.formant_percent_var = self.formant_scale
         self.formant_scale.pack(anchor="w", pady=(0, 5))
         self.controller.ui_vars["formant_percent"] = self.formant_scale
+        bind_tooltip([self.formant_scale], "Adjust how deep/gravelly the voice sounds.")
 
         # ====================================================
         # RIGHT PANE: LIVE SANDBOX SIMULATOR
@@ -123,11 +131,11 @@ class AudioTab(ttk.Frame):
 
         warning_text = (
             "• INITIALIZATION PAUSE:\n"
-            "  The very first time you click 'Apply Effects' in a session, the utility may take 10 to 30 seconds "
-            "to boot the local speech synthesis engine environment into memory.\n\n"
+            "  When you click 'Apply Effects' in a session, the utility may take a minute or more"
+            "  to boot the local speech model into memory.\n\n"
             "• ALTERNATE VOICE MODELS:\n"
-            "  Selecting a new voice model will require a network download to pull the binary file if you do not already have it, and will encounter a pause while it loads to memory.\n\n"
-            "These models can be completely managed, uninstalled, or cleared using the Voice Model Management tab."
+            "  Selecting a new voice model may require a network download to pull the file if not already present. Swapping will pause the manager until the model is loaded to memory.\n\n"
+            "  These models are installed, uninstalled, and managed through the Voice Model tab."
         )
 
         warning_label = ttk.Label(warning_frame, text=warning_text, font=("TkDefaultFont", 9, "italic"), wraplength=380, justify="left")
@@ -165,14 +173,14 @@ class AudioTab(ttk.Frame):
                 messagebox.showwarning(
                     "Tuning Calibration Advisory",
                     "Notice: These character presets were handcrafted specifically for the default Mod Voice Engine.\n\n"
-                    "Since you are running an alternative voice model, these slider numbers may sound fast, slow, or distorted until you manually adjust them."
+                    "When running an alternative voice model, these slider numbers may sound fast, slow, or distorted until you manually adjust them."
                 )
 
             # 2. MAP SETTINGS TO GUI SLIDERS GENERIPALLY FROM JSON KEY-VALUES!
             self.gain_scale.set(p.get("gain_db", 5))
             self.pitch_scale.set(p.get("pitch_semitones", 4))
             self.tempo_scale.set(p.get("tempo", 1.02))
-            self.rate_scale.set(p.get("rate", 0.51))
+            self.rate_scale.set(p.get("rate", 0.50))
             self.freq_scale.set(p.get("ring_freq", 300))
             self.mix_scale.set(p.get("ring_mix", 100))
             self.formant_scale.set(p.get("formant_percent", 80))
@@ -191,7 +199,7 @@ class AudioTab(ttk.Frame):
         self.gain_scale.set(5)
         self.pitch_scale.set(4)
         self.tempo_scale.set(1.02)
-        self.rate_scale.set(0.51)
+        self.rate_scale.set(0.50)
         self.freq_scale.set(300)
         self.mix_scale.set(100)
         self.formant_scale.set(80)

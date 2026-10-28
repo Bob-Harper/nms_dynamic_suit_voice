@@ -7,6 +7,8 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from pathlib import Path
 import sys
+from manager.tooltip import bind_tooltip
+
 
 class SystemTab(ttk.Frame):
     def __init__(self, parent, controller):
@@ -69,32 +71,39 @@ class SystemTab(ttk.Frame):
         self.purge_btn.pack(anchor="w", pady=(0, 5))
 
         # Live Status Output Box
-        self.status_label = ttk.Label(maintenance_group, text="Deck Systems Status: Idle", font=("TkDefaultFont", 10, "bold"), foreground="#002E00")
+        self.status_label = ttk.Label(maintenance_group, text="Deck Systems Status:\n Idle", font=("TkDefaultFont", 10, "bold"), foreground="#002E00")
         self.status_label.pack(anchor="w", pady=(10, 2))
 
         # ====================================================
         # RIGHT PANE: THE STOVE BURNER DIAGNOSTIC VAULT
         # ====================================================
-        vault_group = ttk.LabelFrame(self.right_pane, text=" Advanced Signal Diagnostics (Stove Burner Vault) ", padding=12)
+        vault_group = ttk.LabelFrame(self.right_pane, text=" Advanced Signal Diagnostics (Hot Stove Burner Vault) ", padding=12)
         vault_group.pack(fill="both", expand=True, pady=5)
 
         # THE LEGENDARY WARN READOUT WELL
         warning_frame = ttk.LabelFrame(vault_group, text=" CRITICAL SYSTEM ADVISORY ")
         warning_frame.pack(fill="x", pady=(0, 10))
 
-        warning_text = (
+        self.warning_text = (
             "YOU TRULY DO NOT WANT TO DO THIS. But you cannot help but touch the hot stove burner.\n\n"
             "Very well. To open this panel, acknowledge that YOU UNDERSTAND CHANGING THESE SETTINGS COULD CAUSE "
             "UNINTENDED EFFECTS such as: complete mod failure, the total inability for your suit AI to tell Friend "
             "from Foe, severe semantic hallucinations from your local neural hulls, your domestic cat refusing to recognize "
             "you and aggressively hissing at your presence, every single left sock you own for the rest of your days vanishing "
             "from reality, and your tongue turning a very vivid (although highly interesting) shade of lavender.\n\n"
-            "YOU TAKE FULL RESPONSIBILITY if your computer program programmatically purchases a heavy industrial snowblower "
-            "from an online auction site and autonomously goes out into the street to chase teenagers celebrating their graduation."
+            "YOU TAKE FULL RESPONSIBILITY if your operating system autonomously purchases a heavy industrial snowblower "
+            "from an online auction site and prowls the neighbourhood to chase teenagers celebrating their graduation."
+        )
+        self.halloween_easter_egg = (
+            "\n\n----------------------------------------------------------\n"
+            "⚠️CRITICAL WARNING:\n CONSIDER YOUR LIFE CHOICES WHILE YOU STILL CAN.\n\n"
+            "When the Cenobites arrive, they will not listen to your pleas of \n\"I did not know what would happen.\"\n\n"
+            "You clicked the box.\n\nThey will come.\n\n"
+            "They have such configurations to show you..."
         )
 
-        warning_label = ttk.Label(warning_frame, text=warning_text, font=("TkDefaultFont", 9, "italic"), wraplength=400, justify="left", foreground="#4A0000")
-        warning_label.pack(fill="x", padx=10, pady=10)
+        self.warning_label = ttk.Label(warning_frame, text=self.warning_text, font=("TkDefaultFont", 9, "italic"), wraplength=400, justify="left", foreground="#4A0000")
+        self.warning_label.pack(fill="x", padx=10, pady=10)
 
         # Interlocking Activation Checkbox matrix
         self.accept_responsibility_var = tk.BooleanVar(value=False)
@@ -132,11 +141,17 @@ class SystemTab(ttk.Frame):
         if self.accept_responsibility_var.get():
             self.cache_spin.config(state="normal")
             self.interval_spin.config(state="normal")
-            self.status_label.config(text="Deck Systems Status: ADVANCED BURNER MODES LIVE", foreground="#4A0000")
+
+            # Combines the variables out of object storage dynamically
+            self.warning_label.config(text=self.warning_text + self.halloween_easter_egg, foreground="#8B0000")
+            self.status_label.config(text="Deck Systems Status:\n LAMENT CONFIGURATION UNLOCKED.", foreground="#8B0000")
         else:
             self.cache_spin.config(state="disabled")
             self.interval_spin.config(state="disabled")
-            self.status_label.config(text="Deck Systems Status: Idle", foreground="#002E00")
+
+            # Reverts clean strings out of memory perfectly on uncheck
+            self.warning_label.config(text=self.warning_text, foreground="#4A0000")
+            self.status_label.config(text="Deck Systems Status:\n Idle", foreground="#002E00")
 
     def _purge_audio_cache(self):
         """Wipes the physical temporary wave directories clean from local drive sectors."""
@@ -153,13 +168,13 @@ class SystemTab(ttk.Frame):
                         if file.is_file():
                             file.unlink()
             messagebox.showinfo("Success", "Exosuit local audio storage vectors purged flawlessly!")
-            self.status_label.config(text="Deck Systems Status: Storage Purged Clean")
+            self.status_label.config(text="Deck Systems Status:\n Storage Purged Clean")
         except Exception as err:
             messagebox.showerror("Purge Error", f"Could not flush file boundaries: {err}")
 
     def _run_async_topup(self):
         self.topup_btn.config(state="disabled")
-        self.status_label.config(text="Deck Systems Status: Loading ML Cache Accelerators...", foreground="#543B00")
+        self.status_label.config(text="Deck Systems Status:\n Loading ML Cache Accelerators...", foreground="#543B00")
         self.update_idletasks()
         threading.Thread(target=self._topup_worker_thread, daemon=True).start()
 
@@ -169,7 +184,7 @@ class SystemTab(ttk.Frame):
             from modular.config import SuitVoiceConfig
             from extras.cache_topup_to_max import fill_cache_for_ids
 
-            self.status_label.config(text="Deck Systems Status: Pre-populating Cached Voice Sequences...", foreground="#543B00")
+            self.status_label.config(text="Deck Systems Status:\n Pre-populating Cached Voice Sequences...", foreground="#543B00")
             self.update_idletasks()
             heavy_config = SuitVoiceConfig(init_llm=False)
             csv_path = heavy_config.csv_path
@@ -189,4 +204,4 @@ class SystemTab(ttk.Frame):
             messagebox.showerror("Error", f"Cache generation sequence encountered an issue: {e}")
         finally:
             self.topup_btn.config(state="normal")
-            self.status_label.config(text="Deck Systems Status: Idle", foreground="#002E00")
+            self.status_label.config(text="Deck Systems Status:\n Idle", foreground="#002E00")
