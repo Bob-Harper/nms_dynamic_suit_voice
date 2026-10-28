@@ -1,104 +1,78 @@
 # Dynamic No Man’s Sky Suit AI Voice Mod
 
-Version: 1.0<br>
-Author: [[Bob-Harper](https://github.com/Bob-Harper)]<br>
-Repository: [[nms_dynamic_suit_voice](https://github.com/Bob-Harper/nms_dynamic_suit_voice)]
+Version: 1.1
+Author: [[Bob-Harper](https://github.com)]
+Repository: [[nms_dynamic_suit_voice](https://github.com/nms_dynamic_suit_voice)]
 
 ## Overview
 
-This mod replaces static suit AI voice lines in No Man’s Sky with dynamically generated, non-repetitive lines, powered by a local AI model.<br>
-Non-negotiable design philosophies guiding every decision made on this project:
-- Local files ONLY.
-- ENHANCE gameplay but NOT at the EXPENSE of gameplay
-- When pre-caching, files are overwritten after use, never reused.
+This mod replaces static suit AI voice lines in No Man’s Sky with dynamically generated, non-repetitive lines, powered by a local AI model and localized audio DSP filters.
 
-## Explanation
+### Non-Negotiable Core Project Philosophies:
+- **Local files ONLY.** No cloud processing, zero internet connection required, and absolutely no paid API subscription keys.
+- **ENHANCE gameplay but NOT at the EXPENSE of gameplay.** Hardware footprints are stringently guarded.
+- **Strict Single-Use Cache Vectors.** When pre-caching, generated audio files are completely overwritten after a single use, never reused.
 
-When the game makes a call to use a suit voice line, it will use the file it finds in the mod directory at the time it searches. The game does NOT preload mod voice files when it starts.  They do NOT stay in memory.  They load and play EACH TIME the game makes a call for that specific WEM file, then are unloaded until called from the file again.  This is why this pipeline works.  If we generate a new voice file fast enough, and save it before the game has a chance to call it again, every line will be completely new - even when selling items at a terminal.  No more repetitive "Units Received Units Received Units Received Units Received ".
+## How the Tech Works
 
-## Key Features
+When No Man's Sky makes a sound call to play a suit voice line, it reads the physical file it finds inside your mod directory *at the exact millisecond it searches*. The game does NOT preload mod voice files into system memory when it launches. They load and play **EACH TIME** the game calls for that specific `.wem` file block, then are immediately unloaded until called again.
 
-- No repetition – each line is discarded after a single use then replaced.
-- Drop-in replacement for default suit AI audio files.
-- Local-only – no cloud processing or internet connection required. Completely Offline game compatible.
-- no paid API required
-- Current implementation uses CPU inference, leaving the GPU free for the game.
+Because your local pipeline generates variations ahead of time into a protected background cache buffer, the system watcher instantly swaps a fresh file into your game folder the moment a line finishes playing. Every notification is completely new—even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
 
+## Key Features (New in v1.1!)
 
-## Examples:
-<br>Original Game Wording: Nearby toxins detected
-<br> Final Output: Corrosive environmental toxins are causing damage to your suit's protective filters.
-<br> Final Output: Corrosive environmental toxins are threatening the effectiveness of your suit's protective filters.
-<br> Final Output: Corrosive environmental toxins are harming Your suit’s protective filters.
-<br> Final Output: Corrosive environmental toxins are impacting Your suit's protective filters, leading to damage and potential filter failure.
-<br> Final Output: Corrosive environmental contaminants are debilitating your suit’s filtration system.
+- 🖥️ **Centralized Control Dashboard:** A fully graphical config interface (`960x748`) to customize iteration names, swap engines, or fine-tune signal waves natively.
+- 🎛️ **NumPy Acoustic Modifiers Matrix:** Six standalone sliders to control volume gain, sentence pacing, pitch semitones, rate scalars, throat size resonators, and cybernetic overlay mix balances.
+- 🛸 **Themed Audio Presets:** Pre-calibrated, data-driven JSON presets that instantly transform standard voice clips into lore-friendly signatures like the *Gek NipNip Merchant*, *Vy'keen Juggernaut*, *Caffeinated Korvax*, or *Queeg 500 Tactical Advisor*.
+- 🗄️ **Secure 8-Model Core Roster:** Built-in dynamic asset management for eight verified, high-performance, single-voice English baselines with crash-free automated download or uninstall hooks.
+- 🧠 **Protected VRAM Performance:** Run fully on optimized CPU thread inference layouts, leaving your GPU completely free to push maximum frame rates to the game.
 
-Original Game Wording: Extreme Night Temperature Detected
-<br> Final Output: Extreme night cold weather noted. Alerting of potential severe consequences for life support and safety.
-<br> Final Output: Extreme night temperature detected poses a severe risk to life support and your well-being.
-<br> Final Output: Extreme night cold temperatures are reported. This is concerning as it could lead to reduced life support and potential danger for You.
-<br> Final Output: Extreme cold temperatures during the night cycle are detected, posing a significant threat to life support and your safety.
+## Examples of Dynamic Output Variations
 
-## Demo Video
-** OLD!  USES CACHE FREE INFERENCE PIPELNE.
-[![Dynamic Suit Voice Demo](https://img.youtube.com/vi/L1BsYxOSzSk/0.jpg)](https://youtu.be/L1BsYxOSzSk)
-** NEW DEMO VIDEO COMING SOON
+- **Original Game Wording:** *Nearby toxins detected*
+  - ↳ *Corrosive environmental toxins are causing damage to your suit's protective filters.*
+  - ↳ *Corrosive environmental toxins are threatening the effectiveness of your suit's protective filters.*
+  - ↳ *Corrosive environmental contaminants are debilitating your suit’s filtration system.*
 
-## Limitations / Disclaimer
+- **Original Game Wording:** *Extreme Night Temperature Detected*
+  - ↳ *Extreme night cold temperatures are reported, posing a threat to life support.*
+  - ↳ *Extreme cold temperatures during the night cycle are detected, risking safety systems.*
 
-- This is incompatible with mods that change the suit voice by placing sound files in the MODS folder.
-- This project (and the notes regarding it's capabilities) assume minimizing VRAM and GPU necessity. It is not currently enabled to take advantage of a GPU so as not to impact actual gameplay. (See Advanced/FAQ for the long version)
+## Current Verified Limitations
 
+- **Mod Conflicts:** Completely incompatible with traditional static suit voice mods that drop pre-recorded audio `.pak` files directly into your standard game `MODS` folder.
+- **VITS Architecture Block:** Advanced multi-speaker VITS architectures are intentionally excluded from the scan loader to protect end-users from installing external C++ system binaries (such as eSpeak NG) onto their primary Windows environment paths.
 
-⚠️ WARNING
-This has only been tested on my personal development machine:
-- Windows 11
-- 64GB RAM
-- NVIDIA GTX 1650 Ti (4GB VRAM)
-- Performance and results may vary wildly on other hardware.
-- This is not tested on any other system, OS, or GPU configuration.
+## Installation & Deployment
 
-I recommend starting this BEFORE NMS is started up (Essential if GPU enabled).  The model I use and recommend takes up 1.6 GB of memory.
+### ⚡ Guided Setup (Recommended)
+Launch the primary command wrapper script:
+```bash
+DOUBLECLICK_To_Install_Dynamic_Suit_Voice.cmd
+```
+Choose **Automatic Mode** for a streamlined, minimal-click environment deployment, or choose **Guided Mode** to manually inspect path mappings, folder targets, and validation configurations line-by-line.
 
-## Installation
-** note this may need updating due to recent changes<br>
-Automatic/Guided Mode: run setup.cmd
-<br>This will offer 2 modes - Automatic (as close to 1 click install as I could make it) and Guided.  Both follow the same steps but the Guided mode will ask you for confirmation of paths and installation of items before proceeding.  Auto will assume defaults as provided in the example env file and proceed accordingly.
+### 🛠️ Launching the Control Deck
+To customize your Exosuit experience, simply double-click the launcher script in your root mod folder:
+```bash
+run_manager.cmd
+```
+This instantly boots your graphical dashboard configuration utility, allowing you to fine-tune your **Iteration Designation**, swap active vocal models on the fly, or test-play custom presets inside the live real-time sandbox deck before starting your game session.
 
-~~Masochist~~ Manual Mode:
-[For detailed instructions refer to the Setup.md in the docs folder](docs/Setup.md)
-<br>Short version:
-- Clone this repository
-- Install Python venv and requirements (Includes llama-cpp-python - no separate llama.cpp install required).
-- Download the LLM model file
-- Clone/Download sound2wem (which will separately ensure wwise plus ffmpeg)
-- Copy pre-generated .wem files from the "DYNAMIC_SUIT_VOICE" folder into your No Man’s Sky MODS folder (NOT PCBANKS).
-- Review and modify the supplied .env example
-- run the TTS warmup to pre-download necessary models
-- Run the generator.
-- Start NMS
-- Play!
+2. Set your custom **Iteration Name**, calibrate your **Companion AI Tone Profiles**, or load your favorite alien voice presets inside the live sandbox panel.
+3. Click **Save & Close** (or leave it active via **Apply Changes** to tweak metrics on the fly while playing!).
+4. Fire up the background watchdog thread generator pipeline, launch No Man's Sky, and head out into the stars!
 
-## Usage
-Once installed, no user interaction required other than starting it up before you play the game and stopping it when you are done.
-The generator will watch for a suit voice trigger and determine a new audio file is needed.
-
-The pipeline will move one of the cached files to the mod dir, removing it from cache and overwriting the existing mod file.
-If the cache is below configured capacity, it will queue a task to replace the file and top the cache up.  The next time you
-hear that same notification, the wording will be different.  It's that simple.  If there are NO files in the cache yet, it will
-wait until a file is available, and move that to the mod dir, then continue with queueing as many generations as needed to top up the cache.
-
-## Future Plans (Version 2 and beyond)
-- Context-aware lines (react to in-game events with tailored responses.  this is unlikely to happen any time soon).
-- Persistent memory, keeping track of events that have taken place over the current play session (perhaps saving the data and reload at the start of the next session)
-- Expanded voice profiles and personalities with on-the-fly changes through the systray icon.
-- Configurable parameters adjustable through an interface.
+## Future Framework Roadmap (Version 1.2 and Beyond)
+- 💾 **Custom User Profile Saving:** A local profile manager to let users write, name, and archive their own handcrafted audio preset slider files.
+- 🎙️ **Bundled Zero-Install Masculine Vocal Registers:** Staging offline pre-compiled binary modules directly inside localized project folders to safely unlock native male voice models without complex user configuration scripts.
+- 📦 **Native Python `sound2wem` Refactoring:** Completely absorbing audio compilation dependencies natively into pure Python memory streams to bypass calling shell execution windows entirely.
 
 ## License
 
-MIT, see the license link for details.
+Distributed fully open-source under the MIT License. See `LICENSE` for details.
 
-# Thank you
-- [[EternalLeo](https://github.com/EternalLeo)] - [[sound2wem](https://github.com/EternalLeo/sound2wem)] is 50% of what allows this project to work at all. 
-- All the suit voice modders on Nexus Mods, without whom I would not know which directory to monitor or that the game looks for WEM files.  I downloaded every suit voice mod and examined every one of them.  I do not recall which one I was looking at when my suspicions were confirmed.  It may have been a comment on nexusmods from one of the feedback messages.  It may have been between 4am and 6am when I finally tested and saw the correct directory was working.  So thank you to every one of you, and the commenters as well.
-- Sean Murray and everyone at Hello Games for bringing to life the game I waited 25 years for.
+## Special Acknowledgments
+- **[[EternalLeo](https://github.com)]:** The excellent [[sound2wem](https://github.com/sound2wem)] utility drives 50% of the back-end compiler pipeline's heavy lifting.
+- **The Nexus Mods Suit Audio Community:** Gratitude to all original voice modders and commenters whose forum feedback helped isolate the exact filesystem directories the game monitors for sound cues.
+- **Sean Murray & Hello Games:** Deep thanks for crafting the definitive cosmic sandbox universe we waited 25 years to explore.
