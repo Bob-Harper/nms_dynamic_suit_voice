@@ -306,7 +306,7 @@ def create_shortcut():
     target = Path.cwd() / "venv/Scripts/python.exe"
 
     # CRITICAL CHANGE: Target the lightning fast boot loader script instead of the old core loop!
-    args = Path.cwd() / "run_dsv.py"
+    args = Path.cwd() / "launch_nms_dsv.py"
     icon = Path.cwd() / "assets/nms_dsv_256.ico"
 
     visible = input("Should the terminal be visible? (Good for Debugging or just to watch it work) (Y/N): ").strip().lower() == "y"
