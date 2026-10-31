@@ -1,4 +1,4 @@
-# run_dsv.py
+# launch_nms_dsv.py
 import sys
 import socket
 
