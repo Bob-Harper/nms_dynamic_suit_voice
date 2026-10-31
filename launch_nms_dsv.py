@@ -57,7 +57,7 @@ class FastBootTray:
         """Runs inside a background worker thread where heavy 20-second imports are safe."""
         print("Launcher: Fast boot active. Invoking heavy engine components...")
 
-        # LAZY-IMPORT HERE. This keeps the initial startup completely free of delay.
+        # DELAYED-IMPORT HERE. This keeps the initial startup fast to display the icon immeditely as a status update mechanism.
         from modular.config import SuitVoiceConfig
         from nms_dynamic_suit_voice_pipeline import watch_wems
 
