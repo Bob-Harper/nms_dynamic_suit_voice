@@ -12,7 +12,7 @@ except socket.error:
     sys.exit(0)
 
 # ====================================================
-# LIGHTWEIGHT TRAY UI RUNNER (No AI Imports Allowed Here)
+# LIGHTWEIGHT TRAY UI RUNNER (No Large Imports Allowed Yet)
 # ====================================================
 import threading
 from pathlib import Path
