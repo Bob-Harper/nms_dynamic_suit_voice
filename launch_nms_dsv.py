@@ -3,7 +3,7 @@ import sys
 import socket
 
 # ====================================================
-# 1. IMMEDIATE SINGLE-INSTANCE GUARD
+# IMMEDIATE SINGLE-INSTANCE GUARD
 # ====================================================
 try:
     _instance_lock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -12,7 +12,7 @@ except socket.error:
     sys.exit(0)
 
 # ====================================================
-# 2. LIGHTWEIGHT TRAY UI RUNNER (No AI Imports Allowed Here)
+# LIGHTWEIGHT TRAY UI RUNNER (No AI Imports Allowed Here)
 # ====================================================
 import threading
 from pathlib import Path
@@ -36,11 +36,11 @@ class FastBootTray:
         except Exception:
             base_img = Image.new('RGBA', (64, 64), color=(0, 0, 0, 0))
 
-        # Paint the dynamic startup background solid crimson beneath your transparent icon
+        # Paint the dynamic startup background beneath the transparent icon
         w, h = base_img.size
-        bg = Image.new("RGBA", (w, h), color=(220, 20, 60, 255)) # Pure solid Crimson pad
+        bg = Image.new("RGBA", (w, h), color=(220, 20, 60, 255)) # Solid colour block
 
-        # Merge your transparent art cleanly on top of the yellow base shape
+        # Merge the transparent art cleanly on top of the shape
         init_img = Image.alpha_composite(bg, base_img).convert("RGB")
 
         self.icon = Icon(
@@ -57,14 +57,14 @@ class FastBootTray:
         """Runs inside a background worker thread where heavy 20-second imports are safe."""
         print("Launcher: Fast boot active. Invoking heavy engine components...")
 
-        # WE LAZY-IMPORT HERE. This keeps the initial startup completely free of delay.
+        # LAZY-IMPORT HERE. This keeps the initial startup completely free of delay.
         from modular.config import SuitVoiceConfig
         from nms_dynamic_suit_voice_pipeline import watch_wems
 
         # Instantiate the configuration class now that the tray is already visible
         config = SuitVoiceConfig(init_llm=False)
 
-        # Hand off execution control smoothly to your existing core loop
+        # Hand off execution control smoothly to the existing core loop
         watch_wems(self, config)
 
     def run(self):

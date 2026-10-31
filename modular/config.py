@@ -34,6 +34,7 @@ class SuitVoiceConfig:
         config_dir = root_dir / "config"
 
         # Load file structures
+        self.dsv2wem = load_json(config_dir / "dsv2wem_config.json")
         self.environment = load_json(config_dir / "environment_config.json")
         self.llm_prompting = load_json(config_dir / "llm_prompting.json")
         self.default_customization = load_json(config_dir / "default_customization.json")
@@ -49,10 +50,10 @@ class SuitVoiceConfig:
         runtime = self.environment.get("runtime", {})
         self.check_interval = float(runtime.get("check_interval", 0.1))
         self.max_session_lines = int(runtime.get("max_session_lines", 25))
-        self.quick_cache_max = int(runtime.get("quick_cache_max", 25))
+        self.quick_cache_max = int(runtime.get("quick_cache_max", 16))
 
         # ====================================================
-        # 1. CORE FILESYSTEM PATHS (From environment_config.json -> "paths")
+        # CORE FILESYSTEM PATHS (From environment_config.json -> "paths")
         # ====================================================
         paths = self.environment.get("paths", {})
 
@@ -68,35 +69,26 @@ class SuitVoiceConfig:
         self.temp_wav_dir = self.resolve_json_path(paths.get("temp_wav_dir"), root_dir, must_exist=False)
         self.quick_cache_dir = self.resolve_json_path(paths.get("quick_cache_dir"), root_dir, must_exist=False)
 
-        # ====================================================
-        # 2. LOGGING ENGINE INITIALIZATION (From environment_config.json -> "logging")
-        # ====================================================
-        logging_cfg = self.environment.get("logging", {})
-        self.prompt_console = bool(logging_cfg.get("console", False))
-        self.prompt_logging = bool(logging_cfg.get("prompt_logging", False))
-
-        # Logging Targets
-        self.cache_log_dir = self.resolve_json_path(logging_cfg.get("cache_log_dir"), root_dir, must_exist=False)
-        self.game_output_csv = self.resolve_json_path(logging_cfg.get("game_output_csv"), root_dir, must_exist=False)
-        self.test_output_csv = self.resolve_json_path(logging_cfg.get("test_output_csv"), root_dir, must_exist=False)
 
         # Window platform subprocess flags
         self.create_no_window = 0x08000000 if sys.platform == "win32" else 0
 
         # Enforce workspace directories (Safe loop: all paths are strict non-nullable Path types)
-        for d in [self.temp_wem_dir, self.temp_wav_dir, self.quick_cache_dir, self.cache_log_dir]:
+        for d in [self.temp_wem_dir, self.temp_wav_dir, self.quick_cache_dir]:
             d.mkdir(parents=True, exist_ok=True)
 
         # ====================================================
-        # 3. EXTERNAL SYSTEM UTILITIES (From environment_config.json -> "external_tools")
+        # EXTERNAL SYSTEM UTILITIES (From environment_config.json -> "external_tools")
         # ====================================================
         ext_tools = self.environment.get("external_tools", {})
         self.cmd_script_path = self.resolve_json_path(ext_tools.get("sound2wem_cmd"), root_dir, must_exist=True)
 
         # --- PROMPT ASSETS & FILES ---
         files = self.llm_prompting.get("files", {})
-        self.csv_path = self.resolve_json_path(files.get("csv_path"), root_dir, must_exist=True)
-        self.intent_map = self.load_intent_map(self.csv_path)
+        # self.csv_path = self.resolve_json_path(files.get("csv_path"), root_dir, must_exist=True) # CSV for intent mapping
+        # self.intent_map = self.load_intent_map(self.csv_path) # CSV for intent mapping
+        self.transcripts_path = self.resolve_json_path(files.get("transcripts_path"), root_dir, must_exist=True) # JSON for intent mapping
+        self.intent_map = json.loads(self.transcripts_path.read_text(encoding="utf-8")) # JSON for intent mapping
 
         self.suit_voice_base_path = self.resolve_json_path(files.get("base_prompt"), root_dir, must_exist=True)
         self.suit_voice_base = self.suit_voice_base_path.read_text(encoding="utf-8")
@@ -126,10 +118,10 @@ class SuitVoiceConfig:
         self.promptdata_path = self.resolve_json_path(files.get("prompt_data"), root_dir, must_exist=True)
         raw_prompt_json = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
 
-        # 1. Create a structured memory object for the Tkinter UI to read descriptions
+        # Create a structured memory object for the Tkinter UI to read descriptions
         self.ui_promptdata = raw_prompt_json
 
-        # 2. Flatten the dictionary dynamically in memory for the backend AI engine!
+        # Flatten the dictionary dynamically in memory for the backend AI engine!
         # This keeps the rest of your text generation loops 100% stable and untouched.
         self.promptdata = {
             "wordiness": {
@@ -162,7 +154,38 @@ class SuitVoiceConfig:
                 raise SystemExit("ffmpeg not found on PATH. Please install ffmpeg or set up path contexts.")
         self.ffmpeg_path = Path(ffmpeg_path)
 
-        # --- ML MODEL INITIALIZATIONS ---
+        # wwise settings
+        env_var = self.dsv2wem.get(
+            "wwise_root_windows_environment_variable",
+            "WWISEROOT"
+        ) # Because future me will ask where WWISEROOT is defined, forget that it's a Windows environment variable, and spend 30 minutes searching the repo.
+        self.wwise_root = os.environ.get(env_var)
+
+        if not self.wwise_root:
+            raise SystemExit(
+                 f"DEBUG TOKEN = DSV2WEM_WWISE >> Windows environment variable '{env_var}' not found."
+            )
+
+        self.wwise_console_path = (
+            Path(self.wwise_root)
+            / "Authoring"
+            / "x64"
+            / "Release"
+            / "bin"
+            / "WwiseConsole.exe"
+        )
+
+        if not self.wwise_console_path.exists():
+            raise SystemExit(
+                "DEBUG TOKEN = DSV2WEM_WWISE >> WwiseConsole.exe not found."
+            )
+
+        self.project_path = self.dsv2wem.get("project_path", "sound2wem")
+        self.project_name = self.dsv2wem.get("project_name", "wavtowemscript")
+        self.project_file_name = self.dsv2wem.get("project_file", "wavtowemscript.wproj")
+        self.project_file_path = Path(self.project_path) / self.project_name / self.project_file_name
+        self.conversion_profile = self.dsv2wem.get("conversion_profile", "Vorbis Quality High")
+
         # --- ML MODEL INITIALIZATIONS ---
         models = self.environment.get("models", {})
 
@@ -208,7 +231,7 @@ class SuitVoiceConfig:
             raise FileNotFoundError(f"Configuration file element targets a missing path reference: {p}")
         return p
 
-    @staticmethod
+    @staticmethod # OBSOLETE, REMOVED: Use load_json() instead for JSON files
     def load_intent_map(csv_path: Path) -> dict:
         i_intent_map = {}
         if not csv_path.exists():

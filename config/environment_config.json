@@ -23,7 +23,8 @@
         "tts_model": "tts_models/en/ljspeech/tacotron2-DDC_ph"
     },
     "external_tools": {
-        "sound2wem_cmd": "sound2wem/zSound2wem.cmd"
+        "sound2wem_cmd": "sound2wem/zSound2wem.cmd",
+        "ffmpeg_cmd": "ffmpeg/ffmpeg.exe"
     },
     "model_url": {
         "qwen3_4b_q8_0": "https://huggingface.co/Qwen/Qwen3-4B-GGUF/resolve/main/Qwen3-4B-Q8_0.gguf"
