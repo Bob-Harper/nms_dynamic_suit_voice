@@ -1,5 +1,6 @@
 # nms_dynamic_suit_voice_pipeline.py (Streamlined Version)
 import time
+import os
 from pathlib import Path
 from modular.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
 from PIL import Image
@@ -10,6 +11,10 @@ def watch_wems(wtray_ui, config):
 
     # --- PHASE 1: Initialize Coqui-TTS Engine Weights ---
     wtray_ui.icon.title = "Dynamic Suit Voice - Loading TTS Voice Models..."
+
+    # Prevent HuggingFace from attempting cloud updates on boot
+    os.environ["HF_HUB_OFFLINE"] = "1"
+    os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
     from TTS.api import TTS
     config.tts_model = TTS(model_name=config.tts_model_name)
