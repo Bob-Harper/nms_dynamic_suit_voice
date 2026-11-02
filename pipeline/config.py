@@ -29,7 +29,7 @@ def deep_merge(base: dict, override: dict) -> dict:
 
 class SuitVoiceConfig:
     def __init__(self, init_llm: bool = True):
-        # Anchor to project root (parent of modular/)
+        # Anchor to project root (parent of pipeline/)
         root_dir = Path(__file__).parent.parent
         config_dir = root_dir / "config"
 

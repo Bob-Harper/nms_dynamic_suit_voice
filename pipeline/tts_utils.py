@@ -1,4 +1,4 @@
-# modular/tts_utils.py
+# pipeline/tts_utils.py
 import subprocess
 from pathlib import Path
 import sys

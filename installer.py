@@ -397,7 +397,7 @@ def copy_starter_wems():
 # -------------------------
 def warmup_tts():
     python_exe = Path("venv/Scripts/python.exe")
-    run([str(python_exe), "modular/warmup_tts.py"], "Warmup TTS")
+    run([str(python_exe), "pipeline/warmup_tts.py"], "Warmup TTS")
 
 # -------------------------
 # Step: Create Desktop Shortcuts
