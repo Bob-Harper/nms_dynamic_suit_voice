@@ -396,8 +396,16 @@ def copy_starter_wems():
 # Step: Warmup TTS
 # -------------------------
 def warmup_tts():
-    python_exe = Path("venv/Scripts/python.exe")
+    # Force the path to resolve absolutely from the root workspace directory
+    project_root = Path(__file__).parent.absolute()
+    python_exe = project_root / "venv" / "Scripts" / "python.exe"
+
+    # Absolute safety check: If the venv isn't there, fallback to active interpreter
+    if not python_exe.exists():
+        python_exe = Path(sys.executable)
+
     run([str(python_exe), "pipeline/warmup_tts.py"], "Warmup TTS")
+
 
 # -------------------------
 # Step: Create Desktop Shortcuts

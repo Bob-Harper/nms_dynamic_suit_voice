@@ -1,8 +1,7 @@
-# pipeline/warmup_tts.py
 import json
+import os
 import sys
 from pathlib import Path
-from TTS.api import TTS  # coqui-tts fork
 
 def main():
     print("Pipeline: Starting offline TTS compilation warmup...")
@@ -40,10 +39,28 @@ def main():
 
     print(f"Pipeline: Verifying weights for voice signature -> {tts_model_name}")
 
-    # 3. Fire up the synthesis warmup routine
+    # 3. Locate the verified physical cache folder
+    local_appdata = os.environ.get("LOCALAPPDATA", "")
+    safe_folder = tts_model_name.replace("/", "--")
+    coqui_target_path = Path(local_appdata) / "tts" / safe_folder
+
+    # 4. Fire the synthesis compilation warmup safely using structural path injection
     try:
-        # This will download the models into the local cache if missing, or load them instantly
-        tts_model = TTS(model_name=tts_model_name)
+        from TTS.api import TTS
+
+        if coqui_target_path.exists() and (coqui_target_path / "model_file.pth").exists():
+            print("Enforcing strict local path injection (Bypassing dead Coqui remote index repositories)...")
+            # By passing explicit local file paths, we force Coqui to load standalone,
+            # completely bypassing the broken .get() remote network loop.
+            tts_model = TTS(
+                model_path=str(coqui_target_path / "model_file.pth"),
+                config_path=str(coqui_target_path / "config.json"),
+                progress_bar=False,
+                gpu=False
+            )
+        else:
+            print("Warning: Local cache folder missing or incomplete. Attempting standard named fallback...")
+            tts_model = TTS(model_name=tts_model_name, progress_bar=False)
 
         test_text = (
             "The required models and files for voice synthesis are now installed. "
