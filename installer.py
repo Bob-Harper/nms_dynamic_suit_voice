@@ -433,8 +433,8 @@ def create_shortcuts():
         {
             "name": "Exosuit Companion.lnk",
             "target": python_exe,
-            "args": root_dir / "manager_gui.py",  # Replace with the exact script name your second tool uses
-            "icon": root_dir / "assets/companion_gear.ico"  # Replace with your second tool's actual icon name
+            "args": root_dir / "manager/dsv_manager.py",
+            "icon": root_dir / "assets/nms_dsv_manager_256.ico"
         }
     ]
 
