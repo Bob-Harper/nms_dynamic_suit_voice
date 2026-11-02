@@ -408,58 +408,56 @@ def warmup_tts():
 
 
 # -------------------------
-# Step: Create Desktop Shortcuts
+# Step: Create Desktop Shortcuts (Updated for Two Tools)
 # -------------------------
-def create_shortcut():
+def create_shortcuts():
     desktop = Path.home() / "Desktop"
-
-    # 1. Define paths for Core Tool Shortcut
-    shortcut_core = desktop / "NMS Dynamic Suit Voice.lnk"
-    args_core = Path.cwd() / "launch_nms_dsv.py"
-    icon_core = Path.cwd() / "assets/nms_dsv_256.ico"
-
-    # 2. Define paths for Manager Shortcut (Pointing directly to the launch batch file!)
-    shortcut_manager = desktop / "Exosuit Companion AI Dashboard.lnk"
-    target_manager = Path.cwd() / "manager\\run_manager.cmd"  # Ensure this matches the batch file's name exactly
-    icon_manager = Path.cwd() / "assets/nms_dsv_manager_256.ico"
-
-    # Check if both already exist to avoid rewriting unnecessarily
-    if shortcut_core.exists() and shortcut_manager.exists():
-        print("Both shortcuts already exist, skipping.")
-        return
-
-    # Select the right python executable based on terminal visibility choice for the background process
-    visible = input("Should the terminal be visible for the CORE TOOL? (For Debugging or just to watch it work) (Y/N): ").strip().lower() == "y"
-
-    if visible:
-        target_core = Path.cwd() / "venv/Scripts/python.exe"
-    else:
-        target_core = Path.cwd() / "venv/Scripts/pythonw.exe"
-
     temp_dir = os.getenv("TEMP") or os.getenv("TMP") or str(Path.home())
     vbs = Path(temp_dir) / "create_shortcuts.vbs"
 
+    # Define your clean workspace targets absolutely
+    root_dir = Path.cwd()
+    python_exe = root_dir / "venv/Scripts/python.exe"
+
+    # Ask the visibility question once for the installation session
+    visible = input("Should the terminal be visible for the CORE TOOL? (For Debugging or just to watch it work) (Y/N): ").strip().lower() == "y"
+
+    # Define the precise file configurations for both desktop items
+    shortcuts_to_build = [
+        {
+            "name": "NMS Dynamic Suit Voice.lnk",
+            "target": python_exe,
+            "args": root_dir / "run_dsv.py",
+            "icon": root_dir / "assets/nms_dsv_256.ico"
+        },
+        {
+            "name": "Exosuit Companion.lnk",
+            "target": python_exe,
+            "args": root_dir / "manager_gui.py",  # Replace with the exact script name your second tool uses
+            "icon": root_dir / "assets/companion_gear.ico"  # Replace with your second tool's actual icon name
+        }
+    ]
+
     with open(vbs, "w", encoding="utf-8") as f:
-        f.write('Set WshShell = WScript.CreateObject("WScript.Shell")\n\n')
+        f.write('Set WshShell = WScript.CreateObject("WScript.Shell")\n')
 
-        # --- WRITE CORE TOOL SHORTCUT ---
-        if not shortcut_core.exists():
-            f.write(f'Set Shortcut1 = WshShell.CreateShortcut("{shortcut_core}")\n')
-            f.write(f'Shortcut1.TargetPath = "{target_core}"\n')
-            f.write(f'Shortcut1.Arguments = "{args_core}"\n')
-            f.write(f'Shortcut1.WorkingDirectory = "{Path.cwd()}"\n')
-            f.write(f'Shortcut1.IconLocation = "{icon_core}"\n')
-            f.write('Shortcut1.Save\n\n')
+        for item in shortcuts_to_build:
+            shortcut_file = desktop / item["name"]
 
-        # --- WRITE MANAGER DASHBOARD SHORTCUT ---
-        if not shortcut_manager.exists():
-            f.write(f'Set Shortcut2 = WshShell.CreateShortcut("{shortcut_manager}")\n')
-            f.write(f'Shortcut2.TargetPath = "{target_manager}"\n')
-            f.write(f'Shortcut2.WorkingDirectory = "{Path.cwd()}"\n')
-            f.write(f'Shortcut2.IconLocation = "{icon_manager}"\n')
-            f.write('Shortcut2.Save\n')
+            f.write(f'Set Shortcut = WshShell.CreateShortcut("{shortcut_file}")\n')
 
-    # Execute and clean up VBS execution boundary
+            if visible:
+                f.write(f'Shortcut.TargetPath = "{item["target"]}"\n')
+                f.write(f'Shortcut.Arguments = "{item["args"]}"\n')
+            else:
+                f.write('Shortcut.TargetPath = "cmd.exe"\n')
+                f.write(f'Shortcut.Arguments = "/c \\"{item["target"]} {item["args"]}\\""\n')
+
+            # This is the exact parameter that forces the shortcut to remember where the venv lives!
+            f.write(f'Shortcut.WorkingDirectory = "{root_dir}"\n')
+            f.write(f'Shortcut.IconLocation = "{item["icon"]}"\n')
+            f.write('Shortcut.Save\n')
+
     run(["cscript", "//nologo", str(vbs)], "Create desktop shortcuts")
     vbs.unlink()
 
@@ -479,7 +477,7 @@ def main():
     step("Prepare MOD directory", copy_starter_wems)
     step("Initialize TTS model", warmup_tts)
     step("Validate configuration matrix", validate_configuration_layer)
-    step("Create Desktop Shortcut", create_shortcut)
+    step("Create Desktop Shortcut", create_shortcuts)
 
     print("\n=== Setup Complete ===")
     print("• LLM model: OK")
