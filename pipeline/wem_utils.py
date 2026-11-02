@@ -11,7 +11,7 @@ def convert_to_wem(config, temp_wav_path, output_path: Path):
     """
     temp_wav_path = Path(temp_wav_path).resolve()
     output_path = Path(output_path).resolve()  # Final WEM location
-    script_path = config.cmd_script_path.resolve()
+    script_path = config.project_file_path.resolve()
     temp_dir = config.temp_wem_dir.resolve()   # temporary folder for conversion
 
     # Run Wwise conversion into temp_dir

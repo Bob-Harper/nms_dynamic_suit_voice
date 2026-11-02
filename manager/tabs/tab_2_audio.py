@@ -212,7 +212,7 @@ class AudioTab(ttk.Frame):
 
     def audio_generation_worker(self):
         try:
-            from modular.config import SuitVoiceConfig
+            from pipeline.config import SuitVoiceConfig
             from TTS.api import TTS
             import numpy as np
             import soundfile as sf

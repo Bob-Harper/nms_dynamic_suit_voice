@@ -7,6 +7,8 @@ import shutil
 import json
 from pathlib import Path
 import traceback
+from install.dsv2wem_install import setup_audio_tools
+
 
 AUTOALL = False
 
@@ -465,7 +467,7 @@ def main():
     step("Setup virtual environment", setup_venv)
     step("Install Python dependencies", install_reqs)
     step("Download LLM model", run_download_model)
-    step("Setup Sound2WEM", setup_sound2wem)
+    step("Setup Audio Tool Infrastructure", setup_audio_tools)
     step("Prepare MOD directory", copy_starter_wems)
     step("Initialize TTS model", warmup_tts)
     step("Validate configuration matrix", validate_configuration_layer)

@@ -77,12 +77,6 @@ class SuitVoiceConfig:
         for d in [self.temp_wem_dir, self.temp_wav_dir, self.quick_cache_dir]:
             d.mkdir(parents=True, exist_ok=True)
 
-        # ====================================================
-        # EXTERNAL SYSTEM UTILITIES (From environment_config.json -> "external_tools")
-        # ====================================================
-        ext_tools = self.environment.get("external_tools", {})
-        self.cmd_script_path = self.resolve_json_path(ext_tools.get("sound2wem_cmd"), root_dir, must_exist=True)
-
         # --- PROMPT ASSETS & FILES ---
         files = self.llm_prompting.get("files", {})
         # self.csv_path = self.resolve_json_path(files.get("csv_path"), root_dir, must_exist=True) # CSV for intent mapping

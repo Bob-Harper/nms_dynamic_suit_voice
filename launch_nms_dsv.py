@@ -58,8 +58,8 @@ class FastBootTray:
         print("Launcher: Fast boot active. Invoking heavy engine components...")
 
         # DELAYED-IMPORT HERE. This keeps the initial startup fast to display the icon immeditely as a status update mechanism.
-        from modular.config import SuitVoiceConfig
-        from nms_dynamic_suit_voice_pipeline import watch_wems
+        from pipeline.config import SuitVoiceConfig
+        from pipeline.nms_dynamic_suit_voice_pipeline import watch_wems
 
         # Instantiate the configuration class now that the tray is already visible
         config = SuitVoiceConfig(init_llm=False)

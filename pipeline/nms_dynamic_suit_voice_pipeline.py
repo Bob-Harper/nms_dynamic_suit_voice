@@ -2,7 +2,7 @@
 import time
 import os
 from pathlib import Path
-from modular.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
+from pipeline.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
 from PIL import Image
 # NOTE: No global config or TTS instantiations live at the top of this file anymore!
 
@@ -12,7 +12,7 @@ def watch_wems(wtray_ui, config):
     # --- PHASE 1: Initialize Coqui-TTS Engine Weights ---
     wtray_ui.icon.title = "Dynamic Suit Voice - Loading TTS Voice Models..."
 
-    # Prevent HuggingFace from attempting cloud updates on boot
+    # Prevent HuggingFace from attempting cloud updates on boot (this can be toggled elsewhere on demand as needed)
     os.environ["HF_HUB_OFFLINE"] = "1"
     os.environ["TRANSFORMERS_OFFLINE"] = "1"
 

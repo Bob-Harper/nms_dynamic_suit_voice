@@ -1,9 +1,9 @@
 from pathlib import Path
 from datetime import datetime
-from modular.llm_utils import reword_phrase
-from modular.prompt_utils import build_suit_prompt
-from modular.tts_utils import run_tts
-# from modular.wem_utils import convert_to_wem
+from pipeline.llm_utils import reword_phrase
+from pipeline.prompt_utils import build_suit_prompt
+from pipeline.tts_utils import run_tts
+# from pipeline.wem_utils import convert_to_wem
 from sound2wem.dsv2wem_convert import convert_to_wem
 
 
