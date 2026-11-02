@@ -1,12 +1,12 @@
 # installer.py
 import subprocess
 import sys
-
 print("INTERPRETER:", sys.executable)
 import os
 import shutil
 import json
 from pathlib import Path
+import traceback
 
 AUTOALL = False
 
@@ -127,24 +127,130 @@ def validate_configuration_layer():
 
     print("Native JSON configuration profiles verified successfully.")
 
+
 # -------------------------
 # Step: Install requirements
-# -------------------------
+# # -------------------------
 def install_reqs():
+    print("\n[MOD SETUP] >>> Entering environment sync and dependency boundary.")
+
     python_exe = Path("venv/Scripts/python.exe")
     if not python_exe.exists():
-        print("ERROR: venv not found.")
+        print("[MOD SETUP] !!! CRITICAL ERROR: Virtual environment (venv) initialization verified: FALSE.")
+        print("ERROR: venv folder missing. Execution halted.")
         sys.exit(1)
 
+    print("[MOD SETUP] Virtual environment verified: TRUE.")
+
+    # 1. Upgrade pip normally
+    print("[MOD SETUP] Synchronizing core package manager (pip)...")
     run([str(python_exe), "-m", "pip", "install", "--upgrade", "pip"], "Upgrade pip")
-    run([str(python_exe), "-m", "pip", "install", "-r", "requirements.txt"], "Install dependencies")
+
+    # 2. Deploy binary-enforced dependency stack
+    target_url = "https://abetlen.github.io/llama-cpp-python/whl/cpu"
+    print(f"[MOD SETUP] Mapping external CPU binary matrix: {target_url}")
+    print("[MOD SETUP] Deploying lightweight local LLM dependencies...")
+
+    run([
+        str(python_exe), "-m", "pip", "install",
+        "--only-binary=llama-cpp-python",
+        "--extra-index-url", target_url,
+        "-r", "requirements.txt"
+    ], "Install dependencies")
+
+    print("[MOD SETUP] <<< Environment synchronized successfully. Core systems nominal.\n")
+
+
+# -------------------------
+# Step: Install requirements
+# "Extreme Debug" Edition
+# -------------------------
+def debug_install_reqs():
+    print("\n[SUBATOMIC DEBUG] >>> Entering install_reqs() function execution boundary.")
+
+    # Track the active working directory and environment variables
+    print(f"[SUBATOMIC DEBUG] Current Working Directory (CWD): {os.getcwd()}")
+    print(f"[SUBATOMIC DEBUG] Current Python Executable running this script: {sys.executable}")
+    print(f"[SUBATOMIC DEBUG] Current System Path (sys.path) entry count: {len(sys.path)}")
+
+    # Path Instantiation & Virtual Environment Verification
+    print("[SUBATOMIC DEBUG] Instantiating Path object for target virtual environment...")
+    python_exe = Path("venv/Scripts/python.exe")
+    print(f"[SUBATOMIC DEBUG] Target Path evaluated to string: '{str(python_exe)}'")
+    print(f"[SUBATOMIC DEBUG] Absolute Path resolution: '{python_exe.resolve()}'")
+
+    print("[SUBATOMIC DEBUG] Querying file system for presence of python.exe...")
+    exists = python_exe.exists()
+    print(f"[SUBATOMIC DEBUG] File system presence check result: {exists}")
+
+    if not exists:
+        print("[SUBATOMIC DEBUG] !!! CRITICAL STATE TRIGGERED: venv not found. Preparing hard exit.")
+        print("ERROR: venv not found.")
+        print("[SUBATOMIC DEBUG] Invoking sys.exit(1)... Goodbye.")
+        sys.exit(1)
+
+    print("[SUBATOMIC DEBUG] Conditional check passed. Virtual environment verified.")
+
+    try:
+        # Pip Upgrade Execution Phase
+        print("\n[SUBATOMIC DEBUG] ==========================================================")
+        print("[SUBATOMIC DEBUG] PREPARING STEP 1: Upgrading Core Package Manager (pip)")
+        print("[SUBATOMIC DEBUG] Constructing subprocess argument array...")
+        pip_upgrade_args = [str(python_exe), "-m", "pip", "install", "--upgrade", "pip"]
+        print(f"[SUBATOMIC DEBUG] Argument payload: {pip_upgrade_args}")
+        print("[SUBATOMIC DEBUG] Handoff to run() wrapper imminent. Initiating execution...")
+
+        run(pip_upgrade_args, "Upgrade pip")
+
+        print("[SUBATOMIC DEBUG] Step 1 finished. Subprocess returned execution control cleanly.")
+        print("[SUBATOMIC DEBUG] ==========================================================\n")
+
+        # Comprehensive Requirements Execution Phase with Ultimate Verbosity
+        print("[SUBATOMIC DEBUG] ==========================================================")
+        print("[SUBATOMIC DEBUG] PREPARING STEP 2: Dependency Sweep with Binary Enforcement")
+
+        # Swapping the URL target out so your script can bind it cleanly
+        target_url = "https://abetlen.github.io/llama-cpp-python/whl/cpu"
+        print(f"[SUBATOMIC DEBUG] Binding target extra-index-url string variable to memory: '{target_url}'")
+
+        # Verifying requirements.txt existence before letting pip touch it
+        req_file = Path("requirements.txt")
+        print(f"[SUBATOMIC DEBUG] Checking for target manifest '{req_file.resolve()}'...")
+        print(f"[SUBATOMIC DEBUG] Manifest presence verified: {req_file.exists()}")
+
+        print("[SUBATOMIC DEBUG] Constructing hyper-verbose subprocess argument array...")
+        print("[SUBATOMIC DEBUG] NOTE: Adding '-vvv' flag to expose all pip internal tag matching and engine diagnostics.")
+
+        pip_install_args = [
+            str(python_exe), "-m", "pip", "install",
+            "--only-binary=llama-cpp-python",        # Restricts ONLY llama-cpp from compiling
+            "--extra-index-url", target_url,
+            "-r", str(req_file)
+        ]
+
+        print(f"[SUBATOMIC DEBUG] Full argument payload matrix: {pip_install_args}")
+        print("[SUBATOMIC DEBUG] Handoff to run() wrapper imminent. Initiating binary enforcement phase...")
+
+        run(pip_install_args, "Install dependencies")
+
+        print("[SUBATOMIC DEBUG] Step 2 finished. Dependencies successfully aligned.")
+        print("[SUBATOMIC DEBUG] ==========================================================\n")
+
+    except Exception as e:
+        print("\n[SUBATOMIC DEBUG] !!! ANOMALY DETECTED IN RUNTIME EXECUTION BOUNDARY !!!")
+        print(f"[SUBATOMIC DEBUG] Exception Type: {type(e)}")
+        print(f"[SUBATOMIC DEBUG] Exception Message: {str(e)}")
+        print("[SUBATOMIC DEBUG] Unwinding call stack trace now:")
+        traceback.print_exc()
+        print("[SUBATOMIC DEBUG] Standard recovery impossible. Terminating process.")
+        raise e
+
+    print("[SUBATOMIC DEBUG] <<< Exiting install_reqs() function boundary safely. Mission successful.\n")
 
 
 # -------------------------
 # Step: Download LLM model
 # -------------------------
-# installer.py - Streamlined Dynamic Downloader
-
 def download_model():
     # 1. Force absolute project path mapping relative to the script location
     project_root = Path(__file__).parent.absolute()
@@ -292,42 +398,61 @@ def warmup_tts():
     run([str(python_exe), "modular/warmup_tts.py"], "Warmup TTS")
 
 # -------------------------
-# Step: Create Desktop Shortcut
+# Step: Create Desktop Shortcuts
 # -------------------------
 def create_shortcut():
     desktop = Path.home() / "Desktop"
-    shortcut = desktop / "NMS Dynamic Suit Voice.lnk"
-    if shortcut.exists():
-        print("Shortcut already exists, skipping.")
+
+    # 1. Define paths for Core Tool Shortcut
+    shortcut_core = desktop / "NMS Dynamic Suit Voice.lnk"
+    args_core = Path.cwd() / "launch_nms_dsv.py"
+    icon_core = Path.cwd() / "assets/nms_dsv_256.ico"
+
+    # 2. Define paths for Manager Shortcut (Pointing directly to the launch batch file!)
+    shortcut_manager = desktop / "Exosuit Companion AI Dashboard.lnk"
+    target_manager = Path.cwd() / "manager.cmd"  # Ensure this matches the batch file's name exactly
+    icon_manager = Path.cwd() / "assets/nms_dsv_manager256.ico"
+
+    # Check if both already exist to avoid rewriting unnecessarily
+    if shortcut_core.exists() and shortcut_manager.exists():
+        print("Both shortcuts already exist, skipping.")
         return
+
+    # Select the right python executable based on terminal visibility choice for the background process
+    visible = input("Should the terminal be visible for the CORE TOOL? (For Debugging or just to watch it work) (Y/N): ").strip().lower() == "y"
+
+    if visible:
+        target_core = Path.cwd() / "venv/Scripts/python.exe"
+    else:
+        target_core = Path.cwd() / "venv/Scripts/pythonw.exe"
+
     temp_dir = os.getenv("TEMP") or os.getenv("TMP") or str(Path.home())
-    vbs = Path(temp_dir) / "create_shortcut.vbs"
+    vbs = Path(temp_dir) / "create_shortcuts.vbs"
 
-    target = Path.cwd() / "venv/Scripts/python.exe"
+    with open(vbs, "w", encoding="utf-8") as f:
+        f.write('Set WshShell = WScript.CreateObject("WScript.Shell")\n\n')
 
-    # CRITICAL CHANGE: Target the lightning fast boot loader script instead of the old core loop!
-    args = Path.cwd() / "launch_nms_dsv.py"
-    icon = Path.cwd() / "assets/nms_dsv_256.ico"
+        # --- WRITE CORE TOOL SHORTCUT ---
+        if not shortcut_core.exists():
+            f.write(f'Set Shortcut1 = WshShell.CreateShortcut("{shortcut_core}")\n')
+            f.write(f'Shortcut1.TargetPath = "{target_core}"\n')
+            f.write(f'Shortcut1.Arguments = "{args_core}"\n')
+            f.write(f'Shortcut1.WorkingDirectory = "{Path.cwd()}"\n')
+            f.write(f'Shortcut1.IconLocation = "{icon_core}"\n')
+            f.write('Shortcut1.Save\n\n')
 
-    visible = input("Should the terminal be visible? (Good for Debugging or just to watch it work) (Y/N): ").strip().lower() == "y"
+        # --- WRITE MANAGER DASHBOARD SHORTCUT ---
+        if not shortcut_manager.exists():
+            f.write(f'Set Shortcut2 = WshShell.CreateShortcut("{shortcut_manager}")\n')
+            f.write(f'Shortcut2.TargetPath = "{target_manager}"\n')
+            f.write(f'Shortcut2.WorkingDirectory = "{Path.cwd()}"\n')
+            f.write(f'Shortcut2.IconLocation = "{icon_manager}"\n')
+            f.write('Shortcut2.Save\n')
 
-    with open(vbs, "w") as f:
-        f.write('Set WshShell = WScript.CreateObject("WScript.Shell")\n')
-        f.write(f'Set Shortcut = WshShell.CreateShortcut("{shortcut}")\n')
-
-        if visible:
-            f.write(f'Shortcut.TargetPath = "{target}"\n')
-            f.write(f'Shortcut.Arguments = "{args}"\n')
-        else:
-            f.write('Shortcut.TargetPath = "cmd.exe"\n')
-            f.write(f'Shortcut.Arguments = "/c \\"{target} {args}\\""\n')
-
-        f.write(f'Shortcut.WorkingDirectory = "{Path.cwd()}"\n')
-        f.write(f'Shortcut.IconLocation = "{icon}"\n')
-        f.write('Shortcut.Save\n')
-
-    run(["cscript", "//nologo", str(vbs)], "Create desktop shortcut")
+    # Execute and clean up VBS execution boundary
+    run(["cscript", "//nologo", str(vbs)], "Create desktop shortcuts")
     vbs.unlink()
+
 
 # -------------------------
 # Main
