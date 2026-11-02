@@ -420,8 +420,8 @@ def create_shortcut():
 
     # 2. Define paths for Manager Shortcut (Pointing directly to the launch batch file!)
     shortcut_manager = desktop / "Exosuit Companion AI Dashboard.lnk"
-    target_manager = Path.cwd() / "manager.cmd"  # Ensure this matches the batch file's name exactly
-    icon_manager = Path.cwd() / "assets/nms_dsv_manager256.ico"
+    target_manager = Path.cwd() / "manager\\run_manager.cmd"  # Ensure this matches the batch file's name exactly
+    icon_manager = Path.cwd() / "assets/nms_dsv_manager_256.ico"
 
     # Check if both already exist to avoid rewriting unnecessarily
     if shortcut_core.exists() and shortcut_manager.exists():
