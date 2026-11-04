@@ -7,8 +7,6 @@ import shutil
 import json
 from pathlib import Path
 import traceback
-from install.dsv2wem_install import setup_audio_tools
-
 
 AUTOALL = False
 
@@ -106,9 +104,6 @@ def validate_configuration_layer():
     paths = env_data.get("paths", {})
     mod_dir = Path(paths.get("mod_dir", ""))
 
-    ext_tools = env_data.get("external_tools", {})
-    cmd_script = Path(ext_tools.get("sound2wem_cmd", ""))
-
     models = env_data.get("models", {})
     llm_model = Path(models.get("llm_model", ""))
 
@@ -116,11 +111,6 @@ def validate_configuration_layer():
     if not mod_dir.exists():
         print(f"ERROR: Target game mod folder path missing or unreachable:\n{mod_dir}")
         print("Please correct the 'mod_dir' value inside config/environment_config.json")
-        sys.exit(1)
-
-    if not cmd_script.exists():
-        print(f"ERROR: sound2wem execution macro missing or unreachable:\n{cmd_script}")
-        print("Fix your config paths or run Sound2WEM setup steps again.")
         sys.exit(1)
 
     if not llm_model.exists():
@@ -165,7 +155,7 @@ def install_reqs():
 
 # -------------------------
 # Step: Install requirements
-# "Extreme Debug" Edition
+# "Extreme Debug" Edition - left in place should it be needed in the future.
 # -------------------------
 def debug_install_reqs():
     print("\n[SUBATOMIC DEBUG] >>> Entering install_reqs() function execution boundary.")
@@ -330,44 +320,6 @@ if "--download-model" in sys.argv:
     sys.exit(0)
 
 
-
-# -------------------------
-# Step: Setup Sound2WEM
-# -------------------------
-def setup_sound2wem():
-    s2w = Path("sound2wem")
-    cmd = s2w / "zSound2wem.cmd"
-
-    # Static command string ensures Windows parses the absolute URL token perfectly
-    CLONE_CMD = "git clone https://github.com/EternalLeo/sound2wem"
-
-    if s2w.exists():
-        if not cmd.exists():
-            print("Warning: sound2wem exists but zSound2wem.cmd is missing.")
-            choice = input("Delete and re-clone? (Y/N): ").strip().lower()
-            if choice == "y":
-                shutil.rmtree(s2w)
-                print("\n=== Clone Sound2WEM ===")
-                subprocess.run(CLONE_CMD, shell=True, check=True)
-            else:
-                print("Cannot continue without zSound2wem.cmd.")
-                sys.exit(1)
-        else:
-            print("Sound2WEM directory OK.")
-    else:
-        print("\n=== Clone Sound2WEM ===")
-        subprocess.run(CLONE_CMD, shell=True, check=True)
-
-    print("\nPlease run Sound2WEM setup:")
-    print("  1) Explorer window opened.")
-    print("  2) Double-click zSound2wem.cmd")
-    print("  3) Install Wwise/FFmpeg")
-    print("  4) Return here and press Enter.")
-    subprocess.Popen(["explorer", str(s2w)])
-    input("Press Enter when ready...")
-
-
-
 # -------------------------
 # Step: Copy starter WEMs
 # -------------------------
@@ -408,7 +360,7 @@ def warmup_tts():
 
 
 # -------------------------
-# Step: Create Desktop Shortcuts (Updated for Two Tools)
+# Step: Create Desktop Shortcuts (Fixed for VBScript Quote Escaping)
 # -------------------------
 def create_shortcuts():
     desktop = Path.home() / "Desktop"
@@ -427,7 +379,7 @@ def create_shortcuts():
         {
             "name": "NMS Dynamic Suit Voice.lnk",
             "target": python_exe,
-            "args": root_dir / "run_dsv.py",
+            "args": root_dir / "launch_nms_dsv.py",
             "icon": root_dir / "assets/nms_dsv_256.ico"
         },
         {
@@ -451,9 +403,10 @@ def create_shortcuts():
                 f.write(f'Shortcut.Arguments = "{item["args"]}"\n')
             else:
                 f.write('Shortcut.TargetPath = "cmd.exe"\n')
-                f.write(f'Shortcut.Arguments = "/c \\"{item["target"]} {item["args"]}\\""\n')
+                # VBSCRIPT SYNTAX FIX: Double up the internal quotes ("") so VBScript reads them as literal marks
+                f.write(f'Shortcut.Arguments = "/c ""{item["target"]}"" ""{item["item"] if "item" in item else item["args"]}"""\n')
 
-            # This is the exact parameter that forces the shortcut to remember where the venv lives!
+            # Keep your working directory environment configurations locked down tight
             f.write(f'Shortcut.WorkingDirectory = "{root_dir}"\n')
             f.write(f'Shortcut.IconLocation = "{item["icon"]}"\n')
             f.write('Shortcut.Save\n')
@@ -470,22 +423,30 @@ def main():
     choose_mode()
 
     step("Check Python", check_python)
-    step("Setup virtual environment", setup_venv)
-    step("Install Python dependencies", install_reqs)
-    step("Download LLM model", run_download_model)
-    step("Setup Audio Tool Infrastructure", setup_audio_tools)
-    step("Prepare MOD directory", copy_starter_wems)
-    step("Initialize TTS model", warmup_tts)
-    step("Validate configuration matrix", validate_configuration_layer)
-    step("Create Desktop Shortcut", create_shortcuts)
+    print("• Python 3.11 check: OK")
 
-    print("\n=== Setup Complete ===")
+    step("Setup virtual environment", setup_venv)
+    print("• venv: OK")
+
+    step("Install Python dependencies", install_reqs)
+    print("• Dependencies: OK")
+
+    step("Download LLM model", run_download_model)
     print("• LLM model: OK")
-    print("• Sound2WEM: OK")
-    print("• TTS models: OK")
+
+    step("Prepare MOD directory", copy_starter_wems)
     print("• WEMs updated: OK")
+
+    step("Initialize TTS model", warmup_tts)
+    print("• TTS models: OK")
+
+    step("Validate configuration matrix", validate_configuration_layer)
     print("• Native JSON Config: OK")
+
+    step("Create Desktop Shortcut", create_shortcuts)
     print("• Desktop Fast-Boot Shortcut: OK")
+
+    print("\n=== If you have made this far, setup is now complete.  Stop reading this. Go play! ===")
 
 if __name__ == "__main__":
     main()

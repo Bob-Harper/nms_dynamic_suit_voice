@@ -49,9 +49,8 @@ def reword_phrase(config, wem_id_r,
             if attempt < max_retries - 1:
                 time.sleep(1)
             else:
-                print(f"LLM ERROR on WEM {wem_id_r}: {e}")
+                print(f"DEBUG TOKEN = LLMINFERENCE_FAIL >> LLM ERROR on WEM {wem_id_r}: {e}")
                 return f"WEM ERROR {wem_id_r}, {e}. {original_phrase_r}"
-    print(f"ERROR on WEM {wem_id_r}")
     return f"External Reality Failure. {original_phrase_r}"
 
 

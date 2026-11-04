@@ -17,7 +17,6 @@
     ]
   },
   "files": {
-    "csv_path": "data/nms_suit_voice_transcripts.csv",
     "transcripts_path": "data/nms_suit_voice_transcripts.json",
     "tokenized_logits_path": "data/logit_bias.json",
 

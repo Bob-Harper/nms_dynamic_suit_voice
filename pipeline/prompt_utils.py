@@ -62,6 +62,8 @@ def construct_milcat_prompt(config, category, intent, phrase, wem_id):
 def determine_tone(config):
     tones = list(config.promptdata.get("tones", {}).keys())
     current_tone = config.current_tone
+    # return current_tone  # TO REMOVE ALL RANDOM CHANCE, UNCOMMENT THIS LINE.
+    # Adjust values below if desired.
 
     # 90% chance stick with default
     if random.random() < 0.9 or not tones:
@@ -72,15 +74,17 @@ def determine_tone(config):
 
 
 def determine_wordiness(config):
-    current = config.current_wordiness
+    current_wordiness = config.current_wordiness
+    # return current_wordiness # TO REMOVE ALL RANDOM CHANCE, UNCOMMENT THIS LINE.
+    # Adjust values below if desired.
 
-    # If observer is explicitly set, never override it
-    if current == "Observer":
-        return current
+    # If observer is explicitly set, never override it - some categories require Observer to stay on topic
+    if current_wordiness == "Observer":
+        return current_wordiness
 
     # 95% chance stick with whatever's configured
     if random.random() < 0.95:
-        return current
+        return current_wordiness
 
     # 5% chance: override with verbose
     return "Verbose"

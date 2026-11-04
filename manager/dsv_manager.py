@@ -16,7 +16,7 @@ if str(project_root) not in sys.path:
 class DSVManagementUtility:
     def __init__(self, root: tk.Tk):
         self.root = root
-        self.root.title("NMS Dynamic Suit Voice - Management Utility")
+        self.root.title("NMS Dynamic Suit Voice 1.2 Management Utility")
         self.root.geometry("960x820")
         self.root.minsize(580, 440)
         self.project_root = project_root
@@ -30,16 +30,11 @@ class DSVManagementUtility:
 
         self.load_raw_configurations()
 
-        # Dynamic Notebook Canvas mounting grid
-        self.notebook = ttk.Notebook(self.root)
-        self.notebook.pack(fill="both", expand=True, padx=10, pady=10)
+        # ====================================================
+        # RE-ALIGNED PACKAGING SEQUENCE (FIXES VERTICAL HIDING)
+        # ====================================================
 
-        # --------------------------------------------------
-        # THE CORE DISK SCANNER LOOP (100% FUTUREPROOFED)
-        # --------------------------------------------------
-        self.discover_and_mount_tabs()
-
-        # Action Buttons Tray
+        # 1. Pack the Action Buttons Tray FIRST so it clips hard to the bottom layout boundary
         self.button_frame = ttk.Frame(self.root)
         self.button_frame.pack(fill="x", side="bottom", padx=10, pady=10)
 
@@ -51,6 +46,14 @@ class DSVManagementUtility:
 
         self.cancel_btn = ttk.Button(self.button_frame, text="Cancel", command=self.root.quit)
         self.cancel_btn.pack(side="right", padx=5)
+
+        # 2. Pack the Notebook SECOND — it will automatically consume all remaining upper screen real estate
+        self.notebook = ttk.Notebook(self.root)
+        self.notebook.pack(fill="both", expand=True, padx=10, pady=(10, 0)) # Clean zero-padding lower anchor
+
+        # 3. Execute your discovery loops and mount your modular tab files into the allocated space
+        self.discover_and_mount_tabs()
+
 
     def discover_and_mount_tabs(self):
         """Sweeps manager/tabs/ recursively, sorting automatically by number."""

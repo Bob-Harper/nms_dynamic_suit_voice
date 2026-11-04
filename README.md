@@ -1,8 +1,8 @@
 # Dynamic No Man’s Sky Suit AI Voice Mod
 
-Version: 1.1
+Version: 1.2.0 (Unchained)
 Author: [[Bob-Harper](https://github.com)]
-Repository: [[nms_dynamic_suit_voice](https://github.com/nms_dynamic_suit_voice)]
+Repository: [[nms_dynamic_suit_voice](https://github.com)]
 
 ## Overview
 
@@ -17,18 +17,19 @@ This mod replaces static exosuit AI voice lines in No Man’s Sky with dynamical
 
 When No Man's Sky makes a sound call to play a suit voice line, it reads the physical file it finds inside your mod directory *at the exact moment it searches*. The game does NOT preload mod voice files into system memory when it launches. They load and play **EACH TIME** the game calls for that specific `.wem` file block, then are immediately unloaded until called again.
 
-Because your local pipeline generates variations ahead of time into a protected background cache buffer, the system watcher instantly swaps a fresh file into your game folder the moment a line is loaded and played by the game. Every notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
+Because your local pipeline generates variations ahead of time into a protected background cache buffer, the system watcher instantly swaps a fresh file into your game folder the moment a line is loaded and played by the game, and proceeds to replenish the cache while you are still playing. Every notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
 
-## Key Features (New in v1.1!)
+## Key Features (New in v1.2.0!)
 
-- 🖥️ **Centralized Control Dashboard:** A graphical config interface (`960x820) to customize iteration names, swap engines, or fine-tune processing effects.
-- 🎛️ **NumPy Acoustic Modifiers Matrix:** Six standalone sliders to control volume gain, sentence pacing, pitch semitones, rate scalars, throat size resonators, and cybernetic overlay mix balances.
-- 🛸 **Themed Audio Presets:** Pre-calibrated, data-driven JSON presets that instantly transform standard voice clips into lore-friendly signatures like the *Gek NipNip Merchant*, *Vy'keen Juggernaut*, or *Caffeinated Korvax*.
-- 🗄️ **Secure 8-Model Core Roster:** Built-in dynamic asset management for eight verified, high-performance, single-voice English baselines with crash-free automated download or uninstall hooks.
-- 🧠 **Protected VRAM Performance:** Run fully on optimized CPU thread inference layouts, leaving your GPU completely free to push maximum frame rates to the game.
+- **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely eradicated. No software accounts, corporate registration, or heavy background installations of programs or third party software are required.  (LLM and TTS models still required)
+- **Pure-Python DSP Matrix Engine:** FFmpeg requirement and sub-process loop has been removed. Volume gain, sentence tempo stretchings, and pitch adjustments are handled entirely in-memory via single-pass NumPy/SciPy matrix math.
+- **Micro-Sized Asset Footprint:** Bundles an embedded, native `.wem` bitstream re-packetizer right inside your repository pull.
+- **Centralized Control Dashboard:** A graphical config interface to customize iteration names, swap engines, adjust multi-threaded look-ahead queues, or fine-tune processing effects.
+- **Stateful Quick Cache System:** Thread-isolated background queue managers monitor inventory states, look ahead to generate upcoming lines, and intelligently handle file locks without breaking game focus.
+- **Protected VRAM Performance:** Run fully on optimized CPU thread inference layouts, leaving your GPU completely free to push maximum frame rates to the game.
 
-### 🛠️ Persistent User Configuration Matrix
-Customizations are now securely saved directly to `config/user_customization.json`. This architecture ensures your personalized variables will **never be overwritten or wiped out** during future mod updates or repository git pulls.
+### Persistent User Configuration Matrix
+Customizations are securely saved directly to `config/user_customization.json`. This architecture ensures your personalized variables will **never be overwritten or wiped out** during future mod updates or repository git pulls.
 
 - **First-Time Installation:** If this configuration file does not exist on your drive, the automated setup script will initialize it cleanly for you.
 - **Upgrading the Mod:** If the file already exists with your custom settings, the engine boundaries will completely shield it from being touched.
@@ -52,34 +53,36 @@ Customizations are now securely saved directly to `config/user_customization.jso
 
 ## Installation & Deployment
 
-### ⚡ Automatic or Guided Installation
-Launch the primary command wrapper script:
+### 1-Click Execution Setup
+Launch the primary command wrapper script from your extracted mod directory:
 ```bash
 DOUBLECLICK_To_Install_Dynamic_Suit_Voice.cmd
 ```
-Choose **Automatic Mode** for a streamlined, minimal-click environment deployment, or choose **Guided Mode** to manually inspect path mappings, folder targets, and validation configurations step-by-step.
+Choose **Automatic Mode** for a streamlined, single-click deployment that sets up your isolated Python `venv` environment, upgrades core libraries, builds your asset pointers, and creates space-safe desktop shortcuts completely in the background.
 
-### 🛠️ Launching the DSV Manager
-To customize your Exosuit experience, simply double-click the launcher script in your root mod folder:
-```bash
-run_manager.cmd
-```
-This instantly boots your graphical dashboard configuration utility, allowing you to fine-tune your **Iteration Designation**, swap active vocal models on the fly, or test-play custom presets inside the live real-time sandbox deck before starting your game session.
+### Launching the DSV
+Double-click your newly generated desktop shortcut: NMS Dynamic Suit Voice
+Check your system tray - if the icon is Red, it is still warming up.  When the red disappears, the DSV is actively monitoring your game directory and ready to step up.  Launch No Man's Sky, and head out into the stars!
 
-- Set your custom **Iteration Name**, calibrate your **Companion AI Tone Profiles**, or load your favorite alien voice presets inside the live sandbox panel.
-- Click **Save & Close** (or leave it active via **Apply Changes** to tweak metrics on the fly while playing!).
-- Fire up the background watchdog thread generator pipeline, launch No Man's Sky, and head out into the stars!
+### Launching the DSV Manager
+To customize your Exosuit experience, double-click your newly generated desktop shortcut: Exosuit Companion
+This launches separately from the main DSV, and can be run at any time.  It opens your graphical configuration utility, allowing you to specify your **Iteration Designation**, swap active vocal models, or test-play custom presets and fine-tune your modifications inside the sandbox before starting your game session.
+Click **Save & Close** when you are done (or **Apply Changes** and leave it open to tweak metrics while playing).
 
-## Future Framework Roadmap (Version 1.2 and Beyond)
-- 💾 **Custom User Profile Saving:** A local profile manager to let users write, name, and archive their own handcrafted audio preset slider files.
-- 🎙️ **Bundled Zero-Install Masculine Vocal Registers:** Staging offline pre-compiled binary modules directly inside localized project folders to safely unlock native male voice models without complex user configuration scripts.
-- 📦 **Native Python `sound2wem` Refactoring:** Completely absorbing audio compilation dependencies natively into pure Python memory streams to bypass calling shell execution windows entirely.
+## Future Framework Roadmap
+- **Multiple Profiles:** Allow users to to users to name and store their own created configurations and audio presets.
+- **Easy Updates & Cache Management:** Manager enhancements such as the ability to check for and download updates, manage local storage and temporary files.
+- **Support Tab:** Instead of cryptic error messages written in Nerdspeak, a human readable summary plus a Debug Token that can be entered into the support tab to display instant advice or steps to follow for common issues.  Direct support will remain an option as always.
 
-## License
+## Licensing & Third-Party Open Source Attributions
 
 Distributed fully open-source under the MIT License. See `LICENSE` for details.
 
+* **`wav2wem` Assembly Tool:** This project bundles an embedded static binary of `wav2wem` to handle bit-exact audio re-packetization. Licensed under the GPLv2.
+  * Original Repository: [[pas2k/wav2wem](https://github.com)]
+  * Project Fork Source: [[Bob-Harper/wav2wem](https://github.com)]
+
 ## Special Acknowledgments
-- **[[EternalLeo](https://github.com)]:** The excellent [[sound2wem](https://github.com/sound2wem)] utility drives 50% of the back-end compiler pipeline's heavy lifting.
+- **[[EternalLeo](https://github.com)]:** The excellent [[sound2wem](https://github.com)] utility which acted as the springboard to launch this project and provided the original proof of concept. This project would not exist without his research.
 - **The Nexus Mods Suit Audio Community:** Gratitude to all original voice modders and commenters whose forum feedback helped isolate the exact filesystem directories the game monitors.
 - **Sean Murray & Hello Games:** Deep thanks for crafting the definitive cosmic sandbox universe we waited all these years to explore.

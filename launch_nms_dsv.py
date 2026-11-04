@@ -57,11 +57,11 @@ class FastBootTray:
         """Runs inside a background worker thread where heavy 20-second imports are safe."""
         print("Launcher: Fast boot active. Invoking heavy engine components...")
 
-        # DELAYED-IMPORT HERE. This keeps the initial startup fast to display the icon immeditely as a status update mechanism.
+        # DELAYED-IMPORT HERE. This keeps the initial startup fast to display the icon immediately as a status update mechanism.
         from pipeline.config import SuitVoiceConfig
         from pipeline.nms_dynamic_suit_voice_pipeline import watch_wems
 
-        # Instantiate the configuration class now that the tray is already visible
+        # Instance the configuration class now that the tray is already visible
         config = SuitVoiceConfig(init_llm=False)
 
         # Hand off execution control smoothly to the existing core loop
@@ -70,7 +70,7 @@ class FastBootTray:
     def run(self):
         # Spin up the background compiler/initialization thread
         threading.Thread(target=self.boot_pipeline_thread, daemon=True).start()
-        # Open the system tray icon instantly (0-second delay)
+        # Open the system tray icon
         self.icon.run()
 
 if __name__ == "__main__":

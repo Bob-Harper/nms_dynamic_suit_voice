@@ -1,20 +1,17 @@
 # cache_topup_to_max.py
 from time import time
 from pipeline.config import SuitVoiceConfig
-from pipeline.quick_cache import _replacement_wrapper
+from pipeline.quick_cache import QuickCacheEngine
 import csv
 
 config = SuitVoiceConfig()
-
+qce = QuickCacheEngine(config)
 # === Paste your ID list here ===
+# Modern JSON sweep utilizing your pre-loaded configuration map
 wem_ids_raw = []
-with open(config.csv_path, newline='', encoding='utf-8') as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        if row.get("Used", "").strip().lower() == "yes":
-            wem_number = row.get("WEM_number")
-            if wem_number:
-                wem_ids_raw.append(str(wem_number))
+for wem_id, data in config.intent_map.items():
+    if data.get("Used", "").strip().lower() == "yes":
+        wem_ids_raw.append(str(wem_id))
 
 
 def fill_cache_for_ids(wem_ids, max_count=None):
@@ -39,8 +36,8 @@ def fill_cache_for_ids(wem_ids, max_count=None):
 
         for i in range(missing_count):
             t0 = time()
-            _replacement_wrapper(config, wem_id, wem_dir)
-
+            qce.enqueue_job(qce._replacement_wrapper, wem_id, wem_dir)
+            #    def _replacement_wrapper(self, config, wem_id: str, wem_dir: Path):
 
 
 if __name__ == "__main__":

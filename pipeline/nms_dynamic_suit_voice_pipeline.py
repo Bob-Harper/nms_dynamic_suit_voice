@@ -2,15 +2,18 @@
 import time
 import os
 from pathlib import Path
-from pipeline.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
+from pipeline.quick_cache import QuickCacheEngine
+# from pipeline.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
 from PIL import Image
-# NOTE: No global config or TTS instantiations live at the top of this file anymore!
+
 
 def watch_wems(wtray_ui, config):
     """Main watchdog thread invoked after the launcher completes fast boot."""
 
     # --- PHASE 1: Initialize Coqui-TTS Engine Weights ---
     wtray_ui.icon.title = "Dynamic Suit Voice - Loading TTS Voice Models..."
+
+    qce = QuickCacheEngine(config)
 
     # Prevent HuggingFace from attempting cloud updates on boot (this can be toggled elsewhere on demand as needed)
     os.environ["HF_HUB_OFFLINE"] = "1"
@@ -20,7 +23,7 @@ def watch_wems(wtray_ui, config):
     config.tts_model = TTS(model_name=config.tts_model_name)
 
     # --- PHASE 2: Initialize Llama-cpp Core Engine weights ---
-    wtray_ui.icon.title = "Dynamic Suit Voice - Loading Local Llama AI..."
+    wtray_ui.icon.title = "Dynamic Suit Voice - Loading Local AI..."
 
     from llama_cpp import Llama
     config.llm = Llama(
@@ -47,7 +50,7 @@ def watch_wems(wtray_ui, config):
         # Open a fresh copy and preserve the full RGBA alpha transparency channel
         wtray_ui.icon.icon = Image.open(wtray_ui.ready_icon_path).convert("RGBA")
 
-    wtray_ui.icon.title = "Dynamic Suit Voice - Ready"
+    wtray_ui.icon.title = "Dynamic Suit Voice 1.2 - Ready"
     check_interval = config.check_interval
 
     while wtray_ui.running:
@@ -57,17 +60,17 @@ def watch_wems(wtray_ui, config):
                 wem_id = f3.stem
                 if current_atime != access_times.get(wem_id, 0):
 
-                    cached_file = get_cached_wem(config, wem_id)
+                    cached_file = qce.get_cached_wem(wem_id)
                     if cached_file is None:
                         continue
 
-                    moved_file = move_cachedfile_to_mod_dir(cached_file, mod_dir, wem_id)
+                    moved_file = qce.move_cachedfile_to_mod_dir(cached_file, mod_dir, wem_id)
                     if moved_file is None:
                         continue
 
-                    update_access_time_to_match_newfile(moved_file, access_times)
+                    qce.update_access_time_to_match_newfile(moved_file, access_times)
 
             except Exception as w_e:
-                print(f"Error handling {f3.name}: {w_e}")
+                print(f"DEBUG TOKEN = TRAYWATCHER_EXC >> Error handling {f3.name}: {w_e}")
 
         time.sleep(check_interval)

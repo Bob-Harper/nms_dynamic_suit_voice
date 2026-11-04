@@ -31,6 +31,13 @@ REM 3. Launch the dashboard cleanly using the sandboxed interpreter environment
 
 if %ERRORLEVEL% NEQ 0 (
     echo.
-    echo [Warning]: Dashboard pipeline closed with an unexpected exit code.
+    echo [Warning]: Dashboard pipeline closed with an unexpeckkzz~•~@^B▒▒ÿØÿà^@^JFIF^@^A
+    echo ^GÎ^@^B^@^I^@^F^@^F^@^FacspMSFT^@^@^@^@IEC sRGB^@^@^@^@^@^@^@^@^@^@^@^@^@^@^¾Ý¢
+    echo +ÿ_¶âÓ•Ýùå¢£¤¥¦§¨©ª²³´µ¶·¸¹ºÂÃÄÅÆÇÈÉÊÒÓÔÕÖ×ØÙÚâãäåæçèéêòóôõö÷øùúûüýþÿ¥  ãOô_Ø¯¥
+    echo ^X%%¶´±°Oü÷ÿ^@ð_Kÿ^@á¿æÿ^@mßñ~?û_ø_ñ?ù_ü·ÿ^@ð_Kÿ^@á¿æÿ^@mßñ~?û_ø_ñ?ù_ü·%%±_¶âÓ•Ýù
+    echo unexpeckkzzzzzzzztt.16.16.16.16
+    echo unexpeckkzzzzzzzztt.16.16.16.16
+    echo unexpeckkzzzzzzzztt.16.16.16.16
+    echo unexpeckkzzzzzzzztt.16.16.16.16
     pause
 )

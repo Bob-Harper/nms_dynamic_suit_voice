@@ -212,13 +212,23 @@ class AudioTab(ttk.Frame):
 
     def audio_generation_worker(self):
         try:
+            import json
+            import sys
+            import shutil
+            from pathlib import Path
             from pipeline.config import SuitVoiceConfig
+            from pipeline.tts_utils import apply_vocal_dsp_chain
             from TTS.api import TTS
-            import numpy as np
-            import soundfile as sf
-            from scipy.signal import resample
+
+            # Use native Windows media player DLL binding for zero-dependency audio previews
+            if sys.platform == "win32":
+                import winsound
+            else:
+                winsound = None
 
             self.update_log_display(" Connecting to Coqui TTS Engine...")
+
+            # Initialize configuration without heavy LLM memory overhead
             heavy_cfg = SuitVoiceConfig(init_llm=False)
 
             embeds_dir = self.controller.project_root / "cache"
@@ -229,7 +239,8 @@ class AudioTab(ttk.Frame):
 
             text_payload = self.test_text_box.get("1.0", tk.END).strip()
 
-            gain_val = int(self.gain_scale.get())
+            # Extract active values straight from the Tkinter slider widgets
+            gain_val = float(self.gain_scale.get())
             pitch_semitones = int(self.pitch_scale.get())
             tempo_val = float(self.tempo_scale.get())
             rate_val = float(self.rate_scale.get())
@@ -237,10 +248,8 @@ class AudioTab(ttk.Frame):
             ring_mix = int(self.mix_scale.get())
             formant_percent = int(self.formant_scale.get())
 
-            # Read user configurations directly out of the controller's active live memory cache first!
+            # Fetch active voice model choice mapping profiles cleanly
             model_signature = self.controller.user_data.get("tts_model")
-
-            # If the user customization envelope doesn't hold a custom choice yet, fall back to base system weights
             if not model_signature:
                 with open(self.controller.env_config_file, "r", encoding="utf-8") as f:
                     env_map = json.load(f)
@@ -250,54 +259,35 @@ class AudioTab(ttk.Frame):
             tts_engine = TTS(model_name=model_signature)
             tts_engine.to("cpu")
 
-            self.update_log_display(f" Instantiating weights -> {model_signature}", append=True)
-            tts_engine = TTS(model_name=model_signature)
-            tts_engine.to("cpu")
-
             self.update_log_display(" Synthesizing vocal wave footprints...", append=True)
             tts_engine.tts_to_file(text=text_payload, file_path=str(temp_wav))
 
             self.update_log_display(" Injecting authentic local numpy robotic filter matrices...", append=True)
-            audio, sr = sf.read(str(temp_wav))
-            MIN_SAMPLES = 1000
 
-            # A. Pitch Adjustment Resample Loop
-            factor_pitch = 2 ** (pitch_semitones / 12)
-            n_samples_pitch = max(int(len(audio) / factor_pitch), MIN_SAMPLES)
-            audio = resample(audio, n_samples_pitch)
-
-            # B. Throat Formant Resonance Resample Loop
-            factor_formant = formant_percent / 100
-            n_samples_formant = max(int(len(audio) / factor_formant), MIN_SAMPLES)
-            audio = resample(audio, n_samples_formant)
-
-            # C. Hardware Ring Modulation (Wet/Dry Blend)
-            wet_factor = ring_mix / 100.0
-            dry_factor = 1.0 - wet_factor
-
-            dry_signal = audio.copy()
-            t = np.arange(len(audio)) / sr
-            wet_signal = audio * np.sin(2 * np.pi * ring_freq * t)
-
-            audio = (dry_signal * dry_factor) + (wet_signal * wet_factor)
-            sf.write(str(final_wav), audio, sr)
-
-            self.update_log_display(" Applying volume and tempo layers via FFmpeg...", append=True)
-            CREATE_NO_WINDOW = 0x08000000 if sys.platform == "win32" else 0
-            setrate_val = int(44100 * rate_val)
-            filter_string = f"volume={gain_val}dB,atempo={tempo_val},asetrate={setrate_val}"
-
-            subprocess.run([
-                "ffmpeg", "-hide_banner", "-y",
-                "-i", str(final_wav),
-                "-af", filter_string,
-                str(temp_wav)
-            ], check=True, creationflags=CREATE_NO_WINDOW)
+            # Route processing straight through your verified single-pass SciPy matrix math!
+            apply_vocal_dsp_chain(
+                config=heavy_cfg,
+                input_wav=temp_wav,
+                output_wav=final_wav,
+                gain_db=gain_val,
+                pitch_semitones=pitch_semitones,
+                tempo=tempo_val,
+                rate=rate_val,
+                ring_freq=ring_freq,
+                ring_mix=ring_mix,
+                formant_percent=formant_percent,
+                target_sr=44100  # Maintain standard full-speed playback sample rate profile
+            )
 
             self.update_log_display(" Footprints generated successfully! Triggering playback stream...", append=True)
-            subprocess.run([
-                "ffplay", "-nodisp", "-autoexit", str(temp_wav)
-            ], check=True, creationflags=CREATE_NO_WINDOW)
+
+            # Execute playback cleanly without spawning external ffplay processes
+            if winsound:
+                winsound.PlaySound(str(final_wav), winsound.SND_FILENAME)
+            else:
+                # Portable backup fallbacks for multi-platform development environments
+                import os
+                os.system(f"aplay {final_wav}" if sys.platform == "linux" else f"afplay {final_wav}")
 
             self.update_log_display("\n Playback loop finished smoothly. Tuning complete.")
 

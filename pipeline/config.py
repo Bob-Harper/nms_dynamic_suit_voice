@@ -1,5 +1,4 @@
 # config.py
-import csv
 import json
 import os
 import shutil
@@ -34,7 +33,6 @@ class SuitVoiceConfig:
         config_dir = root_dir / "config"
 
         # Load file structures
-        self.dsv2wem = load_json(config_dir / "dsv2wem_config.json")
         self.environment = load_json(config_dir / "environment_config.json")
         self.llm_prompting = load_json(config_dir / "llm_prompting.json")
         self.default_customization = load_json(config_dir / "default_customization.json")
@@ -79,8 +77,7 @@ class SuitVoiceConfig:
 
         # --- PROMPT ASSETS & FILES ---
         files = self.llm_prompting.get("files", {})
-        # self.csv_path = self.resolve_json_path(files.get("csv_path"), root_dir, must_exist=True) # CSV for intent mapping
-        # self.intent_map = self.load_intent_map(self.csv_path) # CSV for intent mapping
+
         self.transcripts_path = self.resolve_json_path(files.get("transcripts_path"), root_dir, must_exist=True) # JSON for intent mapping
         self.intent_map = json.loads(self.transcripts_path.read_text(encoding="utf-8")) # JSON for intent mapping
 
@@ -136,49 +133,17 @@ class SuitVoiceConfig:
         # Audio effect mapping dict for processing pipeline reference
         self.voice_effects = self.customization.get("voice_effects", {})
 
-        # FFMPEG Binary Resolution
-        ffmpeg_path = shutil.which("ffmpeg")
-        if not ffmpeg_path:
-            # Fall back to alternative platform configuration options if explicitly added
-            ffmpeg_env = self.environment.get("external_tools", {}).get("ffmpeg_path")
-            if ffmpeg_env:
-                ffmpeg_path = Path(ffmpeg_env.strip('"'))
-                os.environ["PATH"] = str(ffmpeg_path.parent) + ";" + os.environ.get("PATH", "")
-            else:
-                raise SystemExit("ffmpeg not found on PATH. Please install ffmpeg or set up path contexts.")
-        self.ffmpeg_path = Path(ffmpeg_path)
+        # ====================================================
+        # EXTERNAL TOOLS INFRASTRUCTURE
+        # ====================================================
+        external_tools = self.environment.get("external_tools", {})
 
-        # wwise settings
-        env_var = self.dsv2wem.get(
-            "wwise_root_windows_environment_variable",
-            "WWISEROOT"
-        ) # Because future me will ask where WWISEROOT is defined, forget that it's a Windows environment variable, and spend 30 minutes searching the repo.
-        self.wwise_root = os.environ.get(env_var)
-
-        if not self.wwise_root:
-            raise SystemExit(
-                 f"DEBUG TOKEN = DSV2WEM_WWISE >> Windows environment variable '{env_var}' not found."
-            )
-
-        self.wwise_console_path = (
-            Path(self.wwise_root)
-            / "Authoring"
-            / "x64"
-            / "Release"
-            / "bin"
-            / "WwiseConsole.exe"
+        # Resolve the new standalone audio compiler tool footprint securely
+        self.wav2wem_binary_path = self.resolve_json_path(
+            external_tools.get("wav2wem_asset", "assets/wav2wem/wav2wem.exe"),
+            root_dir,
+            must_exist=True
         )
-
-        if not self.wwise_console_path.exists():
-            raise SystemExit(
-                "DEBUG TOKEN = DSV2WEM_WWISE >> WwiseConsole.exe not found."
-            )
-
-        self.project_path = self.dsv2wem.get("project_path", "sound2wem")
-        self.project_name = self.dsv2wem.get("project_name", "wavtowemscript")
-        self.project_file_name = self.dsv2wem.get("project_file", "wavtowemscript.wproj")
-        self.project_file_path = Path(self.project_path) / self.project_name / self.project_file_name
-        self.conversion_profile = self.dsv2wem.get("conversion_profile", "Vorbis Quality High")
 
         # --- ML MODEL INITIALIZATIONS ---
         models = self.environment.get("models", {})
@@ -186,7 +151,7 @@ class SuitVoiceConfig:
         # Coqui-TTS Lazy Loading Setup
         self.tts_model_name = models.get("tts_model")
         if not self.tts_model_name:
-            raise ValueError("tts_model token signature missing inside configuration targets.")
+            raise ValueError("DEBUG TOKEN = TTSMODEL_SIG >> tts_model token signature missing inside configuration targets.")
 
         # Explicit type hint tells Pylance that TTS is allowed here later!
         self.tts_model: Optional[TTS] = None
@@ -215,31 +180,13 @@ class SuitVoiceConfig:
 
     def resolve_json_path(self, path_str: str, root: Path, must_exist=True) -> Path:
         if not path_str:
-            raise ValueError("Required configuration path entry is missing in JSON targets.")
+            raise ValueError("DEBUG TOKEN = JSONCONFIG_NR >> Required configuration path entry is missing in JSON targets.")
 
         p = Path(path_str.strip('"'))
         if not p.is_absolute():
             p = root / p
 
         if must_exist and not p.exists():
-            raise FileNotFoundError(f"Configuration file element targets a missing path reference: {p}")
+            raise FileNotFoundError(f"DEBUG TOKEN = JSONCONFIG_NP >> Configuration file element targets a missing path reference: {p}")
         return p
 
-    @staticmethod # OBSOLETE, REMOVED: Use load_json() instead for JSON files
-    def load_intent_map(csv_path: Path) -> dict:
-        i_intent_map = {}
-        if not csv_path.exists():
-            return i_intent_map
-        try:
-            with open(csv_path, newline='', encoding='utf-8') as csvfile:
-                reader = csv.DictReader(csvfile)
-                for row in reader:
-                    wem_number = (row.get('WEM_number') or '').strip()
-                    i_intent_map[wem_number] = {
-                        "Transcription": (row.get('Transcription') or '').strip(),
-                        "Category": (row.get('Category') or '').strip(),
-                        "Intent": (row.get('Intent') or '').strip(),
-                    }
-        except Exception as e:
-            print(f"Error loading intent map CSV profile: {e}")
-        return i_intent_map
