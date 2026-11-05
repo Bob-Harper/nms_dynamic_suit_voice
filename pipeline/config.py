@@ -38,6 +38,15 @@ class SuitVoiceConfig:
         self.default_customization = load_json(config_dir / "default_customization.json")
         self.user_customization = load_json(config_dir / "user_customization.json")
 
+        # --- CENTRALIZED PROJECT METADATA ---
+        project_meta = self.environment.get("project", {})
+        v_num = project_meta.get("version", "Something")
+        v_major = project_meta.get("release_major", "Went")
+        v_minor = project_meta.get("release_minor", "Wrong")
+
+        # Compiles to schema example: "v1.2.2 (Unchained.QT)"
+        self.version_signature = f"v{v_num} ({v_major}.{v_minor})"
+
         # Merge defaults with custom user tweaks cleanly
         self.customization = deep_merge(
             self.default_customization,
@@ -190,3 +199,17 @@ class SuitVoiceConfig:
             raise FileNotFoundError(f"DEBUG TOKEN = JSONCONFIG_NP >> Configuration file element targets a missing path reference: {p}")
         return p
 
+    @staticmethod
+    def get_version_signature() -> str:
+        """
+        Globally accessible static hook. Allows the UI launcher, README tools,
+        or update checkers to grab the single source of truth version instantly.
+        """
+        try:
+            config_dir = Path(__file__).parent.parent / "config"
+            with open(config_dir / "environment_config.json", "r", encoding="utf-8") as f:
+                env = json.load(f)
+            meta = env.get("project", {})
+            return f"v{meta.get('version', 'Something')} ({meta.get('release_major', 'Went')}.{meta.get('release_minor', 'Wrong')})"
+        except Exception:
+            return "Something went horribly wrong with the config files.  You should do something about that."

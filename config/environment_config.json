@@ -20,5 +20,10 @@
     },
     "model_url": {
         "qwen3_4b_q8_0": "https://huggingface.co/Qwen/Qwen3-4B-GGUF/resolve/main/Qwen3-4B-Q8_0.gguf"
+    },
+    "project": {
+        "version": "1.2.2",
+        "release_major": "Unchained",
+        "release_minor": "QT"
     }
 }
