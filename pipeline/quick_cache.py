@@ -30,7 +30,6 @@ class QuickCacheEngine:
         """Adds an active processing job to the thread safe execution queue."""
         self.start_worker()
 
-        # If it's a replacement pass, increment the job tracker counter for this WEM ID
         if func == self._replacement_wrapper:
             wem_id = args[1]
             with self._jobs_lock:
@@ -61,25 +60,42 @@ class QuickCacheEngine:
     def move_cachedfile_to_mod_dir(self, src_path: Path, mod_dir: Path, wem_id: str) -> Path | None:
         """
         Safely moves an available compiled WEM asset directly into the No Man's Sky mods directory.
-        Maintains your exact signature and loop polling execution limits.
+        Uses a cooperative back-off delay to stay silent under security tools.
         """
         mod_dir.mkdir(parents=True, exist_ok=True)
         dst_path = mod_dir / f"{wem_id}.wem"
 
         start_time = time()
+        attempt = 0
         while True:
             try:
+                # Cooperative swap: Attempt the physical file replacement
                 src_path.replace(dst_path)
+
+                # NATIVE FIX FOR WINDOWS SSDs: Force a tiny metadata update to the modification stamp.
+                # This ensures your watch loop detects the swap even if st_atime is disabled by the OS!
+                try:
+                    os.utime(dst_path, None)
+                except Exception:
+                    pass
+
                 return dst_path
             except (PermissionError, OSError):
                 if time() - start_time > 120:
                     return None
-                sleep(0.1)
+
+                # Scanner-Friendly Backoff: Slowly ramp up the sleep if the game engine is holding a long file handle lock.
+                # This prevents aggressive continuous polling errors which trip behavioral defenses.
+                attempt += 1
+                sleep_delay = min(0.5, 0.05 * (2 ** min(attempt, 4)))
+                sleep(sleep_delay)
 
     def update_access_time_to_match_newfile(self, file_path: Path, access_times: dict):
         """Updates your tracking dictionary with the file's exact filesystem access epoch timestamp."""
         if file_path.exists():
-            access_times[file_path.stem] = file_path.stat().st_atime
+            # Fallback alignment to st_mtime if st_atime isn't updating on the user's OS profile
+            stat_data = file_path.stat()
+            access_times[file_path.stem] = max(stat_data.st_atime, stat_data.st_mtime)
 
     def get_cached_wem(self, wem_id: str) -> Path:
         """
@@ -91,7 +107,6 @@ class QuickCacheEngine:
 
         id_str = str(wem_id).strip()
 
-        # Isolate cache parameters cleanly using your pre-loaded config layout memory maps
         should_pre_cache = False
         if id_str in self.config.intent_map:
             status_flag = self.config.intent_map[id_str].get("Used", "").strip().lower()
@@ -109,13 +124,11 @@ class QuickCacheEngine:
                 missing_count = max(0, self.config.quick_cache_max - current_inventory)
                 for _ in range(missing_count):
                     self.enqueue_job(self._replacement_wrapper, self.config, wem_id, wem_dir)
-            return cached_files[0] # Returns the single explicit Path node!
+            return cached_files[0]
 
-        # FALLBACK GATE: If an inactive file is missing, enqueue ONE immediately if none are pending
         if pending_jobs == 0:
             self.enqueue_job(self._replacement_wrapper, self.config, wem_id, wem_dir)
 
-        # Wait until the fallback file finishes rendering
         while True:
             sleep(0.1)
             cached_files = sorted(wem_dir.glob("*.wem"))
