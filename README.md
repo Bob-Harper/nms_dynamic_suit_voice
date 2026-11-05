@@ -9,31 +9,31 @@ Repository: [[nms_dynamic_suit_voice](https://github.com)]
 This mod replaces static exosuit AI voice lines in No Man’s Sky with dynamically generated, non-repetitive lines, powered by a local AI model and localized audio DSP filters.
 
 ### Non-Negotiable Core Mandates:
-- **Local files ONLY.** No cloud processing, zero internet connection required beyond installation, and absolutely no paid API subscription keys.
+- **Local files ONLY.** No cloud processing, LLM and TTS odels are downloaded then stored locally, and absolutely no paid API subscription keys.
 - **ENHANCE gameplay but NOT at the EXPENSE of gameplay.** Hardware footprints are stringently guarded.
-- **Strict Single-Use Cache Vectors.** When pre-caching, generated audio files are completely overwritten after a single use, never reused.
+- **Strict Single-Use Policy.** When pre-caching, generated audio files are completely overwritten after a single use, never reused.
 
 ## How the Tech Works
 
 When No Man's Sky makes a sound call to play a suit voice line, it reads the physical file it finds inside your mod directory *at the exact moment it searches*. The game does NOT preload mod voice files into system memory when it launches. They load and play **EACH TIME** the game calls for that specific `.wem` file block, then are immediately unloaded until called again.
 
-Because your local pipeline generates variations ahead of time into a protected background cache buffer, the system watcher instantly swaps a fresh file into your game folder the moment a line is loaded and played by the game, and proceeds to replenish the cache while you are still playing. Every notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
+Because the local pipeline generates variations ahead of time into a background cache, the system watcher instantly swaps a fresh file into your game folder, and proceeds to replenish the cache while you are still playing. Every notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
 
 ## Key Features (As of v1.2.1)
 
-- **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely eradicated. No software accounts, corporate registration, or heavy background installations of programs or third party software are required.  (LLM and TTS models still required)
-- **Pure-Python DSP Matrix Engine:** FFmpeg requirement and sub-process loop has been removed. Volume gain, sentence tempo stretchings, and pitch adjustments are handled entirely in-memory via single-pass NumPy/SciPy matrix math.
-- **Micro-Sized Asset Footprint:** Bundles an embedded, native `.wem` bitstream re-packetizer right inside your repository pull.
+- **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely replaced by an included lightweight converter. No software accounts, corporate registration, or heavy background installations of programs or third party software are required.  (LLM and TTS models still required)
+- **Pure-Python DSP Matrix Engine:** FFmpeg requirement and sub-process loop has been removed. Volume gain, sentence tempo stretchings, and pitch adjustments are now handled entirely in-memory via single-pass NumPy/SciPy matrix math.
+- **Micro-Sized Asset Footprint:** Bundles an open source .wem` bitstream converter right inside the project.
 - **Centralized Control Dashboard:** A graphical config interface to customize iteration names, swap engines, adjust multi-threaded look-ahead queues, or fine-tune processing effects.
-- **Stateful Quick Cache System:** Thread-isolated background queue managers monitor inventory states, look ahead to generate upcoming lines, and intelligently handle file locks without breaking game focus.
-- **Protected VRAM Performance:** Run fully on optimized CPU thread inference layouts, leaving your GPU completely free to push maximum frame rates to the game.
+- **Stateful Quick Cache System:** Thread-isolated background queue managers top up caches and intelligently handle file locks without breaking game focus.
+- **Protected VRAM Performance:** Runs lightweight models on CPU thread inference layouts, leaving your GPU completely free to push maximum frame rates to the game.
 
 ### Persistent User Configuration Matrix
-Customizations are securely saved directly to `config/user_customization.json`. This architecture ensures your personalized variables will **never be overwritten or wiped out** during future mod updates or repository git pulls.
+Customizations are securely saved directly to `config/user_customization.json`. This architecture ensures your personalized variables will **never be overwritten or wiped out** during future mod updates or repository git pulls. (Management will not accept responsibility for preventable user-initiated catastrophic events)
 
-- **First-Time Installation:** If this configuration file does not exist on your drive, the automated setup script will initialize it cleanly for you.
-- **Upgrading the Mod:** If the file already exists with your custom settings, the engine boundaries will completely shield it from being touched.
-- **Power-User Manipulation:** While changes can be made manually via any plain-text editor, the graphical **DSV Manager** interface reads natively from this profile map and saves your slider adjustments straight back to it when applying or saving changes.
+- **First-Time Installation:** If this configuration file does not exist on your drive, the automated setup script will initialize it cleanly.
+- **Upgrading the Mod:** If the custom settings file already exists, the engine boundaries will completely shield it from being touched.
+- **Power-User Manipulation:** While the graphical **DSV Manager** interface reads natively from this profile map and saves your slider adjustments straight back to it when applying or saving changes, changes can be made manually via any plain-text editor,
 
 ## Examples of Dynamic Output Variations
 
@@ -73,6 +73,7 @@ Click **Save & Close** when you are done (or **Apply Changes** and leave it open
 
 ## Future Framework Roadmap
 - **Multiple Profiles:** Allow users to to users to name and store their own created configurations and audio presets.
+- **User Config Backup:** define a storage location outside the project structure to ensure user-created files are safe even if extinction level events occur.
 - **Easy Updates & Cache Management:** Manager enhancements such as the ability to check for and download updates, manage local storage and temporary files.
 - **Support Tab:** Instead of cryptic error messages written in Nerdspeak, a human readable summary plus a Debug Token that can be entered into the support tab to display instant advice or steps to follow for common issues.  Direct support will remain an option as always.
 - **Additional TTS Models:** Adding an Advanced button to the model management tab in DSV Manager to show the full list of available models regardless of requirements or capabilities.
@@ -81,7 +82,7 @@ Click **Save & Close** when you are done (or **Apply Changes** and leave it open
 
 Distributed fully open-source under the MIT License. See `LICENSE` for details.
 
-* **`wav2wem` Assembly Tool:** This project bundles an embedded static binary of `wav2wem` to handle bit-exact audio re-packetization. Licensed under the GPLv2.
+* **`wav2wem` Assembly Tool:** This project bundles static binary of `wav2wem` to handle bit-exact audio re-packetization. Licensed under the GPLv2.
     * Original Repository: [pas2k/wav2wem](https://github.com/pas2k/wav2wem)
     * Project Fork Source: [Bob-Harper/wav2wem](https://github.com/Bob-Harper/wav2wem)
 
