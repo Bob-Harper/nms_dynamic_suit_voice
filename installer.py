@@ -217,25 +217,22 @@ def download_model():
     print("\nModel binary download complete via configuration metrics.")
 
 # -------------------------
-# Step: Copy starter WEMs
+# Step: Copy Mod Assets (Audio & Global Configs)
 # -------------------------
-def copy_starter_wems():
-    starter = Path("DYNAMIC_SUIT_VOICE/AUDIO/WINDOWS/MEDIA/ENGLISH(US)")
-    steam = Path("C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/GAMEDATA/MODS/DYNAMIC_SUIT_VOICE/AUDIO/WINDOWS/MEDIA/ENGLISH(US)")
+def copy_starter_wems(): # also copies GCDEBUGOPTIONS.GLOBAL.EXML to ensure hotswap is enabled
+    starter = Path("DYNAMIC_SUIT_VOICE/")
+    steam = Path("C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/GAMEDATA/MODS/DYNAMIC_SUIT_VOICE/")
 
-    steam.mkdir(parents=True, exist_ok=True)
+    if not starter.exists():
+        print(f"Error: Source directory {starter} not found.")
+        return
 
-    copied = 0
-    total = 0
-
-    for f in starter.glob("*.*"):
-        total += 1
-        dest = steam / f.name
-        if not dest.exists():
-            shutil.copy(f, dest)
-            copied += 1
-
-    print(f"{copied} voice files updated")
+    # copytree with dirs_exist_ok=True cleanly merges/updates the entire tree
+    try:
+        shutil.copytree(starter, steam, dirs_exist_ok=True)
+        print("Mod folder assets and global configurations updated successfully.")
+    except Exception as e:
+        print(f"Failed to copy assets: {e}")
 
 # -------------------------
 # Step: Warmup TTS

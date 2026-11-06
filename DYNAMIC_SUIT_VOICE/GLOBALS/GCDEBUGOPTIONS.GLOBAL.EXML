@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Data template="cGcDebugOptions">
+	<Property name="HotReloadModGlobals" value="true" />
+</Data>
