@@ -22,3 +22,5 @@ config/user_customization.json
 interface/
 assets/wav2wem/LICENSE
 assets/wav2wem/README.md
+
+DYNAMIC_SUIT_VOICE/GLOBALS
