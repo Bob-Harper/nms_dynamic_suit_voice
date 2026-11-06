@@ -149,7 +149,7 @@ class SuitVoiceConfig:
 
         # Resolve the new standalone audio compiler tool footprint securely
         self.wav2wem_binary_path = self.resolve_json_path(
-            external_tools.get("wav2wem_asset", "assets/wav2wem/wav2wem.exe"),
+            external_tools.get("wav2wem_asset", "assets/wav2wem/assets/wav2wem.exe"),
             root_dir,
             must_exist=True
         )

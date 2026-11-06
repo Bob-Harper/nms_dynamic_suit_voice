@@ -141,7 +141,7 @@ def install_reqs():
     print("[MOD SETUP] Fetching specialized local environment tools...")
     run([str(python_exe), "-m", "pip", "install", "winshell", "comtypes"], "Install shortcut utilities")
 
-    target_url = "https://github.io"
+    target_url = "https://abetlen.github.io/llama-cpp-python/whl/cpu"
     print("[MOD SETUP] Deploying lightweight local LLM dependencies...")
 
     run([
@@ -229,7 +229,7 @@ def copy_starter_wems(): # also copies GCDEBUGOPTIONS.GLOBAL.EXML to ensure hots
 
     # copytree with dirs_exist_ok=True cleanly merges/updates the entire tree
     try:
-        shutil.copytree(starter, steam, dirs_exist_ok=True)
+        shutil.copytree(starter, steam, dirs_exist_ok=True, ignore=shutil.ignore_patterns('desktop.ini', '*.tmp'))
         print("Mod folder assets and global configurations updated successfully.")
     except Exception as e:
         print(f"Failed to copy assets: {e}")
@@ -245,6 +245,74 @@ def warmup_tts():
         python_exe = Path(sys.executable)
 
     run([str(python_exe), "pipeline/warmup_tts.py"], "Warmup TTS")
+
+
+# -------------------------
+# Step: Grab GithubAction compiled decoupled wav2wem and ogg encoder
+# -------------------------
+
+def automate_audio_compiler_provisioning() -> bool:
+    """
+    provisions decoupled wav2wem and ogg encoder by pulling
+    open-source fork repository directly into the assets directory.
+    """
+    # Establish root variables relative to this script's execution path
+    project_root = Path(__file__).parent.absolute()
+    assets_dir = project_root / "assets"
+    target_fork_path = assets_dir / "wav2wem"
+
+    # Define the nested execution paths matching the forked asset structure
+    expected_exe = target_fork_path / "assets" / "wav2wem.exe"
+
+    # Verification Guard: If the fresh tools are already active locally, skip entirely
+    if expected_exe.exists():
+        print("[INSTALLER]: Audio compiler tools verified locally. Skipping.")
+        return True
+
+    print("\n")
+    print("[INSTALLER]: PROVISIONING AUDIO UTILITIES")
+    print(f"Pulling components to Target Destination: {target_fork_path}")
+    print("\n")
+
+    # Safely purge any corrupted folder stubs before pulling into the repository
+    if target_fork_path.exists():
+        try:
+            shutil.rmtree(target_fork_path)
+        except Exception as e:
+            print(f"[INSTALLER WARNING]: Failed to clean temporary directory stubs: {e}")
+
+    assets_dir.mkdir(parents=True, exist_ok=True)
+
+    try:
+        # This grabs the latest commit snapshot
+        repo_url = "https://github.com/Bob-Harper/wav2wem.git"
+
+        subprocess.run(
+            ["git", "clone", "--depth", "1", repo_url, str(target_fork_path)],
+            check=True,
+            capture_output=True,
+            creationflags=subprocess.CREATE_NO_WINDOW  # Prevents cmd console windows from flashing
+        )
+
+        # 3. Post-Clone Validation Check: Ensure the binaries actually materialized on disk
+        if expected_exe.exists():
+            print("\n[INSTALLER SUCCESS]: Audio processing tools successfully synchronized!")
+            print(f"-> Verified: {expected_exe.name}")
+            print(f"-> Verified: {expected_exe.parent / 'oggenc2.exe'}")
+            print(f"-> Verified: {expected_exe.parent / 'libFLAC.dll'}")
+            return True
+        else:
+            print("\n[INSTALLER CRITICAL]: Repository sync completed, but binaries were missing from the branch path.")
+            return False
+
+    except FileNotFoundError:
+        print("\n[INSTALL LINK FAULT]: Git client environment not found on this workstation.")
+        print("Ensure Git is installed natively on your OS and registered in system environment paths.")
+        return False
+    except subprocess.CalledProcessError as e:
+        print(f"\n[INSTALL LINK FAULT]: Automated repository synchronization aborted by server.")
+        print(f"Error Diagnostic Tracking Output: {e.stderr.decode('utf-8', errors='ignore')}")
+        return False
 
 # -------------------------
 # Step: Create Desktop Shortcuts (Pure Python via winshell - NO VBSCRIPT!)
@@ -314,6 +382,8 @@ def main():
     print("• TTS models: OK")
     step("Validate configuration matrix", validate_configuration_layer)
     print("• Native JSON Config: OK")
+    step("Retrieve Encoder", automate_audio_compiler_provisioning)
+    print("• Encoder Retrieval: OK")
     step("Create Desktop Shortcut", create_shortcuts)
     print("• Desktop Fast-Boot Shortcut: OK")
     print("\n=== Setup complete. Go play! ===")

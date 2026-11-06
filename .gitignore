@@ -7,7 +7,8 @@ __pycache__/
 *.log
 /cache/*
 
-# Ignore all model-related stuff
+# Ignore all models and binaries
+assets/wav2wem
 assets/qwen3_4b_q8_0/
 # But keep icons/images
 !assets/**/*.png
@@ -19,3 +20,5 @@ config/user_customization.json
 
 # temp while developing new manager panel
 interface/
+assets/wav2wem/LICENSE
+assets/wav2wem/README.md
