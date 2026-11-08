@@ -86,7 +86,9 @@
         "Check the configured models.llm_model file path in config/environment_config.json.",
         "Try a short test phrase and check the application logs for the complete model error.",
         "Restart the application to release memory, then try again."
-      ]
+      ],
+      "settings_target": "System/Paths"
+
     },
     "TRAYWATCHER_EXC": {
       "title": "The background watcher encountered an error",

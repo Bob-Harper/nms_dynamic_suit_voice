@@ -1,5 +1,4 @@
-"""Local debug-token generation and lookup for user-facing error reports."""
-
+# pipeline/debug_support.py
 import json
 import re
 import sys
@@ -8,7 +7,7 @@ import traceback
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-
+from PySide6.QtGui import QGuiApplication
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEBUG_REPORTS_PATH = PROJECT_ROOT / "logs" / "debug_reports.jsonl"
@@ -36,6 +35,7 @@ def record_exception(
     error: BaseException, context: str, related_token: str | None = None
 ) -> str:
     token = f"DSV-{uuid.uuid4().hex[:10].upper()}"
+
     record = {
         "token": token,
         "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -65,7 +65,7 @@ def debug_error_message(error: BaseException, context: str) -> str:
     if related_token and related_token.startswith("DSV-"):
         related_token = None
     token = record_exception(error, context, related_token)
-    return f"{error}\n\nDEBUG TOKEN = {token}"
+    return f"{error}\n\nDEBUG TOKEN = {token}\n(Token key has been logged to the Event Viewer. Open the event log dropdown on the Debug Tab to query logs.)"
 
 
 def load_debug_report(token: str) -> dict | None:

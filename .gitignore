@@ -7,8 +7,8 @@ __pycache__/
 *.log
 /logs/debug_reports.jsonl
 /cache/*
-
-# Ignore all models and binaries
+/logs/
+# Ignore all models and binaries and temporary install files
 assets/wav2wem
 assets/qwen3_4b_q8_0/
 assets/*.zip
@@ -16,11 +16,10 @@ assets/*.zip
 !assets/**/*.png
 !assets/**/*.ico
 
-# Ignore USER CUSTOMIZED FILE, THIS MAY NEVER BE OVERWRITTEN BY UPDATES.
-# Installer will create an empty config if needed.
+# Ignore USER CUSTOMIZED FILES, THEY MAY NEVER BE OVERWRITTEN BY UPDATES.
+# Installer will create the config files only if they do not exist
 config/user_customization.json
+config/environment_config.json
 
-assets/wav2wem/LICENSE
-assets/wav2wem/README.md
-
+# Debugging dir for specific issues regarding hotswappable voice files, uses it's own separate file
 DYNAMIC_SUIT_VOICE/GLOBALS

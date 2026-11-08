@@ -1,3 +1,4 @@
+# interface\panels\widgets\runtime_settings.py
 from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QLabel,

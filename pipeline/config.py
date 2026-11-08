@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from llama_cpp import Llama, Optional
 from TTS.api import TTS  # coqui-tts fork
-from pipeline.debug_support import record_exception
+from .debug_support import record_exception
 
 def load_json(path: Path) -> dict:
     if not path.exists():
@@ -34,8 +34,8 @@ class SuitVoiceConfig:
         config_dir = root_dir / "config"
 
         # Load file structures
+        self.default_environment = load_json(config_dir / "default_environment_config.json")
         self.environment = load_json(config_dir / "environment_config.json")
-        self.llm_prompting = load_json(config_dir / "llm_prompting.json")
         self.default_customization = load_json(config_dir / "default_customization.json")
         self.user_customization = load_json(config_dir / "user_customization.json")
 
@@ -44,7 +44,10 @@ class SuitVoiceConfig:
         v_num = project_meta.get("version", "Something")
         v_major = project_meta.get("release_major", "Went")
         v_minor = project_meta.get("release_minor", "Wrong")
-
+        self.project_url = project_meta.get("base_url", "https://github.com/Bob-Harper/nms_dynamic_suit_voice")
+        support_path = project_meta.get("support", "issues")
+        # Cleanly join the base repository link with the support subdirectory target
+        self.support_url = f"{self.project_url.rstrip('/')}/{support_path}"
         # Compiles to schema example: "v1.2.2 (Unchained.QT)"
         self.version_signature = f"v{v_num} ({v_major}.{v_minor})"
 
@@ -77,6 +80,12 @@ class SuitVoiceConfig:
         self.temp_wav_dir = self.resolve_json_path(paths.get("temp_wav_dir"), root_dir, must_exist=False)
         self.quick_cache_dir = self.resolve_json_path(paths.get("quick_cache_dir"), root_dir, must_exist=False)
 
+        # Logging for Debug interface
+        self.debug_reports_path = self.resolve_json_path(
+            paths.get("debug_reports_label", "logs/debug_reports.jsonl"),
+            root_dir,
+            must_exist=False
+        )
 
         # Window platform subprocess flags
         self.create_no_window = 0x08000000 if sys.platform == "win32" else 0
@@ -86,6 +95,14 @@ class SuitVoiceConfig:
             d.mkdir(parents=True, exist_ok=True)
 
         # --- PROMPT ASSETS & FILES ---
+        prompting_config_path = self.resolve_json_path(
+            paths.get("llm_prompting_config", "data/llm_prompting.json"),
+            root_dir,
+            must_exist=True
+        )
+        self.llm_prompting = load_json(prompting_config_path)
+
+
         files = self.llm_prompting.get("files", {})
 
         self.transcripts_path = self.resolve_json_path(files.get("transcripts_path"), root_dir, must_exist=True) # JSON for intent mapping

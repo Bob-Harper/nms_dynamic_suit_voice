@@ -1,5 +1,5 @@
+# interface\panels\widgets\path_management.py
 from pathlib import Path
-
 from PySide6.QtWidgets import (
     QFileDialog,
     QHBoxLayout,

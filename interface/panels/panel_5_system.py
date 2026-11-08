@@ -1,19 +1,9 @@
+# interface/panels/panel_4_system.py
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QCheckBox,
-    QLabel,
-    QPushButton,
-    QStackedWidget,
-    QTabWidget,
-    QVBoxLayout,
-    QWidget,
-)
-
+from PySide6.QtWidgets import QCheckBox, QLabel, QPushButton, QStackedWidget, QTabWidget, QVBoxLayout, QWidget
 from interface.panels.widgets.cache_management import CacheManagementWidget
 from interface.panels.widgets.path_management import PathManagementWidget
 from interface.panels.widgets.runtime_settings import RuntimeManagementWidget
-from interface.panels.widgets.update_management import UpdateManagementWidget
-
 
 class SystemPanel(QWidget):
     def __init__(self, config):
@@ -35,24 +25,19 @@ class SystemPanel(QWidget):
         gate_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         warning = QLabel(
-            "SYSTEM SETTINGS\n\n"
-            "Most users do not need to change these settings. Incorrect paths, "
-            "runtime values, or update choices can prevent the application or "
-            "mod from working as expected.\n\n"
-            "Continue only if you understand the setting you are changing. "
-            "Changes are saved to configuration files and may require restarting "
-            "the application."
+            "SYSTEM DIAGNOSTICS & TUNING CONSOLE\n\n"
+            "Altering these low-level pipeline variables, file allocation tables, "
+            "or operational path roots can cause severe runtime calculation disruptions "
+            "across the cognition matrix engine loops.\n\n"
+            "Proceed ONLY if you are tracking specific workspace environmental paths."
         )
         warning.setWordWrap(True)
         warning.setStyleSheet(
-            "background-color: #141923; border: 1px solid #ffaa00; "
-            "border-radius: 6px; padding: 18px; color: #ffffff;"
+            "background-color: #141923; border: 1px solid #ffaa00; border-radius: 6px; padding: 18px; color: #ffffff;"
         )
 
-        self.acknowledgement = QCheckBox(
-            "I understand that changing these settings may have unintended results."
-        )
-        self.continue_button = QPushButton("CONTINUE TO SYSTEM SETTINGS")
+        self.acknowledgement = QCheckBox("I accept complete technical oversight over these changes.")
+        self.continue_button = QPushButton("CONTINUE TO CRITICAL SYSTEM SETTINGS")
         self.continue_button.setEnabled(False)
         self.continue_button.clicked.connect(self._open_settings)
         self.acknowledgement.toggled.connect(self.continue_button.setEnabled)
@@ -64,15 +49,15 @@ class SystemPanel(QWidget):
         gate_layout.addStretch()
         self.pages.addWidget(self.gate_page)
 
+        # The System configuration book no longer contains the update widget!
         self.settings_page = QTabWidget()
-        self.update_widget = UpdateManagementWidget(self.config)
         self.cache_widget = CacheManagementWidget(self.config)
         self.runtime_widget = RuntimeManagementWidget(self.config)
         self.path_widget = PathManagementWidget(self.config)
-        self.settings_page.addTab(self.update_widget, "Updates")
-        self.settings_page.addTab(self.cache_widget, "Cache")
-        self.settings_page.addTab(self.runtime_widget, "Runtime")
-        self.settings_page.addTab(self.path_widget, "Paths")
+
+        self.settings_page.addTab(self.cache_widget, "Cache Table Allocation")
+        self.settings_page.addTab(self.runtime_widget, "Runtime Subsystem")
+        self.settings_page.addTab(self.path_widget, "System Paths Mapping")
         self.pages.addWidget(self.settings_page)
 
     def _open_settings(self):
@@ -104,5 +89,4 @@ class SystemPanel(QWidget):
         self.path_widget.gather_settings()
         self.cache_widget.gather_settings()
         self.runtime_widget.gather_settings()
-        self.update_widget.gather_settings()
         self.cache_widget.refresh_stats()

@@ -1,4 +1,5 @@
 # interface/control_deck.py
+import os
 import sys
 import json
 import importlib
@@ -6,7 +7,12 @@ import hashlib
 import threading
 import tempfile
 from pathlib import Path
+import warnings
 
+# Force python to ignore all UserWarnings and deprecation noise coming from third-party libraries globally
+os.environ["PYTHONWARNINGS"] = "ignore"
+warnings.filterwarnings("ignore", category=UserWarning, module="jieba")
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 # Force-align the execution context to look back up at the main mod root folder
 project_root = Path(__file__).parent.parent.absolute()
 if str(project_root) not in sys.path:
@@ -249,6 +255,28 @@ class ControlDeckDashboard(QMainWindow):
         button_frame = QWidget()
         btn_layout = QHBoxLayout(button_frame)
         btn_layout.setContentsMargins(0, 5, 0, 0)
+
+        # MASTER KILL-SWITCH BUTTON: Anchor it on the far left side to avoid accidental presses
+        close_everything_btn = QPushButton("FULL PROCESS SHUTDOWN")
+        close_everything_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #551111;
+                border: 1px solid #ff3333;
+                color: #ffffff;
+                padding: 8px 16px;
+                min-width: 120px;
+                font-family: 'Consolas', monospace;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #772222;
+                border-color: #ffffff;
+            }
+        """)
+        close_everything_btn.clicked.connect(self.quit_application)
+        btn_layout.addWidget(close_everything_btn)
+
+        # Push standard window options safely to the right-hand margin
         btn_layout.addStretch()
 
         cancel_btn = QPushButton("Cancel")
@@ -283,6 +311,7 @@ class ControlDeckDashboard(QMainWindow):
 
         # Scan and load layout panels seamlessly now that self.config exists
         self.discover_and_mount_panels()
+
 
     def toggle_engine_state(self):
         if self._quit_requested:
@@ -439,14 +468,27 @@ class ControlDeckDashboard(QMainWindow):
 
     def _open_debug_settings(self, target):
         panel_name, _, section = target.partition("/")
+        matched_index = -1
+
+        # First, search for the target tab string safely
         for index in range(self.notebook.count()):
-            if self.notebook.tabText(index).casefold() != panel_name.casefold():
-                continue
-            panel = self.notebook.widget(index)
-            self.notebook.setCurrentIndex(index)
-            if section and hasattr(panel, "request_settings"):
-                panel.request_settings(section)
+            if self.notebook.tabText(index).casefold() == panel_name.casefold():
+                matched_index = index
+                break
+
+        # If a real match was locked into the indicator, execute the settings shift
+        if matched_index != -1:
+            panel = self.notebook.widget(matched_index)
+            self.notebook.setCurrentIndex(matched_index)
+
+            if panel is not None and section:
+                # Use getattr to dynamic-link the call, bypassing Pylance object restrictions completely!
+                request_func = getattr(panel, "request_settings", None)
+                if request_func is not None:
+                    request_func(section)
             return
+
+        # Fallback: If no match was ever found, the code hits this clean boundary line safely
         QMessageBox.warning(
             self,
             "Settings unavailable",

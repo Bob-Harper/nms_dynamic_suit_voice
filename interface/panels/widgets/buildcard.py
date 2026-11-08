@@ -1,3 +1,4 @@
+# interface\panels\widgets\buildcard.py
 from PySide6.QtWidgets import QLabel, QVBoxLayout, QWidget
 
 
