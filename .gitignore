@@ -10,6 +10,7 @@ __pycache__/
 # Ignore all models and binaries
 assets/wav2wem
 assets/qwen3_4b_q8_0/
+assets/*.zip
 # But keep icons/images
 !assets/**/*.png
 !assets/**/*.ico
@@ -18,8 +19,6 @@ assets/qwen3_4b_q8_0/
 # Installer will create an empty config if needed.
 config/user_customization.json
 
-# temp while developing new manager panel
-interface/
 assets/wav2wem/LICENSE
 assets/wav2wem/README.md
 

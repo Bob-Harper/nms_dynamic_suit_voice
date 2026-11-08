@@ -1,17 +1,16 @@
 # nms_dynamic_suit_voice_pipeline.py (Streamlined Version)
-import time
 import os
-from pathlib import Path
 from pipeline.quick_cache import QuickCacheEngine
 # from pipeline.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
-from PIL import Image
 
 
-def watch_wems(wtray_ui, config):
-    """Main watchdog thread invoked after the launcher completes fast boot."""
+def watch_wems(engine, config):
+    """Run the watcher on the control deck's engine thread."""
 
     # --- PHASE 1: Initialize Coqui-TTS Engine Weights ---
-    wtray_ui.icon.title = "Dynamic Suit Voice - Loading TTS Voice Models..."
+    if not engine.running:
+        return
+    engine.update_status("Loading TTS Voice Models...")
 
     qce = QuickCacheEngine(config)
 
@@ -20,12 +19,18 @@ def watch_wems(wtray_ui, config):
     os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
     from TTS.api import TTS
+    if not engine.running:
+        return
     config.tts_model = TTS(model_name=config.tts_model_name)
 
     # --- PHASE 2: Initialize Llama-cpp Core Engine weights ---
-    wtray_ui.icon.title = "Dynamic Suit Voice - Loading Local AI..."
+    if not engine.running:
+        return
+    engine.update_status("Loading Local AI...")
 
     from llama_cpp import Llama
+    if not engine.running:
+        return
     config.llm = Llama(
         model_path=config.llm_model,
         n_ctx=40960,
@@ -35,26 +40,23 @@ def watch_wems(wtray_ui, config):
     )
 
     # --- PHASE 3: Verify Filesystem Watches ---
-    wtray_ui.icon.title = "Dynamic Suit Voice - Verifying Directories..."
+    if not engine.running:
+        return
+    engine.update_status("Verifying Directories...")
     mod_dir = config.mod_dir
     if not mod_dir or not mod_dir.exists():
-        wtray_ui.icon.title = "Dynamic Suit Voice - Error: Missing Dirs"
-        return
+        raise FileNotFoundError(f"Mod directory does not exist: {mod_dir}")
 
     access_times = {f3.stem: f3.stat().st_atime for f3 in mod_dir.glob("*.wem")}
 
     # --- PHASE 4: Initialization Complete, Launch Active Watch ---
-    # Restore native transparency by swapping the icon out directly
-    root_dir = Path(__file__).parent
-    if wtray_ui.ready_icon_path.exists():
-        # Open a fresh copy and preserve the full RGBA alpha transparency channel
-        wtray_ui.icon.icon = Image.open(wtray_ui.ready_icon_path).convert("RGBA")
-
-    wtray_ui.icon.title = "Dynamic Suit Voice 1.2 - Ready"
+    engine.update_status("Ready", is_ready=True)
     check_interval = config.check_interval
 
-    while wtray_ui.running:
+    while engine.running:
         for f3 in mod_dir.glob("*.wem"):
+            if not engine.running:
+                break
             try:
                 current_atime = f3.stat().st_atime
                 wem_id = f3.stem
@@ -73,4 +75,4 @@ def watch_wems(wtray_ui, config):
             except Exception as w_e:
                 print(f"DEBUG TOKEN = TRAYWATCHER_EXC >> Error handling {f3.name}: {w_e}")
 
-        time.sleep(check_interval)
+        engine.stop_event.wait(check_interval)

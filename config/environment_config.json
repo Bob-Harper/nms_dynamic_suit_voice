@@ -1,6 +1,7 @@
 {
     "paths": {
         "mod_dir": "C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/GAMEDATA/MODS/DYNAMIC_SUIT_VOICE/AUDIO/WINDOWS/MEDIA/ENGLISH(US)",
+        "cache_root": "cache",
         "temp_wem_dir": "cache/tmp_wem_dir",
         "temp_wav_dir": "cache/tmp_wav_dir",
         "quick_cache_dir": "cache/tmp_quick_dir",
@@ -16,14 +17,19 @@
         "tts_model": "tts_models/en/ljspeech/tacotron2-DDC_ph"
     },
     "external_tools": {
-        "wav2wem_asset": "assets/wav2wem/wav2wem.exe"
+        "wav2wem_asset": "assets/wav2wem/assets/wav2wem.exe"
     },
     "model_url": {
         "qwen3_4b_q8_0": "https://huggingface.co/Qwen/Qwen3-4B-GGUF/resolve/main/Qwen3-4B-Q8_0.gguf"
     },
+    "updates": {
+        "enabled": true,
+        "repository_url": "https://github.com/Bob-Harper/nms_dynamic_suit_voice.git",
+        "branch": "main"
+    },
     "project": {
-        "version": "1.2.2",
+        "version": "1.3.2",
         "release_major": "Unchained",
-        "release_minor": "QT"
+        "release_minor": "SYS"
     }
 }

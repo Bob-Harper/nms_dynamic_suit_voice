@@ -67,7 +67,7 @@ class SuitVoiceConfig:
         # Game Mod Directory (Must exist to track file updates)
         self.mod_dir = self.resolve_json_path(paths.get("mod_dir"), root_dir, must_exist=True)
 
-        # Tray App UI Icon (Force to clean string format for PIL/pystray compatibility)
+        # System tray icon path used by the Qt control deck
         icon_path_obj = self.resolve_json_path(paths.get("icon_image"), root_dir, must_exist=True)
         self.icon_image = str(icon_path_obj)
 
@@ -118,7 +118,7 @@ class SuitVoiceConfig:
         self.promptdata_path = self.resolve_json_path(files.get("prompt_data"), root_dir, must_exist=True)
         raw_prompt_json = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
 
-        # Create a structured memory object for the Tkinter UI to read descriptions
+        # Create structured descriptions for the Qt control deck
         self.ui_promptdata = raw_prompt_json
 
         # Flatten the dictionary dynamically in memory for the backend AI engine!

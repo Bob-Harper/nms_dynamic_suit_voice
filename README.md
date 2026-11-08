@@ -1,6 +1,6 @@
 # Dynamic No Man’s Sky Suit AI Voice Mod
 
-Version: 1.2.1 (Unchained.SecFix)<br>
+Version: 1.3.2 (Unchained.SYS)<br>
 Author: [[Bob-Harper](https://github.com)]<br>
 Repository: [[nms_dynamic_suit_voice](https://github.com)]
 
@@ -23,17 +23,17 @@ Because the local pipeline generates variations ahead of time into a background 
 
 - **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely replaced by an included lightweight converter. No software accounts, corporate registration, or heavy background installations of programs or third party software are required.  (LLM and TTS models still required)
 - **Pure-Python DSP Matrix Engine:** FFmpeg requirement and sub-process loop has been removed. Volume gain, sentence tempo stretchings, and pitch adjustments are now handled entirely in-memory via single-pass NumPy/SciPy matrix math.
-- **Micro-Sized Asset Footprint:** Bundles an open source .wem` bitstream converter right inside the project.
+- **Open-Source Audio Converter:** The installer retrieves the WEM converter from its separate project repository; its executable is not bundled in the Nexus source archive.
 - **Centralized Control Dashboard:** A graphical config interface to customize iteration names, swap engines, adjust multi-threaded look-ahead queues, or fine-tune processing effects.
 - **Stateful Quick Cache System:** Thread-isolated background queue managers top up caches and intelligently handle file locks without breaking game focus.
 - **Protected VRAM Performance:** Runs lightweight models on CPU thread inference layouts, leaving your GPU completely free to push maximum frame rates to the game.
 
 ### Persistent User Configuration Matrix
-Customizations are securely saved directly to `config/user_customization.json`. This architecture ensures your personalized variables will **never be overwritten or wiped out** during future mod updates or repository git pulls. (Management will not accept responsibility for preventable user-initiated catastrophic events)
+Profile and voice customizations are saved to `config/user_customization.json`, which is kept separate from project updates. System settings such as paths, watcher timing, cache limits, and update preferences are saved in `config/environment_config.json`.
 
 - **First-Time Installation:** If this configuration file does not exist on your drive, the automated setup script will initialize it cleanly.
 - **Upgrading the Mod:** If the custom settings file already exists, the engine boundaries will completely shield it from being touched.
-- **Power-User Manipulation:** While the graphical **DSV Manager** interface reads natively from this profile map and saves your slider adjustments straight back to it when applying or saving changes, changes can be made manually via any plain-text editor,
+- **Power-User Manipulation:** The Qt control deck reads this profile and saves changes when applying or saving settings. Power users can also edit these files with a plain-text editor.
 
 ## Examples of Dynamic Output Variations
 
@@ -55,36 +55,40 @@ Customizations are securely saved directly to `config/user_customization.json`. 
 
 ## Installation & Deployment
 
-### 1-Click Execution Setup
-Launch the primary command wrapper script from your extracted mod directory:
-```bash
-DOUBLECLICK_To_Install_Dynamic_Suit_Voice.cmd
+### Install
+Install Python 3.11, extract the download, open a terminal in the extracted project folder, and run:
+```powershell
+py -3.11 installer.py
 ```
-Choose **Automatic Mode** for a streamlined, single-click deployment that sets up your isolated Python `venv` environment, upgrades core libraries, builds your asset pointers, and creates space-safe desktop shortcuts completely in the background.
+Choose **Automatic Mode** for a streamlined setup, or run the installer steps individually. The installer creates its isolated `venv`, installs dependencies, prepares the local assets, and creates desktop shortcuts. No `.cmd` launcher is required.
 
 ### Launching the DSV
-Double-click your newly generated desktop shortcut: NMS Dynamic Suit Voice
-Check your system tray - if the icon is Red, it is still warming up.  When the red disappears, the DSV is actively monitoring your game directory and ready to step up.  Launch No Man's Sky, and head out into the stars!
+Double-click either generated desktop shortcut to open the unified Qt control deck. Use **ENGAGE AI CORE** to start monitoring your game directory. Closing the window hides it in the system tray; choose **Show Control Deck** to reopen it, or **Close everything completely** to stop the watcher and exit.
 
-### Launching the DSV Manager
-To customize your Exosuit experience, double-click your newly generated desktop shortcut: Exosuit Companion
-This launches separately from the main DSV, and can be run at any time.  It opens your graphical configuration utility, allowing you to specify your **Iteration Designation**, swap active vocal models, or test-play custom presets and fine-tune your modifications inside the sandbox before starting your game session.
-Click **Save & Close** when you are done (or **Apply Changes** and leave it open to tweak metrics while playing).
+The **NMS Dynamic Suit Voice** and **Exosuit Companion** shortcuts now open the same control deck. Configure your **Iteration Designation**, voice model, audio presets, and system settings there without editing source code. **Save & Minimize** saves settings and hides the window in the tray; **Apply Changes** saves while leaving the control deck open.
+
+### System Settings and Optional Updates
+The System page starts with an acknowledgement because most users should not need to change its settings. It contains separate Update, Cache, Runtime, and Paths panels. Changes are saved to the configuration files; path changes require an application restart.
+
+Update management supports two optional workflows:
+
+- **Git-tracked install:** Check the configured GitHub branch, convert an extracted install to a tracked repository, and pull updates when local project files can be safely fast-forwarded. Conversion does not replace existing project files. Local project edits block a pull rather than being overwritten.
+- **ZIP install:** Download the configured branch ZIP, back up your configuration, extract the ZIP over the existing installation, then run `py -3.11 installer.py` from the project folder again.
+
+Update checks and downloads are always user-initiated through the System > Updates panel; the application does not update itself automatically. The repository URL and branch are configuration values in `config/environment_config.json`.
 
 ## Future Framework Roadmap
 - **Multiple Profiles:** Allow users to to users to name and store their own created configurations and audio presets.
 - **User Config Backup:** define a storage location outside the project structure to ensure user-created files are safe even if extinction level events occur.
-- **Easy Updates & Cache Management:** Manager enhancements such as the ability to check for and download updates, manage local storage and temporary files.
+- **Expanded Cache Management:** Add further cache policy controls after the current storage and purge workflow has been validated.
 - **Support Tab:** Instead of cryptic error messages written in Nerdspeak, a human readable summary plus a Debug Token that can be entered into the support tab to display instant advice or steps to follow for common issues.  Direct support will remain an option as always.
-- **Additional TTS Models:** Adding an Advanced button to the model management tab in DSV Manager to show the full list of available models regardless of requirements or capabilities.
+- **Additional TTS Models:** Adding an Advanced button to the model tab in the Qt control deck to show the full list of available models regardless of requirements or capabilities.
 
 ## Licensing & Third-Party Open Source Attributions
 
 Distributed fully open-source under the MIT License. See `LICENSE` for details.
 
-* **`wav2wem` Assembly Tool:** This project bundles static binary of `wav2wem` to handle bit-exact audio re-packetization. Licensed under the GPLv2.
-    * Original Repository: [pas2k/wav2wem](https://github.com/pas2k/wav2wem)
-    * Project Fork Source: [Bob-Harper/wav2wem](https://github.com/Bob-Harper/wav2wem)
+* **`wav2wem` Audio Converter:** The installer retrieves the converter from the separate project repository. Review its source, build instructions, and license at [Bob-Harper/wav2wem](https://github.com/Bob-Harper/wav2wem), originally based on [pas2k/wav2wem](https://github.com/pas2k/wav2wem).
 
 ## Special Acknowledgments
 - **[EternalLeo](https://github.com/EternalLeo):** The excellent [sound2wem](https://github.com/EternalLeo/sound2wem) utility which acted as the springboard to launch this project and provided the original proof of concept. This project would not exist without his research.

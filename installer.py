@@ -137,7 +137,7 @@ def install_reqs():
     print("[MOD SETUP] Upgrading core package manager (pip)...")
     run([str(python_exe), "-m", "pip", "install", "--upgrade", "pip"], "Upgrade pip")
 
-    # Install winshell and comtypes natively so we can build shortcuts without malicious VBS scripts
+    # Install utilities used to create Windows desktop shortcuts.
     print("[MOD SETUP] Fetching specialized local environment tools...")
     run([str(python_exe), "-m", "pip", "install", "winshell", "comtypes"], "Install shortcut utilities")
 
@@ -337,8 +337,8 @@ def create_shortcuts():
         },
         {
             "name": "Exosuit Companion.lnk",
-            "target": str(root_dir / "venv/Scripts/python.exe"), # Keep regular python here so the Manager GUI works normally
-            "args": f'"{root_dir / "manager/dsv_manager.py"}"',
+            "target": str(python_exe),
+            "args": f'"{root_dir / "launch_nms_dsv.py"}"',
             "icon": str(root_dir / "assets/nms_dsv_manager_256.ico")
         }
     ]
@@ -348,7 +348,7 @@ def create_shortcuts():
         shortcut_path = os.path.join(desktop, item["name"])
         shortcut = shell.CreateShortCut(shortcut_path)
 
-        # We always point directly to python_exe. No hidden cmd.exe wrappers to spook filters.
+        # Launch the application directly through the virtual-environment Python.
         shortcut.Targetpath = item["target"]
         shortcut.Arguments = item["args"]
         shortcut.WorkingDirectory = str(root_dir)
@@ -373,7 +373,7 @@ def main():
     step("Install Python dependencies", install_reqs)
     print("• Dependencies: OK")
 
-    # Call the download natively in the same thread process! Bypasses the downloader alert.
+    # Download the model directly in the installer process.
     step("Download LLM model", download_model)
     print("• LLM model: OK")
     step("Prepare MOD directory", copy_starter_wems)
