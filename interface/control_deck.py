@@ -20,6 +20,11 @@ from PySide6.QtWidgets import (
     QMenu, QSystemTrayIcon
 )
 from interface.panels.widgets.config_io import write_json_atomic
+from pipeline.debug_support import (
+    debug_error_message,
+    install_exception_hooks,
+    record_exception,
+)
 
 class ConfigLoaderWorker(QThread):
     """Asynchronously loads the heavy SuitVoiceConfig configurations off the UI thread."""
@@ -32,7 +37,9 @@ class ConfigLoaderWorker(QThread):
             from pipeline.config import SuitVoiceConfig
             config_instance = SuitVoiceConfig(init_llm=False)
         except Exception as error:
-            self.config_failed_signal.emit(str(error))
+            self.config_failed_signal.emit(
+                debug_error_message(error, "Loading application configuration")
+            )
             return
         self.config_loaded_signal.emit(config_instance)
 
@@ -52,7 +59,9 @@ class ExosuitEngineThread(QThread):
             from pipeline.nms_dynamic_suit_voice_pipeline import watch_wems
             watch_wems(self, self.config)
         except Exception as error:
-            self.engine_log_signal.emit(str(error))
+            self.engine_log_signal.emit(
+                debug_error_message(error, "Starting or running the background watcher")
+            )
 
     def update_status(self, message, is_ready=False):
         self.status_signal.emit(message, is_ready)
@@ -71,8 +80,9 @@ class ControlDeckDashboard(QMainWindow):
             v_sig = f"v{meta['version']} ({meta['release_major']}.{meta['release_minor']})"
         except Exception as e:
             # NO FALSE DATA: Signal a clear diagnostic failure in the title bar
-            print(f"[LAUNCHER CRITICAL]: Version lookup failed: {e}")
-            v_sig = "v[MATRIX_INITIALIZATION_ERROR]"
+            token = record_exception(e, "Reading the application version")
+            print(f"[LAUNCHER CRITICAL]: {e} (DEBUG TOKEN = {token})")
+            v_sig = f"CONFIG ERROR ({token})"
 
         icon_path_value = env_data.get("paths", {}).get(
             "icon_image", "assets/nms_dsv.png"
@@ -417,8 +427,31 @@ class ControlDeckDashboard(QMainWindow):
 
                     panel_instance = panel_class(self.config)
                     self.notebook.addTab(panel_instance, display_title)
+                    if hasattr(panel_instance, "settings_requested"):
+                        panel_instance.settings_requested.connect(
+                            self._open_debug_settings
+                        )
             except Exception as load_err:
-                print(f"[PANEL FAULT] Error loading modular asset block '{module_name}': {load_err}")
+                message = debug_error_message(
+                    load_err, f"Loading interface panel {module_name}"
+                )
+                print(f"[PANEL FAULT] {message}")
+
+    def _open_debug_settings(self, target):
+        panel_name, _, section = target.partition("/")
+        for index in range(self.notebook.count()):
+            if self.notebook.tabText(index).casefold() != panel_name.casefold():
+                continue
+            panel = self.notebook.widget(index)
+            self.notebook.setCurrentIndex(index)
+            if section and hasattr(panel, "request_settings"):
+                panel.request_settings(section)
+            return
+        QMessageBox.warning(
+            self,
+            "Settings unavailable",
+            f"The recommended settings panel is not available: {panel_name}.",
+        )
 
     def gather_all_panel_data(self):
         for i in range(self.notebook.count()):
@@ -441,7 +474,10 @@ class ControlDeckDashboard(QMainWindow):
                 "Restart the application to apply path changes.",
             )
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to commit settings to file system maps: {e}")
+            message = debug_error_message(e, "Saving application preferences")
+            QMessageBox.critical(
+                self, "Error", f"Failed to commit settings to file system maps:\n{message}"
+            )
 
     def save_and_close(self):
         if self.config is None:
@@ -458,7 +494,8 @@ class ControlDeckDashboard(QMainWindow):
             )
             self.close()
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to finalize files: {e}")
+            message = debug_error_message(e, "Saving preferences before closing")
+            QMessageBox.critical(self, "Error", f"Failed to finalize files:\n{message}")
 
     def _save_configuration_files(self):
         config = self.config
@@ -481,6 +518,7 @@ class ControlDeckDashboard(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+    install_exception_hooks()
     app.setQuitOnLastWindowClosed(False)
     instance_key = hashlib.sha256(str(project_root).encode("utf-8")).hexdigest()[:12]
     lock_path = Path(tempfile.gettempdir()) / f"nms_dynamic_suit_voice_{instance_key}.lock"

@@ -1,6 +1,6 @@
 # Dynamic No Man’s Sky Suit AI Voice Mod
 
-Version: 1.3.2 (Unchained.SYS)<br>
+Version: 1.3.3 (Unchained.DBG)<br>
 Author: [[Bob-Harper](https://github.com)]<br>
 Repository: [[nms_dynamic_suit_voice](https://github.com)]
 
@@ -67,6 +67,11 @@ Double-click either generated desktop shortcut to open the unified Qt control de
 
 The **NMS Dynamic Suit Voice** and **Exosuit Companion** shortcuts now open the same control deck. Configure your **Iteration Designation**, voice model, audio presets, and system settings there without editing source code. **Save & Minimize** saves settings and hides the window in the tray; **Apply Changes** saves while leaving the control deck open.
 
+### Enhanced Debug and Support
+Open the **Debug** panel and enter a token from an error message to see its explanation, likely causes, and suggested repair steps. Some entries can take you to the relevant settings panel; System Settings will still require its acknowledgement.
+
+Unexpected exceptions receive a `DSV-...` incident token. The matching traceback is saved locally in `logs/debug_reports.jsonl` and can be retrieved by entering that token on the same installation. Diagnostic reports may include local file paths and error details, are not uploaded automatically, and are excluded from Git. Review and redact details before sharing them in a GitHub issue. The **Open GitHub issues** button only opens the website; it does not submit a report.
+
 ### System Settings and Optional Updates
 The System page starts with an acknowledgement because most users should not need to change its settings. It contains separate Update, Cache, Runtime, and Paths panels. Changes are saved to the configuration files; path changes require an application restart.
 
@@ -81,7 +86,6 @@ Update checks and downloads are always user-initiated through the System > Updat
 - **Multiple Profiles:** Allow users to to users to name and store their own created configurations and audio presets.
 - **User Config Backup:** define a storage location outside the project structure to ensure user-created files are safe even if extinction level events occur.
 - **Expanded Cache Management:** Add further cache policy controls after the current storage and purge workflow has been validated.
-- **Support Tab:** Instead of cryptic error messages written in Nerdspeak, a human readable summary plus a Debug Token that can be entered into the support tab to display instant advice or steps to follow for common issues.  Direct support will remain an option as always.
 - **Additional TTS Models:** Adding an Advanced button to the model tab in the Qt control deck to show the full list of available models regardless of requirements or capabilities.
 
 ## Licensing & Third-Party Open Source Attributions

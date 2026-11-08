@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSlider, QComboBox,
     QFrame, QPushButton, QLineEdit, QTextEdit
 )
+from pipeline.debug_support import debug_error_message
 
 class AudioPanel(QWidget):
     # Dynamic thread safe status macro callback signals
@@ -28,7 +29,8 @@ class AudioPanel(QWidget):
                     self.loaded_presets = json.load(f)
                 self.preset_options.extend(list(self.loaded_presets.keys()))
             except Exception as e:
-                print(f"[PRESET ERROR]: Failed to parse audio_presets.json: {e}")
+                message = debug_error_message(e, "Loading saved audio presets")
+                print(f"[PRESET ERROR]: Failed to parse audio_presets.json: {message}")
 
         # Connect internal signal handling loops safely across thread boundaries
         self.log_signal.connect(self._append_console_log)
@@ -336,7 +338,8 @@ class AudioPanel(QWidget):
 
             self.log_signal.emit("Preview cycle finished successfully.")
         except Exception as e:
-            self.log_signal.emit(f"ERROR: Preview pipeline aborted: {e}")
+            message = debug_error_message(e, "Generating an audio preview")
+            self.log_signal.emit(f"ERROR: Preview pipeline aborted: {message}")
         finally:
             self.reset_btn_signal.emit(True)
 

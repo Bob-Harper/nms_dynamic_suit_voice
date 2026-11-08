@@ -2,8 +2,14 @@ import json
 import os
 import sys
 from pathlib import Path
+project_root = Path(__file__).resolve().parents[1]
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from pipeline.debug_support import install_exception_hooks, record_exception
 
 def main():
+    install_exception_hooks()
     print("Pipeline: Starting offline TTS compilation warmup...")
 
     # 1. Resolve project root absolute path structure
@@ -11,7 +17,11 @@ def main():
     env_config_path = project_root / "config" / "environment_config.json"
 
     if not env_config_path.exists():
-        print(f"ERROR: Cannot warm up engine. Configuration profile missing: {env_config_path}")
+        error = FileNotFoundError(
+            f"Configuration profile missing: {env_config_path}"
+        )
+        token = record_exception(error, "Checking setup configuration for TTS warmup")
+        print(f"ERROR: {error}\nDEBUG TOKEN = {token}")
         sys.exit(1)
 
     # 2. Extract configuration fields dynamically out of the JSON profile
@@ -19,7 +29,8 @@ def main():
         with open(env_config_path, "r", encoding="utf-8") as f:
             env_data = json.load(f)
     except Exception as e:
-        print(f"ERROR: environment_config.json format is corrupt: {e}")
+        token = record_exception(e, "Reading setup configuration for TTS warmup")
+        print(f"ERROR: environment_config.json format is corrupt: {e}\nDEBUG TOKEN = {token}")
         sys.exit(1)
 
     # Fetch data values cleanly out of their respective nested JSON objects
@@ -30,7 +41,11 @@ def main():
     temp_wem_setting = paths_cfg.get("temp_wem_dir") # "cache/tmp_wem_dir"
 
     if not tts_model_name or not temp_wem_setting:
-        print("ERROR: Crucial keys ('tts_model' or 'temp_wem_dir') missing inside environment_config.json")
+        error = ValueError(
+            "Required tts_model or temp_wem_dir setting is missing."
+        )
+        token = record_exception(error, "Validating TTS warmup configuration")
+        print(f"ERROR: {error}\nDEBUG TOKEN = {token}")
         sys.exit(1)
 
     # Ensure our workspace directory exists relative to the project root
@@ -72,7 +87,8 @@ def main():
         print(f"TTS warmup complete. Verification test file generated safely: {final_wav}")
 
     except Exception as e:
-        print(f"ERROR: Local TTS compilation failed: {e}")
+        token = record_exception(e, "Downloading or compiling the TTS model during setup")
+        print(f"ERROR: Local TTS compilation failed: {e}\nDEBUG TOKEN = {token}")
         sys.exit(1)
 
 if __name__ == "__main__":

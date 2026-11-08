@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (
 
 from interface.panels.widgets.buildcard import build_card
 from interface.panels.widgets.config_io import write_json_atomic
+from pipeline.debug_support import debug_error_message
 
 
 class UpdateManagementWidget(QWidget):
@@ -162,7 +163,8 @@ class UpdateManagementWidget(QWidget):
                 )
             self._set_actions_enabled(self.updates_enabled.isChecked())
         except RuntimeError as error:
-            self.repository_status.setText(f"Repository status check failed: {error}")
+            message = debug_error_message(error, "Checking the local Git repository status")
+            self.repository_status.setText(f"Repository status check failed: {message}")
 
     def _matching_version_tag(self, repository_url):
         version = str(
@@ -233,7 +235,8 @@ class UpdateManagementWidget(QWidget):
                 )
             self.repository_status.setText(status)
         except (OSError, subprocess.SubprocessError, RuntimeError, ValueError) as error:
-            QMessageBox.warning(self, "Update check failed", str(error))
+            message = debug_error_message(error, "Checking for project updates")
+            QMessageBox.warning(self, "Update check failed", message)
 
     def _convert_to_git(self):
         try:
@@ -246,7 +249,8 @@ class UpdateManagementWidget(QWidget):
             repository_url, branch = self._repository_and_branch()
             version_tag = self._matching_version_tag(repository_url)
         except (RuntimeError, ValueError) as error:
-            QMessageBox.warning(self, "Cannot convert install", str(error))
+            message = debug_error_message(error, "Preparing to convert the install to Git")
+            QMessageBox.warning(self, "Cannot convert install", message)
             return
 
         answer = QMessageBox.question(
@@ -283,11 +287,12 @@ class UpdateManagementWidget(QWidget):
             )
             changed_paths = self._working_tree_paths()
         except RuntimeError as error:
+            message = debug_error_message(error, "Converting the install to a Git repository")
             QMessageBox.critical(
                 self,
                 "Git conversion failed",
                 "Git could not finish converting this installation. No project "
-                f"files were replaced.\n\n{error}\n\n"
+                f"files were replaced.\n\n{message}\n\n"
                 "If Git initialization already started, the folder may contain "
                 "a partial .git directory.",
             )
@@ -387,7 +392,8 @@ class UpdateManagementWidget(QWidget):
                 "preserved. Restart the application to load updated code.",
             )
         except (OSError, json.JSONDecodeError, RuntimeError, ValueError) as error:
-            QMessageBox.warning(self, "Update failed", str(error))
+            message = debug_error_message(error, "Pulling project updates")
+            QMessageBox.warning(self, "Update failed", message)
 
     @staticmethod
     def _github_archive_url(repository_url, branch):
@@ -417,7 +423,8 @@ class UpdateManagementWidget(QWidget):
                 repository_url, branch
             )
         except ValueError as error:
-            QMessageBox.warning(self, "Cannot download ZIP", str(error))
+            message = debug_error_message(error, "Preparing a project ZIP download")
+            QMessageBox.warning(self, "Cannot download ZIP", message)
             return
 
         suggested_path = str(
@@ -458,8 +465,10 @@ class UpdateManagementWidget(QWidget):
         except (OSError, urllib.error.URLError) as error:
             if temporary_path.exists():
                 temporary_path.unlink()
+            message = debug_error_message(error, "Downloading a project ZIP update")
             QMessageBox.critical(
-                self, "ZIP download failed", f"Could not download the update:\n{error}"
+                self, "ZIP download failed",
+                f"Could not download the update:\n{message}"
             )
             return
 

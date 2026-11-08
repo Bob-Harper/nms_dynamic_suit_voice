@@ -20,6 +20,7 @@ class SystemPanel(QWidget):
         super().__init__()
         self.config = config
         self._acknowledged = False
+        self._pending_settings_section = None
         self._build_ui()
 
     def _build_ui(self):
@@ -79,6 +80,20 @@ class SystemPanel(QWidget):
             return
         self._acknowledged = True
         self.pages.setCurrentWidget(self.settings_page)
+        if self._pending_settings_section:
+            section = self._pending_settings_section.casefold()
+            for index in range(self.settings_page.count()):
+                if self.settings_page.tabText(index).casefold() == section:
+                    self.settings_page.setCurrentIndex(index)
+                    break
+            self._pending_settings_section = None
+
+    def request_settings(self, section):
+        self._pending_settings_section = section
+        if self._acknowledged:
+            self._open_settings()
+        else:
+            self.pages.setCurrentWidget(self.gate_page)
 
     def showEvent(self, event):
         super().showEvent(event)

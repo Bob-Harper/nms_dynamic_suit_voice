@@ -5,6 +5,7 @@ from time import time, sleep
 from queue import Queue
 from pathlib import Path
 from pipeline.cache_replenishment import generate_replacement_voice_line
+from pipeline.debug_support import extract_debug_token, record_exception
 
 class QuickCacheEngine:
     def __init__(self, config):
@@ -44,7 +45,16 @@ class QuickCacheEngine:
             try:
                 func(*args, **kwargs)
             except Exception as e:
-                print(f"[THREAD CRASH]: Quick Cache background processor errored: {e}")
+                related_token = extract_debug_token(str(e))
+                if related_token and related_token.startswith("DSV-"):
+                    related_token = None
+                token = record_exception(
+                    e, "Generating a quick-cache voice line", related_token
+                )
+                print(
+                    f"[THREAD CRASH]: Quick Cache background processor errored: {e}\n"
+                    f"DEBUG TOKEN = {token}"
+                )
             finally:
                 if func == self._replacement_wrapper:
                     wem_id = args[1]

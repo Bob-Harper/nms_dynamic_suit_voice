@@ -1,0 +1,123 @@
+{
+  "tokens": {
+    "TTSMODEL_SIG": {
+      "title": "Voice model configuration is incompatible",
+      "summary": "The selected voice model could not be loaded with the current configuration.",
+      "likely_causes": [
+        "The model name or model signature in the configuration is invalid.",
+        "The installed TTS package does not support this model.",
+        "The selected model files are incomplete or damaged."
+      ],
+      "steps": [
+        "Open the Models panel and select a supported model.",
+        "If the model is already selected, download it again from the Models panel.",
+        "Restart the application and retry the operation."
+      ],
+      "settings_target": "Models"
+    },
+    "JSONCONFIG_NR": {
+      "title": "A configured path could not be resolved",
+      "summary": "A path value required by the application is missing or could not be found.",
+      "likely_causes": [
+        "The configuration contains a blank or outdated path.",
+        "The game or mod was moved after configuration.",
+        "The current Windows account cannot access the configured folder."
+      ],
+      "steps": [
+        "Open System Settings > Paths and review the configured folders.",
+        "Select the correct game or mod folder and save the settings.",
+        "Restart the application, then retry."
+      ],
+      "settings_target": "System/Paths"
+    },
+    "JSONCONFIG_NP": {
+      "title": "A configuration path is invalid",
+      "summary": "A configured path does not point to a usable location.",
+      "likely_causes": [
+        "The configured folder does not exist.",
+        "The folder is not writable or is on an unavailable drive.",
+        "The path contains a typo or refers to an old installation."
+      ],
+      "steps": [
+        "Open System Settings > Paths and check the folder shown in the error.",
+        "Choose an existing folder that the current Windows account can access.",
+        "Save settings and restart the application."
+      ],
+      "settings_target": "System/Paths"
+    },
+    "DSV2WEM_NF": {
+      "title": "The WEM conversion tool is unavailable",
+      "summary": "The required audio converter could not be located.",
+      "likely_causes": [
+        "Setup did not complete or the converter download is missing.",
+        "The configured tool folder was moved or removed.",
+        "Security software quarantined a downloaded tool."
+      ],
+      "steps": [
+        "Run the project installer again from the extracted project folder.",
+        "Check the installer output for a failed download or setup step.",
+        "If security software quarantined a file, review its report and restore only if you trust the source."
+      ]
+    },
+    "WAV2WEM_FAIL": {
+      "title": "Audio conversion failed",
+      "summary": "The WAV-to-WEM conversion process exited unsuccessfully.",
+      "likely_causes": [
+        "The source WAV is invalid, empty, or incomplete.",
+        "The converter cannot access its input or output folder.",
+        "The converter reported an unsupported format or another conversion error."
+      ],
+      "steps": [
+        "Retry the same item and note the source filename and complete converter output.",
+        "Check that the configured game and output folders exist and are writable.",
+        "If the problem repeats, open a GitHub issue with this token and the relevant log excerpt."
+      ],
+      "settings_target": "System/Paths"
+    },
+    "LLMINFERENCE_FAIL": {
+      "title": "Voice generation failed",
+      "summary": "The speech model could not generate audio after its retry attempts.",
+      "likely_causes": [
+        "The configured local language model file is missing or damaged.",
+        "The input text or voice settings are not accepted by the model.",
+        "The computer ran out of memory while generating audio."
+      ],
+      "steps": [
+        "Check the configured models.llm_model file path in config/environment_config.json.",
+        "Try a short test phrase and check the application logs for the complete model error.",
+        "Restart the application to release memory, then try again."
+      ]
+    },
+    "TRAYWATCHER_EXC": {
+      "title": "The background watcher encountered an error",
+      "summary": "The watcher failed while processing an item. Other items may continue to be monitored.",
+      "likely_causes": [
+        "The current source file is incomplete or unreadable.",
+        "A required folder or conversion tool is unavailable.",
+        "An unexpected processing error occurred."
+      ],
+      "steps": [
+        "Check the application log for the filename and underlying error.",
+        "Verify the configured game and mod paths in System Settings > Paths.",
+        "Retry after the source file has finished being written. If it repeats, open a GitHub issue with this token."
+      ],
+      "settings_target": "System/Paths"
+    }
+  },
+  "generic": {
+    "title": "No matching help entry",
+    "summary": "This token is not in the built-in help catalog. A generated DSV token may have a private local diagnostic report.",
+    "likely_causes": [
+      "The application version that produced the token is newer than this help catalog.",
+      "The token was copied incompletely or contains extra text."
+    ],
+    "steps": [
+      "Copy the complete token and enter it again.",
+      "For a generated DSV token, use the local diagnostic details shown below.",
+      "If the issue persists, open a GitHub issue and include the token, application version, and relevant log excerpt."
+    ]
+  },
+  "support": {
+    "issues_url": "https://github.com/Bob-Harper/nms_dynamic_suit_voice/issues"
+  }
+}

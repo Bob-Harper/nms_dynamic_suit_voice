@@ -1,4 +1,5 @@
 import time
+from pipeline.debug_support import record_exception
 import re
 
 
@@ -49,7 +50,16 @@ def reword_phrase(config, wem_id_r,
             if attempt < max_retries - 1:
                 time.sleep(1)
             else:
-                print(f"DEBUG TOKEN = LLMINFERENCE_FAIL >> LLM ERROR on WEM {wem_id_r}: {e}")
+                token = record_exception(
+                    e,
+                    f"Generating speech for WEM {wem_id_r}",
+                    related_token="LLMINFERENCE_FAIL",
+                )
+                print(
+                    f"DEBUG TOKEN = LLMINFERENCE_FAIL >> "
+                    f"LLM ERROR on WEM {wem_id_r}: {e}\n"
+                    f"Incident: DEBUG TOKEN = {token}"
+                )
                 return f"WEM ERROR {wem_id_r}, {e}. {original_phrase_r}"
     return f"External Reality Failure. {original_phrase_r}"
 

@@ -1,6 +1,7 @@
 # nms_dynamic_suit_voice_pipeline.py (Streamlined Version)
 import os
 from pipeline.quick_cache import QuickCacheEngine
+from pipeline.debug_support import record_exception
 # from pipeline.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
 
 
@@ -73,6 +74,15 @@ def watch_wems(engine, config):
                     qce.update_access_time_to_match_newfile(moved_file, access_times)
 
             except Exception as w_e:
-                print(f"DEBUG TOKEN = TRAYWATCHER_EXC >> Error handling {f3.name}: {w_e}")
+                token = record_exception(
+                    w_e,
+                    f"Processing watched WEM file {f3.name}",
+                    related_token="TRAYWATCHER_EXC",
+                )
+                print(
+                    f"DEBUG TOKEN = TRAYWATCHER_EXC >> "
+                    f"Error handling {f3.name}: {w_e}\n"
+                    f"Incident: DEBUG TOKEN = {token}"
+                )
 
         engine.stop_event.wait(check_interval)

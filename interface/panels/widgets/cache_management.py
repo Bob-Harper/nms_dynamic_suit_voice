@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
 )
 
 from interface.panels.widgets.buildcard import build_card
+from pipeline.debug_support import debug_error_message, record_exception
 
 
 class CacheManagementWidget(QWidget):
@@ -96,7 +97,10 @@ class CacheManagementWidget(QWidget):
             )
         except OSError as error:
             self.cache_files_label.setText("Cached files: unavailable")
-            self.cache_size_label.setText(f"Storage scan failed: {error}")
+            token = record_exception(error, "Scanning cache storage")
+            self.cache_size_label.setText(
+                f"Storage scan failed: {error} (DEBUG TOKEN = {token})"
+            )
 
         horizon = self.cache_horizon_spin.value()
         self.cache_policy_label.setText(
@@ -153,8 +157,10 @@ class CacheManagementWidget(QWidget):
                         shutil.rmtree(item)
                     removed_count += 1
         except (OSError, ValueError) as error:
+            message = debug_error_message(error, "Purging cache storage")
             QMessageBox.critical(
-                self, "Cache purge failed", f"Could not clear cache storage:\n{error}"
+                self, "Cache purge failed",
+                f"Could not clear cache storage:\n{message}"
             )
             self.refresh_stats()
             return

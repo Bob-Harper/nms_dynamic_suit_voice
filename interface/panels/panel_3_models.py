@@ -9,6 +9,7 @@ from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QListWidget, QPushButton, QFrame, QMessageBox, QProgressBar
 )
+from pipeline.debug_support import debug_error_message, record_exception
 
 class _TtsDownloadProgress:
     def __init__(self, total, update_callback):
@@ -262,8 +263,12 @@ class ModelsPanel(QWidget):
             self.global_storage_label.setText(
                 f"Total Storage Used by All Models: {self._format_size(cumulative_bytes)}"
             )
-        except Exception:
-            self.global_storage_label.setText("Total Storage Used by All Models: Telemetry Fault")
+        except Exception as error:
+            token = record_exception(error, "Scanning installed voice-model storage")
+            self.global_storage_label.setText(
+                f"Total Storage Used by All Models: Telemetry Fault "
+                f"(DEBUG TOKEN = {token})"
+            )
 
     def _check_if_model_present_on_disk(self, model_key: str) -> bool:
         target_folder, size_str = self._get_model_storage_metrics(model_key)
@@ -282,7 +287,11 @@ class ModelsPanel(QWidget):
                 with open(env_path, "r", encoding="utf-8") as f:
                     env_map = json.load(f)
                 current_active = env_map.get("models", {}).get("tts_model", "tts_models/en/ljspeech/tacotron2-DDC_ph")
-            except Exception:
+            except Exception as error:
+                message = debug_error_message(
+                    error, "Reading the selected voice model configuration"
+                )
+                print(f"[MODEL CONFIGURATION ERROR] {message}")
                 current_active = "tts_models/en/ljspeech/tacotron2-DDC_ph"
 
         for key in self.list_index_keys:
@@ -373,7 +382,11 @@ class ModelsPanel(QWidget):
                 self.model_list_widget.setCurrentRow(self.list_index_keys.index(self.selected_model_key))
             QMessageBox.information(self, "Success", "Voice engine weights configuration updated successfully!")
         except Exception as e:
-            QMessageBox.critical(self, "Configuration Error", f"Could not preserve target voice choice: {e}")
+            message = debug_error_message(e, "Selecting a voice model")
+            QMessageBox.critical(
+                self, "Configuration Error",
+                f"Could not preserve target voice choice:\n{message}"
+            )
 
     def _uninstall_model_assets(self):
         if not self.selected_model_key:
@@ -399,7 +412,11 @@ class ModelsPanel(QWidget):
             self._refresh_catalog_list_display()
             self.model_list_widget.setCurrentRow(self.list_index_keys.index(self.selected_model_key))
         except Exception as e:
-            QMessageBox.critical(self, "Purge Failure", f"Could not remove local folder modules: {e}")
+            message = debug_error_message(e, "Removing downloaded voice-model files")
+            QMessageBox.critical(
+                self, "Purge Failure",
+                f"Could not remove local folder modules:\n{message}"
+            )
 
     # ==============================================================================
     # ASYNCHRONOUS ENGINE DOWNLOAD HOOKS & LIVE PROGRESS STREAM INTERCEPTORS
@@ -443,7 +460,9 @@ class ModelsPanel(QWidget):
             self.progress_signal.emit("Queue Status: Model downloaded successfully.")
         except Exception as e:
             self.progress_signal.emit("Queue Status: Download pipeline process failed.")
-            print(f"[DOWNLOAD FAULT]: Model extraction failed: {e}")
+            message = debug_error_message(e, "Downloading or extracting a voice model")
+            self.progress_signal.emit(message)
+            print(f"[DOWNLOAD FAULT]: Model extraction failed: {message}")
         finally:
             if manage_module is not None and original_tqdm is not None:
                 manage_module.tqdm = original_tqdm

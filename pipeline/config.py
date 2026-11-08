@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from llama_cpp import Llama, Optional
 from TTS.api import TTS  # coqui-tts fork
+from pipeline.debug_support import record_exception
 
 def load_json(path: Path) -> dict:
     if not path.exists():
@@ -211,5 +212,6 @@ class SuitVoiceConfig:
                 env = json.load(f)
             meta = env.get("project", {})
             return f"v{meta.get('version', 'Something')} ({meta.get('release_major', 'Went')}.{meta.get('release_minor', 'Wrong')})"
-        except Exception:
-            return "Something went horribly wrong with the config files.  You should do something about that."
+        except Exception as error:
+            token = record_exception(error, "Reading the configured application version")
+            return f"Configuration version could not be read. DEBUG TOKEN = {token}"
