@@ -23,13 +23,13 @@ Because the local pipeline generates variations ahead of time into a background 
 
 ## Key Features (As of v1.4.0)
 
+- **Centralized Control Dashboard:** A graphical config interface to launch and quit the tool, customize player name, adjust multi-threaded look-ahead queues, or fine-tune processing effects.
 - **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely replaced by an included lightweight converter. No software accounts, corporate registration, or heavy background installations of programs or third party software are required. (LLM and TTS models still required)
-- **Pure-Python DSP Matrix Engine:** FFmpeg requirement and sub-process loops have been removed. Volume gain, sentence tempo stretchings, and pitch adjustments are now handled entirely in-memory via single-pass NumPy/SciPy matrix math.
+- **Pure-Python DSP Matrix Engine:** ffmpeg requirement and sub-process loops have been removed. Volume gain, sentence tempo stretchings, and other adjustments are now handled entirely in-memory via single-pass NumPy/SciPy matrix math.
 - **Open-Source Audio Converter:** The installer retrieves the WEM converter from its separate project repository; its executable is not bundled in the Nexus source archive.
-- **Centralized Control Dashboard:** A graphical config interface to customize iteration names, swap engines, adjust multi-threaded look-ahead queues, or fine-tune processing effects.
-- **Dedicated Ecosystem Update Tab:** Upgrades are out of the system gate disclaimers and live in their own frontline tab workspace (Tab 2) for immediate user-initiated fast-forward compliance pulls.
-- **Stateful Quick Cache System:** Thread-isolated background queue managers top up caches and intelligently handle file locks without breaking game focus.
-- **Protected VRAM Performance:** Runs lightweight models on CPU thread inference layouts, leaving your GPU completely free to push maximum frame rates to the game.
+- **Dedicated Update Panel:** Update through a top level panel for immediate user-initiated version checks and file updates.
+- **Stateful Quick Cache System:** Thread-isolated background queue managers to top up caches and intelligently handle file locks without interfering with Game.
+- **Protected VRAM Performance:** Runs lightweight models on CPU thread inference, leaving your GPU completely free to push maximum frame rates to the game.
 - **Integrated Token-based Debuggin system:**Most known possible issues generate a unique Debug Token which can quickly identify possible issues.  This can be used on the Debug panel within the main interface to access explanations, advice, and expose relevant settings for immediate resolution.  A direct link to the Issues page on the Github Repository is also provided for further discussion and assistance.  Log files are *NOT* transmitted automatically, to ensure user privacy.
 
 ### Persistent User Configuration Matrix
@@ -103,5 +103,5 @@ Distributed fully open-source under the MIT License. See `LICENSE` for details.
 ## Special Acknowledgments
 - **[EternalLeo](https://github.com/EternalLeo):** The excellent [sound2wem](https://github.com/EternalLeo/sound2wem) utility which acted as the springboard to launch this project and provided the original proof of concept. This project would not exist without his research.
 - **[Kilvoctu](https://github.com/Kilvoctu):** Excellent suggestions, thank you for giving me much to ponder and helping elevate the codebase.
-- **The Nexus Mods Suit Audio Community:** Gratitude to all original voice modders and commenters whose forum feedback helped isolate the exact filesystem directories the game monitors.
+- **The Nexus Mods Suit Audio Community:** Gratitude to all original voice modders and commenters whose forum feedback helped isolate the exact filesystem directories and behaviours that make this possible.
 - **Sean Murray & Hello Games:** Deep thanks for crafting the definitive cosmic sandbox universe we waited all these years to explore.
