@@ -382,18 +382,56 @@ def create_shortcuts():
 
     print("Desktop Shortcuts created successfully via pure memory allocations.")
 
+
+def _restart_installer_in_venv(mode):
+    project_root = Path(__file__).resolve().parent
+    python_exe = project_root / "venv" / "Scripts" / "python.exe"
+    if not python_exe.is_file():
+        return None
+    if Path(sys.executable).resolve() == python_exe.resolve():
+        return None
+
+    print("[BOOTSTRAP] Continuing setup inside the project virtual environment...")
+    return subprocess.run(
+        [
+            str(python_exe),
+            str(Path(__file__).resolve()),
+            "--resume-after-venv",
+            mode,
+        ],
+        cwd=project_root,
+    ).returncode
+
+
 # -------------------------
 # Main
 # -------------------------
 def main():
+    global AUTOALL
     print("\n=== NMS Dynamic Suit Voice Auto Setup ===")
-    choose_mode()
+    resume_mode = (
+        sys.argv[2]
+        if len(sys.argv) == 3 and sys.argv[1] == "--resume-after-venv"
+        else None
+    )
+    if resume_mode not in (None, "auto", "guided"):
+        raise ValueError(f"Unknown installer resume mode: {resume_mode}")
 
-    step("Check Python", check_python)
-    print("• Python 3.11 check: OK")
+    if resume_mode is None:
+        choose_mode()
+        step("Check Python", check_python)
+        print("• Python 3.11 check: OK")
 
-    step("Setup virtual environment", setup_venv)
-    print("• venv: OK")
+        step("Setup virtual environment", setup_venv)
+        print("• venv: OK")
+        handoff_status = _restart_installer_in_venv(
+            "auto" if AUTOALL else "guided"
+        )
+        if handoff_status is not None:
+            sys.exit(handoff_status)
+    else:
+        AUTOALL = resume_mode == "auto"
+        check_python()
 
     step("Install Python dependencies", install_reqs)
     print("• Dependencies: OK")
