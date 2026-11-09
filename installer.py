@@ -7,13 +7,7 @@ import shutil
 import json
 from pathlib import Path
 import traceback
-from pipeline.debug_support import (
-    debug_error_message,
-    install_exception_hooks,
-    record_exception,
-)
 
-install_exception_hooks()
 
 # ==============================================================================
 # VENV SELF-BOOTSTRAPPER
@@ -32,8 +26,6 @@ if venv_python.exists() and Path(sys.executable).absolute() != venv_python:
 print("INTERPRETER:", sys.executable)
 AUTOALL = False
 
-AUTOALL = False
-
 # -------------------------
 # Utility: fail-fast runner
 # -------------------------
@@ -42,8 +34,7 @@ def run(cmd, desc):
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as error:
-        message = debug_error_message(error, f"Installer step: {desc}")
-        print(f"ERROR: {desc} failed.\n{message}")
+        print(f"ERROR: {desc} failed.\n{error}")
         sys.exit(1)
 
 # -------------------------
@@ -75,8 +66,6 @@ def check_python():
 
     if not out.startswith("Python 3.11"):
         error = RuntimeError(f"Installer requires Python 3.11; found {out}.")
-        token = record_exception(error, "Checking the installer Python version")
-        print(f"ERROR: {error}\nDEBUG TOKEN = {token}")
         sys.exit(1)
 
 # -------------------------
@@ -110,16 +99,12 @@ def validate_configuration_layer():
         error = FileNotFoundError(
             f"Crucial project workspace data is missing: {env_config_path}"
         )
-        token = record_exception(error, "Validating installer configuration files")
-        print(f"ERROR: {error}\nDEBUG TOKEN = {token}")
         sys.exit(1)
 
     try:
         with open(env_config_path, "r", encoding="utf-8") as f:
             env_data = json.load(f)
     except Exception as e:
-        message = debug_error_message(e, "Reading installer configuration")
-        print(f"ERROR: environment_config.json format is corrupt: {message}")
         sys.exit(1)
 
     paths = env_data.get("paths", {})
@@ -132,8 +117,6 @@ def validate_configuration_layer():
         error = FileNotFoundError(
             f"Target game mod folder path missing or unreachable: {mod_dir}"
         )
-        token = record_exception(error, "Validating the configured game mod folder")
-        print(f"ERROR: {error}\nDEBUG TOKEN = {token}")
         print("Please correct the 'mod_dir' value inside config/environment_config.json")
         sys.exit(1)
 
@@ -251,8 +234,7 @@ def copy_starter_wems(): # also copies GCDEBUGOPTIONS.GLOBAL.EXML to ensure hots
         shutil.copytree(starter, steam, dirs_exist_ok=True, ignore=shutil.ignore_patterns('desktop.ini', '*.tmp'))
         print("Mod folder assets and global configurations updated successfully.")
     except Exception as e:
-        message = debug_error_message(e, "Copying starter mod assets")
-        print(f"Failed to copy assets: {message}")
+        print(f"Failed to copy WEM assets")
 
 # -------------------------
 # Step: Warmup TTS
@@ -299,8 +281,7 @@ def automate_audio_compiler_provisioning() -> bool:
         try:
             shutil.rmtree(target_fork_path)
         except Exception as e:
-            message = debug_error_message(e, "Cleaning an incomplete converter download")
-            print(f"[INSTALLER WARNING]: Failed to clean temporary directory stubs: {message}")
+            print(f"[INSTALLER WARNING]: Failed to clean temporary directory stubs: {e}")
 
     assets_dir.mkdir(parents=True, exist_ok=True)
 
@@ -327,16 +308,12 @@ def automate_audio_compiler_provisioning() -> bool:
             return False
 
     except FileNotFoundError as error:
-        message = debug_error_message(error, "Locating Git while downloading the converter")
         print("\n[INSTALL LINK FAULT]: Git client environment not found on this workstation.")
         print("Ensure Git is installed natively on your OS and registered in system environment paths.")
-        print(message)
         return False
     except subprocess.CalledProcessError as e:
-        message = debug_error_message(e, "Downloading the WEM converter repository")
         print(f"\n[INSTALL LINK FAULT]: Automated repository synchronization aborted by server.")
         print(f"Error Diagnostic Tracking Output: {e.stderr.decode('utf-8', errors='ignore')}")
-        print(message)
         return False
 
 # -------------------------
@@ -355,17 +332,11 @@ def create_shortcuts():
 
     shortcuts_to_build = [
         {
-            "name": "NMS Dynamic Suit Voice.lnk",
+            "name": "NMS Exosuit Companion.lnk",
             "target": str(python_exe),
             "args": f'"{root_dir / "launch_nms_dsv.py"}"',
             "icon": str(root_dir / "assets/nms_dsv_256.ico")
         },
-        {
-            "name": "Exosuit Companion.lnk",
-            "target": str(python_exe),
-            "args": f'"{root_dir / "launch_nms_dsv.py"}"',
-            "icon": str(root_dir / "assets/nms_dsv_manager_256.ico")
-        }
     ]
     shell = Dispatch('WScript.Shell')
 
