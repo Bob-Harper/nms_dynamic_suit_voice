@@ -1,12 +1,16 @@
-# nms_dynamic_suit_voice_pipeline.py (Streamlined Version)
 import os
+import win32con
+import win32file
+import win32event
+from time import sleep
+from pathlib import Path
+
+# Bring in your explicit project dependencies cleanly
 from .quick_cache import QuickCacheEngine
 from .debug_support import record_exception
-# from pipeline.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
-
 
 def watch_wems(engine, config):
-    """Run the watcher on the control deck's engine thread."""
+    """Run the native win32 filesystem listener cleanly with absolute type alignment."""
 
     # --- PHASE 1: Initialize Coqui-TTS Engine Weights ---
     if not engine.running:
@@ -15,7 +19,6 @@ def watch_wems(engine, config):
 
     qce = QuickCacheEngine(config)
 
-    # Prevent HuggingFace from attempting cloud updates on boot (this can be toggled elsewhere on demand as needed)
     os.environ["HF_HUB_OFFLINE"] = "1"
     os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
@@ -48,41 +51,54 @@ def watch_wems(engine, config):
     if not mod_dir or not mod_dir.exists():
         raise FileNotFoundError(f"Mod directory does not exist: {mod_dir}")
 
-    access_times = {f3.stem: f3.stat().st_atime for f3 in mod_dir.glob("*.wem")}
-
-    # --- PHASE 4: Initialization Complete, Launch Active Watch ---
+    # --- PHASE 4: Initialization Complete, Launch Active Oplock Watch ---
     engine.update_status("Ready", is_ready=True)
-    check_interval = config.check_interval
+
+    from .oplock_watch import OplockWatch
+
+    # Instantiate the low-overhead native Win32 tripwire engine
+    watcher = OplockWatch()
+
+    # Map out the exact list of 220 active track target ids from your game directory
+    tracked_ids = [f3.stem for f3 in mod_dir.glob("*.wem")]
+    watcher.set_target(mod_dir, tracked_ids)
+
+    print(f"[WATCHER CORE]: Armed Level-1 Oplock tripwires across {len(tracked_ids)} assets natively.")
 
     while engine.running:
-        for f3 in mod_dir.glob("*.wem"):
-            if not engine.running:
-                break
-            try:
-                current_atime = f3.stat().st_atime
-                wem_id = f3.stem
-                if current_atime != access_times.get(wem_id, 0):
+        try:
+            # 1. Periodically re-arm broken lock handles or fresh files we just swapped
+            watcher.maintain(tries=12)
 
-                    cached_file = qce.get_cached_wem(wem_id)
-                    if cached_file is None:
-                        continue
+            # 2. Passively listen for kernel lock break signals with zero CPU load
+            broken_ids = watcher.poll_ack(timeout=0.05)
 
-                    moved_file = qce.move_cachedfile_to_mod_dir(cached_file, mod_dir, wem_id)
-                    if moved_file is None:
-                        continue
+            for wem_id in broken_ids:
+                print(f"[KERNEL INTERCEPT]: Oplock tripwire snapped on file track: {wem_id}.wem")
 
-                    qce.update_access_time_to_match_newfile(moved_file, access_times)
+                # Fetch the corresponding variation asset out of your cache engine queue
+                cached_file = qce.get_cached_wem(wem_id)
+                if cached_file is None:
+                    continue
 
-            except Exception as w_e:
-                token = record_exception(
-                    w_e,
-                    f"Processing watched WEM file {f3.name}",
-                    related_token="TRAYWATCHER_EXC",
-                )
-                print(
-                    f"DEBUG TOKEN = TRAYWATCHER_EXC >> "
-                    f"Error handling {f3.name}: {w_e}\n"
-                    f"Incident: DEBUG TOKEN = {token}"
-                )
+                # Tell the watcher to ignore our upcoming file-move operation write event
+                watcher.suppress(wem_id, seconds=0.5)
 
-        engine.stop_event.wait(check_interval)
+                # Swap the target file seamlessly in place
+                moved_file = qce.move_cachedfile_to_mod_dir(cached_file, mod_dir, wem_id)
+
+                # Tell the watcher to immediately re-arm the tripwire loop on the fresh asset file handle
+                if moved_file is not None:
+                    watcher.rearm(wem_id)
+
+        except Exception as w_e:
+            token = record_exception(
+                w_e,
+                "Oplock watch event loop execution failure",
+                related_token="OPLOCK_WATCH_ERR",
+            )
+            print(f"DEBUG TOKEN = OPLOCK_WATCH_ERR >> Oplock stream error: {w_e} | ID: {token}")
+            sleep(0.1)
+
+    # Clean release pass when the engine drops out
+    watcher.close()

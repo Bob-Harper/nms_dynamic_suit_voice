@@ -103,9 +103,8 @@ class QuickCacheEngine:
     def update_access_time_to_match_newfile(self, file_path: Path, access_times: dict):
         """Updates your tracking dictionary with the file's exact filesystem access epoch timestamp."""
         if file_path.exists():
-            # Fallback alignment to st_mtime if st_atime isn't updating on the user's OS profile
-            stat_data = file_path.stat()
-            access_times[file_path.stem] = max(stat_data.st_atime, stat_data.st_mtime)
+            # Lock this strictly to st_atime, exactly how it was written for 8 months
+            access_times[file_path.stem] = file_path.stat().st_atime
 
     def get_cached_wem(self, wem_id: str) -> Path:
         """
