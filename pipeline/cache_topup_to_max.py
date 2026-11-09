@@ -1,7 +1,7 @@
 # cache_topup_to_max.py
 from time import time
-from pipeline.config import SuitVoiceConfig
-from pipeline.quick_cache import QuickCacheEngine
+from .config import SuitVoiceConfig
+from .quick_cache import QuickCacheEngine
 import csv
 
 config = SuitVoiceConfig()

@@ -165,13 +165,16 @@ class SuitVoiceConfig:
         # ====================================================
         external_tools = self.environment.get("external_tools", {})
 
-        # Resolve the new standalone audio compiler tool footprint securely
-        self.wav2wem_binary_path = self.resolve_json_path(
-            external_tools.get("wav2wem_asset", "assets/wav2wem/assets/wav2wem.exe"),
+        # Resolve the unified assets installation directory folder path cleanly
+        self.wav2wem_assets_dir = self.resolve_json_path(
+            external_tools.get("wav2wem_assets", "assets/wav2wem/assets/"),
             root_dir,
             must_exist=True
         )
-
+        # Build absolute system tracks for all associated tool binaries
+        self.wav2wem_binary_path = self.wav2wem_assets_dir / "wav2wem.exe"
+        self.ogg_encoder_path = self.wav2wem_assets_dir / "oggenc2.exe"
+        
         # --- ML MODEL INITIALIZATIONS ---
         models = self.environment.get("models", {})
 

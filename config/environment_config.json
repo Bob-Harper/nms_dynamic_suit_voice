@@ -8,7 +8,8 @@
         "icon_image": "assets/nms_dsv.png",
         "debug_reports_label": "logs/debug_reports.jsonl",
         "llm_prompting_config": "data/llm_prompting.json"
-    },    "runtime": {
+    },
+    "runtime": {
         "check_interval": 0.1,
         "max_session_lines": 10,
         "quick_cache_max": 16
@@ -30,8 +31,8 @@
     },
     "project": {
         "name": "NMS Dynamic Suit Voice",
-        "base_url":"https://github.com/Bob-Harper/nms_dynamic_suit_voice",
-        "support":"issues",
+        "base_url": "https://github.com/Bob-Harper/nms_dynamic_suit_voice",
+        "support": "issues",
         "version": "1.4.0",
         "release_major": "NEXUS",
         "release_minor": "BASE",

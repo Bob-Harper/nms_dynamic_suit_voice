@@ -6,7 +6,7 @@ project_root = Path(__file__).resolve().parents[1]
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from pipeline.debug_support import install_exception_hooks, record_exception
+from .debug_support import install_exception_hooks, record_exception
 
 def main():
     install_exception_hooks()

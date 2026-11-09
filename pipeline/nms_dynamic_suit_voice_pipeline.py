@@ -1,7 +1,7 @@
 # nms_dynamic_suit_voice_pipeline.py (Streamlined Version)
 import os
-from pipeline.quick_cache import QuickCacheEngine
-from pipeline.debug_support import record_exception
+from .quick_cache import QuickCacheEngine
+from .debug_support import record_exception
 # from pipeline.quick_cache import get_cached_wem, move_cachedfile_to_mod_dir, update_access_time_to_match_newfile
 
 

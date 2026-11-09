@@ -4,8 +4,8 @@ import threading
 from time import time, sleep
 from queue import Queue
 from pathlib import Path
-from pipeline.cache_replenishment import generate_replacement_voice_line
-from pipeline.debug_support import extract_debug_token, record_exception
+from .cache_replenishment import generate_replacement_voice_line
+from .debug_support import extract_debug_token, record_exception
 
 class QuickCacheEngine:
     def __init__(self, config):
@@ -63,7 +63,7 @@ class QuickCacheEngine:
                             self._active_jobs_count[wem_id] = max(0, self._active_jobs_count[wem_id] - 1)
                 self._job_queue.task_done()
 
-    def _replacement_wrapper(self, wem_id: str, wem_dir: Path):
+    def _replacement_wrapper(self, wem_id: str, wem_dir: Path, *args):
         """Private interface bridge execution stub executing the real-time voice line generation engine."""
         generate_replacement_voice_line(self.config, wem_id, wem_dir)
 
@@ -133,11 +133,11 @@ class QuickCacheEngine:
             if should_pre_cache:
                 missing_count = max(0, self.config.quick_cache_max - current_inventory)
                 for _ in range(missing_count):
-                    self.enqueue_job(self._replacement_wrapper, self.config, wem_id, wem_dir)
+                    self.enqueue_job(self._replacement_wrapper, wem_id, wem_dir)
             return cached_files[0]
 
         if pending_jobs == 0:
-            self.enqueue_job(self._replacement_wrapper, self.config, wem_id, wem_dir)
+            self.enqueue_job(self._replacement_wrapper, wem_id, wem_dir)
 
         while True:
             sleep(0.1)
@@ -149,11 +149,11 @@ class QuickCacheEngine:
                     net_total = len(cached_files) + latest_pending
                     missing_count = max(0, self.config.quick_cache_max - net_total)
                     for _ in range(missing_count):
-                        self.enqueue_job(self._replacement_wrapper, self.config, wem_id, wem_dir)
+                        self.enqueue_job(self._replacement_wrapper, wem_id, wem_dir)
                 return cached_files[0]
 
 if __name__ == "__main__":
-    # If an automated security scanner tries to execute this file 
+    # If an automated security scanner tries to execute this file
     # as a standalone script, exit immediately with a success code.
     import sys
     sys.exit(0)

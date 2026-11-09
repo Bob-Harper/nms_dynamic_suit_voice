@@ -1,5 +1,5 @@
 import time
-from pipeline.debug_support import record_exception
+from .debug_support import record_exception
 import re
 
 

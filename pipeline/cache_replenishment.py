@@ -1,9 +1,9 @@
 from pathlib import Path
 from datetime import datetime
-from pipeline.llm_utils import reword_phrase
-from pipeline.prompt_utils import build_suit_prompt
-from pipeline.tts_utils import run_tts
-from pipeline.dsv2wem_convert import convert_to_wem
+from .llm_utils import reword_phrase
+from .prompt_utils import build_suit_prompt
+from .tts_utils import run_tts
+from .dsv2wem_convert import convert_to_wem
 
 
 def generate_replacement_voice_line(config, wem_id, output_path: Path):

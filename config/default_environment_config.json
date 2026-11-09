@@ -5,7 +5,9 @@
         "temp_wem_dir": "cache/tmp_wem_dir",
         "temp_wav_dir": "cache/tmp_wav_dir",
         "quick_cache_dir": "cache/tmp_quick_dir",
-        "icon_image": "assets/nms_dsv.png"
+        "icon_image": "assets/nms_dsv.png",
+        "debug_reports_label": "logs/debug_reports.jsonl",
+        "llm_prompting_config": "data/llm_prompting.json"
     },
     "runtime": {
         "check_interval": 0.1,
@@ -29,6 +31,8 @@
     },
     "project": {
         "name": "NMS Dynamic Suit Voice",
+        "base_url": "https://github.com/Bob-Harper/nms_dynamic_suit_voice",
+        "support": "issues",
         "version": "1.4.0",
         "release_major": "NEXUS",
         "release_minor": "BASE",
