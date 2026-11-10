@@ -3,6 +3,7 @@ import subprocess
 from pathlib import Path
 import sys
 import wave
+import re
 import numpy as np
 from scipy.signal import resample
 
@@ -12,9 +13,25 @@ def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
     final_wav = config.temp_wav_dir / f"{wem_num}.wav"
     temp_wav = final_wav.with_suffix(".temp.wav")
 
-    # Generate the raw voice line out of Coqui-TTS
+    # --------------------------------------------------------------------------
+    # VOCABULARY SANITIZATION PASS
+    # --------------------------------------------------------------------------
+    # Strip the combining double inverted breve (tie-bar accent) symbol entirely.
+    # This keeps the phonemizer from feeding unsupported tokens down to the
+    # LJSpeech model tokenizer, permanently silencing vocabulary warnings.
+    sanitized_text = text.replace("\u0361", "")
+
+    # Optional alphanumeric string safety cleanup block to strip outlier characters
+    sanitized_text = re.sub(r"[^\w\s\.,!\?'\"-]", "", sanitized_text)
+    sanitized_text = " ".join(sanitized_text.split())
+
+    # Fallback guard to protect against empty generation lines after cleanup
+    if not sanitized_text.strip():
+        sanitized_text = "Alert."
+
+    # Generate the raw voice line out of Coqui-TTS using the sanitized string mapping
     config.tts_model.tts_to_file(
-        text=text,
+        text=sanitized_text,
         file_path=str(final_wav),
     )
 

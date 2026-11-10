@@ -246,7 +246,10 @@ def warmup_tts():
     if not python_exe.exists():
         python_exe = Path(sys.executable)
 
-    run([str(python_exe), "pipeline/warmup_tts.py"], "Warmup TTS")
+    # Execute using the packaged module flag (-m) out of the repository root
+    # This initializes the parent package context so relative dot-imports function
+    run([str(python_exe), "-m", "pipeline.warmup_tts"], "Warmup TTS")
+
 
 
 # -------------------------
