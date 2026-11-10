@@ -1,6 +1,6 @@
 # Dynamic No Man’s Sky Suit AI Voice Mod
 
-Version: 1.4.0 (Nexus.BASE)
+Version: 1.4.1 (Nexus.BASE)
 Author: [Bob-Harper](https://github.com)
 Repository: [nms_dynamic_suit_voice](https://github.com)
 
