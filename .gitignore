@@ -11,6 +11,7 @@ __pycache__/
 # Ignore all models and binaries and temporary install files
 assets/wav2wem
 assets/qwen3_4b_q8_0/
+assets/weights
 assets/*.zip
 # But keep icons/images
 !assets/**/*.png

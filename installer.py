@@ -246,10 +246,17 @@ def warmup_tts():
     if not python_exe.exists():
         python_exe = Path(sys.executable)
 
-    # Execute using the packaged module flag (-m) out of the repository root
-    # This initializes the parent package context so relative dot-imports function
-    run([str(python_exe), "-m", "pipeline.warmup_tts"], "Warmup TTS")
+    # Force the subprocess execution pass to bypass capture pipes
+    # This dumps Coqui's model table straight to the screen, completely preventing pipe deadlocks
+    print("Pipeline: Initializing local audio synthesis arrays...")
 
+    subprocess.run(
+        [str(python_exe), "-m", "pipeline.warmup_tts"],
+        cwd=str(project_root),
+        stdout=sys.stdout,
+        stderr=sys.stderr,
+        check=True
+    )
 
 
 # -------------------------

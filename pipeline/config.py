@@ -5,7 +5,7 @@ import shutil
 import sys
 from pathlib import Path
 from llama_cpp import Llama, Optional
-from TTS.api import TTS  # coqui-tts fork
+
 from .debug_support import record_exception
 
 def load_json(path: Path) -> dict:
@@ -32,7 +32,7 @@ class SuitVoiceConfig:
         # Anchor to project root (parent of pipeline/)
         root_dir = Path(__file__).parent.parent
         config_dir = root_dir / "config"
-
+        self.project_root = root_dir
         # Load file structures
         self.default_environment = load_json(config_dir / "default_environment_config.json")
         self.environment = load_json(config_dir / "environment_config.json")
@@ -174,21 +174,28 @@ class SuitVoiceConfig:
         # Build absolute system tracks for all associated tool binaries
         self.wav2wem_binary_path = self.wav2wem_assets_dir / "wav2wem.exe"
         self.ogg_encoder_path = self.wav2wem_assets_dir / "oggenc2.exe"
-        
+
         # --- ML MODEL INITIALIZATIONS ---
         models = self.environment.get("models", {})
+        model_url = self.environment.get("model_url", {})
 
-        # Coqui-TTS Lazy Loading Setup
+        # Wrapping this in Path()
+        self.tts_base_dir = Path(paths.get("tts_base_dir", "assets/weights").strip('"'))
+
+        # --- TTS Model ---
         self.tts_model_name = models.get("tts_model")
         if not self.tts_model_name:
             raise ValueError("DEBUG TOKEN = TTSMODEL_SIG >> tts_model token signature missing inside configuration targets.")
 
-        # Explicit type hint tells Pylance that TTS is allowed here later!
-        self.tts_model: Optional[TTS] = None
+        self.tts_voice_bin = self.tts_base_dir / models.get("tts_voice_bin", "voices-v1.0.bin")
+        self.tts_model = self.tts_base_dir / models.get("tts_model", "kokoro-v1.0.fp16.onnx")
+
+        # Centralize core network release endpoints for download passes later
+        self.tts_base_url = model_url.get("tts_base_url", "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1")
 
         # Llama Engine Setup
         self.llm_model = str(self.resolve_json_path(models.get("llm_model"), root_dir, must_exist=True))
-        self.llm = None  # You can also use self.llm: Optional[Llama] = None if it squawks here too
+        self.llm = None
         if init_llm:
             self.llm = Llama(
                 model_path=self.llm_model,

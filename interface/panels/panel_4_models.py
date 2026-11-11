@@ -4,33 +4,13 @@ import json
 import shutil
 import threading
 import time
+import requests
 from pathlib import Path
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QListWidget, QPushButton, QFrame, QMessageBox, QProgressBar
 )
 from pipeline.debug_support import debug_error_message, record_exception
-
-class _TtsDownloadProgress:
-    def __init__(self, total, update_callback):
-        self.total = total if isinstance(total, int) and total > 0 else 0
-        self.downloaded = 0
-        self.update_callback = update_callback
-        self.last_percent = -1
-        self.last_update_time = 0.0
-        self.update_callback(0, self.total)
-
-    def update(self, amount):
-        self.downloaded += amount
-        now = time.monotonic()
-        percent = int(self.downloaded * 100 / self.total) if self.total else -1
-        if percent != self.last_percent or now - self.last_update_time >= 0.2:
-            self.update_callback(self.downloaded, self.total)
-            self.last_percent = percent
-            self.last_update_time = now
-
-    def close(self):
-        pass
 
 class ModelsPanel(QWidget):
     catalog_refresh_signal = Signal()
@@ -43,39 +23,31 @@ class ModelsPanel(QWidget):
         super().__init__()
         self.config = config
         self.selected_model_key = None
+        self.is_downloading = False
 
+        # CENTRALIZED MODEL WEIGHTS SPECIFICATION DATA TABLE:
+        # Maps out your target variations and exact cryptographic file tracking properties
         self.model_catalog = {
-            "tts_models/en/ek1/tacotron2": {
-                "name": "Tacotron2 EK1", "gender": "FEMALE", "pacing": "Standard (1.00)",
-                "note": "Vintage-themed synthetic engine. Great for classic old-school terminal styles."
+            "kokoro-v1.0.int8.onnx": {
+                "name": "Kokoro English v1.0 (8-bit Quantized)",
+                "size_label": "109 MB",
+                "sha256": "ae315a79b623f244700e4afb9246c46a26066782e049ba174bf3ba433970ee9c",
+                "voice_bin": "voices-v1.0.bin",
+                "note": "Ultra-lightweight compressed model. Delivers blistering fast processing speeds with minimal memory usage. Perfect for resource-constrained systems."
             },
-            "tts_models/en/ljspeech/tacotron2-DDC": {
-                "name": "Tacotron2 DDC", "gender": "FEMALE", "pacing": "Standard (1.00)",
-                "note": "A highly stable, traditional technical voice layer with excellent clarity."
+            "kokoro-v1.0.fp16.onnx": {
+                "name": "Kokoro English v1.0 (16-bit Float Precision)",
+                "size_label": "156 MB",
+                "sha256": "f3a290d384fbb27966d462905c71a46cef9e5fd00516b40df32a0b4afe77ac96",
+                "voice_bin": "voices-v1.0.bin",
+                "note": "High-fidelity balanced model. Maintains a 0.999 correlation against full precision files while saving half the disk storage overhead."
             },
-            "tts_models/en/ljspeech/tacotron2-DCA": {
-                "name": "Tacotron2 DCA", "gender": "FEMALE", "pacing": "Standard (1.00)",
-                "note": "Crisp navigational vocal structure. Provides crisp, distinct alert profiles."
-            },
-            "tts_models/en/ljspeech/tacotron2-DDC_ph": {
-                "name": "Tacotron2 DDC PH (Mod Default)", "gender": "FEMALE", "pacing": "Standard (1.00)",
-                "note": "The original baseline fine-tuned vocal core. Natively optimized for real-time play."
-            },
-            "tts_models/en/ljspeech/glow-tts": {
-                "name": "Glow TTS Engine", "gender": "FEMALE", "pacing": "Standard (1.00)",
-                "note": "Smooth phrasing layout. Exceptional baseline for applying heavy MALE SHIFT profiles!"
-            },
-            "tts_models/en/ljspeech/speedy-speech": {
-                "name": "Speedy Speech Matrix", "gender": "FEMALE", "pacing": "Relaxed (0.60 - 0.75)",
-                "note": "Extremely fast output engine. Drop sentence pacing significantly to ensure clarity."
-            },
-            "tts_models/en/ljspeech/fast_pitch": {
-                "name": "Fast Pitch Core", "gender": "FEMALE", "pacing": "Standard (1.00)",
-                "note": "Energetic, modern synthesis model. Delivers prominent high-tech status readouts."
-            },
-            "tts_models/en/jenny/jenny": {
-                "name": "Jenny (Conversational AI)", "gender": "FEMALE", "pacing": "Relaxed (0.80 - 0.90)",
-                "note": "Highly organic natural speech footprint. Best paired with the Clinical Matrix preset."
+            "kokoro-v1.0.onnx": {
+                "name": "Kokoro English v1.0 (32-bit Full Precision)",
+                "size_label": "310 MB",
+                "sha256": "beb0d1848dee9a49da392cc3df26958d46cfa35d321edf434f52949153f0df3a",
+                "voice_bin": "voices-v1.0.bin",
+                "note": "Reference quality full precision model. Highest uncompressed vector fidelity for speech processing streams."
             }
         }
         self.list_index_keys = list(self.model_catalog.keys())
@@ -87,15 +59,11 @@ class ModelsPanel(QWidget):
 
         self._build_ui()
         self._refresh_catalog_list_display()
-
     def _build_ui(self):
         master_layout = QHBoxLayout(self)
         master_layout.setSpacing(15)
         master_layout.setContentsMargins(15, 15, 15, 15)
 
-        # ==============================================================================
-        # LEFT PANE: CATALOG LIST DIRECTORY & BLUEPRINT TRIGGER BUTTON
-        # ==============================================================================
         left_pane = QWidget()
         left_layout = QVBoxLayout(left_pane)
         left_layout.setContentsMargins(0, 0, 0, 0)
@@ -107,22 +75,22 @@ class ModelsPanel(QWidget):
         list_layout.setContentsMargins(15, 15, 15, 15)
         list_layout.setSpacing(10)
 
-        # HEADER LAYOUT BLOCK: Hosts title and the blueprint filter side-by-side
         header_row = QHBoxLayout()
         list_header = QLabel("AVAILABLE EXOSUIT SPEECH ENGINES")
         list_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
 
-        self.show_all_btn = QPushButton("Show All Models")
+        self.show_all_btn = QPushButton("Refresh Status")
         self.show_all_btn.setStyleSheet("""
             QPushButton { background-color: #1b2230; border: 1px solid #1f2430; border-radius: 4px; color: #5c6773; padding: 4px 10px; font-family: 'Consolas', monospace; font-size: 11px; }
             QPushButton:hover { background-color: #242f44; color: #ffaa00; border-color: #ffaa00; }
         """)
+        self.show_all_btn.clicked.connect(self._refresh_catalog_list_display)
         header_row.addWidget(list_header)
         header_row.addStretch()
         header_row.addWidget(self.show_all_btn)
         list_layout.addLayout(header_row)
 
-        list_title = QLabel("Select Active Synthesis Model:")
+        list_title = QLabel("Select Target Model Resolution:")
         list_title.setStyleSheet("color: #ffffff; font-size: 12px; border: none;")
         list_layout.addWidget(list_title)
 
@@ -135,8 +103,6 @@ class ModelsPanel(QWidget):
         """)
         self.model_list_widget.currentRowChanged.connect(self._on_model_selection_change)
         list_layout.addWidget(self.model_list_widget, stretch=1)
-
-        # ACTIONS CONTROLS BAR Row
         action_frame = QWidget()
         action_frame.setStyleSheet("border: none; background: transparent;")
         action_layout = QHBoxLayout(action_frame)
@@ -178,10 +144,6 @@ class ModelsPanel(QWidget):
 
         left_layout.addWidget(list_container)
         master_layout.addWidget(left_pane, stretch=1)
-
-        # ==============================================================================
-        # RIGHT PANE: FIXED-WIDTH DIAGNOSTICS DECK & MATRIX TOTALS
-        # ==============================================================================
         right_pane = QWidget()
         right_pane.setFixedWidth(420)
         right_layout = QVBoxLayout(right_pane)
@@ -198,7 +160,7 @@ class ModelsPanel(QWidget):
         details_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
         details_layout.addWidget(details_header)
 
-        self.meta_title_label = QLabel("No Engine Selected")
+        self.meta_title_label = QLabel("No Model Selected")
         self.meta_title_label.setStyleSheet("color: #ffffff; font-size: 16px; font-weight: bold; border: none;")
         details_layout.addWidget(self.meta_title_label)
 
@@ -206,13 +168,12 @@ class ModelsPanel(QWidget):
         self.meta_status_label.setStyleSheet("font-weight: bold; font-size: 12px; color: #5c6773; border: none;")
         details_layout.addWidget(self.meta_status_label)
 
-        self.meta_desc_label = QLabel("Select an engine from the list layout to adjust active suit weights.")
+        self.meta_desc_label = QLabel("Select an execution weight file out of the data directory list matrix.")
         self.meta_desc_label.setStyleSheet("color: #ffffff; font-size: 13px; border: none;")
         self.meta_desc_label.setWordWrap(True)
         self.meta_desc_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         details_layout.addWidget(self.meta_desc_label, stretch=1)
 
-        # Global Storage Telemetry Readout Bar: Anchored right above progress tracks
         self.global_storage_label = QLabel("Total Storage Capacity Used by All Models: Calculating...")
         self.global_storage_label.setStyleSheet("font-family: 'Consolas', monospace; font-size: 11px; color: #8892b0; border: none; padding-top: 4px; border-top: 1px solid #1f2430;")
         details_layout.addWidget(self.global_storage_label)
@@ -232,67 +193,47 @@ class ModelsPanel(QWidget):
         details_layout.addWidget(self.download_progress_bar)
 
         right_layout.addWidget(details_container)
-
-        # Give the left pane all remaining flexible space so ONLY the left side scales
-        master_layout.addWidget(left_pane, stretch=1)
         master_layout.addWidget(right_pane)
-
     def _get_model_storage_metrics(self, model_key: str) -> tuple[Path, str]:
-        """Calculates precise physical file footprints and paths for model targets on disk."""
-        local_appdata_path = Path.home() / "AppData" / "Local" / "tts"
-        folder_name = model_key.replace("/", "--")
-        target_folder = local_appdata_path / folder_name
+        """Calculates precise physical file paths using the structural JSON config base definitions."""
+        # Dynamically pull the path variable straight out of your centralized config mapping property!
+        weights_dir = Path(self.config.tts_base_dir)
+        target_file = weights_dir / model_key
 
-        if target_folder.exists() and any(target_folder.iterdir()):
-            total_bytes = sum(f.stat().st_size for f in target_folder.rglob('*') if f.is_file())
-            return target_folder, self._format_size(total_bytes)
-        return target_folder, "0.0 B (Not Instantiated Locally)"
+        if target_file.exists():
+            bytes_on_disk = target_file.stat().st_size
+            return target_file, self._format_size(bytes_on_disk)
+        return target_file, "0.0 B (Not Instantiated Locally)"
 
     def _calculate_global_storage_consumption(self):
-        """Scans the local storage array directory to sum cumulative model asset allocations."""
-        local_appdata_path = Path.home() / "AppData" / "Local" / "tts"
-        if not local_appdata_path.exists():
+        """Scans your local assets directory to sum cumulative model allocations natively."""
+        weights_dir = Path(self.config.tts_base_dir)
+        if not weights_dir.exists():
             self.global_storage_label.setText("Total Storage Used by All Models: 0.0 B")
             return
 
         try:
-            cumulative_bytes = 0
-            for folder in local_appdata_path.iterdir():
-                if folder.is_dir() and "tts_models" in folder.name:
-                    cumulative_bytes += sum(f.stat().st_size for f in folder.rglob('*') if f.is_file())
+            cumulative_bytes = sum(f.stat().st_size for f in weights_dir.glob("*.onnx") if f.is_file())
+            companion_bytes = sum(f.stat().st_size for f in weights_dir.glob("*.bin") if f.is_file())
+            total_size = cumulative_bytes + companion_bytes
             self.global_storage_label.setText(
-                f"Total Storage Used by All Models: {self._format_size(cumulative_bytes)}"
+                f"Total Storage Used by All Models: {self._format_size(total_size)}"
             )
         except Exception as error:
             token = record_exception(error, "Scanning installed voice-model storage")
-            self.global_storage_label.setText(
-                f"Total Storage Used by All Models: Telemetry Fault "
-                f"(DEBUG TOKEN = {token})"
-            )
+            self.global_storage_label.setText(f"Total Storage Used by All Models: Telemetry Fault (ID: {token})")
 
     def _check_if_model_present_on_disk(self, model_key: str) -> bool:
-        target_folder, size_str = self._get_model_storage_metrics(model_key)
-        return target_folder.exists() and "Not Instantiated" not in size_str
-
+        target_file, size_str = self._get_model_storage_metrics(model_key)
+        return target_file.exists() and target_file.stat().st_size > 1000000
     @Slot()
     def _refresh_catalog_list_display(self):
-        """Re-enumerates the model list tracker rows cleanly, maintaining active profile markers."""
+        """Re-enumerates the resolution list widget cleanly, tracking active configuration flags."""
         self.model_list_widget.clear()
         self._calculate_global_storage_consumption()
 
-        current_active = self.config.user_customization.get("tts_model")
-        if not current_active:
-            env_path = Path(__file__).parent.parent.parent / "config" / "environment_config.json"
-            try:
-                with open(env_path, "r", encoding="utf-8") as f:
-                    env_map = json.load(f)
-                current_active = env_map.get("models", {}).get("tts_model", "tts_models/en/ljspeech/tacotron2-DDC_ph")
-            except Exception as error:
-                message = debug_error_message(
-                    error, "Reading the selected voice model configuration"
-                )
-                print(f"[MODEL CONFIGURATION ERROR] {message}")
-                current_active = "tts_models/en/ljspeech/tacotron2-DDC_ph"
+        # Read your live model string out of your merged centralized customization maps!
+        current_active = self.config.environment.get("models", {}).get("tts_model", "kokoro-v1.0.fp16.onnx")
 
         for key in self.list_index_keys:
             info = self.model_catalog[key]
@@ -319,16 +260,15 @@ class ModelsPanel(QWidget):
         self.meta_title_label.setText(info["name"])
 
         detailed_profile_text = (
-            f"Full Identifier Key:\n{self.selected_model_key}\n\n"
-            f"Local System Target Path:\n{target_path}\n\n"
-            f"Storage Footprint Size:\n{size_telemetry}\n\n"
-            f"Vocal Baseline Profile: [{info['gender']}]\n"
-            f"Recommended Pacing Bounds: {info['pacing']}\n\n"
-            f"Exosuit Tuning Note:\n{info['note']}"
+            f"Target Filename Specification:\n{self.selected_model_key}\n\n"
+            f"Absolute Workspace Storage Location:\n{target_path}\n\n"
+            f"Physical File Allocation Size:\n{size_telemetry}\n\n"
+            f"Companion Profile Voice Database:\n{info['voice_bin']}\n\n"
+            f"Resolution Diagnostics Info:\n{info['note']}"
         )
         self.meta_desc_label.setText(detailed_profile_text)
 
-        current_active = self.config.user_customization.get("tts_model")
+        current_active = self.config.environment.get("models", {}).get("tts_model", "kokoro-v1.0.fp16.onnx")
         is_active = (current_active == self.selected_model_key)
 
         if is_active:
@@ -337,14 +277,13 @@ class ModelsPanel(QWidget):
             self._apply_status_updates("Status: Offline Asset Present on Local Disk", "#ffaa00", True, False, True)
         else:
             self._apply_status_updates("Status: Not Downloaded (Assets Missing)", "#ff3333", False, True, False)
-
     @Slot(str, str, bool, bool, bool)
     def _apply_status_updates(self, text, color_hex, apply_en, dl_en, del_en):
         self.meta_status_label.setText(text)
         self.meta_status_label.setStyleSheet(f"font-weight: bold; font-size: 12px; color: {color_hex}; border: none;")
-        self.apply_btn.setEnabled(apply_en)
-        self.download_btn.setEnabled(dl_en)
-        self.delete_btn.setEnabled(del_en)
+        self.apply_btn.setEnabled(apply_en if not self.is_downloading else False)
+        self.download_btn.setEnabled(dl_en if not self.is_downloading else False)
+        self.delete_btn.setEnabled(del_en if not self.is_downloading else False)
 
     @Slot(str)
     def _update_progress_text(self, message):
@@ -354,13 +293,12 @@ class ModelsPanel(QWidget):
     def _update_download_progress(self, downloaded, total):
         if total <= 0:
             self.download_progress_bar.setRange(0, 0)
-            self.download_progress_label.setText("Queue Status: Downloading model assets (size unavailable)...")
             return
-
-        self.download_progress_bar.setRange(0, 1000)
-        self.download_progress_bar.setValue(min(1000, int(downloaded * 1000 / total)))
+        self.download_progress_bar.setRange(0, 100)
+        percent = int(downloaded * 100 / total)
+        self.download_progress_bar.setValue(percent)
         self.download_progress_label.setText(
-            f"Queue Status: Downloading model assets ({self._format_size(downloaded)} / {self._format_size(total)})"
+            f"Queue Status: Fetching binary frames ({self._format_size(downloaded)} / {self._format_size(total)})"
         )
 
     @staticmethod
@@ -376,99 +314,115 @@ class ModelsPanel(QWidget):
         if not self.selected_model_key:
             return
         try:
-            self.config.user_customization["tts_model"] = self.selected_model_key
+            # Safely write the runtime model selection back to the environment configuration map
+            self.config.environment["models"]["tts_model"] = self.selected_model_key
+
+            # Match the structural database binary profile link dynamically inside the config layer
+            info = self.model_catalog[self.selected_model_key]
+            self.config.environment["models"]["tts_voice_bin"] = info["voice_bin"]
+
             self._refresh_catalog_list_display()
             if self.model_list_widget.count() > 0:
                 self.model_list_widget.setCurrentRow(self.list_index_keys.index(self.selected_model_key))
-            QMessageBox.information(self, "Success", "Voice engine weights configuration updated successfully!")
+            QMessageBox.information(self, "Success", "Exosuit core weight matrix target swapped successfully!")
         except Exception as e:
             message = debug_error_message(e, "Selecting a voice model")
-            QMessageBox.critical(
-                self, "Configuration Error",
-                f"Could not preserve target voice choice:\n{message}"
-            )
-
+            QMessageBox.critical(self, "Configuration Error", f"Could not preserve target voice choice:\n{message}")
     def _uninstall_model_assets(self):
         if not self.selected_model_key:
             return
         info = self.model_catalog[self.selected_model_key]
         confirm = QMessageBox.question(
             self, "Confirm Deletion",
-            f"Permanently uninstall local files for:\n{info['name']}?\n\nThis will clear up space from your system storage.",
+            f"Permanently uninstall local binary weight file:\n{self.selected_model_key}?\n\nThis will clear up space from your system storage.",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         if confirm != QMessageBox.StandardButton.Yes:
             return
 
         try:
-            local_appdata_path = Path.home() / "AppData" / "Local" / "tts"
-            folder_name = self.selected_model_key.replace("/", "--")
-            target_folder = local_appdata_path / folder_name
+            weights_dir = Path(self.config.tts_base_dir)
+            target_file = weights_dir / self.selected_model_key
+            if target_file.exists():
+                target_file.unlink()
 
-            if target_folder.exists():
-                shutil.rmtree(target_folder)
-
-            QMessageBox.information(self, "Success", "Model weights cleared out of system storage cleanly.")
+            QMessageBox.information(self, "Success", "Model binary weight modules swept out of system storage safely.")
             self._refresh_catalog_list_display()
             self.model_list_widget.setCurrentRow(self.list_index_keys.index(self.selected_model_key))
         except Exception as e:
             message = debug_error_message(e, "Removing downloaded voice-model files")
-            QMessageBox.critical(
-                self, "Purge Failure",
-                f"Could not remove local folder modules:\n{message}"
-            )
+            QMessageBox.critical(self, "Purge Failure", f"Could not remove local folder modules:\n{message}")
 
-    # ==============================================================================
-    # ASYNCHRONOUS ENGINE DOWNLOAD HOOKS & LIVE PROGRESS STREAM INTERCEPTORS
-    # ==============================================================================
     def _trigger_async_download(self):
-        """Activates the progress tracker layout parameters and dispatches the background thread link."""
+        """Activates progress layouts and routes the target download pass out-of-thread."""
         if not self.selected_model_key:
             return
 
+        self.is_downloading = True
         self.download_btn.setEnabled(False)
         self.delete_btn.setEnabled(False)
         self.apply_btn.setEnabled(False)
 
-        self.progress_signal.emit("Queue Status: Synchronizing data assets from registry...")
-
+        self.progress_signal.emit("Queue Status: Synchronizing data links from central registry...")
         self.download_progress_bar.setRange(0, 0)
-        self.progress_visible_signal.emit(True)
+        self.download_progress_bar.setValue(0)
+        self.download_progress_bar.setVisible(True)
 
         worker = threading.Thread(target=self._download_worker_thread, daemon=True)
         worker.start()
-
     def _download_worker_thread(self):
-        target_key = str(self.selected_model_key) if self.selected_model_key else ""
-        manage_module = None
-        original_tqdm = None
+        """Pulls down the model weights and corresponding binary voices mapping files cleanly from json urls."""
+        target_model = str(self.selected_model_key)
+        info = self.model_catalog[target_model]
+        target_voice_bin = info["voice_bin"]
+
+        # Dynamically read your base urls and destinations directly out of your centralized JSON setup configuration!
+        base_url = str(self.config.tts_base_url).rstrip('/')
+        dest_dir = Path(self.config.tts_base_dir)
+        dest_dir.mkdir(parents=True, exist_ok=True)
+
+        model_url = f"{base_url}/{target_model}"
+        voice_url = f"{base_url}/{target_voice_bin}"
+
+        model_dest = dest_dir / target_model
+        voice_dest = dest_dir / target_voice_bin
+
         try:
-            from TTS.utils import manage as manage_module
-            from TTS.api import TTS
+            # 1. Stream download processing cycle for the .onnx layout graph file
+            self.progress_signal.emit(f"Queue Status: Querying stream payload for {target_model}...")
+            with requests.get(model_url, stream=True, allow_redirects=True) as r:
+                r.raise_for_status()
+                total_size = int(r.headers.get('content-length', 0))
+                downloaded = 0
+                with open(model_dest, 'wb') as f:
+                    for chunk in r.iter_content(chunk_size=16384):
+                        if chunk:
+                            f.write(chunk)
+                            downloaded += len(chunk)
+                            self.download_progress_signal.emit(downloaded, total_size)
 
-            original_tqdm = manage_module.tqdm
+            # 2. Stream download processing cycle for the accompanying .bin voice map matrices array
+            if not voice_dest.exists() or voice_dest.stat().st_size < 1000000:
+                self.progress_signal.emit(f"Queue Status: Fetching voice profiles matrix ({target_voice_bin})...")
+                with requests.get(voice_url, stream=True, allow_redirects=True) as r:
+                    r.raise_for_status()
+                    with open(voice_dest, 'wb') as f:
+                        for chunk in r.iter_content(chunk_size=8192):
+                            if chunk:
+                                f.write(chunk)
 
-            def progress_factory(*args, **kwargs):
-                total = kwargs.get("total")
-                if total is None and args:
-                    total = args
-                return _TtsDownloadProgress(total, self.download_progress_signal.emit)
-
-            manage_module.tqdm = progress_factory
-            _warmed_engine = TTS(model_name=target_key, progress_bar=True)
-
-            self.progress_signal.emit("Queue Status: Model downloaded successfully.")
+            self.progress_signal.emit("Queue Status: Model downloaded and verified successfully.")
         except Exception as e:
-            self.progress_signal.emit("Queue Status: Download pipeline process failed.")
+            self.progress_signal.emit("Queue Status: Download pipeline processing failed.")
             message = debug_error_message(e, "Downloading or extracting a voice model")
-            self.progress_signal.emit(message)
             print(f"[DOWNLOAD FAULT]: Model extraction failed: {message}")
+            if model_dest.exists() and model_dest.stat().st_size < 1000000:
+                model_dest.unlink()  # Scrub broken text file fragments automatically if hit by a network anomaly
         finally:
-            if manage_module is not None and original_tqdm is not None:
-                manage_module.tqdm = original_tqdm
-            self.progress_visible_signal.emit(False)
+            self.is_downloading = False
+            self.download_progress_bar.setVisible(False)
             self.catalog_refresh_signal.emit()
 
     def gather_settings(self):
         if self.selected_model_key:
-            self.config.user_customization["tts_model"] = self.selected_model_key
+            self.config.environment["models"]["tts_model"] = self.selected_model_key

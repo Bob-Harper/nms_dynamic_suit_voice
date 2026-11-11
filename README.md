@@ -1,6 +1,6 @@
 # Dynamic No Man’s Sky Suit AI Voice Mod
 
-Version: 1.4.1 (Nexus.BASE)
+Version: 1.4.2 (Nexus.QUEEG)
 Author: [Bob-Harper](https://github.com)
 Repository: [nms_dynamic_suit_voice](https://github.com)
 
@@ -22,7 +22,7 @@ When No Man's Sky makes a sound call to play a suit voice line, it reads the phy
 Because the local pipeline generates variations ahead of time into a background cache, the system watcher instantly swaps a fresh file into your game folder, and proceeds to replenish the cache while you are still playing. Every notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
 
 ## Key Features (As of v1.4.0)
-
+- **Fully converted to Kokoro ONNX** TTS processing is now faster, more efficient, and has both Male and Female base voices to choose from.
 - **Centralized Control Dashboard:** A graphical config interface to launch and quit the tool, customize player name, adjust multi-threaded look-ahead queues, or fine-tune processing effects.
 - **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely replaced by an included lightweight converter. No software accounts, corporate registration, or heavy background installations of programs or third party software are required. (LLM and TTS models still required)
 - **Pure-Python DSP Matrix Engine:** ffmpeg requirement and sub-process loops have been removed. Volume gain, sentence tempo stretchings, and other adjustments are now handled entirely in-memory via single-pass NumPy/SciPy matrix math.

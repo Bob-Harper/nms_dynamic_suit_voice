@@ -11,8 +11,6 @@ import warnings
 
 # Force python to ignore all UserWarnings and deprecation noise coming from third-party libraries globally
 os.environ["PYTHONWARNINGS"] = "ignore"
-warnings.filterwarnings("ignore", category=UserWarning, module="jieba")
-warnings.filterwarnings("ignore", category=DeprecationWarning)
 # Force-align the execution context to look back up at the main mod root folder
 project_root = Path(__file__).parent.parent.absolute()
 if str(project_root) not in sys.path:
@@ -50,7 +48,7 @@ class ConfigLoaderWorker(QThread):
         self.config_loaded_signal.emit(config_instance)
 
 class ExosuitEngineThread(QThread):
-    """Natively runs core No Man's Sky filewatcher loop as a worker thread."""
+    """runs core No Man's Sky filewatcher loop as a worker thread."""
     engine_log_signal = Signal(str)
     status_signal = Signal(str, bool)
 
@@ -76,7 +74,7 @@ class ControlDeckDashboard(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # 1. LIGHTWEIGHT TEXT READ FOR THE VERSION SIGNATURE
+        # LIGHTWEIGHT TEXT READ FOR THE VERSION SIGNATURE
         env_data = {}
         try:
             env_path = project_root / "config" / "environment_config.json"
@@ -111,11 +109,11 @@ class ControlDeckDashboard(QMainWindow):
         self._engine_error_message = None
         self.notebook = QTabWidget()
 
-        # 2. RUN VISUALS FIRST: Build the UI widgets immediately so they are ready to paint
+        # RUN VISUALS FIRST: Build the UI widgets immediately so they are ready to paint
         self.init_ui()
         self._setup_system_tray()
 
-        # 3. KICK OFF BACKGROUND INITIALIZATION DELAYED
+        # KICK OFF BACKGROUND INITIALIZATION DELAYED
         # Triggers 50ms after the window frame draws, keeping the startup completely unblocked
         QTimer.singleShot(50, self.launch_background_config_loader)
 
@@ -456,10 +454,15 @@ class ControlDeckDashboard(QMainWindow):
 
                     panel_instance = panel_class(self.config)
                     self.notebook.addTab(panel_instance, display_title)
+
+                    if class_name == "ConsolePanel":
+                        self.active_console_signal = panel_instance.log_signal
+
                     if hasattr(panel_instance, "settings_requested"):
                         panel_instance.settings_requested.connect(
                             self._open_debug_settings
                         )
+
             except Exception as load_err:
                 message = debug_error_message(
                     load_err, f"Loading interface panel {module_name}"

@@ -5,6 +5,7 @@
         "temp_wem_dir": "cache/tmp_wem_dir",
         "temp_wav_dir": "cache/tmp_wav_dir",
         "quick_cache_dir": "cache/tmp_quick_dir",
+        "tts_base_dir":"assets/weights",
         "icon_image": "assets/nms_dsv.png",
         "debug_reports_label": "logs/debug_reports.jsonl",
         "llm_prompting_config": "data/llm_prompting.json"
@@ -16,12 +17,14 @@
     },
     "models": {
         "llm_model": "assets/qwen3_4b_q8_0/Qwen3-4B-Q8_0.gguf",
-        "tts_model": "tts_models/en/ljspeech/tacotron2-DDC_ph"
+        "tts_model": "kokoro-v1.0.fp16.onnx",
+        "tts_voice_bin": "voices-v1.0.bin"
     },
     "external_tools": {
         "wav2wem_asset": "assets/wav2wem/assets/wav2wem.exe"
     },
     "model_url": {
+        "tts_base_url":"https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1",
         "qwen3_4b_q8_0": "https://huggingface.co/Qwen/Qwen3-4B-GGUF/resolve/main/Qwen3-4B-Q8_0.gguf"
     },
     "updates": {
@@ -33,7 +36,7 @@
         "name": "NMS Dynamic Suit Voice",
         "base_url": "https://github.com/Bob-Harper/nms_dynamic_suit_voice",
         "support": "issues",
-        "version": "1.4.0",
+        "version": "1.4.1",
         "release_major": "NEXUS",
         "release_minor": "BASE",
         "locale": "en_US"

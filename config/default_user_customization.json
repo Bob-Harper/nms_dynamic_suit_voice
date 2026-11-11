@@ -1,17 +1,19 @@
 {
-    "tts_model": "tts_models/en/ljspeech/tacotron2-DDC_ph",
-    "player_name": "Interloper",
+    "tts_model": "kokoro-v1.0.fp16.onnx",
+    "tts_voice_bin": "voices-v1.0.bin",
+    "player_name": "Traveller",
     "phrase_settings": {
-        "wordiness": "Standard",
-        "tone": "Standard"
+        "tone": "Standard",
+        "wordiness": "Standard"
     },
     "voice_effects": {
-        "gain_db": 5,
-        "tempo": 1.02,
-        "rate": 0.50,
-        "ring_freq": 300,
-        "ring_mix": 100,
+        "base_voice": "am_adam",
+        "gain_db": 14,
         "pitch_semitones": 4,
-        "formant_percent": 80
+        "tempo": 0.99,
+        "rate": 1.5,
+        "ring_freq": 862,
+        "ring_mix": 18,
+        "formant_percent": 50
     }
 }

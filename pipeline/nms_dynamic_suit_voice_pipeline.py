@@ -9,23 +9,25 @@ from pathlib import Path
 from .quick_cache import QuickCacheEngine
 from .debug_support import record_exception
 
-def watch_wems(engine, config):
-    """Run the native win32 filesystem listener cleanly with absolute type alignment."""
+def watch_wems(engine, config, console_pipe=None):
 
-    # --- PHASE 1: Initialize Coqui-TTS Engine Weights ---
+    # --- PHASE 1: Initialize Modern Kokoro-TTS Engine ---
     if not engine.running:
         return
-    engine.update_status("Loading TTS Voice Models...")
+    engine.update_status("Loading Kokoro TTS Engine...")
 
     qce = QuickCacheEngine(config)
 
-    os.environ["HF_HUB_OFFLINE"] = "1"
-    os.environ["TRANSFORMERS_OFFLINE"] = "1"
-
-    from TTS.api import TTS
     if not engine.running:
         return
-    config.tts_model = TTS(model_name=config.tts_model_name)
+    from kokoro_onnx import Kokoro
+    import onnxruntime as ort
+    ort.set_default_logger_severity(3)  # 0:Verbose, 1:Info, 2:Warning, 3:Error
+
+    model_path = config.tts_model
+    voices_path = config.tts_voice_bin
+
+    config.tts_model = Kokoro(str(model_path), str(voices_path))
 
     # --- PHASE 2: Initialize Llama-cpp Core Engine weights ---
     if not engine.running:
@@ -55,40 +57,59 @@ def watch_wems(engine, config):
     engine.update_status("Ready", is_ready=True)
 
     from .oplock_watch import OplockWatch
-
-    # Instantiate the low-overhead native Win32 tripwire engine
     watcher = OplockWatch()
 
-    # Map out the exact list of 220 active track target ids from your game directory
-    tracked_ids = [f3.stem for f3 in mod_dir.glob("*.wem")]
-    watcher.set_target(mod_dir, tracked_ids)
+    # CENTRALIZED ASSET FILTERING: Pull only the frequently used voice line IDs
+    try:
+        # config.intent_map holds loaded nms_suit_voice_transcripts.json data dictionary
+        active_voice_profiles = config.intent_map
 
-    print(f"[WATCHER CORE]: Armed Level-1 Oplock tripwires across {len(tracked_ids)} assets natively.")
+        # Filter the dictionary keys down strictly to assets explicitly marked as Used == Yes
+        frequently_used_ids = {
+            wem_id for wem_id, metadata in active_voice_profiles.items()
+            if metadata.get("Used") == "Yes"
+        }
+    except Exception as e:
+        print(f"[WATCHER CORE WARNING]: Failed filtering via 'Used' flag, falling back to all keys: {e}")
+        frequently_used_ids = set(config.intent_map.keys())
+
+    # Map out the file list matching active intent tracking targets
+    tracked_ids = [
+        f3.stem for f3 in mod_dir.glob("*.wem")
+        if f3.stem in frequently_used_ids
+    ]
+
+    watcher.set_target(mod_dir, tracked_ids)
+    print(f"[WATCHER CORE]: Focused Level-1 Oplock tripwires across {len(tracked_ids)} high-frequency voice assets.")
 
     while engine.running:
         try:
-            # 1. Periodically re-arm broken lock handles or fresh files we just swapped
+            # Periodically re-arm broken lock handles or fresh files just swapped
             watcher.maintain(tries=12)
 
-            # 2. Passively listen for kernel lock break signals with zero CPU load
+            # Passively listen for kernel lock break signals
             broken_ids = watcher.poll_ack(timeout=0.05)
 
             for wem_id in broken_ids:
-                print(f"[KERNEL INTERCEPT]: Oplock tripwire snapped on file track: {wem_id}.wem")
+                # Thread-safe log dispatch pipes kernel events straight onto the console tab view
+                if hasattr(config, "ui_console") and config.ui_console is not None:
+                    config.ui_console.append_log_signal.emit(
+                        f"[KERNEL INTERCEPT]: Oplock tripwire snapped on file track: {wem_id}.wem"
+                    )
 
-                # Fetch the corresponding variation asset out of your cache engine queue
                 cached_file = qce.get_cached_wem(wem_id)
                 if cached_file is None:
                     continue
 
-                # Tell the watcher to ignore our upcoming file-move operation write event
                 watcher.suppress(wem_id, seconds=0.5)
-
-                # Swap the target file seamlessly in place
                 moved_file = qce.move_cachedfile_to_mod_dir(cached_file, mod_dir, wem_id)
 
-                # Tell the watcher to immediately re-arm the tripwire loop on the fresh asset file handle
                 if moved_file is not None:
+                    # Signal successful dynamic asset injection directly onto the text stream
+                    if hasattr(config, "ui_console") and config.ui_console is not None:
+                        config.ui_console.append_log_signal.emit(
+                            f"[FILESYSTEM SWAP]: Seamlessly deployed fresh variation track for {wem_id}.wem"
+                        )
                     watcher.rearm(wem_id)
 
         except Exception as w_e:
@@ -100,5 +121,5 @@ def watch_wems(engine, config):
             print(f"DEBUG TOKEN = OPLOCK_WATCH_ERR >> Oplock stream error: {w_e} | ID: {token}")
             sleep(0.1)
 
-    # Clean release pass when the engine drops out
+    # release when the engine stops
     watcher.close()
