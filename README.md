@@ -25,7 +25,7 @@ Because the local pipeline generates variations ahead of time into a background 
 - **Fully converted to Kokoro ONNX** TTS processing is now faster, more efficient, and has both Male and Female base voices to choose from.
 - **Centralized Control Dashboard:** A graphical config interface to launch and quit the tool, customize player name, adjust multi-threaded look-ahead queues, or fine-tune processing effects.
 - **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely replaced by an included lightweight converter. No software accounts, corporate registration, or heavy background installations of programs or third party software are required. (LLM and TTS models still required)
-- **Pure-Python DSP Matrix Engine:** ffmpeg requirement and sub-process loops have been removed. Volume gain, sentence tempo stretchings, and other adjustments are now handled entirely in-memory via single-pass NumPy/SciPy matrix math.
+- **Pure-Python DSP Matrix Engine:** ffmpeg requirement and sub-process loops have been removed. Volume gain, sentence tempo stretchings, and other adjustments are now handled entirely in-memory via single-pass NumPy matrix math.
 - **Open-Source Audio Converter:** The installer retrieves the WEM converter from its separate project repository; its executable is not bundled in the Nexus source archive.
 - **Dedicated Update Panel:** Update through a top level panel for immediate user-initiated version checks and file updates.
 - **Stateful Quick Cache System:** Thread-isolated background queue managers to top up caches and intelligently handle file locks without interfering with Game.
