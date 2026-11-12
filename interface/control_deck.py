@@ -274,7 +274,7 @@ class ControlDeckDashboard(QMainWindow):
         close_everything_btn.clicked.connect(self.quit_application)
         btn_layout.addWidget(close_everything_btn)
 
-        # Push standard window options safely to the right-hand margin
+        # Push standard window options to the right-hand margin
         btn_layout.addStretch()
 
         cancel_btn = QPushButton("Cancel")
@@ -473,7 +473,7 @@ class ControlDeckDashboard(QMainWindow):
         panel_name, _, section = target.partition("/")
         matched_index = -1
 
-        # First, search for the target tab string safely
+        # search for the target tab string
         for index in range(self.notebook.count()):
             if self.notebook.tabText(index).casefold() == panel_name.casefold():
                 matched_index = index
@@ -485,13 +485,13 @@ class ControlDeckDashboard(QMainWindow):
             self.notebook.setCurrentIndex(matched_index)
 
             if panel is not None and section:
-                # Use getattr to dynamic-link the call, bypassing Pylance object restrictions completely!
+                # Use getattr to dynamic-link the call
                 request_func = getattr(panel, "request_settings", None)
                 if request_func is not None:
                     request_func(section)
             return
 
-        # Fallback: If no match was ever found, the code hits this clean boundary line safely
+        # Fallback: If no match was ever found, the code hits this boundary line
         QMessageBox.warning(
             self,
             "Settings unavailable",
@@ -516,7 +516,7 @@ class ControlDeckDashboard(QMainWindow):
                 self,
                 "Applied",
                 "Preferences were saved to the configuration files. "
-                "Restart the application to apply path changes.",
+                "Restart the application to apply any path changes.",
             )
         except Exception as e:
             message = debug_error_message(e, "Saving application preferences")

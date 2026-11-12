@@ -1,22 +1,22 @@
+# pipeline\dsv2wem_convert.py
 from pathlib import Path
 import subprocess
 
 def convert_to_wem(config, input_wav: Path, output_path: Path) -> Path:
     """
-    Natively encodes raw voice WAV outputs into true game-compliant
-    0xFFFF Wwise Vorbis streams via the local project assets.
-    Extracted completely out of Wwise Console SDK dependency limits.
+    encodes raw voice WAV outputs into game-compliant
+    Wwise Vorbis streams via the local project assets.
     """
-    # Grab the absolutely resolved tool path tracked by the configuration module
+    # Grab the resolved tool path tracked by the configuration module
     wav2wem_binary = getattr(config, "wav2wem_binary_path", None)
 
     if not wav2wem_binary or not wav2wem_binary.exists():
         raise RuntimeError(
-            f"DEBUG TOKEN = DSV2WEM_NF >> Standalone conversion asset missing at target location: {wav2wem_binary}. "
+            f"DEBUG TOKEN = DSV2WEMN_FND >> Standalone conversion asset missing at target location: {wav2wem_binary}. "
         )
 
-    # Build the direct, clean CLI argument array
-    # -q 4 maps variable bitrate parameters cleanly (~57kbps)
+    # Build the direct, CLI argument array
+    # -q 4 maps variable bitrate parameters (~57kbps)
     cmd = [
         str(wav2wem_binary),
         str(input_wav),
@@ -25,7 +25,7 @@ def convert_to_wem(config, input_wav: Path, output_path: Path) -> Path:
     ]
 
     try:
-        # Trigger the clean standalone execution loop in memory
+        # Trigger the standalone execution loop in memory
         subprocess.run(
             cmd,
             capture_output=True,

@@ -5,7 +5,7 @@ from pathlib import Path
 from PySide6.QtWidgets import QLabel, QVBoxLayout, QWidget
 
 def write_json_atomic(path: Path, data: dict) -> None:
-    """Safely serializes configuration dictionaries via an atomic file descriptor swap."""
+    """Serializes configuration dictionaries via file descriptor swap."""
     temporary_path = path.with_suffix(path.suffix + ".tmp")
     with temporary_path.open("w", encoding="utf-8") as file:
         json.dump(data, file, indent=4)
@@ -13,7 +13,7 @@ def write_json_atomic(path: Path, data: dict) -> None:
     os.replace(temporary_path, path)
 
 def build_card(title: str) -> tuple[QWidget, QVBoxLayout]:
-    """Generates a perfectly styled, dark-mode technical control container layout frame."""
+    """Generates a dark-mode technical control container layout frame."""
     card = QWidget()
     card.setStyleSheet("""
         QWidget {

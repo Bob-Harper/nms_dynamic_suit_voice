@@ -14,7 +14,7 @@ from interface.panels.widgets.buildcard import build_card
 
 
 class PathManagementWidget(QWidget):
-    PATH_FIELDS = (
+    PATH_FIELDS = ( # TODO: json this bitch in with the actual paths
         ("mod_dir", "No Man's Sky Mod Directory"),
         ("cache_root", "Cache and Temporary Storage Directory"),
         ("temp_wem_dir", "Temporary WEM Directory"),

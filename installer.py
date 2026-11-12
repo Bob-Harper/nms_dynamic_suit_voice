@@ -123,7 +123,7 @@ def validate_configuration_layer():
     if not llm_model.exists():
         print("LLM configuration target missing from workspace assets. Ready to download.")
 
-    print("Native JSON configuration profiles verified successfully.")
+    print("JSON configuration profiles verified successfully.")
 
 # -------------------------
 # Step: Install requirements
@@ -195,7 +195,7 @@ def download_model():
 
     print(f"Downloading model binary (approx 4.4 GB) to config location: {target_file}")
 
-    # Use the local environment's requests library cleanly inside the main process loop
+    # Use the local environment's requests library inside the main process loop
     import requests
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 
@@ -221,7 +221,7 @@ def download_model():
 # -------------------------
 # Step: Copy Mod Assets (Audio & Global Configs)
 # -------------------------
-def copy_starter_wems(): # also copies GCDEBUGOPTIONS.GLOBAL.EXML to ensure hotswap is enabled
+def copy_starter_wems():
     starter = Path("DYNAMIC_SUIT_VOICE/")
     steam = Path("C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/GAMEDATA/MODS/DYNAMIC_SUIT_VOICE/")
 
@@ -229,7 +229,7 @@ def copy_starter_wems(): # also copies GCDEBUGOPTIONS.GLOBAL.EXML to ensure hots
         print(f"Error: Source directory {starter} not found.")
         return
 
-    # copytree with dirs_exist_ok=True cleanly merges/updates the entire tree
+    # copytree with dirs_exist_ok=True merges/updates the entire tree
     try:
         shutil.copytree(starter, steam, dirs_exist_ok=True, ignore=shutil.ignore_patterns('desktop.ini', '*.tmp'))
         print("Mod folder assets and global configurations updated successfully.")
@@ -247,7 +247,6 @@ def warmup_tts():
         python_exe = Path(sys.executable)
 
     # Force the subprocess execution pass to bypass capture pipes
-    # This dumps Coqui's model table straight to the screen, completely preventing pipe deadlocks
     print("Pipeline: Initializing local audio synthesis arrays...")
 
     subprocess.run(
@@ -262,7 +261,6 @@ def warmup_tts():
 # -------------------------
 # Step: Grab GithubAction compiled decoupled wav2wem and ogg encoder
 # -------------------------
-
 def automate_audio_compiler_provisioning() -> bool:
     """
     provisions decoupled wav2wem and ogg encoder by pulling
@@ -286,7 +284,7 @@ def automate_audio_compiler_provisioning() -> bool:
     print(f"Pulling components to Target Destination: {target_fork_path}")
     print("\n")
 
-    # Safely purge any corrupted folder stubs before pulling into the repository
+    # Safely purge any corrupted folder stubs before pulling from the repository
     if target_fork_path.exists():
         try:
             shutil.rmtree(target_fork_path)
@@ -319,7 +317,7 @@ def automate_audio_compiler_provisioning() -> bool:
 
     except FileNotFoundError as error:
         print("\n[INSTALL LINK FAULT]: Git client environment not found on this workstation.")
-        print("Ensure Git is installed natively on your OS and registered in system environment paths.")
+        print("Ensure Git is installed on your OS and registered in system environment paths.")
         return False
     except subprocess.CalledProcessError as e:
         print(f"\n[INSTALL LINK FAULT]: Automated repository synchronization aborted by server.")
@@ -327,7 +325,7 @@ def automate_audio_compiler_provisioning() -> bool:
         return False
 
 # -------------------------
-# Step: Create Desktop Shortcuts (Pure Python via winshell - NO VBSCRIPT!)
+# Step: Create Desktop Shortcuts
 # -------------------------
 def create_shortcuts():
     import winshell
@@ -337,7 +335,6 @@ def create_shortcuts():
     desktop = Path(winshell.desktop())
     root_dir = Path.cwd().absolute()
 
-    # CHANGE THIS LINE: Use pythonw.exe for windowless apps!
     python_exe = root_dir / "venv/Scripts/pythonw.exe"
 
     shortcuts_to_build = [
@@ -425,7 +422,7 @@ def main():
     step("Initialize TTS model", warmup_tts)
     print("• TTS models: OK")
     step("Validate configuration matrix", validate_configuration_layer)
-    print("• Native JSON Config: OK")
+    print("• JSON Config: OK")
     step("Retrieve Encoder", automate_audio_compiler_provisioning)
     print("• Encoder Retrieval: OK")
     step("Create Desktop Shortcut", create_shortcuts)

@@ -49,7 +49,7 @@ class SystemPanel(QWidget):
         gate_layout.addStretch()
         self.pages.addWidget(self.gate_page)
 
-        # The System configuration book no longer contains the update widget!
+        # The System configuration book no longer contains the update widget
         self.settings_page = QTabWidget()
         self.cache_widget = CacheManagementWidget(self.config)
         self.runtime_widget = RuntimeManagementWidget(self.config)

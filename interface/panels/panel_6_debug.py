@@ -71,7 +71,7 @@ class DebugPanel(QWidget):
 
         entry_layout.addWidget(QLabel("Or Paste / Type Manual Code Entry:"))
         self.token_input = QLineEdit()
-        self.token_input.setPlaceholderText("Enter code (e.g. DSV2WEM_NF) or paste dynamic session token...")
+        self.token_input.setPlaceholderText("Enter code (e.g. DSV2WEMN_FND) or paste dynamic session token...")
         self.token_input.setStyleSheet("""
             QLineEdit {
                 background-color: #0c0c0e; border: 1px solid #1f2430; border-radius: 4px;
@@ -138,7 +138,7 @@ class DebugPanel(QWidget):
         sb_layout.setContentsMargins(0, 0, 0, 0)
         card_sb, layout_sb = build_card("Targeted Repair Deck")
 
-        self.desc_sb = QLabel("Awaiting operational query lookup. Matched configuration controls will cleanly embed themselves right here for safe adjustments.")
+        self.desc_sb = QLabel("Awaiting operational query lookup. Matched configuration controls will embed themselves here for adjustments.")
         self.desc_sb.setStyleSheet("color: #5c6773; font-size: 12px; border: none;")
         self.desc_sb.setWordWrap(True)
 
@@ -147,7 +147,7 @@ class DebugPanel(QWidget):
         sb_layout.addWidget(card_sb)
         self.widget_stack.addWidget(self.standby_page)
 
-        # Page Index 1: Paths Component Container
+        # Page Index 1
         self.path_page = QWidget()
         pr_layout = QVBoxLayout(self.path_page)
         pr_layout.setContentsMargins(0, 0, 0, 0)
@@ -155,7 +155,7 @@ class DebugPanel(QWidget):
         pr_layout.addWidget(self.shared_path_widget)
         self.widget_stack.addWidget(self.path_page)
 
-        # Page Index 2: Cache Component Container
+        # Page Index 2
         self.cache_page = QWidget()
         cc_layout = QVBoxLayout(self.cache_page)
         cc_layout.setContentsMargins(0, 0, 0, 0)
@@ -163,7 +163,7 @@ class DebugPanel(QWidget):
         cc_layout.addWidget(self.shared_cache_widget)
         self.widget_stack.addWidget(self.cache_page)
 
-        # Page Index 3: Runtime Component Container
+        # Page Index 3
         self.runtime_page = QWidget()
         rt_layout = QVBoxLayout(self.runtime_page)
         rt_layout.setContentsMargins(0, 0, 0, 0)
@@ -231,7 +231,7 @@ class DebugPanel(QWidget):
                             continue
 
                 # Reverse the list so the most recent error is immediately sitting right at the top
-                for display_text, token in reversed(scanned_items[-20:]): # Keep the last 20 reports clean
+                for display_text, token in reversed(scanned_items[-20:]): # Keep the last 20 reports
                     self.history_combo.addItem(display_text, token)
             except Exception as e:
                 print(f"[DEBUG ENVIRONMENT]: Dropdown refresh failed: {e}", file=sys.stderr)
@@ -240,7 +240,7 @@ class DebugPanel(QWidget):
 
 
     def _on_history_selection_changed(self, index):
-        """Fires the exact second the user clicks an item in the combo dropdown list."""
+        """Fires when the user clicks an item in the combo dropdown list."""
         if index <= 0:
             return
         # Grab the token data attached to the selection item slot
@@ -251,7 +251,7 @@ class DebugPanel(QWidget):
             self._execute_matrix_lookup()
 
     def _execute_matrix_lookup(self):
-        """Processes known static list checks first, then falls back to session log file parsing automatically."""
+        """Processes known static list checks first, then falls back to session log file parsing."""
         code = self.token_input.text().strip().upper()
         if not code:
             self.report_display.setText(">> Input field blank. Provide an error signature to execute lookup cycles.")
@@ -340,10 +340,10 @@ class DebugPanel(QWidget):
             self.shared_runtime_widget.gather_settings()
 
     def _open_github_issues_browser(self):
-        """Launches the default system web browser to point straight to the repository help tracking page."""
+        """Launches the default system web browser straight to the repository help tracking page."""
         import webbrowser
 
-        # Pull the repository URL string straight out of your live config object variables
+        # Pull the repository URL string straight out of config object variables
         updates_cfg = self.config.environment.get("updates", {})
 
         try:

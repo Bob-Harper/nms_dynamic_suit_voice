@@ -67,10 +67,11 @@ def reword_phrase(config, wem_id_r,
 def postprocess_for_tts(text: str) -> str:
     # Strip all non-ASCII characters first
     text = text.encode("ascii", "ignore").decode()
-    # Existing cleanup
+    # Existing cleanup because this is (believe it or not, when seeing all the fixes) easier than trying to prompt smaller models for clean text to send to tts
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Strip Thinking
     text = re.sub(r"<think>\s*", "", text)  # Strip rogue opening think tags with no matching close
-    text = re.sub(r'\bfunds\b', 'Units', text, flags=re.IGNORECASE)  # In-Game Currency for immersion
+    text = re.sub(r'\bfunds\b', 'Units', text, flags=re.IGNORECASE)  # Units is sometimes interpreted as Military units, or measurements
+
     text = re.sub(r"[—–]", ", ", text)  # convert em-dash / en-dash
     text = re.sub(r"\(es\)", "es", text)  # fix pluralization artifact
     text = re.sub(r"-ing", "ing", text)  # remove hyphenation from suffix

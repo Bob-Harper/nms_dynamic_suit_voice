@@ -32,6 +32,7 @@ class SuitVoiceConfig:
         # Anchor to project root (parent of pipeline/)
         root_dir = Path(__file__).parent.parent
         config_dir = root_dir / "config"
+
         self.project_root = root_dir
         # Load file structures
         self.default_environment = load_json(config_dir / "default_environment_config.json")
@@ -39,19 +40,19 @@ class SuitVoiceConfig:
         self.default_customization = load_json(config_dir / "default_customization.json")
         self.user_customization = load_json(config_dir / "user_customization.json")
 
-        # --- CENTRALIZED PROJECT METADATA ---
+        # --- PROJECT METADATA ---
         project_meta = self.environment.get("project", {})
         v_num = project_meta.get("version", "Something")
         v_major = project_meta.get("release_major", "Went")
         v_minor = project_meta.get("release_minor", "Wrong")
-        self.project_url = project_meta.get("base_url", "https://github.com/Bob-Harper/nms_dynamic_suit_voice")
-        support_path = project_meta.get("support", "issues")
-        # Cleanly join the base repository link with the support subdirectory target
+        self.project_url = project_meta.get("base_url")
+        support_path = project_meta.get("support")
+        # join the base repository link with the support subdirectory target
         self.support_url = f"{self.project_url.rstrip('/')}/{support_path}"
         # Compiles to schema example: "v1.2.2 (Unchained.QT)"
         self.version_signature = f"v{v_num} ({v_major}.{v_minor})"
 
-        # Merge defaults with custom user tweaks cleanly
+        # Merge defaults with custom user values
         self.customization = deep_merge(
             self.default_customization,
             self.user_customization
@@ -59,9 +60,9 @@ class SuitVoiceConfig:
 
         # --- RUNTIME SETTINGS ---
         runtime = self.environment.get("runtime", {})
-        self.check_interval = float(runtime.get("check_interval", 0.1))
-        self.max_session_lines = int(runtime.get("max_session_lines", 25))
-        self.quick_cache_max = int(runtime.get("quick_cache_max", 16))
+        self.check_interval = float(runtime.get("check_interval"))
+        self.max_session_lines = int(runtime.get("max_session_lines"))
+        self.quick_cache_max = int(runtime.get("quick_cache_max"))
 
         # ====================================================
         # CORE FILESYSTEM PATHS (From environment_config.json -> "paths")
@@ -75,14 +76,14 @@ class SuitVoiceConfig:
         icon_path_obj = self.resolve_json_path(paths.get("icon_image"), root_dir, must_exist=True)
         self.icon_image = str(icon_path_obj)
 
-        # Engine Cache Locations (Will be auto-provisioned safely below)
+        # Engine Cache Locations (Will be auto-provisioned below)
         self.temp_wem_dir = self.resolve_json_path(paths.get("temp_wem_dir"), root_dir, must_exist=False)
         self.temp_wav_dir = self.resolve_json_path(paths.get("temp_wav_dir"), root_dir, must_exist=False)
         self.quick_cache_dir = self.resolve_json_path(paths.get("quick_cache_dir"), root_dir, must_exist=False)
 
         # Logging for Debug interface
         self.debug_reports_path = self.resolve_json_path(
-            paths.get("debug_reports_label", "logs/debug_reports.jsonl"),
+            paths.get("debug_reports_label"),
             root_dir,
             must_exist=False
         )
@@ -90,13 +91,13 @@ class SuitVoiceConfig:
         # Window platform subprocess flags
         self.create_no_window = 0x08000000 if sys.platform == "win32" else 0
 
-        # Enforce workspace directories (Safe loop: all paths are strict non-nullable Path types)
+        # Enforce workspace directories (all paths are strict non-nullable Path types to placate pylance)
         for d in [self.temp_wem_dir, self.temp_wav_dir, self.quick_cache_dir]:
             d.mkdir(parents=True, exist_ok=True)
 
         # --- PROMPT ASSETS & FILES ---
         prompting_config_path = self.resolve_json_path(
-            paths.get("llm_prompting_config", "data/llm_prompting.json"),
+            paths.get("llm_prompting_config"),
             root_dir,
             must_exist=True
         )
@@ -122,25 +123,25 @@ class SuitVoiceConfig:
 
         # --- COMBAT / CATEGORY METRIC SETTING ---
         combat_cfg = self.llm_prompting.get("combat", {})
-        self.milcat_enable_reasoning = combat_cfg.get("allow_reasoning", True)
+        self.milcat_enable_reasoning = combat_cfg.get("allow_reasoning")
         self.mil_cat = combat_cfg.get("special_categories", [])
 
         labels = self.llm_prompting.get("category_labels", {})
-        self.units_received = labels.get("units_received", "Increased Funds")
-        self.units_insufficient = labels.get("units_insufficient", "Insufficient Funds")
+        self.units_received = labels.get("units_received")
+        self.units_insufficient = labels.get("units_insufficient")
 
         # --- USER PROFILE & CUSTOMIZATION ---
-        self.player_name = self.customization.get("player_name", "Interloper")
+        self.player_name = self.customization.get("player_name")
         phrase_settings = self.customization.get("phrase_settings", {})
-        # --- Inside your Config Class Initialization ---
+
         self.promptdata_path = self.resolve_json_path(files.get("prompt_data"), root_dir, must_exist=True)
         raw_prompt_json = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
 
         # Create structured descriptions for the Qt control deck
         self.ui_promptdata = raw_prompt_json
 
-        # Flatten the dictionary dynamically in memory for the backend AI engine!
-        # This keeps the rest of your text generation loops 100% stable and untouched.
+        # Flatten the dictionary in memory for the backend AI engine
+        # This keeps the rest of the text generation loops stable.
         self.promptdata = {
             "wordiness": {
                 key: (val["prompt"] if isinstance(val, dict) else val)
@@ -152,10 +153,8 @@ class SuitVoiceConfig:
             }
         }
 
-        # Keep your existing state trackers exactly as they are
-        self.current_tone = phrase_settings.get("tone", "Standard")
-        self.current_wordiness = phrase_settings.get("wordiness", "Standard")
-
+        self.current_tone = phrase_settings.get("tone")
+        self.current_wordiness = phrase_settings.get("wordiness")
 
         # Audio effect mapping dict for processing pipeline reference
         self.voice_effects = self.customization.get("voice_effects", {})
@@ -165,9 +164,9 @@ class SuitVoiceConfig:
         # ====================================================
         external_tools = self.environment.get("external_tools", {})
 
-        # Resolve the unified assets installation directory folder path cleanly
+        # Resolve the unified assets installation directory folder path
         self.wav2wem_assets_dir = self.resolve_json_path(
-            external_tools.get("wav2wem_assets", "assets/wav2wem/assets/"),
+            external_tools.get("wav2wem_assets"),
             root_dir,
             must_exist=True
         )
@@ -180,18 +179,22 @@ class SuitVoiceConfig:
         model_url = self.environment.get("model_url", {})
 
         # Wrapping this in Path()
-        self.tts_base_dir = Path(paths.get("tts_base_dir", "assets/weights").strip('"'))
+        self.tts_base_dir = Path(paths.get("tts_base_dir").strip('"'))
 
         # --- TTS Model ---
         self.tts_model_name = models.get("tts_model")
         if not self.tts_model_name:
             raise ValueError("DEBUG TOKEN = TTSMODEL_SIG >> tts_model token signature missing inside configuration targets.")
 
-        self.tts_voice_bin = self.tts_base_dir / models.get("tts_voice_bin", "voices-v1.0.bin")
-        self.tts_model = self.tts_base_dir / models.get("tts_model", "kokoro-v1.0.fp16.onnx")
+        self.tts_voice_bin = self.tts_base_dir / models.get("tts_voice_bin")
+        self.tts_model = self.tts_base_dir / models.get("tts_model")
 
         # Centralize core network release endpoints for download passes later
-        self.tts_base_url = model_url.get("tts_base_url", "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1")
+        self.tts_base_url = model_url.get("tts_base_url")
+
+        data_dir = root_dir / "data"
+        self.ttm_model_data = load_json(data_dir / "ttm_models.json")
+        self.ttm_voices_data = load_json(data_dir / "ttm_voices.json")
 
         # Llama Engine Setup
         self.llm_model = str(self.resolve_json_path(models.get("llm_model"), root_dir, must_exist=True))
@@ -217,28 +220,28 @@ class SuitVoiceConfig:
 
     def resolve_json_path(self, path_str: str, root: Path, must_exist=True) -> Path:
         if not path_str:
-            raise ValueError("DEBUG TOKEN = JSONCONFIG_NR >> Required configuration path entry is missing in JSON targets.")
+            raise ValueError("DEBUG TOKEN = JSONCNFIG_NR >> Required configuration path entry is missing in JSON targets.")
 
         p = Path(path_str.strip('"'))
         if not p.is_absolute():
             p = root / p
 
         if must_exist and not p.exists():
-            raise FileNotFoundError(f"DEBUG TOKEN = JSONCONFIG_NP >> Configuration file element targets a missing path reference: {p}")
+            raise FileNotFoundError(f"DEBUG TOKEN = JSONCONFG_NP >> Configuration file element targets a missing path reference: {p}")
         return p
 
     @staticmethod
     def get_version_signature() -> str:
         """
         Globally accessible static hook. Allows the UI launcher, README tools,
-        or update checkers to grab the single source of truth version instantly.
+        or update checkers to grab the single source of truth version.
         """
         try:
             config_dir = Path(__file__).parent.parent / "config"
             with open(config_dir / "environment_config.json", "r", encoding="utf-8") as f:
                 env = json.load(f)
             meta = env.get("project", {})
-            return f"v{meta.get('version', 'Something')} ({meta.get('release_major', 'Went')}.{meta.get('release_minor', 'Wrong')})"
+            return f"v{meta.get('version')} ({meta.get('release_major')}.{meta.get('release_minor')})"
         except Exception as error:
             token = record_exception(error, "Reading the configured application version")
             return f"Configuration version could not be read. DEBUG TOKEN = {token}"

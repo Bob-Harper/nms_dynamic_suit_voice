@@ -12,12 +12,9 @@ if str(project_root) not in sys.path:
 
 from .debug_support import install_exception_hooks, record_exception
 
-# Force Python's warnings system to ignore the deprecated pkg_resources warning
-if not sys.warnoptions:
-    warnings.filterwarnings("ignore", category=UserWarning, module="jieba")
 
 def verify_file_integrity(file_path: Path, expected_hash: str) -> bool:
-    """Computes SHA256 of local file block to ensure absolute integrity."""
+    """Computes SHA256 of local file block to ensure integrity."""
     if not file_path.exists():
         return False
     sha256_hash = hashlib.sha256()
@@ -53,7 +50,7 @@ def main():
         print(f"ERROR: {error}\nDEBUG TOKEN = {token}")
         sys.exit(1)
 
-    # 2. Extract configuration fields dynamically out of the JSON profile
+    # 2. Extract configuration fields out of the JSON profile
     try:
         with open(env_config_path, "r", encoding="utf-8") as f:
             env_data = json.load(f)
@@ -87,32 +84,32 @@ def main():
     model_path = weights_dir / "kokoro-v1.0.fp16.onnx"
     voices_path = weights_dir / "voices-v1.0.bin"
 
-    # TRUE MANIFEST SPECIFICATIONS: Cryptographic targets extracted directly from the release deck
+    # TRUE MANIFEST SPECIFICATIONS: Cryptographic targets extracted directly from the release details
     MODEL_SHA256 = "f3a290d384fbb27966d462905c71a46cef9e5fd00516b40df32a0b4afe77ac96"
     VOICES_SHA256 = "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d"  #
 
     model_url = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/kokoro-v1.0.fp16.onnx"
     voices_url = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/voices-v1.0.bin"
 
-    # 4. Fire the synthesis compilation warmup safely using the modern Kokoro engine
+    # 4. Fire the synthesis compilation warmup using the Kokoro engine
     try:
         from kokoro_onnx import Kokoro
         import soundfile as sf
         import onnxruntime as ort
 
-        # 1. Verify or acquire the int8 ONNX model graph structure
+        # 1. Verify or acquire the int8 ONNX model
         if not verify_file_integrity(model_path, MODEL_SHA256):
-            print("Pipeline: Local voice model files missing or corrupt. Acquiring model graph weights automatically...")
+            print("Pipeline: Local voice model files missing or corrupt. Acquiring model from source")
             download_asset_stream(model_url, model_path)
             if not verify_file_integrity(model_path, MODEL_SHA256):
-                raise ValueError("Downloaded model graph failed cryptographic SHA256 signature verification loop.")
+                raise ValueError("Downloaded model failed SHA256 signature verification loop.")
 
-        # 2. Verify or acquire the multi-language voice map array binary
+        # 2. Verify or acquire the voice map binary
         if not verify_file_integrity(voices_path, VOICES_SHA256):
-            print("Pipeline: Voice library profiles missing or corrupt. Acquiring array assets automatically...")
+            print("Pipeline: Voice library profiles missing or corrupt. Acquiring binary from source")
             download_asset_stream(voices_url, voices_path)
             if not verify_file_integrity(voices_path, VOICES_SHA256):
-                raise ValueError("Downloaded voice profile database failed cryptographic SHA256 signature verification loop.")
+                raise ValueError("Downloaded voice binary failed SHA256 signature verification loop.")
 
         print("Enforcing strict local path injection...")
 
@@ -125,13 +122,13 @@ def main():
         )
         final_wav = temp_wav_dir / "warmup.wav"
 
-        # Generate the raw audio floats array instantly out of the local ONNX model
+        # Generate the raw audio floats array out of the local ONNX model
         samples, sample_rate = tts_model.create(test_text, voice="am_adam", speed=1.0)
 
-        # Write the audio output array straight to disk as a clean WAV asset
+        # Write the audio output array straight to disk as a WAV asset
         sf.write(str(final_wav), samples, sample_rate)
 
-        print(f"TTS warmup complete. Verification test file generated safely: {final_wav}")
+        print(f"TTS warmup complete. Verification test file generated: {final_wav}")
 
     except Exception as e:
         token = record_exception(e, "Downloading or compiling the TTS model during setup")

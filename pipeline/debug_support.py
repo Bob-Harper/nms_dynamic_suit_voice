@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from PySide6.QtGui import QGuiApplication
 
+# TODO isnt root defined in config?
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEBUG_REPORTS_PATH = PROJECT_ROOT / "logs" / "debug_reports.jsonl"
 _REPORT_LOCK = threading.Lock()

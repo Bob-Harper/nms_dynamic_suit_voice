@@ -6,8 +6,7 @@ import csv
 
 config = SuitVoiceConfig()
 qce = QuickCacheEngine(config)
-# === Paste your ID list here ===
-# Modern JSON sweep utilizing your pre-loaded configuration map
+# JSON sweep utilizing configuration map
 wem_ids_raw = []
 for wem_id, data in config.intent_map.items():
     if data.get("Used", "").strip().lower() == "yes":
@@ -37,8 +36,6 @@ def fill_cache_for_ids(wem_ids, max_count=None):
         for i in range(missing_count):
             t0 = time()
             qce.enqueue_job(qce._replacement_wrapper, wem_id, wem_dir)
-            #    def _replacement_wrapper(self, config, wem_id: str, wem_dir: Path):
-
 
 if __name__ == "__main__":
     fill_cache_for_ids(wem_ids_raw)

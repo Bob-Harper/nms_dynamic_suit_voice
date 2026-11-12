@@ -35,7 +35,7 @@ Because the local pipeline generates variations ahead of time into a background 
 ### Persistent User Configuration Matrix
 Profile and voice customizations are saved to `config/user_customization.json`. System settings such as paths, cache limits, and runtime attributes are saved in `config/environment_config.json`.  These settings will persist through updates.  The first time install ships with a set of default files for both to ensure values are included for initial startup, and as backups should the customized configuration files become unuseable for any reason.
 
-- **First-Time Installation:** If the user configurated files do not exist on your drive, the automated setup script will initialize them with default values cleanly.
+- **First-Time Installation:** If the user configurated files do not exist on your drive, the automated setup script will initialize them with default values.
 - **Upgrading the Mod:** If the custom settings files already exist, the engine boundaries will completely shield them from being touched.
 - **Power-User Manipulation:** These files can be edited directly with a plain-text editor. Be careful.
 
@@ -68,7 +68,7 @@ py -3.11 installer.py
 Choose **Automatic Mode** for a streamlined setup, or run the installer steps individually. The installer creates its isolated `venv`, installs dependencies, prepares the local assets, and creates desktop shortcuts.
 
 ### Launching the DSV Control Deck
-Double-click the generated desktop shortcut to open the unified Qt control deck. Use **ENGAGE AI CORE** to start monitoring your game directory. Closing the window with X hides it in the system tray; choose **Show Control Deck** to reopen it, or click **CLOSE EVERYTHING** on the bottom left of the main interface to shut down all processes, clear handles, and kill the application cleanly. You can also cleanly close everything with a dedicated button within the opene interface window.
+Double-click the generated desktop shortcut to open the unified Qt control deck. Use **ENGAGE AI CORE** to start monitoring your game directory. Closing the window with X hides it in the system tray; choose **Show Control Deck** to reopen it, or click **CLOSE EVERYTHING** on the bottom left of the main interface to shut down all processes, clear handles, and kill the application. You can also close everything with a dedicated button within the opene interface window.
 
 Configure your **Iteration Designation**, audio presets, and system settings across the layout slots without editing source code. **Save & Minimize** saves settings and hides the window in the tray; **Apply Changes** saves while leaving the control deck open.
 

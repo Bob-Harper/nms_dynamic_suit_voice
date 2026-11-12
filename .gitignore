@@ -24,3 +24,4 @@ config/environment_config.json
 
 # Debugging dir for specific issues regarding hotswappable voice files, uses it's own separate file
 DYNAMIC_SUIT_VOICE/GLOBALS
+onnxmodels.txt

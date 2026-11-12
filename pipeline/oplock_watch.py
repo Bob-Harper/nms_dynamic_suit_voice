@@ -1,6 +1,8 @@
 # engine/oplock_watch.py
 """Level-1 oplock play detector: game plays leave no atime, USN-journal or directory-event
-traces, but their opens still break our oplocks, which names the exact file that got played."""
+traces, but their opens still break oplocks, which names the exact file that got played.
+Note to self: Specific Purpose values and data.  Do Not Extract to Json unless there is a real benefit.
+"""
 import ctypes
 import ctypes.wintypes as wt
 import threading

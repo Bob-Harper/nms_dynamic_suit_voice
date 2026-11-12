@@ -15,7 +15,7 @@
       ],
       "settings_target": "Models"
     },
-    "JSONCONFIG_NR": {
+    "JSONCNFIG_NR": {
       "title": "A configured path could not be resolved",
       "summary": "A path value required by the application is missing or could not be found.",
       "likely_causes": [
@@ -30,7 +30,7 @@
       ],
       "settings_target": "System/Paths"
     },
-    "JSONCONFIG_NP": {
+    "JSONCONFG_NP": {
       "title": "A configuration path is invalid",
       "summary": "A configured path does not point to a usable location.",
       "likely_causes": [
@@ -45,7 +45,7 @@
       ],
       "settings_target": "System/Paths"
     },
-    "DSV2WEM_NF": {
+    "DSV2WEMN_FND": {
       "title": "The WEM conversion tool is unavailable",
       "summary": "The required audio converter could not be located.",
       "likely_causes": [
@@ -74,7 +74,7 @@
       ],
       "settings_target": "System/Paths"
     },
-    "LLMINFERENCE_FAIL": {
+    "LLMINFE_FAIL": {
       "title": "Voice generation failed",
       "summary": "The speech model could not generate audio after its retry attempts.",
       "likely_causes": [
@@ -90,7 +90,7 @@
       "settings_target": "System/Paths"
 
     },
-    "TRAYWATCHER_EXC": {
+    "TRAYWTCH_EXC": {
       "title": "The background watcher encountered an error",
       "summary": "The watcher failed while processing an item. Other items may continue to be monitored.",
       "likely_causes": [

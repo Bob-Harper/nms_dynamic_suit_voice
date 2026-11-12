@@ -44,7 +44,7 @@ Short answer: Likely. Maybe? NO IDEA!
 
 Longer answer: All of my development and testing is on Windows 11. Python itself is portable, and the core generation logic ("swap out file, generate a new one, cache it for next time") is straightforward.
 
-However, getting the watcher to reliably *detect* the exact microsecond the game accesses a `.wem` file in the mods folder is OS-specific. Standard file-access timestamps (`st_atime`) don't work reliably on modern drives, so this project uses native Windows Kernel Level-1 Oplocks (`CreateFileW` / `DeviceIoControl`) to catch the game opening the file. Porting that tripwire mechanism to Linux/Proton or macOS will require more knowledgeable heads than mine. Check the Discussions tab on the Nexus Mods page—there is already some conversation happening around this exact topic.
+However, getting the watcher to reliably *detect* the exact microsecond the game accesses a `.wem` file in the mods folder is OS-specific. Standard file-access timestamps (`st_atime`) don't work reliably on modern drives, so this project uses Windows Kernel Level-1 Oplocks (`CreateFileW` / `DeviceIoControl`) to catch the game opening the file. Porting that tripwire mechanism to Linux/Proton or macOS will require more knowledgeable heads than mine. Check the Discussions tab on the Nexus Mods page—there is already some conversation happening around this exact topic.
 
 ## Can I use a different LLM inference pipeline? I would rather use (insert your favourite LLM package here)
 Short answer: Yes.
@@ -56,7 +56,7 @@ Each portion of the pipeline is modular and self-contained. As long as your upda
 Right now, I am sticking with a single local GGUF implementation to keep things simple, though multi-model management and per-model prompt profiles are on the roadmap. If anyone wants to add support for other backends, go for it—and if I still have old archive snippets for Ollama, LM Studio, or Transformers lying around, just ask and I'll share what I have.
 
 ## Can I use a different voice generation model/package/online API/whatever? I hate the way this one sounds.
-First, check the **Audio Modifiers** and **Models** tabs inside the DSV Manager! The mod now uses **Kokoro-82M (ONNX)**, which boots into memory in under 2 seconds and comes with 28 distinct built-in English voice identities (`am_adam`, `af_bella`, `bf_emma`, etc.) plus decoupled real-time DSP sliders for pitch, pacing, throat size (formants), and robotic ring modulation. You can dial in anything from a clinical ship computer to a paranoid, angry space drill sergeant without downloading anything external.
+First, check the **Audio Modifiers** and **Models** tabs inside the DSV Manager. The mod now uses **Kokoro-82M (ONNX)**, which loads  into memory very quickly and comes with 28 distinct built-in English voice identities (`am_adam`, `af_bella`, `bf_emma`, etc.) plus decoupled real-time DSP sliders for pitch, pacing, throat size (formants), and robotic ring modulation. You can dial in anything from a clinical ship computer to a paranoid, angry space drill sergeant without downloading anything external.
 
 If you *still* want to rip it out and use a completely different TTS package or online API, the same modularity rule applies: swap out the generation step in `tts_utils.py`, accept the text string, and output a valid 44.1kHz `.wav` file for the converter to pick up.
 

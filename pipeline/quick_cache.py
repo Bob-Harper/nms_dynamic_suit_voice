@@ -22,7 +22,7 @@ class QuickCacheEngine:
         self._jobs_lock = threading.Lock()
 
     def start_worker(self):
-        """Spins up the background consumer loop thread cleanly if inactive."""
+        """Spins up the background consumer loop thread if inactive."""
         if self._worker_thread is None or not self._worker_thread.is_alive():
             self._worker_thread = threading.Thread(target=self._worker_loop, daemon=True)
             self._worker_thread.start()
@@ -32,12 +32,11 @@ class QuickCacheEngine:
         self.start_worker()
 
         if func == self._replacement_wrapper:
-            # FIXED ARGUMENT INDEX: Pull the string token directly out of the args tuple
             wem_id = str(args[0]).strip()
             with self._jobs_lock:
                 self._active_jobs_count[wem_id] = self._active_jobs_count.get(wem_id, 0) + 1
 
-            # Direct string emission pipes telemetry straight to your console layout view
+            # Direct string emission pipes telemetry straight to console layout view
             if hasattr(self.config, "ui_console") and self.config.ui_console is not None:
                 self.config.ui_console.append_log_signal.emit(
                     f"[CACHE REPLENISH]: Queueing up look-ahead voice generation job for ID: {wem_id}"
@@ -46,7 +45,7 @@ class QuickCacheEngine:
         self._job_queue.put((func, args, kwargs))
 
     def _worker_loop(self):
-        """Background thread loop consuming raw voice line generation tasks safely."""
+        """Background thread loop consuming raw voice line generation tasks."""
         while True:
             func, args, kwargs = self._job_queue.get()
             try:
@@ -64,18 +63,17 @@ class QuickCacheEngine:
                 )
             finally:
                 if func == self._replacement_wrapper:
-                    # FIXED ARGUMENT INDEX: Match the clean wem_id string tracking token precisely
                     wem_id = str(args[0]).strip()
                     with self._jobs_lock:
                         if wem_id in self._active_jobs_count:
                             self._active_jobs_count[wem_id] = max(0, self._active_jobs_count[wem_id] - 1)
                 self._job_queue.task_done()
     def _replacement_wrapper(self, wem_id: str, wem_dir: Path, *args):
-        """Private interface bridge execution stub executing the real-time voice line generation engine."""
+        """Private interface bridge execution stub executing the voice line generation engine."""
         generate_replacement_voice_line(self.config, wem_id, wem_dir)
 
     def move_cachedfile_to_mod_dir(self, src_path: Path, mod_dir: Path, wem_id: str) -> Path | None:
-        """Safely moves an available compiled WEM asset directly into the No Man's Sky mods directory."""
+        """moves an available compiled WEM asset directly into the No Man's Sky mods directory."""
         mod_dir.mkdir(parents=True, exist_ok=True)
         dst_path = mod_dir / f"{wem_id}.wem"
 
@@ -96,7 +94,7 @@ class QuickCacheEngine:
                 sleep_delay = min(0.5, 0.05 * (2 ** min(attempt, 4)))
                 sleep(sleep_delay)
     def update_access_time_to_match_newfile(self, file_path: Path, access_times: dict):
-        """Updates your tracking dictionary with the file's exact filesystem access epoch timestamp."""
+        """Updates tracking dictionary with the file's access epoch timestamp."""
         if file_path.exists():
             access_times[file_path.stem] = file_path.stat().st_atime
 

@@ -3,14 +3,14 @@ from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTextEdit, QPushButton
 
 class ConsolePanel(QWidget):
-    # Native PySide6 signal to marshal background string lines safely to the main GUI thread
+    # PySide6 signal to marshal background string lines to the main UI thread
     log_signal = Signal(str)
 
     def __init__(self, config):
         super().__init__()
         self.config = config
 
-        # Connect internal signal handling loops safely across thread boundaries
+        # Connect internal signal handling loops across thread boundaries
         self.log_signal.connect(self._append_console_log)
 
         self._build_ui()

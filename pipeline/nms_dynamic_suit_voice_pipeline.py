@@ -5,13 +5,12 @@ import win32event
 from time import sleep
 from pathlib import Path
 
-# Bring in your explicit project dependencies cleanly
 from .quick_cache import QuickCacheEngine
 from .debug_support import record_exception
 
 def watch_wems(engine, config, console_pipe=None):
 
-    # --- PHASE 1: Initialize Modern Kokoro-TTS Engine ---
+    # --- PHASE 1: Initialize Kokoro-TTS Engine ---
     if not engine.running:
         return
     engine.update_status("Loading Kokoro TTS Engine...")
@@ -53,7 +52,7 @@ def watch_wems(engine, config, console_pipe=None):
     if not mod_dir or not mod_dir.exists():
         raise FileNotFoundError(f"Mod directory does not exist: {mod_dir}")
 
-    # --- PHASE 4: Initialization Complete, Launch Active Oplock Watch ---
+    # --- PHASE 4: Initialization Complete, Launch Oplock Watch ---
     engine.update_status("Ready", is_ready=True)
 
     from .oplock_watch import OplockWatch
@@ -64,7 +63,7 @@ def watch_wems(engine, config, console_pipe=None):
         # config.intent_map holds loaded nms_suit_voice_transcripts.json data dictionary
         active_voice_profiles = config.intent_map
 
-        # Filter the dictionary keys down strictly to assets explicitly marked as Used == Yes
+        # Filter the dictionary keys down to assets explicitly marked as Used == Yes
         frequently_used_ids = {
             wem_id for wem_id, metadata in active_voice_profiles.items()
             if metadata.get("Used") == "Yes"
@@ -91,7 +90,7 @@ def watch_wems(engine, config, console_pipe=None):
             broken_ids = watcher.poll_ack(timeout=0.05)
 
             for wem_id in broken_ids:
-                # Thread-safe log dispatch pipes kernel events straight onto the console tab view
+                # Thread-safe log dispatch pipes kernel events straight onto the console tab view  ## BROKEN, TRYING AGAIN LATER
                 if hasattr(config, "ui_console") and config.ui_console is not None:
                     config.ui_console.append_log_signal.emit(
                         f"[KERNEL INTERCEPT]: Oplock tripwire snapped on file track: {wem_id}.wem"

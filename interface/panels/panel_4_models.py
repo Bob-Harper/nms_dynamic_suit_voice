@@ -25,31 +25,9 @@ class ModelsPanel(QWidget):
         self.selected_model_key = None
         self.is_downloading = False
 
-        # CENTRALIZED MODEL WEIGHTS SPECIFICATION DATA TABLE:
-        # Maps out your target variations and exact cryptographic file tracking properties
-        self.model_catalog = {
-            "kokoro-v1.0.int8.onnx": {
-                "name": "Kokoro English v1.0 (8-bit Quantized)",
-                "size_label": "109 MB",
-                "sha256": "ae315a79b623f244700e4afb9246c46a26066782e049ba174bf3ba433970ee9c",
-                "voice_bin": "voices-v1.0.bin",
-                "note": "Ultra-lightweight compressed model. Delivers blistering fast processing speeds with minimal memory usage. Perfect for resource-constrained systems."
-            },
-            "kokoro-v1.0.fp16.onnx": {
-                "name": "Kokoro English v1.0 (16-bit Float Precision)",
-                "size_label": "156 MB",
-                "sha256": "f3a290d384fbb27966d462905c71a46cef9e5fd00516b40df32a0b4afe77ac96",
-                "voice_bin": "voices-v1.0.bin",
-                "note": "High-fidelity balanced model. Maintains a 0.999 correlation against full precision files while saving half the disk storage overhead."
-            },
-            "kokoro-v1.0.onnx": {
-                "name": "Kokoro English v1.0 (32-bit Full Precision)",
-                "size_label": "310 MB",
-                "sha256": "beb0d1848dee9a49da392cc3df26958d46cfa35d321edf434f52949153f0df3a",
-                "voice_bin": "voices-v1.0.bin",
-                "note": "Reference quality full precision model. Highest uncompressed vector fidelity for speech processing streams."
-            }
-        }
+        # Pull model catalog specifications directly from centralized JSON data
+        model_data = getattr(self.config, "ttm_model_data", {})
+        self.model_catalog = model_data.get("models", {})
         self.list_index_keys = list(self.model_catalog.keys())
 
         self.catalog_refresh_signal.connect(self._refresh_catalog_list_display)
@@ -196,7 +174,7 @@ class ModelsPanel(QWidget):
         master_layout.addWidget(right_pane)
     def _get_model_storage_metrics(self, model_key: str) -> tuple[Path, str]:
         """Calculates precise physical file paths using the structural JSON config base definitions."""
-        # Dynamically pull the path variable straight out of your centralized config mapping property!
+        # Dynamically pull the path variable straight out of the centralized config
         weights_dir = Path(self.config.tts_base_dir)
         target_file = weights_dir / model_key
 
@@ -206,7 +184,7 @@ class ModelsPanel(QWidget):
         return target_file, "0.0 B (Not Instantiated Locally)"
 
     def _calculate_global_storage_consumption(self):
-        """Scans your local assets directory to sum cumulative model allocations natively."""
+        """Scans your local assets directory to sum cumulative model allocations."""
         weights_dir = Path(self.config.tts_base_dir)
         if not weights_dir.exists():
             self.global_storage_label.setText("Total Storage Used by All Models: 0.0 B")
@@ -228,11 +206,11 @@ class ModelsPanel(QWidget):
         return target_file.exists() and target_file.stat().st_size > 1000000
     @Slot()
     def _refresh_catalog_list_display(self):
-        """Re-enumerates the resolution list widget cleanly, tracking active configuration flags."""
+        """Re-enumerates the resolution list widget, tracking active configuration flags."""
         self.model_list_widget.clear()
         self._calculate_global_storage_consumption()
 
-        # Read your live model string out of your merged centralized customization maps!
+        # Read the live model string out of the merged centralized customization maps
         current_active = self.config.environment.get("models", {}).get("tts_model", "kokoro-v1.0.fp16.onnx")
 
         for key in self.list_index_keys:
@@ -314,7 +292,7 @@ class ModelsPanel(QWidget):
         if not self.selected_model_key:
             return
         try:
-            # Safely write the runtime model selection back to the environment configuration map
+            # Wwrite the runtime model selection back to the environment configuration map
             self.config.environment["models"]["tts_model"] = self.selected_model_key
 
             # Match the structural database binary profile link dynamically inside the config layer
@@ -346,7 +324,7 @@ class ModelsPanel(QWidget):
             if target_file.exists():
                 target_file.unlink()
 
-            QMessageBox.information(self, "Success", "Model binary weight modules swept out of system storage safely.")
+            QMessageBox.information(self, "Success", "Model removed from system storage.")
             self._refresh_catalog_list_display()
             self.model_list_widget.setCurrentRow(self.list_index_keys.index(self.selected_model_key))
         except Exception as e:
@@ -371,12 +349,12 @@ class ModelsPanel(QWidget):
         worker = threading.Thread(target=self._download_worker_thread, daemon=True)
         worker.start()
     def _download_worker_thread(self):
-        """Pulls down the model weights and corresponding binary voices mapping files cleanly from json urls."""
+        """Pulls down the model weights and corresponding binary voices mapping files from json urls."""
         target_model = str(self.selected_model_key)
         info = self.model_catalog[target_model]
         target_voice_bin = info["voice_bin"]
 
-        # Dynamically read your base urls and destinations directly out of your centralized JSON setup configuration!
+        # Dynamically read the base urls and destinations directly out of the centralized JSON setup configuration
         base_url = str(self.config.tts_base_url).rstrip('/')
         dest_dir = Path(self.config.tts_base_dir)
         dest_dir.mkdir(parents=True, exist_ok=True)
@@ -388,7 +366,7 @@ class ModelsPanel(QWidget):
         voice_dest = dest_dir / target_voice_bin
 
         try:
-            # 1. Stream download processing cycle for the .onnx layout graph file
+            # Stream download processing cycle for the .onnx layout graph file
             self.progress_signal.emit(f"Queue Status: Querying stream payload for {target_model}...")
             with requests.get(model_url, stream=True, allow_redirects=True) as r:
                 r.raise_for_status()
@@ -401,7 +379,7 @@ class ModelsPanel(QWidget):
                             downloaded += len(chunk)
                             self.download_progress_signal.emit(downloaded, total_size)
 
-            # 2. Stream download processing cycle for the accompanying .bin voice map matrices array
+            # Stream download processing cycle for the accompanying .bin voice map matrices array
             if not voice_dest.exists() or voice_dest.stat().st_size < 1000000:
                 self.progress_signal.emit(f"Queue Status: Fetching voice profiles matrix ({target_voice_bin})...")
                 with requests.get(voice_url, stream=True, allow_redirects=True) as r:

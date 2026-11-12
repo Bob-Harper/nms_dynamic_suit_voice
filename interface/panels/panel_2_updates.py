@@ -10,7 +10,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushBu
 from interface.panels.widgets.shared import build_card
 
 class UpdatesPanel(QWidget):
-    # Thread-safe pipeline signaling lanes to update status text cleanly from background threads
+    # Thread-safe pipeline signaling lanes to update status text from background threads
     status_signal = Signal(str)
     action_complete_signal = Signal(bool, str)
 
@@ -23,7 +23,7 @@ class UpdatesPanel(QWidget):
         self.project_root = Path(__file__).resolve().parents[2]
         self._tracked_repository = False
 
-        # Connect signaling channels across background loops safely
+        # Connect signaling channels across background loops
         self.status_signal.connect(self._update_status_label)
         self.action_complete_signal.connect(self._on_action_finished)
 
@@ -34,7 +34,7 @@ class UpdatesPanel(QWidget):
         layout.setContentsMargins(15, 15, 15, 15)
         layout.setSpacing(15)
 
-        # Leverage your single-source shared style factory block cleanly!
+        # Leverage single-source shared style factory block
         card, card_layout = build_card("EXOSUIT ECOSYSTEM COMPLIANCE REGISTRY")
 
         project = self.config.environment.get("project", {})
@@ -42,7 +42,7 @@ class UpdatesPanel(QWidget):
         version_label.setStyleSheet("color: #ffffff; font-size: 13px; font-weight: bold; border: none;")
         card_layout.addWidget(version_label)
 
-        # 🎯 LIVE OPERATIONAL DIAGNOSTIC LOGGER LABEL: Plain-text state tracker
+        # DIAGNOSTIC LOGGER LABEL: Plain-text state tracker
         self.status_reporter = QLabel("Ecosystem Status: Standing By...")
         self.status_reporter.setStyleSheet("font-family: 'Consolas', monospace; font-size: 12px; color: #ffaa00; border: none; padding: 4px 0;")
         card_layout.addWidget(self.status_reporter)
@@ -94,7 +94,7 @@ class UpdatesPanel(QWidget):
         note = QLabel(
             "Notice: Git updates are available only after this installation is converted "
             "to a tracked repository loop. Reconciling version profiles ensures local "
-            "configuration changes are safely preserved when synchronizing directories."
+            "configuration changes are preserved when synchronizing directories."
         )
         note.setWordWrap(True)
         note.setStyleSheet("color: #5c6773; font-size: 11px; border: none; padding-top: 5px;")
@@ -145,7 +145,7 @@ class UpdatesPanel(QWidget):
     def _worker_check_updates(self):
         try:
             updates = self.config.environment.get("updates", {})
-            repo_url = updates.get("repository_url", "https://github.com")
+            repo_url = updates.get("repository_url", "https://github.com/Bob-Harper/nms_dynamic_suit_voice")
             branch = updates.get("branch", "main")
             cmd_flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 
@@ -169,9 +169,9 @@ class UpdatesPanel(QWidget):
                 ).stdout.strip()
 
                 if local_commit == remote_commit:
-                    self.status_signal.emit(f"Mod files are completely up to date! ({remote_commit[:8]})")
+                    self.status_signal.emit(f"Mod files are completely up to date ({remote_commit[:8]})")
                 else:
-                    self.status_signal.emit(f"Update available on registry! ({local_commit[:8]} -> {remote_commit[:8]})")
+                    self.status_signal.emit(f"Update available on registry ({local_commit[:8]} -> {remote_commit[:8]})")
             else:
                 self.status_signal.emit("Untracked workspace archive. Click 'CONVERT THIS INSTALL TO GIT' to enable easy updating.")
         except Exception as e:
@@ -181,7 +181,7 @@ class UpdatesPanel(QWidget):
 
     def _trigger_async_conversion(self):
         updates = self.config.environment.get("updates", {})
-        repository_url = updates.get("repository_url", "https://github.com")
+        repository_url = updates.get("repository_url", "https://github.com/Bob-Harper/nms_dynamic_suit_voice")
         branch = updates.get("branch", "main")
 
         answer = QMessageBox.question(
@@ -215,13 +215,13 @@ class UpdatesPanel(QWidget):
             self.status_signal.emit("Fetching upstream repository files snapshots...")
             subprocess.run(["git", "fetch", "origin", branch], cwd=str(self.project_root), capture_output=True, check=True, timeout=120, creationflags=cmd_flags)
 
-            self.status_signal.emit("Reconciling directory index tables cleanly...")
+            self.status_signal.emit("Reconciling directory index tables...")
             subprocess.run(["git", "reset", "--mixed", f"origin/{branch}"], cwd=str(self.project_root), capture_output=True, check=True, creationflags=cmd_flags)
 
             subprocess.run(["git", "branch", f"--set-upstream-to=origin/{branch}", branch], cwd=str(self.project_root), capture_output=True, check=True, creationflags=cmd_flags)
 
             self.status_signal.emit("Update Tracking now active. Evaluation pass complete.")
-            self.action_complete_signal.emit(True, "This installation folder is now actively tracked by Git. Updates can now be directly requested and pulled cleanly.")
+            self.action_complete_signal.emit(True, "This installation folder is now actively tracked by Git. Updates can now be directly requested and pulled.")
 
         except Exception as e:
             self.status_signal.emit("Conversion pipeline aborted.")

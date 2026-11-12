@@ -59,7 +59,7 @@ def complex_vocal_engine_matrix(audio: np.ndarray, speed_factor: float, pitch_fa
         phase_accum += (omega * pitch_factor) + phase_diff
         output_stft[i] = mag * np.exp(1j * phase_accum)
 
-    # 2. Inverse STFT (Overlap-Add Synthesis Pass) back into pristine time-series float samples
+    # 2. Inverse STFT (Overlap-Add Synthesis Pass) back into time-series float samples
     synthesis_hop = int(hop_length * pitch_factor)
     output_len = new_num_frames * synthesis_hop + fft_size
     output_audio = np.zeros(output_len, dtype=np.float32)
@@ -103,10 +103,10 @@ def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
             ring_mix=fx.get("ring_mix", 100),
             formant_percent=fx.get("formant_percent", 80),
             target_sr=44100,
-            apply_gain_stage=False  # Defer volume scaling until AFTER normalization pass!
+            apply_gain_stage=False  # Defer volume scaling until AFTER normalization pass
         )
 
-    # 1. Perform safe baseline peak normalization first to keep sentences uniform
+    # 1. Perform baseline peak normalization first to keep sentences uniform
     if np.max(np.abs(audio)) > 0:
         audio = audio / np.max(np.abs(audio))
 
@@ -145,18 +145,18 @@ def apply_vocal_dsp_chain_matrix(audio, source_sr, gain_db, pitch_semitones, tem
         formant_factor=formant_factor
     )
 
-    # --- PRIMARY SLIDER FIXED: Audio Frequency Warp (Chipmunk Scalar) ---
+    # --- Audio Frequency Warp (Chipmunk Scalar) ---
     factor_rate = float(rate)
     if factor_rate != 1.0:
         n_samples_target = max(int(len(audio) / factor_rate), MIN_SAMPLES)
         audio = np.interp(np.linspace(0, len(audio)-1, n_samples_target), np.arange(len(audio)), audio).astype(np.float32)
 
-    # --- SYSTEM RESOLUTION: Enforce standard game output frequency (44.1kHz) ---
+    # --- Enforce standard game output frequency (44.1kHz) ---
     if source_sr != target_sr:
         n_samples_final = max(int(len(audio) * (target_sr / source_sr)), MIN_SAMPLES)
         audio = np.interp(np.linspace(0, len(audio)-1, n_samples_final), np.arange(len(audio)), audio).astype(np.float32)
 
-    # --- ADVANCED SLIDER FIXED: Cybernetic Ring Modulator Blending Matrix ---
+    # --- Cybernetic Ring Modulator Blending Matrix ---
     wet_factor = ring_mix / 100.0
     dry_factor = 1.0 - wet_factor
 

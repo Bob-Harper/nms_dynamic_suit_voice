@@ -1,0 +1,380 @@
+{
+  "am_adam": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (US) | TRAITS: Deep / Serious | QUALITY: Low (D) | GRADE: F+ (Exosuit Standard)"
+  },
+  "am_echo": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (US) | TRAITS: Synthetic / Filtered | QUALITY: Med (C) | GRADE: D"
+  },
+  "am_eric": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (US) | TRAITS: Flat / Computerised | QUALITY: Med (C) | GRADE: D"
+  },
+  "am_fenrir": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (US) | TRAITS: Heavy / Industrial | QUALITY: High (B) | GRADE: C+"
+  },
+  "am_liam": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (US) | TRAITS: Clear / Soft | QUALITY: Med (C) | GRADE: D"
+  },
+  "am_michael": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (US) | TRAITS: Crisp / Articulate | QUALITY: High (B) | GRADE: C+"
+  },
+  "am_onyx": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (US) | TRAITS: Low Pitch / Dark | QUALITY: Med (C) | GRADE: D"
+  },
+  "am_puck": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (US) | TRAITS: Animated / Casual | QUALITY: High (B) | GRADE: C+"
+  },
+  "am_santa": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (US) | TRAITS: Deep Accent / Heavy | QUALITY: Med (C) | GRADE: D-"
+  },
+  "af_heart": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Warm / Affectionate | QUALITY: High (A) | GRADE: A"
+  },
+  "af_alloy": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Cold / Metallic | QUALITY: High (B) | GRADE: C"
+  },
+  "af_aoede": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Melodic / Smooth | QUALITY: High (B) | GRADE: C+"
+  },
+  "af_bella": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Expressive / Bright | QUALITY: High (A) | GRADE: A-"
+  },
+  "af_jessica": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Casual / Conversational | QUALITY: Low (C) | GRADE: D"
+  },
+  "af_kore": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Sharp / Clear | QUALITY: High (B) | GRADE: C+"
+  },
+  "af_nicole": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Studio / Crisp | QUALITY: High (B) | GRADE: B-"
+  },
+  "af_nova": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Direct / Robotic | QUALITY: High (B) | GRADE: C"
+  },
+  "af_river": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Soft / Muffled | QUALITY: Low (C) | GRADE: D"
+  },
+  "af_sarah": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Standard Technical | QUALITY: High (B) | GRADE: C+"
+  },
+  "af_sky": {
+    "language": "English (US)",
+    "lang_code": "a",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (US) | TRAITS: Light / Airy | QUALITY: High (B) | GRADE: C-"
+  },
+  "bf_alice": {
+    "language": "English (UK)",
+    "lang_code": "b",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (UK) | TRAITS: Precise Dialect | QUALITY: Low (C) | GRADE: D"
+  },
+  "bf_emma": {
+    "language": "English (UK)",
+    "lang_code": "b",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (UK) | TRAITS: Structured / Professional | QUALITY: High (B) | GRADE: B-"
+  },
+  "bf_isabella": {
+    "language": "English (UK)",
+    "lang_code": "b",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (UK) | TRAITS: Polished Technical | QUALITY: High (B) | GRADE: C"
+  },
+  "bf_lily": {
+    "language": "English (UK)",
+    "lang_code": "b",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (UK) | TRAITS: Soft Accent | QUALITY: Low (C) | GRADE: D"
+  },
+  "bm_daniel": {
+    "language": "English (UK)",
+    "lang_code": "b",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (UK) | TRAITS: Clear Dialect | QUALITY: Low (C) | GRADE: D"
+  },
+  "bm_fable": {
+    "language": "English (UK)",
+    "lang_code": "b",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (UK) | TRAITS: Cinematic Narrative | QUALITY: High (B) | GRADE: C"
+  },
+  "bm_george": {
+    "language": "English (UK)",
+    "lang_code": "b",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (UK) | TRAITS: Heavy Corporate | QUALITY: High (B) | GRADE: C"
+  },
+  "bm_lewis": {
+    "language": "English (UK)",
+    "lang_code": "b",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (UK) | TRAITS: Command Executive | QUALITY: Low (C) | GRADE: D+"
+  },
+  "jf_alpha": {
+    "language": "Japanese",
+    "lang_code": "j",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (JA) | TRAITS: Standard | QUALITY: High (B) | GRADE: C+ | SHA256: 1bf4c9dc"
+  },
+  "jf_gongitsune": {
+    "language": "Japanese",
+    "lang_code": "j",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (JA) | TRAITS: Narrative | QUALITY: High (B) | GRADE: C | SHA256: 1b171917"
+  },
+  "jf_nezumi": {
+    "language": "Japanese",
+    "lang_code": "j",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (JA) | TRAITS: Narrative | QUALITY: High (B) | GRADE: C- | SHA256: d83f007a"
+  },
+  "jf_tebukuro": {
+    "language": "Japanese",
+    "lang_code": "j",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (JA) | TRAITS: Narrative | QUALITY: High (B) | GRADE: C | SHA256: 0d691790"
+  },
+  "jm_kumo": {
+    "language": "Japanese",
+    "lang_code": "j",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (JA) | TRAITS: Narrative | QUALITY: High (B) | GRADE: C- | SHA256: 98340afd"
+  },
+  "zf_xiaobei": {
+    "language": "Mandarin Chinese",
+    "lang_code": "z",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (ZH) | TRAITS: Standard | QUALITY: Med (C) | GRADE: D | SHA256: 9b76be63"
+  },
+  "zf_xiaoni": {
+    "language": "Mandarin Chinese",
+    "lang_code": "z",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (ZH) | TRAITS: Standard | QUALITY: Med (C) | GRADE: D | SHA256: 95b49f16"
+  },
+  "zf_xiaoxiao": {
+    "language": "Mandarin Chinese",
+    "lang_code": "z",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (ZH) | TRAITS: Standard | QUALITY: Med (C) | GRADE: D | SHA256: cfaf6f2d"
+  },
+  "zf_xiaoyi": {
+    "language": "Mandarin Chinese",
+    "lang_code": "z",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (ZH) | TRAITS: Standard | QUALITY: Med (C) | GRADE: D | SHA256: b5235dba"
+  },
+  "zm_yunjian": {
+    "language": "Mandarin Chinese",
+    "lang_code": "z",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (ZH) | TRAITS: Standard | QUALITY: Med (C) | GRADE: D | SHA256: 76cbf8ba"
+  },
+  "zm_yunxi": {
+    "language": "Mandarin Chinese",
+    "lang_code": "z",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (ZH) | TRAITS: Standard | QUALITY: Med (C) | GRADE: D | SHA256: dbe6e1ce"
+  },
+  "zm_yunxia": {
+    "language": "Mandarin Chinese",
+    "lang_code": "z",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (ZH) | TRAITS: Standard | QUALITY: Med (C) | GRADE: D | SHA256: bb2b03b0"
+  },
+  "zm_yunyang": {
+    "language": "Mandarin Chinese",
+    "lang_code": "z",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (ZH) | TRAITS: Standard | QUALITY: Med (C) | GRADE: D | SHA256: 5238ac22"
+  },
+  "ef_dora": {
+    "language": "Spanish",
+    "lang_code": "e",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (ES) | TRAITS: Standard (espeak-ng) | SHA256: d9d69b0f"
+  },
+  "em_alex": {
+    "language": "Spanish",
+    "lang_code": "e",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (ES) | TRAITS: Standard (espeak-ng) | SHA256: 5eac53f7"
+  },
+  "em_santa": {
+    "language": "Spanish",
+    "lang_code": "e",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (ES) | TRAITS: Deep / Heavy (espeak-ng) | SHA256: aa8620cb"
+  },
+  "ff_siwis": {
+    "language": "French",
+    "lang_code": "f",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (FR) | TRAITS: Clear / Standard | QUALITY: High (B) | GRADE: B- | SHA256: 8073bf2d"
+  },
+  "hf_alpha": {
+    "language": "Hindi",
+    "lang_code": "h",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (HI) | TRAITS: Standard | QUALITY: High (B) | GRADE: C | SHA256: 06906fe0"
+  },
+  "hf_beta": {
+    "language": "Hindi",
+    "lang_code": "h",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (HI) | TRAITS: Standard | QUALITY: High (B) | GRADE: C | SHA256: 63c0a1a6"
+  },
+  "hm_omega": {
+    "language": "Hindi",
+    "lang_code": "h",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (HI) | TRAITS: Standard | QUALITY: High (B) | GRADE: C | SHA256: b55f02a8"
+  },
+  "hm_psi": {
+    "language": "Hindi",
+    "lang_code": "h",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (HI) | TRAITS: Standard | QUALITY: High (B) | GRADE: C | SHA256: 2f0f055c"
+  },
+  "if_sara": {
+    "language": "Italian",
+    "lang_code": "i",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (IT) | TRAITS: Standard | QUALITY: High (B) | GRADE: C | SHA256: 6c0b253b"
+  },
+  "im_nicola": {
+    "language": "Italian",
+    "lang_code": "i",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (IT) | TRAITS: Standard | QUALITY: High (B) | GRADE: C | SHA256: 234ed066"
+  },
+  "pf_dora": {
+    "language": "Portuguese (BR)",
+    "lang_code": "p",
+    "gender": "Female",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Female (PT-BR) | TRAITS: Standard (espeak-ng) | SHA256: 07e4ff98"
+  },
+  "pm_alex": {
+    "language": "Portuguese (BR)",
+    "lang_code": "p",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (PT-BR) | TRAITS: Standard (espeak-ng) | SHA256: cf0ba8c5"
+  },
+  "pm_santa": {
+    "language": "Portuguese (BR)",
+    "lang_code": "p",
+    "gender": "Male",
+    "bin": "voices-v1.0.bin",
+    "description": "GENDER: Male (PT-BR) | TRAITS: Deep / Heavy (espeak-ng) | SHA256: d4210316"
+  }
+}

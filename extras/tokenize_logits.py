@@ -1,6 +1,6 @@
 import json
 from transformers import AutoTokenizer
-
+# TODO: see if we can use llama.cpp tokenizer
 # Paths
 INPUT_JSON = "../data/logit_bias.json"   # merged format file
 TOKENIZER_DIR = "../assets/qwen3_06b_q4"

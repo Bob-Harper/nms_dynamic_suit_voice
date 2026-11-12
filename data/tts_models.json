@@ -1,0 +1,64 @@
+{
+  "models": {
+    "kokoro-v1.0.int8.onnx": {
+      "name": "Kokoro Multi-Language v1.0 (8-bit Quantized)",
+      "size_label": "114 MB",
+      "sha256": "ae315a79b623f244700e4afb9246c46a26066782e049ba174bf3ba433970ee9c",
+      "voice_bin": "voices-v1.0.bin",
+      "languages": ["en-us", "en-gb", "ja", "zh", "es", "fr", "hi", "it", "pt-br"],
+      "note": "Ultra-lightweight compressed model (spectral correlation 0.916 against fp32). Fast processing speeds with minimal memory usage."
+    },
+    "kokoro-v1.0.fp16.onnx": {
+      "name": "Kokoro Multi-Language v1.0 (16-bit Float Precision)",
+      "size_label": "164 MB",
+      "sha256": "f3a290d384fbb27966d462905c71a46cef9e5fd00516b40df32a0b4afe77ac96",
+      "voice_bin": "voices-v1.0.bin",
+      "languages": ["en-us", "en-gb", "ja", "zh", "es", "fr", "hi", "it", "pt-br"],
+      "note": "High-fidelity balanced model (spectral correlation 0.999 against fp32). Half the disk storage overhead of full precision."
+    },
+    "kokoro-v1.0.onnx": {
+      "name": "Kokoro Multi-Language v1.0 (32-bit Full Precision)",
+      "size_label": "326 MB",
+      "sha256": "beb0d1848dee9a49da392cc3df26958d46cfa35d321edf434f52949153f0df3a",
+      "voice_bin": "voices-v1.0.bin",
+      "languages": ["en-us", "en-gb", "ja", "zh", "es", "fr", "hi", "it", "pt-br"],
+      "note": "Reference quality full precision model. Highest uncompressed vector fidelity for speech processing streams."
+    },
+    "kokoro-v1.1-zh.int8.onnx": {
+      "name": "Kokoro Chinese & English v1.1 (8-bit Quantized)",
+      "size_label": "114 MB",
+      "sha256": "11751c087b4bbeed031e2b687b11dda698bd27ba0509472f960b57f835a999f7",
+      "voice_bin": "voices-v1.1-zh.bin",
+      "languages": ["zh", "en-us", "en-gb"],
+      "note": "Compressed bilingual Chinese and English model (spectral correlation 0.874 against fp32)."
+    },
+    "kokoro-v1.1-zh.fp16.onnx": {
+      "name": "Kokoro Chinese & English v1.1 (16-bit Float Precision)",
+      "size_label": "164 MB",
+      "sha256": "a628ea5d6fbde96d1a85f691a6a00847829937f9e488021ba2c5359bc6ea08b5",
+      "voice_bin": "voices-v1.1-zh.bin",
+      "languages": ["zh", "en-us", "en-gb"],
+      "note": "Balanced bilingual Chinese and English model (spectral correlation 0.994 against fp32)."
+    },
+    "kokoro-v1.1-zh.onnx": {
+      "name": "Kokoro Chinese & English v1.1 (32-bit Full Precision)",
+      "size_label": "326 MB",
+      "sha256": "859f9ded9f53be16c24857cdab3254a45da53c3afd5ba6ef134c7de3f822e326",
+      "voice_bin": "voices-v1.1-zh.bin",
+      "languages": ["zh", "en-us", "en-gb"],
+      "note": "Full precision bilingual Chinese and English model (103 voices supported via voices-v1.1-zh.bin)."
+    }
+  },
+  "voice_bins": {
+    "voices-v1.0.bin": {
+      "size_label": "28 MB",
+      "voice_count": 54,
+      "note": "Standard multi-language voice pack for v1.0 models."
+    },
+    "voices-v1.1-zh.bin": {
+      "size_label": "53 MB",
+      "voice_count": 103,
+      "note": "Expanded Chinese and English voice pack for v1.1-zh models."
+    }
+  }
+}

@@ -29,9 +29,9 @@
 
 ## 4. Unified Model Management & One-Stop Launcher
 - **LLM Model Manager:** Expand model management beyond TTS to handle local LLM downloads, precision selection, and active switching.
-- **Self-Updater (ComfyUI-Style):** Built-in `git pull` integration already there. Expand with a requirements/package manager to update dependencies cleanly from the UI either individually or by rerunning requirements.txt.
+- **Self-Updater (ComfyUI-Style):** Built-in `git pull` integration already there. Expand with a requirements/package manager to update dependencies from the UI either individually or by rerunning requirements.txt.
 - **Direct Game Launcher:**
   - Configure the path to `NMS.exe` and optional CLI startup arguments for power users.
   - One-click launch trigger directly inside the DSV Manager to turn the app into a complete, all-in-one launchpad.
   - No there are no plans to have this handle other people's mods.  this one is more than enough for me, if you want a mod manager - i would suggest the one provide by the wonderful folks at nexusmods.com
-  
+

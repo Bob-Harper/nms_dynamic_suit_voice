@@ -34,44 +34,15 @@ class AudioPanel(QWidget):
         self.log_signal.connect(self._append_console_log)
         self.reset_btn_signal.connect(self._set_button_lock_state)
 
+        # Pull active voice dictionary dynamically from centralized config data
+        self.voice_catalog = getattr(self.config, "ttm_voices_data", {})
+        active_bin = self.config.environment.get("models", {}).get("tts_voice_bin", "voices-v1.0.bin")
+
+        # Filter voices to match the currently selected .bin pack
         self.available_voices = [
-            "am_adam", "am_echo", "am_eric", "am_fenrir", "am_liam",
-            "am_michael", "am_onyx", "am_puck", "am_santa",
-            "af_heart", "af_alloy", "af_aoede", "af_bella", "af_jessica",
-            "af_kore", "af_nicole", "af_nova", "af_river", "af_sarah", "af_sky",
-            "bf_alice", "bf_emma", "bf_isabella", "bf_lily",
-            "bm_daniel", "bm_fable", "bm_george", "bm_lewis"
+            voice_id for voice_id, meta in self.voice_catalog.items()
+            if meta.get("bin", "voices-v1.0.bin") == active_bin
         ]
-        self.voice_metadata = {
-            "am_adam": "GENDER: Male | TRAITS: Deep / Serious | QUALITY: Low (D) | GRADE: F+ (Exosuit Standard)",
-            "am_echo": "GENDER: Male | TRAITS: Synthetic / Filtered | QUALITY: Med (C) | GRADE: D",
-            "am_eric": "GENDER: Male | TRAITS: Flat / Computerised | QUALITY: Med (C) | GRADE: D",
-            "am_fenrir": "GENDER: Male | TRAITS: Heavy / Industrial | QUALITY: High (B) | GRADE: C+",
-            "am_liam": "GENDER: Male | TRAITS: Clear / Soft | QUALITY: Med (C) | GRADE: D",
-            "am_michael": "GENDER: Male | TRAITS: Crisp / Articulate | QUALITY: High (B) | GRADE: C+",
-            "am_onyx": "GENDER: Male | TRAITS: Low Pitch / Dark | QUALITY: Med (C) | GRADE: D",
-            "am_puck": "GENDER: Male | TRAITS: Animated / Casual | QUALITY: High (B) | GRADE: C+",
-            "am_santa": "GENDER: Male | TRAITS: Deep Accent / Heavy | QUALITY: Med (C) | GRADE: D-",
-            "af_heart": "GENDER: Female | TRAITS: Warm / Affectionate | QUALITY: High (A) | GRADE: A",
-            "af_alloy": "GENDER: Female | TRAITS: Cold / Metallic | QUALITY: High (B) | GRADE: C",
-            "af_aoede": "GENDER: Female | TRAITS: Melodic / Smooth | QUALITY: High (B) | GRADE: C+",
-            "af_bella": "GENDER: Female | TRAITS: Expressive / Bright | QUALITY: High (A) | GRADE: A-",
-            "af_jessica": "GENDER: Female | TRAITS: Casual / Conversational | QUALITY: Low (C) | GRADE: D",
-            "af_kore": "GENDER: Female | TRAITS: Sharp / Clear | QUALITY: High (B) | GRADE: C+",
-            "af_nicole": "GENDER: Female | TRAITS: Studio / Crisp | QUALITY: High (B) | GRADE: B-",
-            "af_nova": "GENDER: Female | TRAITS: Direct / Robotic | QUALITY: High (B) | GRADE: C",
-            "af_river": "GENDER: Female | TRAITS: Soft / Muffled | QUALITY: Low (C) | GRADE: D",
-            "af_sarah": "GENDER: Female | TRAITS: Standard Technical | QUALITY: High (B) | GRADE: C+",
-            "af_sky": "GENDER: Female | TRAITS: Light / Airy | QUALITY: High (B) | GRADE: C-",
-            "bf_alice": "GENDER: Female (UK) | TRAITS: Precise Dialect | QUALITY: Low (C) | GRADE: D",
-            "bf_emma": "GENDER: Female (UK) | TRAITS: Structured / Professional | QUALITY: High (B) | GRADE: B-",
-            "bf_isabella": "GENDER: Female (UK) | TRAITS: Polished Technical | QUALITY: High (B) | GRADE: C",
-            "bf_lily": "GENDER: Female (UK) | TRAITS: Soft Accent | QUALITY: Low (C) | GRADE: D",
-            "bm_daniel": "GENDER: Male (UK) | TRAITS: Clear Dialect | QUALITY: Low (C) | GRADE: D",
-            "bm_fable": "GENDER: Male (UK) | TRAITS: Cinematic Narrative | QUALITY: High (B) | GRADE: C",
-            "bm_george": "GENDER: Male (UK) | TRAITS: Heavy Corporate | QUALITY: High (B) | GRADE: C",
-            "bm_lewis": "GENDER: Male (UK) | TRAITS: Command Executive | QUALITY: Low (C) | GRADE: D+"
-        }
 
         self._build_ui()
         self._initialize_data_fields()
@@ -122,7 +93,7 @@ class AudioPanel(QWidget):
         preset_layout.addLayout(voice_row)
 
         self.voice_desc_box = QLabel("Identity Signature: Loading profile arrays...")
-        self.voice_desc_box.setWordWrap(True) # FIXED: Forces long profile notes to wrap to multi-line smoothly
+        self.voice_desc_box.setWordWrap(True) # FIXED: Forces long profile notes to wrap to multi-line
         self.voice_desc_box.setStyleSheet("""
             QLabel { background-color: #0c0c0e; border: 1px dashed #1f2430; color: #5c6773;
                      padding: 6px; font-family: 'Consolas', monospace; font-size: 11px; border-radius: 4px; }
@@ -311,7 +282,8 @@ class AudioPanel(QWidget):
             self.config.user_customization["voice_effects"]["base_voice"] = chosen_voice
 
     def _update_metadata_description_label(self, voice_key):
-        desc = self.voice_metadata.get(voice_key, "GENDER: Unknown | TRAITS: Custom Profile Mapping")
+        voice_info = self.voice_catalog.get(voice_key, {})
+        desc = voice_info.get("description", "GENDER: Unknown | TRAITS: Custom Profile Mapping")
         self.voice_desc_box.setText(desc)
 
     def _update_all_text_labels(self):
@@ -417,6 +389,7 @@ class AudioPanel(QWidget):
 
         worker = threading.Thread(target=self._sound_generation_worker, args=(slider_parameters,), daemon=True)
         worker.start()
+
     def _sound_generation_worker(self, params):
         try:
             import sys
@@ -497,6 +470,25 @@ class AudioPanel(QWidget):
         finally:
             self.reset_btn_signal.emit(True)
 
+    def showEvent(self, event):
+        """Re-syncs available voices whenever the Audio Modifiers tab is opened."""
+        super().showEvent(event)
+        active_bin = self.config.environment.get("models", {}).get("tts_voice_bin", "voices-v1.0.bin")
+        filtered = [
+            vid for vid, meta in self.voice_catalog.items()
+            if meta.get("bin", "voices-v1.0.bin") == active_bin
+        ] or list(self.voice_catalog.keys())
+
+        if filtered != self.available_voices:
+            current = self.voice_combo.currentText()
+            self.available_voices = filtered
+            self.voice_combo.blockSignals(True)
+            self.voice_combo.clear()
+            self.voice_combo.addItems(self.available_voices)
+            if current in self.available_voices:
+                self.voice_combo.setCurrentText(current)
+            self.voice_combo.blockSignals(False)
+            self._update_metadata_description_label(self.voice_combo.currentText())
 
     def gather_settings(self):
         if not self.config:

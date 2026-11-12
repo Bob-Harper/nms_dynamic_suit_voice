@@ -86,7 +86,7 @@ class ProfilePanel(QWidget):
         tone_title_label.setMinimumWidth(180)
         self.tone_combo = QComboBox()
 
-        # Guard: Check that the memory dictionary is mapped cleanly before accessing keys
+        # Guard: Check that the memory dictionary is mapped before accessing keys
         if self.config and hasattr(self.config, 'ui_promptdata'):
             self.tone_combo.addItems(list(self.config.ui_promptdata.get("tones", {}).keys()))
 
@@ -126,7 +126,7 @@ class ProfilePanel(QWidget):
         layout.addWidget(prefs_group)
 
     def _initialize_data_fields(self):
-        """Loads configuration fields from the configuration instance safely."""
+        """Loads configuration fields from the configuration instance."""
         if not self.config:
             return
 
@@ -150,8 +150,7 @@ class ProfilePanel(QWidget):
             f"Greetings {current_name}!\n\n"
             "Welcome to your Exosuit Integration Control Deck.\n\n"
             "This centralized dashboard directly manages your customized preferences while serving as the primary launch vehicle "
-            "for the active system surveillance loop. Running the engine directly inside this frame completely satisfies native OS "
-            "security boundaries.\n\n"
+            "for the active system surveillance loop. Running the engine directly inside this frame satisfies OS security boundaries.\n\n"
             "OPERATION MANUAL, TL;DR EDITION:\n"
             "• User Profile to update your operator designation callsign and select AI behavioral guidelines directly from data profiles.\n"
             "• Audio Modifiers to configure and tune digital signal processing matrix settings in real time.\n\n"
