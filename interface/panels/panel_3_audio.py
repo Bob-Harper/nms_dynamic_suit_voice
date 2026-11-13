@@ -6,7 +6,7 @@ from pathlib import Path
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSlider, QComboBox,
-    QFrame, QPushButton, QLineEdit, QTextEdit
+    QFrame, QPushButton, QLineEdit, QTextEdit, QCheckBox
 )
 from pipeline.debug_support import debug_error_message
 
@@ -34,14 +34,16 @@ class AudioPanel(QWidget):
         self.log_signal.connect(self._append_console_log)
         self.reset_btn_signal.connect(self._set_button_lock_state)
 
-        # Pull active voice dictionary dynamically from centralized config data
-        self.voice_catalog = getattr(self.config, "ttm_voices_data", {})
-        active_bin = self.config.environment.get("models", {}).get("tts_voice_bin", "voices-v1.0.bin")
+        # Pull voice catalog and active voice bin from SuitVoiceConfig
+        self.voice_catalog = self.config.ttm_voices_data
+        self.available_voices = self._get_voices_for_bin(self.config.tts_voice_bin_name)
+        self.voice_catalog = self.config.ttm_voices_data
+        active_bin = self.config.tts_voice_bin_name
 
-        # Filter voices to match the currently selected .bin pack
+        # Filter voices to match the currently selected voice bin
         self.available_voices = [
             voice_id for voice_id, meta in self.voice_catalog.items()
-            if meta.get("bin", "voices-v1.0.bin") == active_bin
+            if meta.get("bin") == active_bin
         ]
 
         self._build_ui()
@@ -110,10 +112,11 @@ class AudioPanel(QWidget):
         primary_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
         primary_layout.addWidget(primary_header)
 
-        self.gain_slider, self.gain_val_label = self._create_slider_row(primary_layout, "Vocal Volume Boost (dB Gain) [Baseline: 5]:", -10, 25, 5, self._on_slider_changed)
-        self.tempo_slider, self.tempo_val_label = self._create_slider_row(primary_layout, "Sentence Pacing (Speech Speed) [Baseline: 1.00]:", 50, 200, 100, self._on_slider_changed)
-        self.pitch_slider, self.pitch_val_label = self._create_slider_row(primary_layout, "Core Voice Tone (Pitch Shift) [Baseline: 4]:", -12, 12, 4, self._on_slider_changed)
-        self.mix_slider, self.mix_val_label = self._create_slider_row(primary_layout, "Synthetic Cybernetic Overlay % [Baseline: 100]:", 0, 100, 100, self._on_slider_changed)
+        self.gain_slider, self.gain_val_label, self.gain_toggle = self._create_slider_row(primary_layout, "Vocal Volume Boost (dB Gain) [Baseline: 5]:", -10, 25, 5, self._on_slider_changed)
+        self.tempo_slider, self.tempo_val_label, self.tempo_toggle = self._create_slider_row(primary_layout, "Sentence Pacing (Speech Speed) [Baseline: 1.00]:", 50, 200, 100, self._on_slider_changed)
+        self.pitch_slider, self.pitch_val_label, self.pitch_toggle = self._create_slider_row(primary_layout, "Core Voice Tone (Pitch Shift) [Baseline: 4]:", -12, 12, 4, self._on_slider_changed)
+        self.mix_slider, self.mix_val_label, self.mix_toggle = self._create_slider_row(primary_layout, "Synthetic Cybernetic Overlay % [Baseline: 100]:", 0, 100, 100, self._on_slider_changed)
+
         left_layout.addWidget(primary_group)
         advanced_group = QWidget()
         advanced_group.setStyleSheet("background-color: #141923; border: 1px solid #1f2430; border-radius: 6px;")
@@ -124,9 +127,9 @@ class AudioPanel(QWidget):
         advanced_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
         advanced_layout.addWidget(advanced_header)
 
-        self.rate_slider, self.rate_val_label = self._create_slider_row(advanced_layout, "Audio Frequency Warp (Chipmunk Scalar) [Baseline: 0.50]:", 10, 150, 50, self._on_slider_changed)
-        self.freq_slider, self.freq_val_label = self._create_slider_row(advanced_layout, "Modulation Carrier Wave Frequency (Hz) [Baseline: 300]:", 50, 1000, 300, self._on_slider_changed)
-        self.formant_slider, self.formant_val_label = self._create_slider_row(advanced_layout, "Vocal Resonator Bandwidth (Throat Size %) [Baseline: 80]:", 10, 150, 80, self._on_slider_changed)
+        self.rate_slider, self.rate_val_label, self.rate_toggle = self._create_slider_row(advanced_layout, "Audio Frequency Warp (Chipmunk Scalar) [Baseline: 0.50]:", 10, 150, 50, self._on_slider_changed)
+        self.freq_slider, self.freq_val_label, _ = self._create_slider_row(advanced_layout, "Modulation Carrier Wave Frequency (Hz) [Baseline: 300]:", 50, 1000, 300, self._on_slider_changed, has_toggle=False)
+        self.formant_slider, self.formant_val_label, self.formant_toggle = self._create_slider_row(advanced_layout, "Vocal Resonator Bandwidth (Throat Size %) [Baseline: 80]:", 10, 150, 80, self._on_slider_changed)
 
         btn_action_row = QHBoxLayout()
         btn_action_row.setSpacing(10)
@@ -189,9 +192,17 @@ class AudioPanel(QWidget):
             QPushButton:hover { background-color: #007acc; border-color: #33bbff; }
             QPushButton:disabled { background-color: #222225; border-color: #444448; color: #66666d; }
         """)
-        self.preview_btn.clicked.connect(self._trigger_async_preview_loop)
+        self.preview_btn.clicked.connect(lambda: self._trigger_async_preview_loop(raw_mode=False))
 
-        self.stop_playback_btn = QPushButton("STOP PLAYBACK")
+        self.preview_raw_btn = QPushButton("PLAY RAW")
+        self.preview_raw_btn.setStyleSheet("""
+            QPushButton { background-color: #1f2430; border: 1px solid #ffaa00; color: #ffaa00; padding: 10px 14px; font-weight: bold; font-family: 'Consolas', monospace; }
+            QPushButton:hover { background-color: #ffaa00; color: #141923; }
+            QPushButton:disabled { background-color: #222225; border-color: #444448; color: #66666d; }
+        """)
+        self.preview_raw_btn.clicked.connect(lambda: self._trigger_async_preview_loop(raw_mode=True))
+
+        self.stop_playback_btn = QPushButton("STOP")
         self.stop_playback_btn.setStyleSheet("""
             QPushButton { background-color: #880000; border: 1px solid #ff3333; color: white; padding: 10px 14px; font-weight: bold; font-family: 'Consolas', monospace; }
             QPushButton:hover { background-color: #aa0000; border-color: #ff5555; }
@@ -199,6 +210,7 @@ class AudioPanel(QWidget):
         self.stop_playback_btn.clicked.connect(self._abort_active_wave_playback)
 
         playback_action_row.addWidget(self.preview_btn, stretch=2)
+        playback_action_row.addWidget(self.preview_raw_btn, stretch=1)
         playback_action_row.addWidget(self.stop_playback_btn, stretch=1)
         sandbox_layout.addLayout(playback_action_row)
 
@@ -216,11 +228,23 @@ class AudioPanel(QWidget):
 
         right_layout.addWidget(sandbox_group)
         master_layout.addWidget(right_pane)
-    def _create_slider_row(self, parent_layout, label_text, min_val, max_val, default_val, change_callback):
+
+    def _create_slider_row(self, parent_layout, label_text, min_val, max_val, default_val, change_callback, has_toggle=True):
         row_frame = QWidget()
         row_frame.setStyleSheet("border: none; background: transparent;")
         row_frame_layout = QHBoxLayout(row_frame)
         row_frame_layout.setContentsMargins(0, 0, 0, 0)
+
+        toggle_box = None
+        if has_toggle:
+            toggle_box = QCheckBox()
+            toggle_box.setChecked(True)
+            toggle_box.setToolTip("Enable or bypass this audio effect")
+            toggle_box.setStyleSheet("""
+                QCheckBox::indicator { width: 14px; height: 14px; border: 1px solid #ffaa00; border-radius: 3px; background: #0c0c0e; }
+                QCheckBox::indicator:checked { background: #ffaa00; }
+            """)
+            row_frame_layout.addWidget(toggle_box)
 
         title_label = QLabel(label_text)
         title_label.setMinimumWidth(260)
@@ -234,6 +258,7 @@ class AudioPanel(QWidget):
             QSlider::groove:horizontal { border: 1px solid #1f2430; height: 6px; background: #0c0c0e; border-radius: 3px; }
             QSlider::handle:horizontal { background: #ffaa00; border: 1px solid #ffaa00; width: 14px; height: 14px; margin: -4px 0; border-radius: 7px; }
             QSlider::handle:horizontal:hover { background: #ffffff; border-color: #ffaa00; }
+            QSlider::handle:horizontal:disabled { background: #4b5668; border-color: #4b5668; }
         """)
         slider.valueChanged.connect(change_callback)
 
@@ -242,12 +267,17 @@ class AudioPanel(QWidget):
         val_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         val_label.setStyleSheet("font-family: 'Consolas', monospace; color: #ffaa00; font-weight: bold; font-size: 11px;")
 
+        if toggle_box is not None:
+            toggle_box.toggled.connect(slider.setEnabled)
+            toggle_box.toggled.connect(lambda _: change_callback(slider.value()))
+
         row_frame_layout.addWidget(title_label)
         row_frame_layout.addWidget(slider, stretch=1)
         row_frame_layout.addWidget(val_label)
 
         parent_layout.addWidget(row_frame)
-        return slider, val_label
+        return slider, val_label, toggle_box
+
 
     def _initialize_data_fields(self):
         if not self.config or "voice_effects" not in self.config.user_customization:
@@ -269,6 +299,7 @@ class AudioPanel(QWidget):
         self.freq_slider.setValue(int(data_dict.get("ring_freq", 300)))
         self.formant_slider.setValue(int(data_dict.get("formant_percent", 80)))
         self._update_all_text_labels()
+
     def _on_slider_changed(self, value):
         self._update_all_text_labels()
         if self.preset_combo.currentIndex() != 0:
@@ -311,17 +342,21 @@ class AudioPanel(QWidget):
 
     def _restore_factory_baselines(self):
         self.log_signal.emit("Flushing parameters... Snapping sliders to factory system baselines.")
-        factory_defaults = {
-            "base_voice": "am_adam",
-            "gain_db": 5,
-            "tempo": 1.00,
-            "pitch_semitones": 4,
-            "ring_mix": 100,
-            "rate": 0.50,
-            "ring_freq": 300,
-            "formant_percent": 80
-        }
+        factory_defaults = self.config.default_customization.get("voice_effects", {})
+        if not factory_defaults:
+            print("[AUDIO PANEL WARNING] voice_effects missing from default_customization.json; using fallback values.")
+            factory_defaults = {
+                "base_voice": "am_adam",
+                "gain_db": 5,
+                "tempo": 1.00,
+                "pitch_semitones": 4,
+                "ring_mix": 100,
+                "rate": 0.50,
+                "ring_freq": 300,
+                "formant_percent": 80
+            }
         self._apply_raw_dictionary_to_sliders(factory_defaults)
+
     def _on_character_preset_selected(self, chosen_preset):
         p = self.loaded_presets.get(chosen_preset)
         if not p:
@@ -363,6 +398,8 @@ class AudioPanel(QWidget):
     @Slot(bool)
     def _set_button_lock_state(self, enabled):
         self.preview_btn.setEnabled(enabled)
+        if hasattr(self, "preview_raw_btn"):
+            self.preview_raw_btn.setEnabled(enabled)
 
     def _abort_active_wave_playback(self):
         import sys
@@ -371,20 +408,23 @@ class AudioPanel(QWidget):
             winsound.PlaySound(None, winsound.SND_PURGE)
             self.log_signal.emit("Playback process aborted by user directive.")
 
-    def _trigger_async_preview_loop(self):
+    def _trigger_async_preview_loop(self, raw_mode=False):
         self.preview_btn.setEnabled(False)
-        self.log_signal.emit("Initializing off-thread matrix audio generator...")
+        self.preview_raw_btn.setEnabled(False)
+        mode_label = "RAW UNMODIFIED" if raw_mode else "DSP PROCESSED"
+        self.log_signal.emit(f"Initializing off-thread audio generator [{mode_label}]...")
 
         slider_parameters = {
+            "raw_mode": raw_mode,
             "text": self.test_text_entry.text().strip(),
             "base_voice": self.voice_combo.currentText(),
-            "gain_db": float(self.gain_slider.value()),
-            "tempo": round(self.tempo_slider.value() / 100.0, 2),
-            "pitch_semitones": int(self.pitch_slider.value()),
-            "ring_mix": int(self.mix_slider.value()),
-            "rate": round(self.rate_slider.value() / 100.0, 2),
+            "gain_db": float(self.gain_slider.value()) if (self.gain_toggle is not None and self.gain_toggle.isChecked()) else 0.0,
+            "tempo": round(self.tempo_slider.value() / 100.0, 2) if (self.tempo_toggle is not None and self.tempo_toggle.isChecked()) else 1.0,
+            "pitch_semitones": int(self.pitch_slider.value()) if (self.pitch_toggle is not None and self.pitch_toggle.isChecked()) else 0,
+            "ring_mix": int(self.mix_slider.value()) if (self.mix_toggle is not None and self.mix_toggle.isChecked()) else 0,
+            "rate": round(self.rate_slider.value() / 100.0, 2) if (self.rate_toggle is not None and self.rate_toggle.isChecked()) else 1.0,
             "ring_freq": int(self.freq_slider.value()),
-            "formant_percent": int(self.formant_slider.value())
+            "formant_percent": int(self.formant_slider.value()) if (self.formant_toggle is not None and self.formant_toggle.isChecked()) else 100
         }
 
         worker = threading.Thread(target=self._sound_generation_worker, args=(slider_parameters,), daemon=True)
@@ -392,7 +432,6 @@ class AudioPanel(QWidget):
 
     def _sound_generation_worker(self, params):
         try:
-            import sys
             import onnxruntime as ort
             dsp_module = importlib.import_module("pipeline.tts_utils")
 
@@ -404,17 +443,8 @@ class AudioPanel(QWidget):
             self.log_signal.emit("Instantiating voice model weights from local cache...")
             from kokoro_onnx import Kokoro
 
-            models_cfg = self.config.environment.get("models", {})
-            active_model_name = models_cfg.get("tts_model", "kokoro-v1.0.fp16.onnx")
-
-            project_root = self.config.temp_wav_dir.parent.parent
-            weights_dir = project_root / "assets" / "weights"
-            model_path = weights_dir / active_model_name
-
-            if "zh" in str(model_path):
-                voices_path = weights_dir / "voices-v1.1-zh.bin"
-            else:
-                voices_path = weights_dir / "voices-v1.0.bin"
+            model_path = self.config.tts_model
+            voices_path = self.config.tts_voice_bin
 
             if not model_path.exists() or not voices_path.exists():
                 raise FileNotFoundError(f"Required weights files are missing at: {model_path} or {voices_path}")
@@ -471,13 +501,13 @@ class AudioPanel(QWidget):
             self.reset_btn_signal.emit(True)
 
     def showEvent(self, event):
-        """Re-syncs available voices whenever the Audio Modifiers tab is opened."""
         super().showEvent(event)
-        active_bin = self.config.environment.get("models", {}).get("tts_voice_bin", "voices-v1.0.bin")
-        filtered = [
-            vid for vid, meta in self.voice_catalog.items()
-            if meta.get("bin", "voices-v1.0.bin") == active_bin
-        ] or list(self.voice_catalog.keys())
+        active_bin = self.config.tts_voice_bin_name
+        filtered = self._get_voices_for_bin(active_bin)
+
+        if not filtered:
+            print(f"[AUDIO PANEL WARNING] No voices matched active bin '{active_bin}'; showing full catalog.")
+            filtered = list(self.voice_catalog.keys())
 
         if filtered != self.available_voices:
             current = self.voice_combo.currentText()
@@ -489,6 +519,17 @@ class AudioPanel(QWidget):
                 self.voice_combo.setCurrentText(current)
             self.voice_combo.blockSignals(False)
             self._update_metadata_description_label(self.voice_combo.currentText())
+
+    def _get_voices_for_bin(self, active_bin: str) -> list[str]:
+        matched = []
+        for voice_id, meta in self.voice_catalog.items():
+            bin_entry = meta.get("bin", [])
+            if isinstance(bin_entry, list):
+                if active_bin in bin_entry:
+                    matched.append(voice_id)
+            elif bin_entry == active_bin:
+                matched.append(voice_id)
+        return matched
 
     def gather_settings(self):
         if not self.config:

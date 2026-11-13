@@ -14,6 +14,8 @@ def load_json(path: Path) -> dict:
     with open(path, encoding="utf-8") as f:
         return json.load(f)
 
+# Merge defaults with custom user values to ensure any new keys are added.
+# say it with me: never overwrite existing user customized configuration
 def deep_merge(base: dict, override: dict) -> dict:
     result = base.copy()
     for key, value in override.items():
@@ -52,7 +54,7 @@ class SuitVoiceConfig:
         # Compiles to schema example: "v1.2.2 (Unchained.QT)"
         self.version_signature = f"v{v_num} ({v_major}.{v_minor})"
 
-        # Merge defaults with custom user values
+        # Repeat after me: never overwrite existing user customized configuration
         self.customization = deep_merge(
             self.default_customization,
             self.user_customization
@@ -174,30 +176,36 @@ class SuitVoiceConfig:
         self.wav2wem_binary_path = self.wav2wem_assets_dir / "wav2wem.exe"
         self.ogg_encoder_path = self.wav2wem_assets_dir / "oggenc2.exe"
 
-        # --- ML MODEL INITIALIZATIONS ---
-        models = self.environment.get("models", {})
-        model_url = self.environment.get("model_url", {})
+        # --- DATA CATALOGS ---
+        data_dir = root_dir / "data"
+        self.ttm_model_data = load_json(data_dir / "tts_models.json")
+        self.ttm_voices_data = load_json(data_dir / "tts_voices.json")
 
-        # Wrapping this in Path()
-        self.tts_base_dir = Path(paths.get("tts_base_dir").strip('"'))
+        # --- TTS PATH & MODEL RESOLUTION ---
+        raw_tts_dir = paths.get("tts_base_dir")
+        if not raw_tts_dir:
+            raise ValueError("DEBUG TOKEN = TTSDIR_SIG >> tts_base_dir missing in environment_config.json.")
+        self.tts_base_dir = root_dir / Path(raw_tts_dir.strip('"'))
 
-        # --- TTS Model ---
-        self.tts_model_name = models.get("tts_model")
+        self.tts_model_name = self.customization.get("tts_model")
         if not self.tts_model_name:
-            raise ValueError("DEBUG TOKEN = TTSMODEL_SIG >> tts_model token signature missing inside configuration targets.")
+            raise ValueError("DEBUG TOKEN = TTSMODEL_SIG >> tts_model missing in user_customization.json.")
 
-        self.tts_voice_bin = self.tts_base_dir / models.get("tts_voice_bin")
-        self.tts_model = self.tts_base_dir / models.get("tts_model")
+        self.tts_voice_bin_name = self.customization.get("tts_voice_bin")
+        if not self.tts_voice_bin_name:
+            raise ValueError("DEBUG TOKEN = TTSBIN_SIG >> tts_voice_bin missing in user_customization.json.")
 
-        # Centralize core network release endpoints for download passes later
+        # Resolved file paths for ONNX runtime and downloaders
+        self.tts_model = self.tts_base_dir / self.tts_model_name
+        self.tts_voice_bin = self.tts_base_dir / self.tts_voice_bin_name
+
+        # Network base URL for model downloads
+        model_url = self.environment.get("model_url", {})
         self.tts_base_url = model_url.get("tts_base_url")
 
-        data_dir = root_dir / "data"
-        self.ttm_model_data = load_json(data_dir / "ttm_models.json")
-        self.ttm_voices_data = load_json(data_dir / "ttm_voices.json")
-
         # Llama Engine Setup
-        self.llm_model = str(self.resolve_json_path(models.get("llm_model"), root_dir, must_exist=True))
+        self.models = self.environment.get("models", {})
+        self.llm_model = str(self.resolve_json_path(self.models.get("llm_model"), root_dir, must_exist=True))
         self.llm = None
         if init_llm:
             self.llm = Llama(

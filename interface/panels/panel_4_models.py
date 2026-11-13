@@ -37,6 +37,7 @@ class ModelsPanel(QWidget):
 
         self._build_ui()
         self._refresh_catalog_list_display()
+
     def _build_ui(self):
         master_layout = QHBoxLayout(self)
         master_layout.setSpacing(15)
@@ -172,6 +173,7 @@ class ModelsPanel(QWidget):
 
         right_layout.addWidget(details_container)
         master_layout.addWidget(right_pane)
+
     def _get_model_storage_metrics(self, model_key: str) -> tuple[Path, str]:
         """Calculates precise physical file paths using the structural JSON config base definitions."""
         # Dynamically pull the path variable straight out of the centralized config
@@ -204,14 +206,14 @@ class ModelsPanel(QWidget):
     def _check_if_model_present_on_disk(self, model_key: str) -> bool:
         target_file, size_str = self._get_model_storage_metrics(model_key)
         return target_file.exists() and target_file.stat().st_size > 1000000
+
     @Slot()
     def _refresh_catalog_list_display(self):
         """Re-enumerates the resolution list widget, tracking active configuration flags."""
         self.model_list_widget.clear()
         self._calculate_global_storage_consumption()
 
-        # Read the live model string out of the merged centralized customization maps
-        current_active = self.config.environment.get("models", {}).get("tts_model", "kokoro-v1.0.fp16.onnx")
+        current_active = self.config.tts_model_name
 
         for key in self.list_index_keys:
             info = self.model_catalog[key]
@@ -246,8 +248,7 @@ class ModelsPanel(QWidget):
         )
         self.meta_desc_label.setText(detailed_profile_text)
 
-        current_active = self.config.environment.get("models", {}).get("tts_model", "kokoro-v1.0.fp16.onnx")
-        is_active = (current_active == self.selected_model_key)
+        is_active = (self.config.tts_model_name == self.selected_model_key)
 
         if is_active:
             self._apply_status_updates("Status: Active and Loaded on Exosuit Matrix", "#00ff66", False, False, False)
@@ -255,6 +256,7 @@ class ModelsPanel(QWidget):
             self._apply_status_updates("Status: Offline Asset Present on Local Disk", "#ffaa00", True, False, True)
         else:
             self._apply_status_updates("Status: Not Downloaded (Assets Missing)", "#ff3333", False, True, False)
+
     @Slot(str, str, bool, bool, bool)
     def _apply_status_updates(self, text, color_hex, apply_en, dl_en, del_en):
         self.meta_status_label.setText(text)
@@ -292,20 +294,29 @@ class ModelsPanel(QWidget):
         if not self.selected_model_key:
             return
         try:
-            # Wwrite the runtime model selection back to the environment configuration map
-            self.config.environment["models"]["tts_model"] = self.selected_model_key
-
-            # Match the structural database binary profile link dynamically inside the config layer
             info = self.model_catalog[self.selected_model_key]
-            self.config.environment["models"]["tts_voice_bin"] = info["voice_bin"]
+            new_bin = info["voice_bin"]
+
+            # Update user customization dictionaries
+            self.config.user_customization["tts_model"] = self.selected_model_key
+            self.config.user_customization["tts_voice_bin"] = new_bin
+            self.config.customization["tts_model"] = self.selected_model_key
+            self.config.customization["tts_voice_bin"] = new_bin
+
+            # Update active config properties in memory
+            self.config.tts_model_name = self.selected_model_key
+            self.config.tts_voice_bin_name = new_bin
+            self.config.tts_model = self.config.tts_base_dir / self.selected_model_key
+            self.config.tts_voice_bin = self.config.tts_base_dir / new_bin
 
             self._refresh_catalog_list_display()
             if self.model_list_widget.count() > 0:
                 self.model_list_widget.setCurrentRow(self.list_index_keys.index(self.selected_model_key))
-            QMessageBox.information(self, "Success", "Exosuit core weight matrix target swapped successfully!")
+            QMessageBox.information(self, "Success", "Exosuit core weight matrix target swapped!")
         except Exception as e:
             message = debug_error_message(e, "Selecting a voice model")
             QMessageBox.critical(self, "Configuration Error", f"Could not preserve target voice choice:\n{message}")
+
     def _uninstall_model_assets(self):
         if not self.selected_model_key:
             return
@@ -348,6 +359,7 @@ class ModelsPanel(QWidget):
 
         worker = threading.Thread(target=self._download_worker_thread, daemon=True)
         worker.start()
+
     def _download_worker_thread(self):
         """Pulls down the model weights and corresponding binary voices mapping files from json urls."""
         target_model = str(self.selected_model_key)
@@ -403,4 +415,6 @@ class ModelsPanel(QWidget):
 
     def gather_settings(self):
         if self.selected_model_key:
-            self.config.environment["models"]["tts_model"] = self.selected_model_key
+            info = self.model_catalog[self.selected_model_key]
+            self.config.user_customization["tts_model"] = self.selected_model_key
+            self.config.user_customization["tts_voice_bin"] = info["voice_bin"]
