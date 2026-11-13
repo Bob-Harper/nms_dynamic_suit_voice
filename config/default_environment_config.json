@@ -19,7 +19,7 @@
         "llm_model": "assets/qwen3_4b_q8_0/Qwen3-4B-Q8_0.gguf"
     },
     "external_tools": {
-        "wav2wem_asset": "assets/wav2wem/assets/wav2wem.exe"
+        "wav2wem_assets": "assets/wav2wem/assets/wav2wem.exe"
     },
     "model_url": {
         "tts_base_url": "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1",
