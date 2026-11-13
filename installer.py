@@ -8,7 +8,6 @@ import json
 from pathlib import Path
 import traceback
 
-
 # ==============================================================================
 # VENV SELF-BOOTSTRAPPER
 # If running outside the local venv, automatically restart inside the venv.
@@ -26,6 +25,7 @@ if venv_python.exists() and Path(sys.executable).absolute() != venv_python:
 print("INTERPRETER:", sys.executable)
 AUTOALL = False
 
+
 # -------------------------
 # Utility: fail-fast runner
 # -------------------------
@@ -37,14 +37,18 @@ def run(cmd, desc):
         print(f"ERROR: {desc} failed.\n{error}")
         sys.exit(1)
 
+
 # -------------------------
 # Prompt: auto vs guided
 # -------------------------
 def choose_mode():
     global AUTOALL
-    choice = input("Do you want EVERYTHING automatically? (Y/N): ").strip().lower()
+    print("The installer is configured to check your setup as it installs, and will auto skip matched requirements.\nIf you know you have " \
+    "the required models and project assets already in place,\nGuided mode allows you to manually choose to skip steps.  Use with caution.")
+    choice = input("Do you want the install to run automatically? (Y/N): ").strip().lower()
     AUTOALL = (choice == "y")
     print("Auto mode enabled." if AUTOALL else "Guided mode enabled.")
+
 
 def step(desc, func):
     print(f"\n=== {desc} ===")
@@ -68,6 +72,7 @@ def check_python():
         error = RuntimeError(f"Installer requires Python 3.11; found {out}.")
         sys.exit(1)
 
+
 # -------------------------
 # Step: Setup venv
 # -------------------------
@@ -80,50 +85,6 @@ def setup_venv():
 
     print("Virtual environment ready.")
 
-# -------------------------
-# Step: Validate Configuration
-# -------------------------
-def validate_configuration_layer():
-    config_dir = Path("config")
-    user_config_path = config_dir / "user_customization.json"
-    env_config_path = config_dir / "environment_config.json"
-
-    config_dir.mkdir(parents=True, exist_ok=True)
-
-    if not user_config_path.exists():
-        with open(user_config_path, "w", encoding="utf-8") as f:
-            json.dump({}, f, indent=4)
-        print("Seeded empty user profile settings successfully.")
-
-    if not env_config_path.exists():
-        error = FileNotFoundError(
-            f"Crucial project workspace data is missing: {env_config_path}"
-        )
-        sys.exit(1)
-
-    try:
-        with open(env_config_path, "r", encoding="utf-8") as f:
-            env_data = json.load(f)
-    except Exception as e:
-        sys.exit(1)
-
-    paths = env_data.get("paths", {})
-    mod_dir = Path(paths.get("mod_dir", ""))
-
-    models = env_data.get("models", {})
-    llm_model = Path(models.get("llm_model", ""))
-
-    if not mod_dir.exists():
-        error = FileNotFoundError(
-            f"Target game mod folder path missing or unreachable: {mod_dir}"
-        )
-        print("Please correct the 'mod_dir' value inside config/environment_config.json")
-        sys.exit(1)
-
-    if not llm_model.exists():
-        print("LLM configuration target missing from workspace assets. Ready to download.")
-
-    print("Native JSON configuration profiles verified successfully.")
 
 # -------------------------
 # Step: Install requirements
@@ -154,6 +115,53 @@ def install_reqs():
     ], "Install dependencies")
 
     print("[MOD SETUP] <<< Environment synchronized successfully.\n")
+
+
+# -------------------------
+# Step: Validate Configuration
+# -------------------------
+def validate_configuration_layer():
+
+    config_dir = Path("config")
+    config_dir.mkdir(parents=True, exist_ok=True)
+
+    user_config_path = config_dir / "user_customization.json"
+    default_user_path = config_dir / "default_user_customization.json"
+
+    env_config_path = config_dir / "environment_config.json"
+    default_env_path = config_dir / "default_environment_config.json"
+
+    if not user_config_path.exists():
+        if default_user_path.exists():
+            shutil.copy2(default_user_path, user_config_path)
+            print("Created user_customization.json from default template.")
+        else:
+            with open(user_config_path, "w", encoding="utf-8") as f:
+                json.dump({}, f, indent=4)
+            print("WARNING: default_customization.json missing; created empty user_customization.json.")
+    else:
+        print(f"user_customization.json ALREADY EXISTS ({user_config_path.stat().st_size} bytes). Leaving untouched.")
+
+    if not env_config_path.exists():
+        if default_env_path.exists():
+            shutil.copy2(default_env_path, env_config_path)
+            print("Created environment_config.json from default template.")
+        else:
+            print(f"FATAL: {default_env_path.resolve()} does not provide useable data.\nPath values from default_ environment_config are required for installtion.")
+            print(f"ERROR: Check to see if {env_config_path} is corrupted or failed to download.")
+            sys.exit(1)
+    else:
+        print(f"environment_config.json ALREADY EXISTS ({env_config_path.stat().st_size} bytes). Leaving untouched.")
+
+    for cfg_path in (user_config_path, env_config_path):
+        try:
+            with open(cfg_path, "r", encoding="utf-8") as f:
+                loaded_data = json.load(f)
+        except Exception as e:
+            print(f"[DEBUG][CONFIG_VAL] JSON parse exception on {cfg_path.resolve()}: {type(e).__name__}: {e}")
+            print(f"ERROR: Failed to parse {cfg_path}: {e}")
+            sys.exit(1)
+
 
 # -------------------------
 # Step: Download LLM model (In-lined, no recursive subprocess calls)
@@ -195,7 +203,7 @@ def download_model():
 
     print(f"Downloading model binary (approx 4.4 GB) to config location: {target_file}")
 
-    # Use the local environment's requests library cleanly inside the main process loop
+    # Use the local environment's requests library inside the main process loop
     import requests
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 
@@ -218,10 +226,11 @@ def download_model():
 
     print("\nModel binary download complete via configuration metrics.")
 
+
 # -------------------------
 # Step: Copy Mod Assets (Audio & Global Configs)
 # -------------------------
-def copy_starter_wems(): # also copies GCDEBUGOPTIONS.GLOBAL.EXML to ensure hotswap is enabled
+def copy_starter_wems():
     starter = Path("DYNAMIC_SUIT_VOICE/")
     steam = Path("C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/GAMEDATA/MODS/DYNAMIC_SUIT_VOICE/")
 
@@ -229,12 +238,13 @@ def copy_starter_wems(): # also copies GCDEBUGOPTIONS.GLOBAL.EXML to ensure hots
         print(f"Error: Source directory {starter} not found.")
         return
 
-    # copytree with dirs_exist_ok=True cleanly merges/updates the entire tree
+    # copytree with dirs_exist_ok=True merges/updates the entire tree
     try:
         shutil.copytree(starter, steam, dirs_exist_ok=True, ignore=shutil.ignore_patterns('desktop.ini', '*.tmp'))
         print("Mod folder assets and global configurations updated successfully.")
     except Exception as e:
         print(f"Failed to copy WEM assets")
+
 
 # -------------------------
 # Step: Warmup TTS
@@ -247,7 +257,6 @@ def warmup_tts():
         python_exe = Path(sys.executable)
 
     # Force the subprocess execution pass to bypass capture pipes
-    # This dumps Coqui's model table straight to the screen, completely preventing pipe deadlocks
     print("Pipeline: Initializing local audio synthesis arrays...")
 
     subprocess.run(
@@ -262,7 +271,6 @@ def warmup_tts():
 # -------------------------
 # Step: Grab GithubAction compiled decoupled wav2wem and ogg encoder
 # -------------------------
-
 def automate_audio_compiler_provisioning() -> bool:
     """
     provisions decoupled wav2wem and ogg encoder by pulling
@@ -286,7 +294,7 @@ def automate_audio_compiler_provisioning() -> bool:
     print(f"Pulling components to Target Destination: {target_fork_path}")
     print("\n")
 
-    # Safely purge any corrupted folder stubs before pulling into the repository
+    # Safely purge any corrupted folder stubs before pulling from the repository
     if target_fork_path.exists():
         try:
             shutil.rmtree(target_fork_path)
@@ -319,15 +327,16 @@ def automate_audio_compiler_provisioning() -> bool:
 
     except FileNotFoundError as error:
         print("\n[INSTALL LINK FAULT]: Git client environment not found on this workstation.")
-        print("Ensure Git is installed natively on your OS and registered in system environment paths.")
+        print("Ensure Git is installed on your OS and registered in system environment paths.")
         return False
     except subprocess.CalledProcessError as e:
         print(f"\n[INSTALL LINK FAULT]: Automated repository synchronization aborted by server.")
         print(f"Error Diagnostic Tracking Output: {e.stderr.decode('utf-8', errors='ignore')}")
         return False
 
+
 # -------------------------
-# Step: Create Desktop Shortcuts (Pure Python via winshell - NO VBSCRIPT!)
+# Step: Create Desktop Shortcuts
 # -------------------------
 def create_shortcuts():
     import winshell
@@ -337,7 +346,6 @@ def create_shortcuts():
     desktop = Path(winshell.desktop())
     root_dir = Path.cwd().absolute()
 
-    # CHANGE THIS LINE: Use pythonw.exe for windowless apps!
     python_exe = root_dir / "venv/Scripts/pythonw.exe"
 
     shortcuts_to_build = [
@@ -416,6 +424,8 @@ def main():
 
     step("Install Python dependencies", install_reqs)
     print("• Dependencies: OK")
+    step("Validate configuration matrix", validate_configuration_layer)
+    print("• JSON Config: OK")
 
     # Download the model directly in the installer process.
     step("Download LLM model", download_model)
@@ -424,13 +434,12 @@ def main():
     print("• WEMs updated: OK")
     step("Initialize TTS model", warmup_tts)
     print("• TTS models: OK")
-    step("Validate configuration matrix", validate_configuration_layer)
-    print("• Native JSON Config: OK")
     step("Retrieve Encoder", automate_audio_compiler_provisioning)
     print("• Encoder Retrieval: OK")
     step("Create Desktop Shortcut", create_shortcuts)
     print("• Desktop Fast-Boot Shortcut: OK")
     print("\n=== Setup complete. Go play! ===")
+
 
 if __name__ == "__main__":
     main()
