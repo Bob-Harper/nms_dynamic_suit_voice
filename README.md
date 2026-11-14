@@ -1,9 +1,9 @@
 # Dynamic No Man’s Sky Suit AI Voice Mod
 
-Version: 1.4.2 (Nexus.QUEEG)
-Author: [Bob-Harper](https://github.com)
-Repository: [nms_dynamic_suit_voice](https://github.com)
-
+Version: 1.4.2 (Nexus.QUEEG)<br>
+Author: [Bob-Harper](https://github.com)<br>
+Repository: [nms_dynamic_suit_voice](https://github.com)<br>
+Kilvoctu: Thank you for your excellent codebase contributions; especially for the code that monitors sound file access. Without your insights this might have been a short lived project since my original method stopped working after a game patch.<br><br>
 ## Overview
 
 This mod replaces static exosuit AI voice lines in No Man’s Sky with dynamically generated, non-repetitive lines, powered by a local AI model and localized audio DSP filters.
@@ -102,6 +102,6 @@ Distributed fully open-source under the MIT License. See `LICENSE` for details.
 
 ## Special Acknowledgments
 - **[EternalLeo](https://github.com/EternalLeo):** The excellent [sound2wem](https://github.com/EternalLeo/sound2wem) utility which acted as the springboard to launch this project and provided the original proof of concept. This project would not exist without his research.
-- **[Kilvoctu](https://github.com/Kilvoctu):** Excellent suggestions, thank you for giving me much to ponder and helping elevate the codebase.
+- **[Kilvoctu](https://github.com/Kilvoctu):** Excellent contributions, thank you for giving me much to ponder and helping elevate the codebase.
 - **The Nexus Mods Suit Audio Community:** Gratitude to all original voice modders and commenters whose forum feedback helped isolate the exact filesystem directories and behaviours that make this possible.
 - **Sean Murray & Hello Games:** Deep thanks for crafting the definitive cosmic sandbox universe we waited all these years to explore.
