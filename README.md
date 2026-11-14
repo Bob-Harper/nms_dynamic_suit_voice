@@ -1,8 +1,8 @@
 # Dynamic No Man’s Sky Suit AI Voice Mod
 
 Version: 1.4.2 (Nexus.QUEEG)<br>
-Author: [Bob-Harper](https://github.com)<br>
-Repository: [nms_dynamic_suit_voice](https://github.com)<br>
+Author: [Bob-Harper](https://github.com/Bob-Harper)<br>
+Repository: [nms_dynamic_suit_voice](https://github.com/Bob-Harper/nms_dynamic_suit_voice)<br>
 [Kilvoctu](https://github.com/Kilvoctu): Thank you for your excellent codebase contributions; especially for the code that monitors sound file access. Without your insights this might have been a short lived project since my original method stopped working after a game patch.<br><br>
 ## Overview
 
@@ -98,7 +98,7 @@ Update checks and downloads are user-initiated through the Updates panel; the ap
 
 Distributed fully open-source under the MIT License. See `LICENSE` for details.
 
-* **`wav2wem` Audio Converter:** The installer retrieves the converter from the separate project repository. Review its source, build instructions, and license at [Bob-Harper/wav2wem](https://github.com), originally based on [pas2k/wav2wem](https://github.com).
+* **`wav2wem` Audio Converter:** The installer retrieves the converter from the separate project repository. Review its source, build instructions, and license at [Bob-Harper/wav2wem](https://github.com/pas2k/wav2wem), originally based on[pas2k/wav2wem](https://github.com/pas2k/wav2wem).
 
 ## Special Acknowledgments
 - **[EternalLeo](https://github.com/EternalLeo):** The excellent [sound2wem](https://github.com/EternalLeo/sound2wem) utility which acted as the springboard to launch this project and provided the original proof of concept. This project would not exist without his research.
