@@ -6,37 +6,37 @@ Repository: [nms_dynamic_suit_voice](https://github.com/Bob-Harper/nms_dynamic_s
 [Kilvoctu](https://github.com/Kilvoctu): Thank you for your excellent codebase contributions; especially for the code that monitors sound file access. Without your insights this might have been a short lived project since my original method stopped working after a game patch.<br><br>
 ## Overview
 
-This mod replaces static exosuit AI voice lines in No Man’s Sky with dynamically generated, non-repetitive lines, powered by a local AI model and localized audio DSP filters.
+This mod replaces static exosuit AI voice lines in No Man’s Sky with dynamically generated non-repetitive lines, powered by a local AI model and localized audio DSP filters.
 
 ### Non-Negotiable Core Mandates:
 - **Local files ONLY.** No cloud processing, LLM and TTS models are downloaded then stored locally
 - **Absolutely Free.** Absolutely no paid API subscription keys or associated costs.
-- **100% Open Source.** Absolutely no proprietary software used or included.  All source code publically accessible with permissive licensing.  Fork the code over as you will with this author's blessing and support.
-- **ENHANCE gameplay but NOT at the EXPENSE of gameplay.** Hardware footprints are stringently guarded, no GPU needed or used
-- **Strict Single-Use Policy.** When pre-caching, generated audio files are completely overwritten after a single use, never reused.
+- **100% Open Source.** Absolutely no proprietary software used or included.  All source code publicly accessible with permissive licensing.  Fork the code over as you will with this author's blessing and support.
+- **ENHANCE gameplay but NOT at the EXPENSE of gameplay.** Hardware constraints are strictly enforced by design, no GPU needed or used
+- **Strict Single-Use Policy.** To mitigate repetition whether instantly replacing files or pre-caching, generated audio files are completely overwritten after a single use, never reused.
 
 ## How the Tech Works
 
-When No Man's Sky makes a sound call to play a suit voice line, it reads the physical file it finds inside your mod directory *at the exact moment it searches*. The game does NOT preload mod voice files into system memory when it launches. They load and play **EACH TIME** the game calls for that specific `.wem` file block, then are immediately unloaded until called again.
+When No Man's Sky plays an audio file, it reads the physical file it finds inside your mod directory *at the moment it needs it*. The game appears to load the existence and location of the audio file - it does NOT preload the voice file itself when it launches. They access and play the file **EACH TIME** the game calls for that specific `.wem` file block, then are immediately released until called again.
 
-Because the local pipeline generates variations ahead of time into a background cache, the system watcher instantly swaps a fresh file into your game folder, and proceeds to replenish the cache while you are still playing. Every notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
+Because the local pipeline generates variations ahead of time into a background cache, the system watcher instantly swaps a fresh file into your game folder, and proceeds to replenish the cache while you are still playing. If you have a powerful enough system, you could even bypass the caching by setting cache size to 0. EIther way, very notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
 
 ## Key Features (As of v1.4.0)
 - **Fully converted to Kokoro ONNX** TTS processing is now faster, more efficient, and has both Male and Female base voices to choose from.
 - **Centralized Control Dashboard:** A graphical config interface to launch and quit the tool, customize player name, adjust multi-threaded look-ahead queues, or fine-tune processing effects.
 - **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely replaced by an included lightweight converter. No software accounts, corporate registration, or heavy background installations of programs or third party software are required. (LLM and TTS models still required)
-- **Pure-Python DSP Matrix Engine:** ffmpeg requirement and sub-process loops have been removed. Volume gain, sentence tempo stretchings, and other adjustments are now handled entirely in-memory via single-pass NumPy matrix math.
-- **Open-Source Audio Converter:** The installer retrieves the WEM converter from its separate project repository; its executable is not bundled in the Nexus source archive.
+- **Pure-Python DSP Matrix Engine:** ffmpeg requirement and sub-process loops have been removed. Volume gain, sentence tempo stretching, and other adjustments are now handled entirely in-memory via single-pass NumPy matrix math.
+- **Open-Source Audio Converter:** The installer retrieves the WEM converter from its separate project repository; its executable is not bundled in the source.
 - **Dedicated Update Panel:** Update through a top level panel for immediate user-initiated version checks and file updates.
 - **Stateful Quick Cache System:** Thread-isolated background queue managers to top up caches and intelligently handle file locks without interfering with Game.
 - **Protected VRAM Performance:** Runs lightweight models on CPU thread inference, leaving your GPU completely free to push maximum frame rates to the game.
-- **Integrated Token-based Debuggin system:**Most known possible issues generate a unique Debug Token which can quickly identify possible issues.  This can be used on the Debug panel within the main interface to access explanations, advice, and expose relevant settings for immediate resolution.  A direct link to the Issues page on the Github Repository is also provided for further discussion and assistance.  Log files are *NOT* transmitted automatically, to ensure user privacy.
+- **Integrated Token-based Debugging system:**Generated Debug Tokens can be used on the Debug panel within the main interface in some cases to access explanations, advice, and expose relevant settings for immediate resolution.  A direct link to the Issues page on the Github Repository is also provided for further discussion and assistance.  Log files are *NOT* transmitted automatically, to ensure user privacy.
 
 ### Persistent User Configuration Matrix
-Profile and voice customizations are saved to `config/user_customization.json`. System settings such as paths, cache limits, and runtime attributes are saved in `config/environment_config.json`.  These settings will persist through updates.  The first time install ships with a set of default files for both to ensure values are included for initial startup, and as backups should the customized configuration files become unuseable for any reason.
+Profile and voice customization is saved to `config/user_customization.json`. System settings such as paths, cache limits, and runtime attributes are saved in `config/environment_config.json`.  These settings will persist through updates.  The first time install ships with a set of default files for both to ensure values are included for initial startup, and as backups should the customized configuration files become unusable for any reason.
 
-- **First-Time Installation:** If the user configurated files do not exist on your drive, the automated setup script will initialize them with default values.
-- **Upgrading the Mod:** If the custom settings files already exist, the engine boundaries will completely shield them from being touched.
+- **First-Time Installation:** If the user configured files do not exist on the drive, the automated setup script will initialize them with default values.
+- **Upgrading the Mod:** If the custom settings files already exist, the engine boundaries will completely shield them from being touched.  If new keys or fields are present, the system will continue to use the defaults until or unless the user adjusts any of those values. The save process will adjust the file as needed without touching existing values.
 - **Power-User Manipulation:** These files can be edited directly with a plain-text editor. Be careful.
 
 ## Examples of Dynamic Output Variations
@@ -98,7 +98,7 @@ Update checks and downloads are user-initiated through the Updates panel; the ap
 
 Distributed fully open-source under the MIT License. See `LICENSE` for details.
 
-* **`wav2wem` Audio Converter:** The installer retrieves the converter from the separate project repository. Review its source, build instructions, and license at [Bob-Harper/wav2wem](https://github.com/pas2k/wav2wem), originally based on[pas2k/wav2wem](https://github.com/pas2k/wav2wem).
+* **`wav2wem` Audio Converter:** The installer retrieves the converter from the separate project repository. Review its source, build instructions, and license at [Bob-Harper/wav2wem](https://github.com/pas2k/wav2wem), forked from [pas2k/wav2wem](https://github.com/pas2k/wav2wem).
 
 ## Special Acknowledgments
 - **[EternalLeo](https://github.com/EternalLeo):** The excellent [sound2wem](https://github.com/EternalLeo/sound2wem) utility which acted as the springboard to launch this project and provided the original proof of concept. This project would not exist without his research.
