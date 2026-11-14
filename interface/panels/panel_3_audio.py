@@ -286,18 +286,18 @@ class AudioPanel(QWidget):
         self._apply_raw_dictionary_to_sliders(effects)
 
     def _apply_raw_dictionary_to_sliders(self, data_dict):
-        active_voice = data_dict.get("base_voice", "am_adam")
+        active_voice = data_dict.get("base_voice")
         if active_voice in self.available_voices:
             self.voice_combo.setCurrentText(active_voice)
             self._update_metadata_description_label(active_voice)
 
-        self.gain_slider.setValue(int(data_dict.get("gain_db", 5)))
-        self.tempo_slider.setValue(int(float(data_dict.get("tempo", 1.02)) * 100))
-        self.pitch_slider.setValue(int(data_dict.get("pitch_semitones", 4)))
-        self.mix_slider.setValue(int(data_dict.get("ring_mix", 100)))
-        self.rate_slider.setValue(int(float(data_dict.get("rate", 0.51)) * 100))
-        self.freq_slider.setValue(int(data_dict.get("ring_freq", 300)))
-        self.formant_slider.setValue(int(data_dict.get("formant_percent", 80)))
+        self.gain_slider.setValue(int(data_dict.get("gain_db")))
+        self.tempo_slider.setValue(int(float(data_dict.get("tempo")) * 100))
+        self.pitch_slider.setValue(int(data_dict.get("pitch_semitones")))
+        self.mix_slider.setValue(int(data_dict.get("ring_mix")))
+        self.rate_slider.setValue(int(float(data_dict.get("rate")) * 100))
+        self.freq_slider.setValue(int(data_dict.get("ring_freq")))
+        self.formant_slider.setValue(int(data_dict.get("formant_percent")))
         self._update_all_text_labels()
 
     def _on_slider_changed(self, value):
@@ -314,7 +314,7 @@ class AudioPanel(QWidget):
 
     def _update_metadata_description_label(self, voice_key):
         voice_info = self.voice_catalog.get(voice_key, {})
-        desc = voice_info.get("description", "GENDER: Unknown | TRAITS: Custom Profile Mapping")
+        desc = voice_info.get("description", "GENDER: Unknown - Check data file | TRAITS: Custom Profile Mapping")
         self.voice_desc_box.setText(desc)
 
     def _update_all_text_labels(self):

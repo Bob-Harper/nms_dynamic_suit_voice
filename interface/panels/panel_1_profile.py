@@ -166,8 +166,8 @@ class ProfilePanel(QWidget):
         chosen_tone = self.tone_combo.currentText()
         chosen_wordiness = self.wordiness_combo.currentText()
 
-        t_desc = self.config.ui_promptdata.get("tones", {}).get(chosen_tone, {}).get("description", "")
-        w_desc = self.config.ui_promptdata.get("wordiness", {}).get(chosen_wordiness, {}).get("description", "")
+        t_desc = self.config.ui_promptdata.get("tones", {}).get(chosen_tone, {}).get("description")
+        w_desc = self.config.ui_promptdata.get("wordiness", {}).get(chosen_wordiness, {}).get("description")
 
         self.tone_desc_label.setText(f"↳ Profile: {t_desc}" if t_desc else "↳ Profile: Default tone metrics active.")
         self.wordiness_desc_label.setText(f"↳ Profile: {w_desc}" if w_desc else "↳ Profile: Default narrative length active.")

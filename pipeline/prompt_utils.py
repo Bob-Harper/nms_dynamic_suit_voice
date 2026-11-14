@@ -20,9 +20,9 @@ def construct_standard_prompt(config, category, intent, phrase, wem_id):
     system_prompt = config.suit_voice_base
     tone = determine_tone(config)
     wordiness_level = determine_wordiness(config)
-    category_context = config.promptdata.get(category, config.promptdata.get("Standard", ""))
-    wordiness_prompt = config.promptdata.get("wordiness", {}).get(wordiness_level, "")
-    tone_prompt = config.promptdata.get("tones", {}).get(tone, "")
+    category_context = config.promptdata.get(category, config.promptdata.get("Standard"))
+    wordiness_prompt = config.promptdata.get("wordiness", {}).get(wordiness_level)
+    tone_prompt = config.promptdata.get("tones", {}).get(tone)
     recent_lines = retrieve_recent_lines(config, wem_id)
 
     # Assemble dynamic prompt
@@ -54,7 +54,7 @@ def construct_milcat_prompt(config, category, intent, phrase, wem_id):
     )
 
     # Append reasoning mode toggle only if non-milcat logic wants it off
-    if getattr(config, "milcat_enable_reasoning", "False") == "False":
+    if getattr(config, "milcat_enable_reasoning") == "False":
         system_prompt += " /nothink"
 
     return system_prompt

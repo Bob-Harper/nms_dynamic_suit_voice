@@ -107,7 +107,7 @@ class QuickCacheEngine:
 
         should_pre_cache = False
         if id_str in self.config.intent_map:
-            status_flag = self.config.intent_map[id_str].get("Used", "").strip().lower()
+            status_flag = self.config.intent_map[id_str].get("Used").strip().lower()
             should_pre_cache = (status_flag == "yes")
 
         cached_files = sorted(wem_dir.glob("*.wem"))

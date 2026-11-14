@@ -89,7 +89,7 @@ class ControlDeckDashboard(QMainWindow):
             v_sig = f"CONFIG ERROR ({token})"
 
         icon_path_value = env_data.get("paths", {}).get(
-            "icon_image", "assets/nms_dsv.png"
+            "icon_image"
         )
         self.tray_icon_path = Path(icon_path_value)
         if not self.tray_icon_path.is_absolute():

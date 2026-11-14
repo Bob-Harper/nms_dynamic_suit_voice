@@ -13,6 +13,7 @@ assets/wav2wem
 assets/qwen3_4b_q8_0/
 assets/weights
 assets/*.zip
+assets/gemma
 # But keep icons/images
 !assets/**/*.png
 !assets/**/*.ico

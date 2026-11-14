@@ -86,7 +86,7 @@ def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
         voices_path = config.project_root / "assets" / "weights" / "voices-v1.0.bin"
         config.kokoro_pipeline = Kokoro(str(model_path), str(voices_path))
 
-    voice_name = config.voice_effects.get("base_voice", "am_adam")
+    voice_name = config.voice_effects.get("base_voice")
     samples, sample_rate = config.kokoro_pipeline.create(text, voice=voice_name, speed=1.0)
     audio = np.array(samples, dtype=np.float32)
 

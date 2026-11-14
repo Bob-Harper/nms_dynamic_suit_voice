@@ -9,7 +9,7 @@ qce = QuickCacheEngine(config)
 # JSON sweep utilizing configuration map
 wem_ids_raw = []
 for wem_id, data in config.intent_map.items():
-    if data.get("Used", "").strip().lower() == "yes":
+    if data.get("Used").strip().lower() == "yes":
         wem_ids_raw.append(str(wem_id))
 
 

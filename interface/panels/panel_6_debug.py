@@ -185,7 +185,7 @@ class DebugPanel(QWidget):
 
         self.history_combo.blockSignals(True)
         self.history_combo.clear()
-        self.history_combo.addItem(" -- Select a recent logged incident to autofill lookup --", "")
+        self.history_combo.addItem(" -- Select a recent logged incident to autofill lookup --")
 
         # RECOVERY COMPLIANCE LINK: Read templates out of config using the resolved path structure
         if not self.reports_file.exists() or self.reports_file.stat().st_size == 0:
@@ -219,7 +219,7 @@ class DebugPanel(QWidget):
                             report = json.loads(line)
                             token = report.get("token")
                             context = report.get("context", "Unknown Incident")
-                            timestamp = report.get("timestamp", "")
+                            timestamp = report.get("timestamp")
 
                             # Clean up ISO timestamp into a neat short clock readout [15:42:01]
                             time_part = timestamp.split("T")[-1][:8] if "T" in timestamp else "00:00:00"
@@ -276,7 +276,7 @@ class DebugPanel(QWidget):
                 f"RECOMMENDED SYSTEM CORRECTIONS:\n{steps_text}"
             )
 
-            target = str(item.get("settings_target", "")).lower()
+            target = str(item.get("settings_target")).lower()
             if "path" in target:
                 self.widget_stack.setCurrentWidget(self.path_page)
             elif "cache" in target:
@@ -318,8 +318,8 @@ class DebugPanel(QWidget):
             f"Raw Kernel Stack Traceback:\n{report.get('traceback')}"
         )
 
-        context_str = str(report.get("context", "")).lower()
-        message_str = str(report.get("message", "")).lower()
+        context_str = str(report.get("context")).lower()
+        message_str = str(report.get("message")).lower()
 
         if "path" in context_str or "directory" in context_str or "file" in message_str:
             self.widget_stack.setCurrentWidget(self.path_page)
