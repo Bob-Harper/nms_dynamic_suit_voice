@@ -72,6 +72,20 @@ def check_python():
         error = RuntimeError(f"Installer requires Python 3.11; found {out}.")
         sys.exit(1)
 
+# -------------------------
+# Step: Check Git
+# -------------------------
+def check_git():
+    git_exe = shutil.which("git")
+    if not git_exe:
+        print("ERROR: Git is not installed or was not found on your system PATH.")
+        print("The installer needs Git to fetch audio converter tools and support updates.")
+        print("Download Git for Windows at: https://git-scm.com")
+        print("After installing Git, close this terminal, open a new one, and run installer.py again.")
+        sys.exit(1)
+
+    out = subprocess.check_output([git_exe, "--version"], text=True).strip()
+    print(out)
 
 # -------------------------
 # Step: Setup venv
@@ -411,6 +425,9 @@ def main():
         step("Check Python", check_python)
         print("• Python 3.11 check: OK")
 
+        step("Check Git", check_git)
+        print("• Git check: OK")
+
         step("Setup virtual environment", setup_venv)
         print("• venv: OK")
         handoff_status = _restart_installer_in_venv(
@@ -435,6 +452,8 @@ def main():
     step("Initialize TTS model", warmup_tts)
     print("• TTS models: OK")
     step("Retrieve Encoder", automate_audio_compiler_provisioning)
+    if not automate_audio_compiler_provisioning():
+        sys.exit(1)
     print("• Encoder Retrieval: OK")
     step("Create Desktop Shortcut", create_shortcuts)
     print("• Desktop Fast-Boot Shortcut: OK")

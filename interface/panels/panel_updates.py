@@ -1,4 +1,5 @@
 # interface/panels/panel_2_updates.py
+import shutil
 import sys
 import subprocess
 import threading
@@ -35,6 +36,8 @@ class UpdatesPanel(QWidget):
         card_layout.addWidget(self.version_label)
 
         self.status_reporter = QLabel("Ecosystem Status: Standing By...")
+        self.status_reporter.setWordWrap(True)
+        self.status_reporter.setOpenExternalLinks(True)
         self.status_reporter.setStyleSheet("font-family: 'Consolas', monospace; font-size: 12px; color: #ffaa00; border: none; padding: 4px 0;")
         card_layout.addWidget(self.status_reporter)
 
@@ -135,6 +138,21 @@ class UpdatesPanel(QWidget):
 
     def _refresh_install_state(self, preserve_status: bool = False):
         self._update_version_header()
+
+        if shutil.which("git") is None:
+            self._tracked_repository = False
+            self.check_button.setEnabled(False)
+            self.convert_button.setEnabled(False)
+            self.pull_button.setEnabled(False)
+            if not preserve_status:
+                self._update_status_label(
+                    'Git not detected on system PATH. '
+                    '<a href="https://git-scm.com" style="color: #66b2ff;">Download &amp; install Git</a>, '
+                    'then restart the Control Deck to enable easy updates.',
+                    "#ff3333",
+                )
+            return
+
         git_dir = self.project_root / ".git"
         if git_dir.exists():
             self._tracked_repository = True
@@ -145,7 +163,7 @@ class UpdatesPanel(QWidget):
         else:
             self._tracked_repository = False
             if not preserve_status:
-                self._update_status_label("ZIP / extracted installation archive (untracked).", "#ffaa00")
+                self._update_status_label("ZIP / extracted installation archive (untracked). Manual updating required", "#ffaa00")
             self.convert_button.setEnabled(True)
             self.pull_button.setEnabled(False)
 
