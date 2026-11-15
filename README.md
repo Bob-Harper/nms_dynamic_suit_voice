@@ -61,6 +61,8 @@ Profile and voice customization is saved to `config/user_customization.json`. Sy
 ### Install
 *Please observe that the previous ONE CLICK INSTALL method has been removed for security and safety reasons, and to appease file saftey checkers.*<br>
 *Notice that as of this time, due to specific requirements in use, 3.11 is the only Python version officially supported.*<br>
+<br>
+**Git:** Required during installation to retrieve the open-source `wav2wem` audio converter and to enable in-app updates via the Control Deck. Download and install Git from [://git-scm.com](https://://git-scm.com) before running the installer.<br><br>
 Install Python 3.11, extract the download, open a terminal in the extracted project folder, and run:
 ```powershell
 py -3.11 installer.py
