@@ -2,7 +2,9 @@
 import wave
 from pathlib import Path
 import numpy as np
+import threading
 
+_tts_init_lock = threading.Lock()
 MIN_SAMPLES = 1024
 
 def complex_vocal_engine_matrix(audio: np.ndarray, speed_factor: float, pitch_factor: float, formant_factor: float, hop_length: int = 256, fft_size: int = 1024) -> np.ndarray:
@@ -79,43 +81,47 @@ def complex_vocal_engine_matrix(audio: np.ndarray, speed_factor: float, pitch_fa
 def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
     final_wav = config.temp_wav_dir / f"{wem_num}.wav"
 
-    if not hasattr(config, "kokoro_pipeline") or config.kokoro_pipeline is None:
-        from kokoro_onnx import Kokoro
-        print("[TTS ENGINE]: Initializing ultra-lightweight Kokoro ONNX pipeline...")
-        model_path = config.project_root / "assets" / "weights" / "kokoro-v1.0.fp16.onnx"
-        voices_path = config.project_root / "assets" / "weights" / "voices-v1.0.bin"
-        config.kokoro_pipeline = Kokoro(str(model_path), str(voices_path))
+    if getattr(config, "kokoro_pipeline", None) is None:
+        with _tts_init_lock:
+            if getattr(config, "kokoro_pipeline", None) is None:
+                from kokoro_onnx import Kokoro
+                if isinstance(config.tts_model, Kokoro):
+                    config.kokoro_pipeline = config.tts_model
+                else:
+                    print("[TTS ENGINE]: Initializing Kokoro ONNX pipeline...")
+                    config.kokoro_pipeline = Kokoro(
+                        str(config.tts_model),
+                        str(config.tts_voice_bin),
+                    )
 
-    voice_name = config.voice_effects.get("base_voice")
+    fx = config.voice_effects
+    voice_name = fx.get("base_voice")
     samples, sample_rate = config.kokoro_pipeline.create(text, voice=voice_name, speed=1.0)
     audio = np.array(samples, dtype=np.float32)
 
+    active_gain = float(fx.get("gain_db", 5)) if fx.get("enable_gain", True) else 0.0
+
     if postprocess:
-        fx = config.voice_effects
         audio = apply_vocal_dsp_chain_matrix(
             audio=audio,
             source_sr=sample_rate,
-            gain_db=fx.get("gain_db", 5),
-            pitch_semitones=fx.get("pitch_semitones", 4),
-            tempo=fx.get("tempo", 1.02),
-            rate=fx.get("rate", 0.51),
-            ring_freq=fx.get("ring_freq", 300),
-            ring_mix=fx.get("ring_mix", 100),
-            formant_percent=fx.get("formant_percent", 80),
+            gain_db=active_gain,
+            pitch_semitones=int(fx.get("pitch_semitones", 4)) if fx.get("enable_pitch", True) else 0,
+            tempo=float(fx.get("tempo", 1.02)) if fx.get("enable_tempo", True) else 1.0,
+            rate=float(fx.get("rate", 0.51)) if fx.get("enable_rate", True) else 1.0,
+            ring_freq=int(fx.get("ring_freq", 300)),
+            ring_mix=int(fx.get("ring_mix", 100)) if fx.get("enable_ring", True) else 0,
+            formant_percent=int(fx.get("formant_percent", 80)) if fx.get("enable_formant", True) else 100,
             target_sr=44100,
-            apply_gain_stage=False  # Defer volume scaling until AFTER normalization pass
+            apply_gain_stage=False
         )
 
-    # 1. Perform baseline peak normalization first to keep sentences uniform
     if np.max(np.abs(audio)) > 0:
         audio = audio / np.max(np.abs(audio))
 
-    # 2. FIXED GAIN STAGE POSITION: Apply user volume boost directly to normalized spectrum
-    gain_db = config.voice_effects.get("gain_db", 5)
-    amplitude_multiplier = 10 ** (gain_db / 20.0)
+    amplitude_multiplier = 10 ** (active_gain / 20.0)
     audio = audio * amplitude_multiplier * 32767
 
-    # Prevent clipping distortion hard ceiling overflows
     audio = np.clip(audio, -32768, 32767)
     final_bytes = audio.astype(np.int16).tobytes()
 
@@ -126,6 +132,7 @@ def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
         wf.writeframes(final_bytes)
 
     return final_wav
+
 
 def apply_vocal_dsp_chain_matrix(audio, source_sr, gain_db, pitch_semitones, tempo, rate,
                                  ring_freq, ring_mix, formant_percent, target_sr=44100, apply_gain_stage=True):

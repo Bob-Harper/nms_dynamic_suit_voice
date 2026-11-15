@@ -68,6 +68,7 @@ class QuickCacheEngine:
                         if wem_id in self._active_jobs_count:
                             self._active_jobs_count[wem_id] = max(0, self._active_jobs_count[wem_id] - 1)
                 self._job_queue.task_done()
+
     def _replacement_wrapper(self, wem_id: str, wem_dir: Path, *args):
         """Private interface bridge execution stub executing the voice line generation engine."""
         generate_replacement_voice_line(self.config, wem_id, wem_dir)
@@ -93,6 +94,7 @@ class QuickCacheEngine:
                 attempt += 1
                 sleep_delay = min(0.5, 0.05 * (2 ** min(attempt, 4)))
                 sleep(sleep_delay)
+                
     def update_access_time_to_match_newfile(self, file_path: Path, access_times: dict):
         """Updates tracking dictionary with the file's access epoch timestamp."""
         if file_path.exists():

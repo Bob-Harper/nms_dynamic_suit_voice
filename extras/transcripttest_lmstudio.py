@@ -14,12 +14,12 @@ from pipeline.config import SuitVoiceConfig
 from pipeline.prompt_utils import build_suit_prompt
 
 # --- MODEL & TEST SETTINGS ---
-MODEL_PATH = PROJECT_ROOT / "assets" / "gemma" / "gemma-4-12b-it-Q4_0.gguf"
+MODEL_PATH = PROJECT_ROOT / "assets" / "gemma" / "gemma-4-12b-it-Q3_K_S.gguf"
 TRANSCRIPTS_PATH = PROJECT_ROOT / "data" / "nms_suit_voice_transcripts.json"
 
 ONLY_USED = True
 START_ROW = 0
-END_ROW = 7
+END_ROW = 9
 
 # Load SuitVoiceConfig without loading the default Qwen LLM
 config = SuitVoiceConfig(init_llm=False)
@@ -50,7 +50,7 @@ def reword_phrase(wem_id_r: str,
         intent=intent_r,
         phrase=original_phrase_r,
         wem_id=wem_id_r
-    ).replace(" /nothink").strip()
+    ).replace(" /nothink", "").strip()
 
     messages = [
         {"role": "system", "content": system_prompt},
@@ -67,7 +67,11 @@ def reword_phrase(wem_id_r: str,
                 stream=False
             )
             if isinstance(response, dict):
-                content = response["choices"][0]["message"].get("content") or ""
+                msg = response["choices"][0]["message"]
+                content = response["choices"][0]["message"].get("content")
+                content = msg.get("content")
+                if content is None:
+                    raise ValueError(f"Model returned content=None (finish_reason={response['choices'][0].get('finish_reason')}, keys={list(msg.keys())})")
                 return content.strip()
         except Exception as e:
             if attempt < max_retries - 1:
@@ -80,6 +84,7 @@ def reword_phrase(wem_id_r: str,
 
 def process_entry(wem_id, entry):
     category = entry["Category"]
+
     original_phrase = entry["Transcription"]
     intent = entry["Intent"]
 

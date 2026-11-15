@@ -20,7 +20,13 @@ def construct_standard_prompt(config, category, intent, phrase, wem_id):
     system_prompt = config.suit_voice_base
     tone = determine_tone(config)
     wordiness_level = determine_wordiness(config)
-    category_context = config.promptdata.get(category, config.promptdata.get("Standard"))
+
+    # Check if category exists or is null in promptdata
+    category_context = config.promptdata.get(category)
+    if category_context is None:
+        print(f"[PROMPT WARNING] Category '{category}' is missing or null in prompt_data.json; using 'Default'.")
+        category_context = config.promptdata.get("Default", "")
+
     wordiness_prompt = config.promptdata.get("wordiness", {}).get(wordiness_level)
     tone_prompt = config.promptdata.get("tones", {}).get(tone)
     recent_lines = retrieve_recent_lines(config, wem_id)

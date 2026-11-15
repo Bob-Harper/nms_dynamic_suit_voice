@@ -5,8 +5,10 @@ import shutil
 import sys
 from pathlib import Path
 from llama_cpp import Llama, Optional
-
+from typing import Any
 from .debug_support import record_exception
+import threading
+
 
 def load_json(path: Path) -> dict:
     if not path.exists():
@@ -139,20 +141,22 @@ class SuitVoiceConfig:
         self.promptdata_path = self.resolve_json_path(files.get("prompt_data"), root_dir, must_exist=True)
         raw_prompt_json = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
 
-        # Create structured descriptions for the Qt control deck
+        # Preserve full structured descriptions for the Qt control deck
         self.ui_promptdata = raw_prompt_json
 
-        # Flatten the dictionary in memory for the backend AI engine
-        # This keeps the rest of the text generation loops stable.
-        self.promptdata = {
-            "wordiness": {
-                key: (val["prompt"] if isinstance(val, dict) else val)
-                for key, val in raw_prompt_json.get("wordiness", {}).items()
-            },
-            "tones": {
-                key: (val["prompt"] if isinstance(val, dict) else val)
-                for key, val in raw_prompt_json.get("tones", {}).items()
-            }
+        # Copy all category prompt strings and flatten wordiness/tones for the AI engine
+        self.promptdata: dict[str, Any] = {
+            key: val
+            for key, val in raw_prompt_json.items()
+            if isinstance(val, str)
+        }
+        self.promptdata["wordiness"] = {
+            key: (val["prompt"] if isinstance(val, dict) else val)
+            for key, val in raw_prompt_json.get("wordiness", {}).items()
+        }
+        self.promptdata["tones"] = {
+            key: (val["prompt"] if isinstance(val, dict) else val)
+            for key, val in raw_prompt_json.get("tones", {}).items()
         }
 
         self.current_tone = phrase_settings.get("tone")
@@ -168,13 +172,16 @@ class SuitVoiceConfig:
 
         # Resolve the unified assets installation directory folder path
         self.wav2wem_assets_dir = self.resolve_json_path(
-            external_tools.get("wav2wem_assets"),
+            external_tools.get("wav2wem_assets_path"),
             root_dir,
             must_exist=True
         )
+        self.w2wexe = external_tools.get("wav2wem_assets_w2wexe")
+        self.oggenc2 = external_tools.get("wav2wem_assets_oggenc")
+
         # Build absolute system tracks for all associated tool binaries
-        self.wav2wem_binary_path = self.wav2wem_assets_dir / "wav2wem.exe"
-        self.ogg_encoder_path = self.wav2wem_assets_dir / "oggenc2.exe"
+        self.wav2wem_binary_path = self.wav2wem_assets_dir / self.w2wexe # XXX
+        self.ogg_encoder_path = self.wav2wem_assets_dir / self.oggenc2
 
         # --- DATA CATALOGS ---
         data_dir = root_dir / "data"
@@ -206,17 +213,27 @@ class SuitVoiceConfig:
         # Llama Engine Setup
         self.models = self.environment.get("models", {})
         self.llm_model = str(self.resolve_json_path(self.models.get("llm_model"), root_dir, must_exist=True))
+        self._llm_lock = threading.Lock()
         self.llm = None
         if init_llm:
-            self.llm = Llama(
-                model_path=self.llm_model,
-                n_ctx=40960,
-                n_batch=1024,
-                n_threads=4,
-                verbose=False
-            )
+            self.ensure_llm()
 
         self.recent_lines_text = {}  # Runtime session state cache tracker: {wem_id_str: [line1, line2, ...]}
+
+    def ensure_llm(self):
+        if self.llm is not None:
+            return self.llm
+        with self._llm_lock:
+            if self.llm is None:
+                print("[LLM ENGINE]: Initializing Llama GGUF model...")
+                self.llm = Llama(
+                    model_path=self.llm_model,
+                    n_ctx=40960,
+                    n_batch=1024,
+                    n_threads=4,
+                    verbose=False,
+                )
+        return self.llm
 
     def get_tone(self) -> str:
         return self.current_tone or "Standard"
