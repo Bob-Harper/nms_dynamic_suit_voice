@@ -436,9 +436,39 @@ class ControlDeckDashboard(QMainWindow):
         if not panels_dir.exists():
             return
 
-        scanned_files = sorted(list(panels_dir.glob("panel_*.py")))
-        for file_path in scanned_files:
-            module_name = file_path.stem
+        layout_cfg = getattr(self.config, "panel_customization", None) or {}
+
+        pinned_first = layout_cfg.get("pinned_first", ["panel_profile"])
+        ordered_stems = layout_cfg.get("panel_order", [])
+        pinned_last = layout_cfg.get("pinned_last", ["panel_debug"])
+        title_overrides = layout_cfg.get(
+            "title_overrides",
+            {"panel_profile": "User Profile", "panel_audio": "Audio Modifiers"},
+        )
+
+        available_files = {fp.stem: fp for fp in panels_dir.glob("panel_*.py")}
+
+        # 1. Pinned-first panels (always page 1)
+        mount_queue = [stem for stem in pinned_first if stem in available_files]
+
+        # 2. Explicitly ordered middle panels
+        for stem in ordered_stems:
+            if stem in available_files and stem not in mount_queue and stem not in pinned_last:
+                mount_queue.append(stem)
+
+        # 3. Any unlisted panels next (alphabetical, before pinned_last)
+        unlisted = sorted(
+            stem for stem in available_files
+            if stem not in mount_queue and stem not in pinned_last
+        )
+        mount_queue.extend(unlisted)
+
+        # 4. Pinned-last panels (always final page)
+        for stem in pinned_last:
+            if stem in available_files and stem not in mount_queue:
+                mount_queue.append(stem)
+
+        for module_name in mount_queue:
             try:
                 imported_module = importlib.import_module(
                     f"interface.panels.{module_name}"
@@ -447,27 +477,33 @@ class ControlDeckDashboard(QMainWindow):
                 class_name = "".join(w.capitalize() for w in words) + "Panel"
                 panel_class = getattr(imported_module, class_name, None)
 
-                if panel_class:
-                    display_title = " ".join(w.capitalize() for w in words)
-                    title_overrides = {"Profile": "User Profile", "Audio": "Audio Modifiers"}
-                    display_title = title_overrides.get(display_title, display_title)
+                if not panel_class:
+                    print(f"[PANEL FAULT] Expected class '{class_name}' not found in {module_name}.py")
+                    continue
 
-                    panel_instance = panel_class(self.config)
-                    self.notebook.addTab(panel_instance, display_title)
+                default_title = " ".join(w.capitalize() for w in words)
+                display_title = title_overrides.get(
+                    module_name,
+                    title_overrides.get(default_title, default_title),
+                )
 
-                    if class_name == "ConsolePanel":
-                        self.active_console_signal = panel_instance.log_signal
+                panel_instance = panel_class(self.config)
+                self.notebook.addTab(panel_instance, display_title)
 
-                    if hasattr(panel_instance, "settings_requested"):
-                        panel_instance.settings_requested.connect(
-                            self._open_debug_settings
-                        )
+                if class_name == "ConsolePanel":
+                    self.active_console_signal = panel_instance.log_signal
+
+                if hasattr(panel_instance, "settings_requested"):
+                    panel_instance.settings_requested.connect(
+                        self._open_debug_settings
+                    )
 
             except Exception as load_err:
                 message = debug_error_message(
                     load_err, f"Loading interface panel {module_name}"
                 )
                 print(f"[PANEL FAULT] {message}")
+
 
     def _open_debug_settings(self, target):
         panel_name, _, section = target.partition("/")

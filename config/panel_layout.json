@@ -1,0 +1,24 @@
+{
+    "panel_order": [
+        "panel_updates",
+        "panel_audio",
+        "panel_models",
+        "panel_cache",
+        "panel_system"
+    ],
+    "pinned_first": [
+        "panel_profile"
+    ],
+    "pinned_last": [
+        "panel_debug"
+    ],
+    "title_overrides": {
+        "panel_profile": "User Profile",
+        "panel_updates": "Updates",
+        "panel_audio": "Audio Modifiers",
+        "panel_models": "Audio Models",
+        "panel_cache": "Cache",
+        "panel_system": "System",
+        "panel_debug": "Debug"
+    }
+}

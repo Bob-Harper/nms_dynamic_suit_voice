@@ -43,7 +43,8 @@ class SuitVoiceConfig:
         self.environment = load_json(config_dir / "environment_config.json")
         self.default_customization = load_json(config_dir / "default_customization.json")
         self.user_customization = load_json(config_dir / "user_customization.json")
-
+        self.panel_customization = load_json(config_dir / "panel_layout.json")
+        
         # --- PROJECT METADATA ---
         project_meta = self.environment.get("project", {})
         v_num = project_meta.get("version", "Something")

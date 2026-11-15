@@ -147,13 +147,16 @@ class ProfilePanel(QWidget):
             current_name = "..."
 
         welcome_text = (
-            f"Greetings {current_name}!\n\n"
-            "Welcome to your Exosuit Integration Control Deck.\n\n"
-            "This centralized dashboard directly manages your customized preferences while serving as the primary launch vehicle "
-            "for the active system surveillance loop. Running the engine directly inside this frame satisfies OS security boundaries.\n\n"
+            f"Greetings {current_name}! Welcome to your Exosuit Integration Control Deck.\n"
+            "This centralized dashboard manages your customized preferences while serving as the primary launcher.\n\n"
             "OPERATION MANUAL, TL;DR EDITION:\n"
-            "• User Profile to update your operator designation callsign and select AI behavioral guidelines directly from data profiles.\n"
-            "• Audio Modifiers to configure and tune digital signal processing matrix settings in real time.\n\n"
+            "• User Profile: Preferred name and AI behavioral guidelines\n"
+            "• Updates: Installed version check against available updates\n"
+            "• Audio Modifiers: Configure and test voice processing settings\n"
+            "• Audio Models: TTS model selection, this may affect the voices available\n"
+            "• Cache: Cache settings, adjustments made globally or per file\n"
+            "• System: Advanced settings and System Paths\n"
+            "• Debug: Debug assistance for specific issues, support options for previously unlisted events.\n"
             f"When ready, 'ENGAGE AI CORE' using the button above. May your journey bring you interesting surprises.  Good luck, {current_name}! "
         )
         self.welcome_label.setText(welcome_text)

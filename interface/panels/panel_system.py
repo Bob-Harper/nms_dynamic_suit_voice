@@ -1,7 +1,6 @@
 # interface/panels/panel_4_system.py
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QCheckBox, QLabel, QPushButton, QStackedWidget, QTabWidget, QVBoxLayout, QWidget
-from interface.panels.widgets.cache_management import CacheManagementWidget
 from interface.panels.widgets.path_management import PathManagementWidget
 from interface.panels.widgets.runtime_settings import RuntimeManagementWidget
 
@@ -51,11 +50,9 @@ class SystemPanel(QWidget):
 
         # The System configuration book no longer contains the update widget
         self.settings_page = QTabWidget()
-        self.cache_widget = CacheManagementWidget(self.config)
         self.runtime_widget = RuntimeManagementWidget(self.config)
         self.path_widget = PathManagementWidget(self.config)
 
-        self.settings_page.addTab(self.cache_widget, "Cache Table Allocation")
         self.settings_page.addTab(self.runtime_widget, "Runtime Subsystem")
         self.settings_page.addTab(self.path_widget, "System Paths Mapping")
         self.pages.addWidget(self.settings_page)
@@ -87,6 +84,4 @@ class SystemPanel(QWidget):
 
     def gather_settings(self):
         self.path_widget.gather_settings()
-        self.cache_widget.gather_settings()
         self.runtime_widget.gather_settings()
-        self.cache_widget.refresh_stats()
