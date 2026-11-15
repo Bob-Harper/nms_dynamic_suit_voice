@@ -32,7 +32,11 @@ class CacheTopUpWorker(QThread):
 
     def run(self):
         try:
-            qce = getattr(self.config, "quick_cache", None) or QuickCacheEngine(self.config)
+            qce = getattr(self.config, "quick_cache", None)
+            if qce is None:
+                qce = QuickCacheEngine(self.config)
+                self.config.quick_cache = qce
+
             jobs_queued = 0
             for wem_id in self.wem_ids:
                 wem_dir = self.config.quick_cache_dir / wem_id
