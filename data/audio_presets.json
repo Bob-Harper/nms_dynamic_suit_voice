@@ -92,7 +92,7 @@
     "Lucia Kline, Exolinguist": {
         "target_model": "kokoro-v1.0.fp16.onnx",
         "description": "Loaded Factory Standard Exosuit parameters.",
-        "base_voice": "am_heart",
+        "base_voice": "af_heart",
         "gain_db": 0,
         "tempo": 1.0,
         "pitch_semitones": 0,
