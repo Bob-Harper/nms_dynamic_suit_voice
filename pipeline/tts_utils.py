@@ -7,12 +7,13 @@ import threading
 _tts_init_lock = threading.Lock()
 MIN_SAMPLES = 1024
 
+
 def complex_vocal_engine_matrix(audio: np.ndarray, speed_factor: float, pitch_factor: float, formant_factor: float, hop_length: int = 256, fft_size: int = 1024) -> np.ndarray:
     """Advanced Phase Vocoder engine that independently shifts tempo, pitch, and formants in a single phase-coherent pass."""
     if len(audio) < fft_size:
         return audio
 
-    # 1. Compute STFT (Short-Time Fourier Transform) via NumPy windowing matrices
+    # Compute STFT (Short-Time Fourier Transform) via NumPy windowing matrices
     window = np.hanning(fft_size)
     stft_frames = []
     for i in range(0, len(audio) - fft_size, hop_length):
@@ -61,7 +62,7 @@ def complex_vocal_engine_matrix(audio: np.ndarray, speed_factor: float, pitch_fa
         phase_accum += (omega * pitch_factor) + phase_diff
         output_stft[i] = mag * np.exp(1j * phase_accum)
 
-    # 2. Inverse STFT (Overlap-Add Synthesis Pass) back into time-series float samples
+    # Inverse STFT (Overlap-Add Synthesis Pass) back into time-series float samples
     synthesis_hop = int(hop_length * pitch_factor)
     output_len = new_num_frames * synthesis_hop + fft_size
     output_audio = np.zeros(output_len, dtype=np.float32)
@@ -77,6 +78,33 @@ def complex_vocal_engine_matrix(audio: np.ndarray, speed_factor: float, pitch_fa
     safe_mask = window_sum > 1e-4
     output_audio[safe_mask] /= window_sum[safe_mask]
     return output_audio
+
+def finalize_broadcast_audio(audio: np.ndarray, gain_db: float) -> bytes:
+    """Applies vocal RMS compression, makeup gain, soft-knee limiting, and 16-bit PCM encoding."""
+    peak = np.max(np.abs(audio))
+    if peak > 0:
+        audio = audio / peak
+
+    # Broadcast Vocal Compressor
+    threshold = 0.35
+    ratio = 4.0
+    abs_audio = np.abs(audio)
+    over_mask = abs_audio > threshold
+    compressed = abs_audio.copy()
+    compressed[over_mask] = threshold + (abs_audio[over_mask] - threshold) / ratio
+    audio = np.sign(audio) * compressed
+
+    # Re-normalize body after peak compression
+    new_peak = np.max(np.abs(audio))
+    if new_peak > 0:
+        audio = audio / new_peak
+
+    # Clean makeup drive + soft-knee limiter
+    amplitude_multiplier = 10 ** (gain_db / 20.0)
+    audio = np.tanh(audio * amplitude_multiplier * 0.95) / np.tanh(0.95)
+
+    return (audio * 32767).astype(np.int16).tobytes()
+
 
 def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
     final_wav = config.temp_wav_dir / f"{wem_num}.wav"
@@ -116,14 +144,7 @@ def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
             apply_gain_stage=False
         )
 
-    if np.max(np.abs(audio)) > 0:
-        audio = audio / np.max(np.abs(audio))
-
-    amplitude_multiplier = 10 ** (active_gain / 20.0)
-    audio = audio * amplitude_multiplier * 32767
-
-    audio = np.clip(audio, -32768, 32767)
-    final_bytes = audio.astype(np.int16).tobytes()
+    final_bytes = finalize_broadcast_audio(audio, active_gain)
 
     with wave.open(str(final_wav), "wb") as wf:
         wf.setnchannels(1)
@@ -139,6 +160,21 @@ def apply_vocal_dsp_chain_matrix(audio, source_sr, gain_db, pitch_semitones, tem
     """Decoupled digital audio signal processing pipeline."""
     if len(audio) < MIN_SAMPLES:
         audio = np.pad(audio, (0, MIN_SAMPLES - len(audio)))
+
+    # Fast-path bypass when all DSP modifiers are neutral
+    if (
+        float(tempo) == 1.0
+        and int(pitch_semitones) == 0
+        and int(formant_percent) == 100
+        and float(rate) == 1.0
+        and int(ring_mix) == 0
+    ):
+        if source_sr != target_sr:
+            n_samples_final = max(int(len(audio) * (target_sr / source_sr)), MIN_SAMPLES)
+            audio = np.interp(np.linspace(0, len(audio) - 1, n_samples_final), np.arange(len(audio)), audio).astype(np.float32)
+        if apply_gain_stage:
+            audio = audio * (10 ** (gain_db / 20.0))
+        return audio
 
     speed_factor = float(tempo)
     pitch_factor = 2 ** (pitch_semitones / 12)

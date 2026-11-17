@@ -37,17 +37,12 @@ class AudioPanel(QWidget):
         # Pull voice catalog and active voice bin from SuitVoiceConfig
         self.voice_catalog = self.config.ttm_voices_data
         self.available_voices = self._get_voices_for_bin(self.config.tts_voice_bin_name)
-        self.voice_catalog = self.config.ttm_voices_data
-        active_bin = self.config.tts_voice_bin_name
-
-        # Filter voices to match the currently selected voice bin
-        self.available_voices = [
-            voice_id for voice_id, meta in self.voice_catalog.items()
-            if meta.get("bin") == active_bin
-        ]
+        if not self.available_voices:
+            self.available_voices = list(self.voice_catalog.keys())
 
         self._build_ui()
         self._initialize_data_fields()
+
     def _build_ui(self):
         master_layout = QHBoxLayout(self)
         master_layout.setSpacing(15)
@@ -147,6 +142,27 @@ class AudioPanel(QWidget):
             QPushButton:hover { background-color: #5c6773; color: #ffffff; }
         """)
         self.restore_baselines_btn.clicked.connect(self._restore_factory_baselines)
+
+        self.restore_baselines_btn = QPushButton("RESTORE SYSTEM BASELINES")
+        self.restore_baselines_btn.setStyleSheet("""
+            QPushButton { background-color: #1f2430; border: 1px solid #5c6773; color: #ffffff; padding: 6px 12px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px; }
+            QPushButton:hover { background-color: #5c6773; color: #ffffff; }
+        """)
+        self.restore_baselines_btn.clicked.connect(self._restore_factory_baselines)
+
+        self.zero_effects_btn = QPushButton("ZERO ALL EFFECTS (RAW VOICE)")
+        self.zero_effects_btn.setStyleSheet("""
+            QPushButton { background-color: #1f2430; border: 1px solid #00aaff; color: #66b2ff; padding: 6px 12px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px; }
+            QPushButton:hover { background-color: #005588; color: #ffffff; }
+        """)
+        self.zero_effects_btn.clicked.connect(self._zero_all_effects)
+
+        btn_action_row.addWidget(self.reset_profile_btn)
+        btn_action_row.addWidget(self.restore_baselines_btn)
+        btn_action_row.addWidget(self.zero_effects_btn)
+        btn_action_row.addStretch()
+        advanced_layout.addLayout(btn_action_row)
+
 
         btn_action_row.addWidget(self.reset_profile_btn)
         btn_action_row.addWidget(self.restore_baselines_btn)
@@ -291,13 +307,26 @@ class AudioPanel(QWidget):
             self.voice_combo.setCurrentText(active_voice)
             self._update_metadata_description_label(active_voice)
 
-        self.gain_slider.setValue(int(data_dict.get("gain_db")))
-        self.tempo_slider.setValue(int(float(data_dict.get("tempo")) * 100))
-        self.pitch_slider.setValue(int(data_dict.get("pitch_semitones")))
-        self.mix_slider.setValue(int(data_dict.get("ring_mix")))
-        self.rate_slider.setValue(int(float(data_dict.get("rate")) * 100))
-        self.freq_slider.setValue(int(data_dict.get("ring_freq")))
-        self.formant_slider.setValue(int(data_dict.get("formant_percent")))
+        self.gain_slider.setValue(int(data_dict.get("gain_db", 5)))
+        self.tempo_slider.setValue(int(float(data_dict.get("tempo", 1.00)) * 100))
+        self.pitch_slider.setValue(int(data_dict.get("pitch_semitones", 4)))
+        self.mix_slider.setValue(int(data_dict.get("ring_mix", 100)))
+        self.rate_slider.setValue(int(float(data_dict.get("rate", 0.50)) * 100))
+        self.freq_slider.setValue(int(data_dict.get("ring_freq", 300)))
+        self.formant_slider.setValue(int(data_dict.get("formant_percent", 80)))
+
+        toggle_map = [
+            (self.gain_toggle, "enable_gain"),
+            (self.tempo_toggle, "enable_tempo"),
+            (self.pitch_toggle, "enable_pitch"),
+            (self.mix_toggle, "enable_ring"),
+            (self.rate_toggle, "enable_rate"),
+            (self.formant_toggle, "enable_formant"),
+        ]
+        for toggle, key in toggle_map:
+            if toggle is not None:
+                toggle.setChecked(bool(data_dict.get(key, True)))
+
         self._update_all_text_labels()
 
     def _on_slider_changed(self, value):
@@ -356,6 +385,30 @@ class AudioPanel(QWidget):
                 "formant_percent": 80
             }
         self._apply_raw_dictionary_to_sliders(factory_defaults)
+
+    def _zero_all_effects(self):
+        self.log_signal.emit("Neutralizing all DSP modifiers... Sliders set to transparent raw voice.")
+        neutral_values = {
+            "gain_db": 0,
+            "tempo": 1.00,
+            "pitch_semitones": 0,
+            "ring_mix": 0,
+            "rate": 1.00,
+            "ring_freq": 300,
+            "formant_percent": 100,
+        }
+        self._apply_raw_dictionary_to_sliders(neutral_values)
+        for toggle in (
+            self.gain_toggle,
+            self.tempo_toggle,
+            self.pitch_toggle,
+            self.mix_toggle,
+            self.rate_toggle,
+            self.formant_toggle,
+        ):
+            if toggle is not None:
+                toggle.setChecked(True)
+
 
     def _on_character_preset_selected(self, chosen_preset):
         p = self.loaded_presets.get(chosen_preset)
@@ -443,13 +496,16 @@ class AudioPanel(QWidget):
             self.log_signal.emit("Instantiating voice model weights from local cache...")
             from kokoro_onnx import Kokoro
 
-            model_path = self.config.tts_model
-            voices_path = self.config.tts_voice_bin
-
-            if not model_path.exists() or not voices_path.exists():
-                raise FileNotFoundError(f"Required weights files are missing at: {model_path} or {voices_path}")
-
-            tts = Kokoro(str(model_path), str(voices_path))
+            if isinstance(self.config.tts_model, Kokoro):
+                tts = self.config.tts_model
+            elif getattr(self.config, "kokoro_pipeline", None) is not None:
+                tts = self.config.kokoro_pipeline
+            else:
+                model_path = self.config.tts_model
+                voices_path = self.config.tts_voice_bin
+                if not model_path.exists() or not voices_path.exists():
+                    raise FileNotFoundError(f"Required weights files are missing at: {model_path} or {voices_path}")
+                tts = Kokoro(str(model_path), str(voices_path))
 
             self.log_signal.emit(f"Synthesizing raw test wave forms via Kokoro ({params['base_voice']})...")
             samples, sample_rate = tts.create(params["text"], voice=params["base_voice"], speed=1.0)
@@ -457,28 +513,28 @@ class AudioPanel(QWidget):
             import numpy as np
             audio = np.array(samples, dtype=np.float32)
 
-            self.log_signal.emit("Injecting local NumPy robotic matrix overlay...")
-            audio = dsp_module.apply_vocal_dsp_chain_matrix(
-                audio=audio,
-                source_sr=sample_rate,
-                gain_db=params["gain_db"],
-                pitch_semitones=params["pitch_semitones"],
-                tempo=params["tempo"],
-                rate=params["rate"],
-                ring_freq=params["ring_freq"],
-                ring_mix=params["ring_mix"],
-                formant_percent=params["formant_percent"],
-                target_sr=44100,
-                apply_gain_stage=False
-            )
-
-            if np.max(np.abs(audio)) > 0:
-                audio = audio / np.max(np.abs(audio))
-
-            amplitude_multiplier = 10 ** (params["gain_db"] / 20.0)
-            audio = audio * amplitude_multiplier * 32767
-            audio = np.clip(audio, -32768, 32767)
-            final_bytes = audio.astype(np.int16).tobytes()
+            if not params.get("raw_mode", False):
+                self.log_signal.emit("Injecting local NumPy robotic matrix overlay...")
+                audio = dsp_module.apply_vocal_dsp_chain_matrix(
+                    audio=audio,
+                    source_sr=sample_rate,
+                    gain_db=params["gain_db"],
+                    pitch_semitones=params["pitch_semitones"],
+                    tempo=params["tempo"],
+                    rate=params["rate"],
+                    ring_freq=params["ring_freq"],
+                    ring_mix=params["ring_mix"],
+                    formant_percent=params["formant_percent"],
+                    target_sr=44100,
+                    apply_gain_stage=False
+                )
+                final_bytes = dsp_module.finalize_broadcast_audio(audio, params["gain_db"])
+            else:
+                self.log_signal.emit("Bypassing DSP chain for raw voice playback...")
+                if sample_rate != 44100:
+                    n_samples = max(int(len(audio) * (44100 / sample_rate)), 1024)
+                    audio = np.interp(np.linspace(0, len(audio) - 1, n_samples), np.arange(len(audio)), audio).astype(np.float32)
+                final_bytes = dsp_module.finalize_broadcast_audio(audio, 0.0)
 
             import wave
             with wave.open(str(processed_wav), "wb") as wf:
@@ -509,16 +565,30 @@ class AudioPanel(QWidget):
             print(f"[AUDIO PANEL WARNING] No voices matched active bin '{active_bin}'; showing full catalog.")
             filtered = list(self.voice_catalog.keys())
 
+        raw_saved = (
+            self.config.user_customization.get("voice_effects", {}).get("base_voice")
+            if self.config
+            else None
+        )
+        saved_voice = str(raw_saved) if raw_saved else ""
+
         if filtered != self.available_voices:
-            current = self.voice_combo.currentText()
+            current = self.voice_combo.currentText() or saved_voice
             self.available_voices = filtered
             self.voice_combo.blockSignals(True)
             self.voice_combo.clear()
             self.voice_combo.addItems(self.available_voices)
-            if current in self.available_voices:
+            if current and current in self.available_voices:
                 self.voice_combo.setCurrentText(current)
+            elif saved_voice and saved_voice in self.available_voices:
+                self.voice_combo.setCurrentText(saved_voice)
             self.voice_combo.blockSignals(False)
             self._update_metadata_description_label(self.voice_combo.currentText())
+        elif saved_voice and saved_voice in self.available_voices and self.voice_combo.currentText() != saved_voice:
+            self.voice_combo.blockSignals(True)
+            self.voice_combo.setCurrentText(saved_voice)
+            self.voice_combo.blockSignals(False)
+            self._update_metadata_description_label(saved_voice)
 
     def _get_voices_for_bin(self, active_bin: str) -> list[str]:
         matched = []
@@ -546,3 +616,16 @@ class AudioPanel(QWidget):
         effects["rate"] = round(self.rate_slider.value() / 100.0, 2)
         effects["ring_freq"] = self.freq_slider.value()
         effects["formant_percent"] = self.formant_slider.value()
+
+        if self.gain_toggle is not None:
+            effects["enable_gain"] = self.gain_toggle.isChecked()
+        if self.tempo_toggle is not None:
+            effects["enable_tempo"] = self.tempo_toggle.isChecked()
+        if self.pitch_toggle is not None:
+            effects["enable_pitch"] = self.pitch_toggle.isChecked()
+        if self.mix_toggle is not None:
+            effects["enable_ring"] = self.mix_toggle.isChecked()
+        if self.rate_toggle is not None:
+            effects["enable_rate"] = self.rate_toggle.isChecked()
+        if self.formant_toggle is not None:
+            effects["enable_formant"] = self.formant_toggle.isChecked()
