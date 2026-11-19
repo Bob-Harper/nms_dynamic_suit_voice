@@ -2,6 +2,7 @@ numpy
 psutil
 pywin32
 winshell
+win32con
 soundfile
 kokoro_onnx
 Pillow>=11.3.0,<12
