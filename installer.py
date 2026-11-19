@@ -8,13 +8,13 @@ from pathlib import Path
 import traceback
 
 ROOT_DIR = Path(__file__).resolve().parent
-
+AUTOALL = False
 # ==============================================================================
 # VENV SELF-BOOTSTRAPPER
 # If running outside the local venv, automatically restart inside the venv.
 # ==============================================================================
 venv_python = Path("venv/Scripts/python.exe").absolute()
-# Ensure we don't loop endlessly by checking if sys.executable points to this venv
+# Ensure no infinite loop by checking if sys.executable points to this venv
 if venv_python.exists() and Path(sys.executable).absolute() != venv_python:
     if "--download-model" not in sys.argv:  # Don't interrupt explicit sub-flags
         print("[BOOTSTRAP] Handoff execution context over to local virtual environment...")
@@ -22,8 +22,6 @@ if venv_python.exists() and Path(sys.executable).absolute() != venv_python:
         result = subprocess.run([str(venv_python)] + sys.argv)
         sys.exit(result.returncode)
 # ==============================================================================
-
-AUTOALL = False
 
 
 # -------------------------
@@ -130,7 +128,7 @@ def setup_venv():
 def install_reqs():
     print("\n[MOD SETUP] >>> Entering environment sync and dependency boundary.")
 
-    current_dir = Path(__file__).resolve().parent
+    current_dir = ROOT_DIR
     python_exe = current_dir / "venv" / "Scripts" / "python.exe"
     requirements_file = current_dir / "requirements.txt"
 
@@ -245,13 +243,13 @@ def download_model():
     if target_file.exists():
         actual_size = target_file.stat().st_size
         if actual_size > (10 * 1024 * 1024):
-            print("Model binary verified. Skipping download.")
+            print("Model verified. Skipping download.")
             return
         else:
             print("Warning: Found incomplete configuration file stub. Re-downloading...")
             target_file.unlink()
 
-    print(f"Downloading model binary (approx 4.4 GB) to config location: {target_file}")
+    print(f"Downloading model (approx 4.4 GB) to config location: {target_file}")
 
     # Use the local environment's requests library inside the main process loop
     import requests
@@ -274,7 +272,7 @@ def download_model():
                         else:
                             print(f"Progress: {mb_done:.1f} MB downloaded...", end="\r")
 
-    print("\nModel binary download complete via configuration metrics.")
+    print("\nModel download complete.")
 
 
 # -------------------------
@@ -326,7 +324,7 @@ def warmup_tts():
         python_exe = Path(sys.executable)
 
     # Force the subprocess execution pass to bypass capture pipes
-    print("Pipeline: Initializing local audio synthesis arrays...")
+    print("Warmup TTS: Initializing local audio synthesis arrays...")
 
     subprocess.run(
         [str(python_exe), "-m", "pipeline.warmup_tts"],
@@ -408,37 +406,54 @@ def automate_audio_compiler_provisioning() -> bool:
 # Step: Create Desktop Shortcuts
 # -------------------------
 def create_shortcuts():
-    import winshell
-    import win32com
-    from win32com.client import Dispatch
+    try:
+        import winshell
+        from win32com.client import Dispatch
+    except ImportError as e:
+        print(f"WARNING: Shortcut libraries unavailable ({e}).")
+        print(f"You can still launch the mod manually using: {ROOT_DIR / 'launch_nms_dsv.py'}")
+        return False
 
-    desktop = Path(winshell.desktop())
-    root_dir = ROOT_DIR
+    try:
+        desktop = Path(winshell.desktop())
+        root_dir = ROOT_DIR
+        python_exe = root_dir / "venv" / "Scripts" / "pythonw.exe"
+        launcher_script = root_dir / "launch_nms_dsv.py"
+        icon_path = root_dir / "assets" / "nms_dsv_256.ico"
 
-    python_exe = root_dir / "venv/Scripts/pythonw.exe"
+        if not python_exe.exists():
+            print(f"WARNING: Virtual environment executable missing at {python_exe}")
+            return False
 
-    shortcuts_to_build = [
-        {
-            "name": "NMS Exosuit Companion.lnk",
-            "target": str(python_exe),
-            "args": f'"{root_dir / "launch_nms_dsv.py"}"',
-            "icon": str(root_dir / "assets/nms_dsv_256.ico")
-        },
-    ]
-    shell = Dispatch('WScript.Shell')
+        shortcuts_to_build = [
+            {
+                "name": "NMS Exosuit Companion.lnk",
+                "target": str(python_exe),
+                "args": f'"{launcher_script}"',
+                "icon": str(icon_path) if icon_path.exists() else "",
+            },
+        ]
 
-    for item in shortcuts_to_build:
-        shortcut_path = os.path.join(desktop, item["name"])
-        shortcut = shell.CreateShortCut(shortcut_path)
+        shell = Dispatch("WScript.Shell")
 
-        # Launch the application directly through the virtual-environment Python.
-        shortcut.Targetpath = item["target"]
-        shortcut.Arguments = item["args"]
-        shortcut.WorkingDirectory = str(root_dir)
-        shortcut.IconLocation = item["icon"]
-        shortcut.Save()
+        for item in shortcuts_to_build:
+            shortcut_path = desktop / item["name"]
+            shortcut = shell.CreateShortCut(str(shortcut_path))
+            shortcut.Targetpath = item["target"]
+            shortcut.Arguments = item["args"]
+            shortcut.WorkingDirectory = str(root_dir)
+            if item["icon"]:
+                shortcut.IconLocation = item["icon"]
+            shortcut.Save()
 
-    print("Desktop Shortcuts created successfully.")
+        print(f"Desktop shortcut created at: {desktop}")
+        return True
+
+    except Exception as e:
+        print(f"WARNING: Could not create desktop shortcut ({type(e).__name__}: {e}).")
+        print("This is often caused by Windows Controlled Folder Access or OneDrive Desktop sync.")
+        print(f"Setup is still complete—you can launch the app directly via: {ROOT_DIR / 'launch_nms_dsv.py'}")
+        return False
 
 
 def _restart_installer_in_venv(mode):
