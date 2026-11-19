@@ -36,75 +36,84 @@ def download_asset_stream(url: str, dest_path: Path):
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
 
+def _load_json_with_fallback(primary_path: Path, fallback_path: Path, label: str) -> dict:
+    target = primary_path if primary_path.exists() else fallback_path
+    if not target.exists():
+        raise FileNotFoundError(f"{label} missing at both {primary_path} and {fallback_path}")
+    with open(target, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
 def main():
     install_exception_hooks()
     print("Pipeline: Starting offline TTS compilation warmup...")
 
-    # 1. Resolve project root absolute path structure
     project_root = Path(__file__).parent.parent.absolute()
-    env_config_path = project_root / "config" / "environment_config.json"
+    config_dir = project_root / "config"
 
-    if not env_config_path.exists():
-        error = FileNotFoundError(f"Configuration profile missing: {env_config_path}")
-        token = record_exception(error, "Checking setup configuration for TTS warmup")
-        print(f"ERROR: {error}\nDEBUG TOKEN = {token}")
-        sys.exit(1)
+    env_config_path = config_dir / "environment_config.json"
+    default_env_config_path = config_dir / "default_environment_config.json"
 
-    # 2. Extract configuration fields out of the JSON profile
+    user_config_path = config_dir / "user_customization.json"
+    default_user_config_path = config_dir / "default_customization.json"
+
     try:
-        with open(env_config_path, "r", encoding="utf-8") as f:
-            env_data = json.load(f)
+        env_data = _load_json_with_fallback(
+            env_config_path, default_env_config_path, "Environment configuration"
+        )
+        user_data = _load_json_with_fallback(
+            user_config_path, default_user_config_path, "User customization configuration"
+        )
     except Exception as e:
         token = record_exception(e, "Reading setup configuration for TTS warmup")
-        print(f"ERROR: environment_config.json format is corrupt: {e}\nDEBUG TOKEN = {token}")
+        print(f"ERROR: Configuration load failed: {e}\nDEBUG TOKEN = {token}")
         sys.exit(1)
 
-    models_cfg = env_data.get("models", {})
-    tts_model_name = models_cfg.get("tts_model")
+    tts_model_name = user_data.get("tts_model")
+    tts_voice_bin_name = user_data.get("tts_voice_bin")
 
     paths_cfg = env_data.get("paths", {})
     temp_wav_setting = paths_cfg.get("temp_wav_dir")
+    tts_base_dir_setting = paths_cfg.get("tts_base_dir", "assets/weights")
+    tts_base_url = env_data.get("model_url", {}).get(
+        "tts_base_url",
+        "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1",
+    ).rstrip("/")
 
-    if not tts_model_name or not temp_wav_setting:
-        error = ValueError("Required tts_model or temp_wav_dir setting is missing.")
+    if not tts_model_name or not tts_voice_bin_name or not temp_wav_setting:
+        error = ValueError("Required tts_model, tts_voice_bin, or temp_wav_dir setting is missing.")
         token = record_exception(error, "Validating TTS warmup configuration")
         print(f"ERROR: {error}\nDEBUG TOKEN = {token}")
         sys.exit(1)
 
-    # Ensure our workspace directory exists relative to the project root
     temp_wav_dir = project_root / Path(temp_wav_setting.strip('"'))
     temp_wav_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Pipeline: Verifying weights for voice signature -> {tts_model_name}")
-
-    # 3. Locate or automatically acquire the physical local weight assets
-    weights_dir = project_root / "assets" / "weights"
+    weights_dir = project_root / Path(tts_base_dir_setting.strip('"'))
     weights_dir.mkdir(parents=True, exist_ok=True)
 
-    model_path = weights_dir / "kokoro-v1.0.fp16.onnx"
-    voices_path = weights_dir / "voices-v1.0.bin"
+    print(f"Pipeline: Verifying weights for voice signature -> {tts_model_name} / {tts_voice_bin_name}")
 
-    # TRUE MANIFEST SPECIFICATIONS: Cryptographic targets extracted directly from the release details
+    model_path = weights_dir / tts_model_name
+    voices_path = weights_dir / tts_voice_bin_name
+
     MODEL_SHA256 = "f3a290d384fbb27966d462905c71a46cef9e5fd00516b40df32a0b4afe77ac96"
-    VOICES_SHA256 = "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d"  #
+    VOICES_SHA256 = "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d"
 
-    model_url = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/kokoro-v1.0.fp16.onnx"
-    voices_url = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/voices-v1.0.bin"
+    model_url = f"{tts_base_url}/{tts_model_name}"
+    voices_url = f"{tts_base_url}/{tts_voice_bin_name}"
 
-    # 4. Fire the synthesis compilation warmup using the Kokoro engine
     try:
         from kokoro_onnx import Kokoro
         import soundfile as sf
         import onnxruntime as ort
 
-        # 1. Verify or acquire the int8 ONNX model
         if not verify_file_integrity(model_path, MODEL_SHA256):
             print("Pipeline: Local voice model files missing or corrupt. Acquiring model from source")
             download_asset_stream(model_url, model_path)
             if not verify_file_integrity(model_path, MODEL_SHA256):
                 raise ValueError("Downloaded model failed SHA256 signature verification loop.")
 
-        # 2. Verify or acquire the voice map binary
         if not verify_file_integrity(voices_path, VOICES_SHA256):
             print("Pipeline: Voice library profiles missing or corrupt. Acquiring binary from source")
             download_asset_stream(voices_url, voices_path)
@@ -113,19 +122,17 @@ def main():
 
         print("Enforcing strict local path injection...")
 
-        ort.set_default_logger_severity(3)  # 0:Verbose, 1:Info, 2:Warning, 3:Error
+        ort.set_default_logger_severity(3)
 
         tts_model = Kokoro(str(model_path), str(voices_path))
+        base_voice = user_data.get("voice_effects", {}).get("base_voice", "am_adam")
         test_text = (
             "The required models and files for voice synthesis are now installed. "
             "If you are hearing this message, the models are downloaded and everything worked correctly."
         )
         final_wav = temp_wav_dir / "warmup.wav"
 
-        # Generate the raw audio floats array out of the local ONNX model
-        samples, sample_rate = tts_model.create(test_text, voice="am_adam", speed=1.0)
-
-        # Write the audio output array straight to disk as a WAV asset
+        samples, sample_rate = tts_model.create(test_text, voice=base_voice, speed=1.0)
         sf.write(str(final_wav), samples, sample_rate)
 
         print(f"TTS warmup complete. Verification test file generated: {final_wav}")
@@ -134,6 +141,7 @@ def main():
         token = record_exception(e, "Downloading or compiling the TTS model during setup")
         print(f"ERROR: Local TTS compilation failed: {e}\nDEBUG TOKEN = {token}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
