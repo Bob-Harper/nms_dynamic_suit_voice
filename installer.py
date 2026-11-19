@@ -407,7 +407,10 @@ def automate_audio_compiler_provisioning() -> bool:
 # -------------------------
 def create_shortcuts():
     try:
+        import site
+        site.main()
         import winshell
+        import win32com
         from win32com.client import Dispatch
     except ImportError as e:
         print(f"WARNING: Shortcut libraries unavailable ({e}).")
