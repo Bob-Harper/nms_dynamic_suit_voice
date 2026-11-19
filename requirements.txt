@@ -1,11 +1,10 @@
 numpy
 psutil
-pywin32
-winshell
-win32con
 soundfile
 kokoro_onnx
 Pillow>=11.3.0,<12
 requests>=2.32.0,<3
 PySide6>=6.7.0,<7.0.0
 llama-cpp-python>=0.3.16
+pywin32; sys_platform == 'win32'
+winshell; sys_platform == 'win32'

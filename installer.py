@@ -1,19 +1,20 @@
 # installer.py
 import subprocess
 import sys
-print("INTERPRETER:", sys.executable)
 import os
 import shutil
 import json
 from pathlib import Path
 import traceback
 
+ROOT_DIR = Path(__file__).resolve().parent
+
 # ==============================================================================
 # VENV SELF-BOOTSTRAPPER
 # If running outside the local venv, automatically restart inside the venv.
 # ==============================================================================
 venv_python = Path("venv/Scripts/python.exe").absolute()
-# Ensure we don't loop endlessly by checking if sys.executable points to our venv
+# Ensure we don't loop endlessly by checking if sys.executable points to this venv
 if venv_python.exists() and Path(sys.executable).absolute() != venv_python:
     if "--download-model" not in sys.argv:  # Don't interrupt explicit sub-flags
         print("[BOOTSTRAP] Handoff execution context over to local virtual environment...")
@@ -22,7 +23,6 @@ if venv_python.exists() and Path(sys.executable).absolute() != venv_python:
         sys.exit(result.returncode)
 # ==============================================================================
 
-print("INTERPRETER:", sys.executable)
 AUTOALL = False
 
 
@@ -43,23 +43,47 @@ def run(cmd, desc):
 # -------------------------
 def choose_mode():
     global AUTOALL
-    print("The installer is configured to check your setup as it installs, and will auto skip matched requirements.\nIf you know you have " \
-    "the required models and project assets already in place,\nGuided mode allows you to manually choose to skip steps.  Use with caution.")
-    choice = input("Do you want the install to run automatically? (Y/N): ").strip().lower()
-    AUTOALL = (choice == "y")
-    print("Auto mode enabled." if AUTOALL else "Guided mode enabled.")
+    print(
+        "\n--- Installation Mode ---\n"
+        "Auto Mode   : Installs everything and skips already-completed steps. (Recommended)\n"
+        "Guided Mode : Prompts before each step so you can manually skip assets or downloads.\n"
+    )
+    while True:
+        choice = input("Run in Auto Mode? [Y/n]: ").strip().lower()
+        if choice in ("", "y", "yes"):
+            AUTOALL = True
+            print("Auto mode enabled.\n")
+            return
+        if choice in ("n", "no"):
+            AUTOALL = False
+            print("Guided mode enabled.\n")
+            return
+        print("Invalid input. Please enter Y or N.")
 
 
-def step(desc, func):
+def step(desc, func, status_label=None):
     print(f"\n=== {desc} ===")
     if AUTOALL:
-        func()
-    else:
-        choice = input("Run this step automatically? (Y/N): ").strip().lower()
-        if choice == "y":
-            func()
-        else:
+        result = func()
+        ok = True if result is None else bool(result)
+        if ok and status_label:
+            print(f"• {status_label}: OK")
+        return ok
+
+    while True:
+        choice = input("Run this step? [Y/n]: ").strip().lower()
+        if choice in ("", "y", "yes"):
+            result = func()
+            ok = True if result is None else bool(result)
+            if ok and status_label:
+                print(f"• {status_label}: OK")
+            return ok
+        if choice in ("n", "no"):
             print(f"Skipping: {desc}")
+            if status_label:
+                print(f"• {status_label}: SKIPPED")
+            return True
+        print("Invalid input. Please enter Y or N.")
 
 # -------------------------
 # Step: Check Python
@@ -69,7 +93,7 @@ def check_python():
     print(out)
 
     if not out.startswith("Python 3.11"):
-        error = RuntimeError(f"Installer requires Python 3.11; found {out}.")
+        print(f"ERROR: Installer requires Python 3.11; found {out}.")
         sys.exit(1)
 
 # -------------------------
@@ -91,11 +115,11 @@ def check_git():
 # Step: Setup venv
 # -------------------------
 def setup_venv():
-    venv_path = Path("venv")
+    venv_path = ROOT_DIR / "venv"
     python_exe = sys.executable
 
     if not venv_path.exists():
-        run([python_exe, "-m", "venv", "venv"], "Create virtual environment")
+        run([python_exe, "-m", "venv", str(venv_path)], "Create virtual environment")
 
     print("Virtual environment ready.")
 
@@ -106,7 +130,10 @@ def setup_venv():
 def install_reqs():
     print("\n[MOD SETUP] >>> Entering environment sync and dependency boundary.")
 
-    python_exe = Path("venv/Scripts/python.exe")
+    current_dir = Path(__file__).resolve().parent
+    python_exe = current_dir / "venv" / "Scripts" / "python.exe"
+    requirements_file = current_dir / "requirements.txt"
+
     if not python_exe.exists():
         print("[MOD SETUP] !!! CRITICAL ERROR: Virtual environment initialization failed.")
         sys.exit(1)
@@ -125,8 +152,17 @@ def install_reqs():
         str(python_exe), "-m", "pip", "install",
         "--only-binary=llama-cpp-python",
         "--extra-index-url", target_url,
-        "-r", "requirements.txt"
+        "-r", str(requirements_file)
     ], "Install dependencies")
+
+    if sys.platform == "win32":
+        postinstall_script = current_dir / "venv" / "Scripts" / "pywin32_postinstall.py"
+        if postinstall_script.exists():
+            subprocess.run(
+                [str(python_exe), str(postinstall_script), "-install", "-silent"],
+                cwd=str(current_dir),
+                check=False,
+            )
 
     print("[MOD SETUP] <<< Environment synchronized successfully.\n")
 
@@ -135,8 +171,7 @@ def install_reqs():
 # Step: Validate Configuration
 # -------------------------
 def validate_configuration_layer():
-
-    config_dir = Path("config")
+    config_dir = ROOT_DIR / "config"
     config_dir.mkdir(parents=True, exist_ok=True)
 
     user_config_path = config_dir / "user_customization.json"
@@ -161,7 +196,7 @@ def validate_configuration_layer():
             shutil.copy2(default_env_path, env_config_path)
             print("Created environment_config.json from default template.")
         else:
-            print(f"FATAL: {default_env_path.resolve()} does not provide useable data.\nPath values from default_ environment_config are required for installtion.")
+            print(f"FATAL: {default_env_path.resolve()} does not provide useable data.\nPath values from default_environment_config are required for installation.")
             print(f"ERROR: Check to see if {env_config_path} is corrupted or failed to download.")
             sys.exit(1)
     else:
@@ -181,7 +216,8 @@ def validate_configuration_layer():
 # Step: Download LLM model (In-lined, no recursive subprocess calls)
 # -------------------------
 def download_model():
-    project_root = Path(__file__).parent.absolute()
+    project_root = ROOT_DIR
+
     config_dir = project_root / "config"
     env_config_path = config_dir / "environment_config.json"
 
@@ -245,26 +281,45 @@ def download_model():
 # Step: Copy Mod Assets (Audio & Global Configs)
 # -------------------------
 def copy_starter_wems():
-    starter = Path("DYNAMIC_SUIT_VOICE/")
-    steam = Path("C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/GAMEDATA/MODS/DYNAMIC_SUIT_VOICE/")
+    starter = ROOT_DIR / "DYNAMIC_SUIT_VOICE"
+    steam = Path("C:/Program Files (x86)/Steam/steamapps/common/No Man's Sky/GAMEDATA/MODS/DYNAMIC_SUIT_VOICE")
 
     if not starter.exists():
         print(f"Error: Source directory {starter} not found.")
-        return
+        return False
 
-    # copytree with dirs_exist_ok=True merges/updates the entire tree
+    copied = 0
+    skipped = 0
+
     try:
-        shutil.copytree(starter, steam, dirs_exist_ok=True, ignore=shutil.ignore_patterns('desktop.ini', '*.tmp'))
-        print("Mod folder assets and global configurations updated successfully.")
-    except Exception as e:
-        print(f"Failed to copy WEM assets")
+        for src_file in starter.rglob("*"):
+            if not src_file.is_file():
+                continue
+            if src_file.name.lower() == "desktop.ini" or src_file.suffix.lower() == ".tmp":
+                continue
 
+            rel_path = src_file.relative_to(starter)
+            dest_file = steam / rel_path
+
+            if dest_file.exists():
+                skipped += 1
+                continue
+
+            dest_file.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src_file, dest_file)
+            copied += 1
+
+        print(f"Mod folder ready ({copied} files copied, {skipped} existing files preserved).")
+        return True
+    except Exception as e:
+        print(f"Failed to copy WEM assets (is the game currently running?): {e}")
+        return False
 
 # -------------------------
 # Step: Warmup TTS
 # -------------------------
 def warmup_tts():
-    project_root = Path(__file__).parent.absolute()
+    project_root = ROOT_DIR
     python_exe = project_root / "venv" / "Scripts" / "python.exe"
 
     if not python_exe.exists():
@@ -291,7 +346,7 @@ def automate_audio_compiler_provisioning() -> bool:
     open-source fork repository directly into the assets directory.
     """
     # Establish root variables relative to this script's execution path
-    project_root = Path(__file__).parent.absolute()
+    project_root = ROOT_DIR
     assets_dir = project_root / "assets"
     target_fork_path = assets_dir / "wav2wem"
 
@@ -358,7 +413,7 @@ def create_shortcuts():
     from win32com.client import Dispatch
 
     desktop = Path(winshell.desktop())
-    root_dir = Path.cwd().absolute()
+    root_dir = ROOT_DIR
 
     python_exe = root_dir / "venv/Scripts/pythonw.exe"
 
@@ -383,11 +438,11 @@ def create_shortcuts():
         shortcut.IconLocation = item["icon"]
         shortcut.Save()
 
-    print("Desktop Shortcuts created successfully via pure memory allocations.")
+    print("Desktop Shortcuts created successfully.")
 
 
 def _restart_installer_in_venv(mode):
-    project_root = Path(__file__).resolve().parent
+    project_root = ROOT_DIR
     python_exe = project_root / "venv" / "Scripts" / "python.exe"
     if not python_exe.is_file():
         return None
@@ -411,7 +466,6 @@ def _restart_installer_in_venv(mode):
 # -------------------------
 def main():
     global AUTOALL
-    print("\n=== NMS Dynamic Suit Voice Auto Setup ===")
     resume_mode = (
         sys.argv[2]
         if len(sys.argv) == 3 and sys.argv[1] == "--resume-after-venv"
@@ -421,42 +475,33 @@ def main():
         raise ValueError(f"Unknown installer resume mode: {resume_mode}")
 
     if resume_mode is None:
+        print("\n=== NMS Dynamic Suit Voice Auto Setup ===")
+        print(f"[INIT] System Interpreter : {sys.executable}")
         choose_mode()
-        step("Check Python", check_python)
-        print("• Python 3.11 check: OK")
+        step("Check Python", check_python, "Python 3.11 check")
+        step("Check Git", check_git, "Git check")
+        step("Setup virtual environment", setup_venv, "venv")
 
-        step("Check Git", check_git)
-        print("• Git check: OK")
-
-        step("Setup virtual environment", setup_venv)
-        print("• venv: OK")
         handoff_status = _restart_installer_in_venv(
             "auto" if AUTOALL else "guided"
         )
         if handoff_status is not None:
             sys.exit(handoff_status)
+        print(f"[VENV] Active Interpreter : {sys.executable}")
     else:
         AUTOALL = resume_mode == "auto"
+        print(f"[VENV] Active Interpreter : {sys.executable}")
         check_python()
 
-    step("Install Python dependencies", install_reqs)
-    print("• Dependencies: OK")
-    step("Validate configuration matrix", validate_configuration_layer)
-    print("• JSON Config: OK")
 
-    # Download the model directly in the installer process.
-    step("Download LLM model", download_model)
-    print("• LLM model: OK")
-    step("Prepare MOD directory", copy_starter_wems)
-    print("• WEMs updated: OK")
-    step("Initialize TTS model", warmup_tts)
-    print("• TTS models: OK")
-    step("Retrieve Encoder", automate_audio_compiler_provisioning)
-    if not automate_audio_compiler_provisioning():
+    step("Install Python dependencies", install_reqs, "Dependencies")
+    step("Validate configuration matrix", validate_configuration_layer, "JSON Config")
+    step("Download LLM model", download_model, "LLM model")
+    step("Prepare MOD directory", copy_starter_wems, "WEMs updated")
+    step("Initialize TTS model", warmup_tts, "TTS models")
+    if not step("Retrieve Encoder", automate_audio_compiler_provisioning, "Encoder Retrieval"):
         sys.exit(1)
-    print("• Encoder Retrieval: OK")
-    step("Create Desktop Shortcut", create_shortcuts)
-    print("• Desktop Fast-Boot Shortcut: OK")
+    step("Create Desktop Shortcut", create_shortcuts, "Desktop Fast-Boot Shortcut")
     print("\n=== Setup complete. Go play! ===")
 
 
