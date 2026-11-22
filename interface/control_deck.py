@@ -74,26 +74,19 @@ class ControlDeckDashboard(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # LIGHTWEIGHT TEXT READ FOR THE VERSION SIGNATURE
-        env_data = {}
-        try:
-            env_path = project_root / "config" / "environment_config.json"
-            with open(env_path, "r", encoding="utf-8") as f:
-                env_data = json.load(f)
-            meta = env_data.get("project", {})
-            v_sig = f"v{meta['version']} ({meta['release_major']}.{meta['release_minor']})"
-        except Exception as e:
-            # NO FALSE DATA: Signal a clear diagnostic failure in the title bar
-            token = record_exception(e, "Reading the application version")
-            print(f"[LAUNCHER CRITICAL]: {e} (DEBUG TOKEN = {token})")
-            v_sig = f"CONFIG ERROR ({token})"
+        from pipeline.config import SuitVoiceConfig
+        v_sig = SuitVoiceConfig.get_version_signature()
 
-        icon_path_value = env_data.get("paths", {}).get(
-            "icon_image"
-        )
+        env_path = project_root / "config" / "environment_config.json"
+        with open(env_path, "r", encoding="utf-8") as f:
+            env_data = json.load(f)
+
+        icon_path_value = env_data["paths"]["icon_image"].strip('"')
         self.tray_icon_path = Path(icon_path_value)
         if not self.tray_icon_path.is_absolute():
             self.tray_icon_path = project_root / self.tray_icon_path
+        if not self.tray_icon_path.exists():
+            raise FileNotFoundError(f"Tray icon missing at configured path: {self.tray_icon_path}")
 
         self.setWindowTitle(f"NMS Dynamic Suit Voice [{v_sig}]")
 
