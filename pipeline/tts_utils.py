@@ -1,109 +1,48 @@
 # pipeline/tts_utils.py
-import wave
-from pathlib import Path
-import numpy as np
 import threading
+import numpy as np
+from pathlib import Path
+from scipy.io import wavfile
+from scipy.signal import resample_poly
 
 _tts_init_lock = threading.Lock()
 MIN_SAMPLES = 1024
+CONTAINER_SR = 48000
 
 
-def complex_vocal_engine_matrix(audio: np.ndarray, speed_factor: float, pitch_factor: float, formant_factor: float, hop_length: int = 256, fft_size: int = 1024) -> np.ndarray:
-    """Advanced Phase Vocoder engine that independently shifts tempo, pitch, and formants in a single phase-coherent pass."""
-    if len(audio) < fft_size:
-        return audio
+def _soft_clip(x: np.ndarray) -> np.ndarray:
+    x = np.asarray(x, dtype=np.float32)
+    out = np.copy(x)
+    mask = np.abs(out) > 0.7
+    out[mask] = np.sign(out[mask]) * (0.7 + 0.3 * np.tanh((np.abs(out[mask]) - 0.7) / 0.3))
+    return out
 
-    # Compute STFT (Short-Time Fourier Transform) via NumPy windowing matrices
-    window = np.hanning(fft_size)
-    stft_frames = []
-    for i in range(0, len(audio) - fft_size, hop_length):
-        stft_frames.append(np.fft.rfft(audio[i:i+fft_size] * window))
-    stft = np.array(stft_frames)
 
-    num_frames = len(stft)
-    num_bins = stft.shape[1]  # FIXED: Explicitly target the frequency bin dimension size
+def _measure_lufs(y: np.ndarray, sr: int) -> float:
+    y = np.asarray(y, dtype=np.float32).reshape(-1)
+    min_samples = max(1, int(0.4 * sr))
+    if 0 < len(y) < min_samples:
+        y = np.tile(y, int(np.ceil(min_samples / len(y))))[:min_samples]
+    try:
+        import pyloudnorm as pyln
+        val = pyln.Meter(sr).integrated_loudness(y)
+        return float(val) if np.isfinite(val) else -70.0
+    except ImportError:
+        rms = float(np.sqrt(np.mean(y ** 2)))
+        return 20.0 * np.log10(max(rms, 1e-9)) - 0.691
 
-    # Calculate new frame count based purely on the requested sentence pacing speed factor
-    new_num_frames = int(num_frames / speed_factor)
-    if new_num_frames < 2:
-        return audio
 
-    # Pre-allocate phase coherent complex spectrum matrices
-    output_stft = np.zeros((new_num_frames, num_bins), dtype=np.complex64)
-
-    # Phase vocoder transformation variables
-    phase_accum = np.zeros(num_bins)
-    omega = 2 * np.pi * hop_length * np.arange(num_bins) / fft_size
-
-    for i in range(new_num_frames):
-        # Calculate cross-frame interpolation position adjusted by pitch factor rules
-        pos = i * speed_factor * pitch_factor
-        idx = int(pos)
-        alpha = pos - idx
-
-        if idx >= num_frames - 1:
+def _normalize_loudness(y: np.ndarray, sr: int, target_lufs: float = -11.0, true_peak_db: float = 6.0) -> np.ndarray:
+    sample_ceiling = max(abs(true_peak_db) - 2.0, 0.0)
+    down = 10.0 ** (-sample_ceiling / 20.0)
+    up = 10.0 ** (sample_ceiling / 20.0)
+    for _ in range(5):
+        gain_db = target_lufs - _measure_lufs(y, sr) + 0.4
+        if abs(gain_db) <= 0.4:
             break
-
-        # Extract magnitude profiles across temporal frame boundaries
-        mag_source = (1 - alpha) * np.abs(stft[idx]) + alpha * np.abs(stft[idx+1])
-
-        # --- ADVANCED SLIDER RE-COUPLED: Vocal Resonator Bandwidth (Formant Shift) ---
-        mag = np.zeros(num_bins)
-        for b in range(num_bins):
-            src_bin = int(b / formant_factor)
-            if src_bin < num_bins:
-                mag[b] = mag_source[src_bin]
-
-        # Compute precise phase delta increments to preserve spatial timing properties
-        phase_diff = np.angle(stft[idx+1]) - np.angle(stft[idx]) - (omega * pitch_factor)
-        phase_diff = (phase_diff + np.pi) % (2 * np.pi) - np.pi  # Normalize to [-PI, PI]
-
-        # Synthesize phase coherent frequency targets
-        phase_accum += (omega * pitch_factor) + phase_diff
-        output_stft[i] = mag * np.exp(1j * phase_accum)
-
-    # Inverse STFT (Overlap-Add Synthesis Pass) back into time-series float samples
-    synthesis_hop = int(hop_length * pitch_factor)
-    output_len = new_num_frames * synthesis_hop + fft_size
-    output_audio = np.zeros(output_len, dtype=np.float32)
-    window_sum = np.zeros(output_len, dtype=np.float32)
-
-    for i in range(new_num_frames):
-        start = i * synthesis_hop
-        frame_time = np.fft.irfft(output_stft[i])
-        output_audio[start:start+fft_size] += frame_time * window
-        window_sum[start:start+fft_size] += window ** 2
-
-    # Smooth normalization prevent clipping drops
-    safe_mask = window_sum > 1e-4
-    output_audio[safe_mask] /= window_sum[safe_mask]
-    return output_audio
-
-def finalize_broadcast_audio(audio: np.ndarray, gain_db: float) -> bytes:
-    """Applies vocal RMS compression, makeup gain, soft-knee limiting, and 16-bit PCM encoding."""
-    peak = np.max(np.abs(audio))
-    if peak > 0:
-        audio = audio / peak
-
-    # Broadcast Vocal Compressor
-    threshold = 0.35
-    ratio = 4.0
-    abs_audio = np.abs(audio)
-    over_mask = abs_audio > threshold
-    compressed = abs_audio.copy()
-    compressed[over_mask] = threshold + (abs_audio[over_mask] - threshold) / ratio
-    audio = np.sign(audio) * compressed
-
-    # Re-normalize body after peak compression
-    new_peak = np.max(np.abs(audio))
-    if new_peak > 0:
-        audio = audio / new_peak
-
-    # Clean makeup drive + soft-knee limiter
-    amplitude_multiplier = 10 ** (gain_db / 20.0)
-    audio = np.tanh(audio * amplitude_multiplier * 0.95) / np.tanh(0.95)
-
-    return (audio * 32767).astype(np.int16).tobytes()
+        gain_db = float(np.clip(gain_db, -12.0, 12.0))
+        y = _soft_clip(y * down * (10.0 ** (gain_db / 20.0))) * up
+    return np.asarray(y, dtype=np.float32)
 
 
 def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
@@ -124,94 +63,27 @@ def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
 
     fx = config.voice_effects
     voice_name = fx.get("base_voice")
-    samples, sample_rate = config.kokoro_pipeline.create(text, voice=voice_name, speed=1.0)
-    audio = np.array(samples, dtype=np.float32)
 
-    active_gain = float(fx.get("gain_db", 5)) if fx.get("enable_gain", True) else 0.0
+    with _tts_init_lock:
+        samples, sample_rate = config.kokoro_pipeline.create(text, voice=voice_name, speed=1.0)
 
-    if postprocess:
-        audio = apply_vocal_dsp_chain_matrix(
-            audio=audio,
-            source_sr=sample_rate,
-            gain_db=active_gain,
-            pitch_semitones=int(fx.get("pitch_semitones", 4)) if fx.get("enable_pitch", True) else 0,
-            tempo=float(fx.get("tempo", 1.02)) if fx.get("enable_tempo", True) else 1.0,
-            rate=float(fx.get("rate", 0.51)) if fx.get("enable_rate", True) else 1.0,
-            ring_freq=int(fx.get("ring_freq", 300)),
-            ring_mix=int(fx.get("ring_mix", 100)) if fx.get("enable_ring", True) else 0,
-            formant_percent=int(fx.get("formant_percent", 80)) if fx.get("enable_formant", True) else 100,
-            target_sr=44100,
-            apply_gain_stage=False
-        )
-
-    final_bytes = finalize_broadcast_audio(audio, active_gain)
-
-    with wave.open(str(final_wav), "wb") as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(2)
-        wf.setframerate(44100)
-        wf.writeframes(final_bytes)
-
-    return final_wav
-
-
-def apply_vocal_dsp_chain_matrix(audio, source_sr, gain_db, pitch_semitones, tempo, rate,
-                                 ring_freq, ring_mix, formant_percent, target_sr=44100, apply_gain_stage=True):
-    """Decoupled digital audio signal processing pipeline."""
+    audio = np.asarray(samples, dtype=np.float32).reshape(-1)
     if len(audio) < MIN_SAMPLES:
         audio = np.pad(audio, (0, MIN_SAMPLES - len(audio)))
 
-    # Fast-path bypass when all DSP modifiers are neutral
-    if (
-        float(tempo) == 1.0
-        and int(pitch_semitones) == 0
-        and int(formant_percent) == 100
-        and float(rate) == 1.0
-        and int(ring_mix) == 0
-    ):
-        if source_sr != target_sr:
-            n_samples_final = max(int(len(audio) * (target_sr / source_sr)), MIN_SAMPLES)
-            audio = np.interp(np.linspace(0, len(audio) - 1, n_samples_final), np.arange(len(audio)), audio).astype(np.float32)
-        if apply_gain_stage:
-            audio = audio * (10 ** (gain_db / 20.0))
-        return audio
+    # Polyphase resample to 48kHz cleanly (24kHz -> 48kHz is exact 2x upsample, zero FFT ringing)
+    sr = int(sample_rate)
+    if sr != CONTAINER_SR:
+        from math import gcd
+        g = gcd(CONTAINER_SR, sr)
+        audio = resample_poly(audio, CONTAINER_SR // g, sr // g).astype(np.float32)
 
-    speed_factor = float(tempo)
-    pitch_factor = 2 ** (pitch_semitones / 12)
-    formant_factor = float(formant_percent / 100.0)
+    # Match original WEM's -14.5 dBFS RMS / -0.4 dBFS Peak using float32 headroom
+    target_lufs = float(fx.get("loudness_target", -11.0))
+    true_peak = float(fx.get("loudness_true_peak", 6.0))
+    audio = _normalize_loudness(audio, CONTAINER_SR, target_lufs=target_lufs, true_peak_db=true_peak)
 
-    # Execute complex multi-variable phase vocoder matrix
-    audio = complex_vocal_engine_matrix(
-        audio=audio,
-        speed_factor=speed_factor,
-        pitch_factor=pitch_factor,
-        formant_factor=formant_factor
-    )
+    stereo = np.ascontiguousarray(np.stack([audio, audio], axis=1), dtype=np.float32)
+    wavfile.write(str(final_wav), CONTAINER_SR, stereo)
 
-    # --- Audio Frequency Warp (Chipmunk Scalar) ---
-    factor_rate = float(rate)
-    if factor_rate != 1.0:
-        n_samples_target = max(int(len(audio) / factor_rate), MIN_SAMPLES)
-        audio = np.interp(np.linspace(0, len(audio)-1, n_samples_target), np.arange(len(audio)), audio).astype(np.float32)
-
-    # --- Enforce standard game output frequency (44.1kHz) ---
-    if source_sr != target_sr:
-        n_samples_final = max(int(len(audio) * (target_sr / source_sr)), MIN_SAMPLES)
-        audio = np.interp(np.linspace(0, len(audio)-1, n_samples_final), np.arange(len(audio)), audio).astype(np.float32)
-
-    # --- Cybernetic Ring Modulator Blending Matrix ---
-    wet_factor = ring_mix / 100.0
-    dry_factor = 1.0 - wet_factor
-
-    dry_signal = audio.copy()
-    t = np.arange(len(audio)) / target_sr
-    wet_signal = audio * np.sin(2 * np.pi * ring_freq * t)
-
-    audio = (dry_signal * dry_factor) + (wet_signal * wet_factor)
-
-    # Optional internal volume stage (used primarily by the off-thread preview workers)
-    if apply_gain_stage:
-        amplitude_multiplier = 10 ** (gain_db / 20.0)
-        audio = audio * amplitude_multiplier
-
-    return audio
+    return final_wav
