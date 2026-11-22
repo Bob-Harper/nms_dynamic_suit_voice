@@ -1,8 +1,9 @@
-# interface\panels\widgets\cache_management.py
+# interface/panels/widgets/cache_management.py
 import shutil
 from pathlib import Path
 
 from PySide6.QtWidgets import (
+    QHBoxLayout,
     QLabel,
     QMessageBox,
     QPushButton,
@@ -36,32 +37,57 @@ class CacheManagementWidget(QWidget):
 
         card, card_layout = build_card("EXOSUIT CACHE AND STORAGE")
 
+        # Single compact row: Cached files | Storage usage | Refresh button
+        stats_row = QHBoxLayout()
+        stats_row.setSpacing(16)
+
         self.cache_files_label = QLabel("Cached files: Calculating...")
         self.cache_size_label = QLabel("Storage usage: Calculating...")
-        self.cache_policy_label = QLabel()
-        self.cache_policy_label.setWordWrap(True)
+        self.refresh_button = QPushButton("REFRESH STORAGE STATUS")
+        self.refresh_button.setStyleSheet("padding: 6px 12px; font-weight: bold;")
+        self.refresh_button.clicked.connect(self.refresh_stats)
+        self.refresh_button = QPushButton("REFRESH STORAGE STATUS")
+        self.refresh_button.setStyleSheet("""
+            QPushButton {
+                padding: 8px 14px;
+                font-weight: bold;
+            }
+            QPushButton:pressed {
+                background-color: #2b5b84;
+                border: 1px solid #66b2ff;
+                padding-top: 10px;
+                padding-bottom: 6px;
+            }
+        """)
+        self.refresh_button.clicked.connect(self.refresh_stats)
+
+        stats_row.addWidget(self.cache_files_label)
+        stats_row.addWidget(self.cache_size_label)
+        stats_row.addStretch()
+        stats_row.addWidget(self.refresh_button)
+        card_layout.addLayout(stats_row)
+
+        # Compact horizon row: Label + SpinBox side-by-side
+        horizon_row = QHBoxLayout()
+        horizon_row.setSpacing(10)
 
         cache_settings = self.config.environment.setdefault("runtime", {})
         self.cache_horizon_spin = QSpinBox()
         self.cache_horizon_spin.setRange(1, 64)
+        self.cache_horizon_spin.setFixedWidth(80)
         self.cache_horizon_spin.setValue(int(cache_settings.get("quick_cache_max", 16)))
 
-        self.purge_cache_btn = QPushButton("PURGE CONFIGURED CACHES")
-        self.purge_cache_btn.clicked.connect(self._purge_cache)
-        self.refresh_button = QPushButton("REFRESH STORAGE STATUS")
-        self.refresh_button.clicked.connect(self.refresh_stats)
+        horizon_row.addWidget(QLabel("Maximum quick-cache variations per voice line:"))
+        horizon_row.addWidget(self.cache_horizon_spin)
+        horizon_row.addStretch()
+        card_layout.addLayout(horizon_row)
 
-        card_layout.addWidget(self.cache_files_label)
-        card_layout.addWidget(self.cache_size_label)
+        self.cache_policy_label = QLabel()
+        self.cache_policy_label.setWordWrap(True)
+        self.cache_policy_label.setStyleSheet("color: #8a99ad; font-size: 11px;")
         card_layout.addWidget(self.cache_policy_label)
-        card_layout.addSpacing(8)
-        card_layout.addWidget(QLabel("Maximum quick-cache variations per voice line"))
-        card_layout.addWidget(self.cache_horizon_spin)
-        card_layout.addWidget(self.refresh_button)
-        card_layout.addWidget(self.purge_cache_btn)
 
         layout.addWidget(card)
-        layout.addStretch()
 
     def _cache_directories(self):
         paths = self.config.environment.get("paths", {})
@@ -109,7 +135,7 @@ class CacheManagementWidget(QWidget):
             "Temporary WEM, WAV, and quick-cache files are included in storage totals."
         )
 
-    def _purge_cache(self):
+    def purge_all_caches(self) -> bool:
         directories = self._cache_directories()
         targets = "\n".join(str(path) for path in directories)
         answer = QMessageBox.question(
@@ -121,7 +147,7 @@ class CacheManagementWidget(QWidget):
             QMessageBox.StandardButton.No,
         )
         if answer != QMessageBox.StandardButton.Yes:
-            return
+            return False
 
         try:
             paths = self.config.environment.get("paths", {})
@@ -164,7 +190,7 @@ class CacheManagementWidget(QWidget):
                 f"Could not clear cache storage:\n{message}"
             )
             self.refresh_stats()
-            return
+            return False
 
         self.refresh_stats()
         QMessageBox.information(
@@ -172,6 +198,7 @@ class CacheManagementWidget(QWidget):
             "Cache purge complete",
             f"Removed {removed_count} cache entries.",
         )
+        return True
 
     def gather_settings(self):
         runtime = self.config.environment.setdefault("runtime", {})

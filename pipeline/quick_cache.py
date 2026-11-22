@@ -73,6 +73,17 @@ class QuickCacheEngine:
         """Private interface bridge execution stub executing the voice line generation engine."""
         generate_replacement_voice_line(self.config, wem_id, wem_dir)
 
+    def _chamber_replacement_wrapper(self, wem_id: str, *args):
+        """Generates a fresh WEM into quick_cache_dir and immediately chambers it into mod_dir."""
+        wem_dir = self.config.quick_cache_dir / str(wem_id)
+        wem_dir.mkdir(parents=True, exist_ok=True)
+        generated = generate_replacement_voice_line(self.config, wem_id, wem_dir)
+        if generated and generated.exists():
+            self.move_cachedfile_to_mod_dir(generated, self.config.mod_dir, str(wem_id))
+            if str(wem_id) in self.config.intent_map:
+                if self.config.intent_map[str(wem_id)].get("Used", "").strip().lower() == "yes":
+                    self.enqueue_job(self._replacement_wrapper, str(wem_id), wem_dir)
+
     def move_cachedfile_to_mod_dir(self, src_path: Path, mod_dir: Path, wem_id: str) -> Path | None:
         """moves an available compiled WEM asset directly into the No Man's Sky mods directory."""
         mod_dir.mkdir(parents=True, exist_ok=True)
@@ -94,7 +105,7 @@ class QuickCacheEngine:
                 attempt += 1
                 sleep_delay = min(0.5, 0.05 * (2 ** min(attempt, 4)))
                 sleep(sleep_delay)
-                
+
     def update_access_time_to_match_newfile(self, file_path: Path, access_times: dict):
         """Updates tracking dictionary with the file's access epoch timestamp."""
         if file_path.exists():
