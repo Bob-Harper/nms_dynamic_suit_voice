@@ -1,6 +1,6 @@
 # Dynamic No Man’s Sky Suit AI Voice Mod
 
-Version: 1.4.2 (Nexus.QUEEG)<br>
+Version: 1.4.5 (Nexus.QUEEG)<br>
 Author: [Bob-Harper](https://github.com/Bob-Harper)<br>
 Repository: [nms_dynamic_suit_voice](https://github.com/Bob-Harper/nms_dynamic_suit_voice)<br>
 [Kilvoctu](https://github.com/Kilvoctu): Thank you for your excellent codebase contributions; especially for the code that monitors sound file access. Without your insights this might have been a short lived project since my original method stopped working after a game patch.<br><br>
@@ -53,7 +53,6 @@ Profile and voice customization is saved to `config/user_customization.json`. Sy
 ## Current Verified Limitations
 
 - **Mod Conflicts:** Completely incompatible with traditional static suit voice mods that drop pre-recorded audio `.wem` files directly into your standard game `MODS` folder. Remove and backup any previous files you may have in DYNAMIC_SUIT_VOICE\AUDIO\WINDOWS\MEDIA\ENGLISH(US) lest they be overwritten and lost forever.
-- **VITS Architecture Block:** Advanced multi-speaker VITS models are intentionally excluded from the scan loader at this time to protect end-users from requiring installation of external C++ system binaries (such as eSpeak NG) onto their primary Windows environment paths.
 - **Voice Clone Capability:** Unsupported at this time as I have an aversion to getting strongly worded letters from Morgan Freeman's lawyers.
 
 ## Installation & Deployment
@@ -94,7 +93,6 @@ Update checks and downloads are user-initiated through the Updates panel; the ap
 - **Interface Localization Support:** Transporting all user-facing panel text elements into unhardcoded `.json` localization dictionary matrices for instant regional multi-language translation packs.
 - **Multiple Profiles:** Allow users to name and store their own created configurations and audio presets.
 - **User Config Backup:** Define a storage location outside the project structure to ensure user-created files are safe even if extinction-level events occur.
-- **Additional Voicees/TTM Support:** Consideration underway for expanding/overhauling current options available.  The visible "Load All Models" is a placeholder and intentionally nonfunctional at this time.
 
 ## Licensing & Third-Party Open Source Attributions
 

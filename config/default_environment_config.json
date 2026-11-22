@@ -34,7 +34,7 @@
         "name": "NMS Dynamic Suit Voice",
         "base_url": "https://github.com/Bob-Harper/nms_dynamic_suit_voice",
         "support": "issues",
-        "version": "1.4.2",
+        "version": "1.4.5",
         "release_major": "NEXUS",
         "release_minor": "QUEEG",
         "locale": "en_US"

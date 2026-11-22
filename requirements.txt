@@ -1,6 +1,7 @@
 numpy
 psutil
 soundfile
+pyloudnorm
 kokoro_onnx
 Pillow>=11.3.0,<12
 requests>=2.32.0,<3

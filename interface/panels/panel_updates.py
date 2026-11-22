@@ -314,9 +314,32 @@ class UpdatesPanel(QWidget):
             self.status_signal.emit("Applying fast-forward update...", "#00aaff")
             subprocess.run(["git", "-C", str(self.project_root), "merge", "--ff-only", f"origin/{branch}"], capture_output=True, check=True, timeout=60, creationflags=cmd_flags)
 
+            self.status_signal.emit("Ensuring pip package manager is up to date...", "#00aaff")
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "--upgrade", "pip"],
+                capture_output=True, text=True, timeout=120, creationflags=cmd_flags
+            )
+
+            req_file = self.project_root / "requirements.txt"
+            if req_file.exists():
+                self.status_signal.emit("Updating Python dependencies from requirements.txt...", "#00aaff")
+                pip_res = subprocess.run(
+                    [sys.executable, "-m", "pip", "install", "--disable-pip-version-check", "-r", str(req_file)],
+                    capture_output=True, text=True, timeout=300, creationflags=cmd_flags
+                )
+                if pip_res.returncode != 0:
+                    err = pip_res.stderr.strip() or pip_res.stdout.strip() or "Unknown pip error."
+                    self.status_signal.emit("Update pulled, but dependency installation failed.", "#ff3333")
+                    self.action_complete_signal.emit(
+                        False,
+                        f"Code updated, but pip failed to install requirements.txt:\n{err}",
+                        True,
+                    )
+                    return
+
             local_sha = self._get_local_commit_sha()
             self.status_signal.emit(f"Synchronized to {local_sha}! RESTART APPLICATION TO APPLY CHANGES.", "#00ff66")
-            self.action_complete_signal.emit(True, "Updates pulled successfully! Please restart the control deck to run the updated code.", True)
+            self.action_complete_signal.emit(True, "Updates pulled and dependencies verified! Please restart the control deck to run the updated code.", True)
 
         except Exception as e:
             self.status_signal.emit("Sync operation interrupted (check for local file modifications).", "#ff3333")
