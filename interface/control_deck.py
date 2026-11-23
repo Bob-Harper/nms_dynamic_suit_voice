@@ -16,12 +16,12 @@ project_root = Path(__file__).parent.parent.absolute()
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from PySide6.QtCore import Qt, QLockFile, QThread, Signal, QTimer
+from PySide6.QtCore import QObject, Qt, QLockFile, QThread, Signal, QTimer
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QTabWidget, QPushButton, QMessageBox, QLabel, QFrame, QProgressBar,
-    QMenu, QSystemTrayIcon
+    QMenu, QSystemTrayIcon, QTextEdit
 )
 from interface.panels.widgets.config_io import write_json_atomic
 from pipeline.debug_support import (
@@ -29,6 +29,39 @@ from pipeline.debug_support import (
     install_exception_hooks,
     record_exception,
 )
+
+
+class StreamRedirector(QObject):
+    """Thread-safe stdout tee that mirrors print() statements into the Control Deck header."""
+    text_written = Signal(str)
+
+    def __init__(self, original_stream):
+        super().__init__()
+        self._original = original_stream
+        self._buffer = ""
+
+    def write(self, text: str):
+        if self._original is not None:
+            try:
+                self._original.write(text)
+            except Exception:
+                pass
+        if not text:
+            return
+        self._buffer += text
+        while "\n" in self._buffer:
+            line, self._buffer = self._buffer.split("\n", 1)
+            cleaned = line.strip()
+            if cleaned:
+                self.text_written.emit(cleaned)
+
+    def flush(self):
+        if self._original is not None:
+            try:
+                self._original.flush()
+            except Exception:
+                pass
+
 
 class ConfigLoaderWorker(QThread):
     """Asynchronously loads the heavy SuitVoiceConfig configurations off the UI thread."""
@@ -149,7 +182,36 @@ class ControlDeckDashboard(QMainWindow):
         status_text_layout.addWidget(system_title)
         status_text_layout.addWidget(self.status_badge)
         header_layout.addLayout(status_text_layout)
-        header_layout.addStretch()
+
+        header_layout.addLayout(status_text_layout)
+        header_layout.setSpacing(15)
+
+        self.telemetry_readout = QTextEdit()
+        self.telemetry_readout.setReadOnly(True)
+        self.telemetry_readout.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.telemetry_readout.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.telemetry_readout.document().setMaximumBlockCount(150)
+        self.telemetry_readout.setFixedHeight(54)
+        self.telemetry_readout.setStyleSheet("""
+            QTextEdit {
+                background-color: #0c0c0e;
+                border: 1px solid #1f2430;
+                border-radius: 4px;
+                color: #00ff66;
+                font-family: 'Consolas', monospace;
+                font-size: 11px;
+                padding: 3px 8px;
+            }
+        """)
+        self.telemetry_readout.append(">> Telemetry link online. Standby...")
+        header_layout.addWidget(self.telemetry_readout, stretch=1)
+
+        self._stdout_redirector = StreamRedirector(sys.__stdout__)
+        self._stdout_redirector.text_written.connect(self._append_telemetry_line)
+        sys.stdout = self._stdout_redirector
+        self.append_log_signal = self._stdout_redirector.text_written
+
+        self.launch_btn = QPushButton("ENGAGE AI CORE")
 
         self.launch_btn = QPushButton("ENGAGE AI CORE")
         self.launch_btn.setEnabled(False)
@@ -174,6 +236,11 @@ class ControlDeckDashboard(QMainWindow):
         load_layout.addWidget(self.loading_msg, alignment=Qt.AlignmentFlag.AlignCenter)
         load_layout.addWidget(self.progress_bar, alignment=Qt.AlignmentFlag.AlignCenter)
         self.main_layout.addWidget(self.loading_panel, stretch=1)
+
+    def _append_telemetry_line(self, line: str):
+        self.telemetry_readout.append(f">> {line}")
+        sb = self.telemetry_readout.verticalScrollBar()
+        sb.setValue(sb.maximum())
 
     def _setup_system_tray(self):
         self.tray_icon = None
@@ -235,6 +302,7 @@ class ControlDeckDashboard(QMainWindow):
         if self._quit_requested:
             return
         self.config = config_instance
+        self.config.ui_console = self
 
         # Clean up loading panel visual stubs
         self.main_layout.removeWidget(self.loading_panel)
@@ -398,6 +466,7 @@ class ControlDeckDashboard(QMainWindow):
             return
 
         self._allow_close = True
+        sys.stdout = sys.__stdout__
         if self.tray_icon is not None:
             self.tray_icon.hide()
         self.close()
