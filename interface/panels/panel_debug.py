@@ -2,6 +2,7 @@
 import sys
 import json
 import shutil
+import webbrowser
 from pathlib import Path
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
@@ -9,10 +10,11 @@ from PySide6.QtWidgets import (
     QPushButton, QTextEdit, QStackedWidget, QComboBox
 )
 from interface.panels.widgets.shared import build_card
-
 from interface.panels.widgets.path_management import PathManagementWidget
 from interface.panels.widgets.cache_management import CacheManagementWidget
 from interface.panels.widgets.runtime_settings import RuntimeManagementWidget
+from pipeline.debug_support import load_debug_report
+from pipeline.localization import t
 
 
 class DebugPanel(QWidget):
@@ -27,7 +29,6 @@ class DebugPanel(QWidget):
         self.static_issues_catalog = {}
         self.generic_fallback = {}
 
-
         # Read static definitions database on launch
         if self.tokens_file.exists():
             try:
@@ -36,7 +37,10 @@ class DebugPanel(QWidget):
                 self.static_issues_catalog = token_data.get("tokens", {})
                 self.generic_fallback = token_data.get("generic", {})
             except Exception as e:
-                print(f"[DEBUG ENVIRONMENT]: Failed to parse debug_tokens.json: {e}", file=sys.stderr)
+                print(
+                    f"[DEBUG ENVIRONMENT]: {t('UI_PANEL_DEBUG_001', error=e)}",
+                    file=sys.stderr,
+                )
 
         self._build_ui()
 
@@ -53,10 +57,10 @@ class DebugPanel(QWidget):
         left_layout.setContentsMargins(0, 0, 0, 0)
         left_layout.setSpacing(10)
 
-        entry_card, entry_layout = build_card("Diagnostic Token / Error Code Input")
+        entry_card, entry_layout = build_card(t("UI_PANEL_DEBUG_002"))
 
         # THE LIVE HISTORY SELECTOR: Populates from debug_reports.jsonl
-        entry_layout.addWidget(QLabel("Select From Recent Local Incident Events:"))
+        entry_layout.addWidget(QLabel(t("UI_PANEL_DEBUG_003")))
         self.history_combo = QComboBox()
         self.history_combo.setStyleSheet("""
             QComboBox {
@@ -69,9 +73,9 @@ class DebugPanel(QWidget):
         self.history_combo.currentIndexChanged.connect(self._on_history_selection_changed)
         entry_layout.addWidget(self.history_combo)
 
-        entry_layout.addWidget(QLabel("Or Paste / Type Manual Code Entry:"))
+        entry_layout.addWidget(QLabel(t("UI_PANEL_DEBUG_004")))
         self.token_input = QLineEdit()
-        self.token_input.setPlaceholderText("Enter code (e.g. DSV2WEMN_FND) or paste dynamic session token...")
+        self.token_input.setPlaceholderText(t("UI_PANEL_DEBUG_005"))
         self.token_input.setStyleSheet("""
             QLineEdit {
                 background-color: #0c0c0e; border: 1px solid #1f2430; border-radius: 4px;
@@ -80,7 +84,7 @@ class DebugPanel(QWidget):
         """)
         entry_layout.addWidget(self.token_input)
 
-        self.lookup_btn = QPushButton("RUN COGNITION MATRIX LOOKUP")
+        self.lookup_btn = QPushButton(t("UI_PANEL_DEBUG_006"))
         self.lookup_btn.setStyleSheet("""
             QPushButton { background-color: #1b2230; border: 1px solid #2b384e; color: white; padding: 10px; font-weight: bold; font-family: 'Consolas', monospace; }
             QPushButton:hover { background-color: #242f44; border-color: #ffaa00; }
@@ -89,7 +93,7 @@ class DebugPanel(QWidget):
         entry_layout.addWidget(self.lookup_btn)
         left_layout.addWidget(entry_card)
 
-        left_layout.addWidget(QLabel("Diagnostic Analysis & Operational Run Logs:"))
+        left_layout.addWidget(QLabel(t("UI_PANEL_DEBUG_007")))
         self.report_display = QTextEdit()
         self.report_display.setReadOnly(True)
         self.report_display.setStyleSheet("""
@@ -98,7 +102,7 @@ class DebugPanel(QWidget):
         left_layout.addWidget(self.report_display)
 
         # Global external support anchor button layout block
-        self.support_btn = QPushButton("OPEN GITHUB PROJECT ISSUES PAGE")
+        self.support_btn = QPushButton(t("UI_PANEL_DEBUG_008"))
         self.support_btn.setStyleSheet("""
             QPushButton {
                 background-color: #004477;
@@ -118,7 +122,6 @@ class DebugPanel(QWidget):
         self.support_btn.clicked.connect(self._open_github_issues_browser)
         left_layout.addWidget(self.support_btn)
 
-
         master_layout.addWidget(left_pane, stretch=1)
 
         # ==============================================================================
@@ -136,9 +139,9 @@ class DebugPanel(QWidget):
         self.standby_page = QWidget()
         sb_layout = QVBoxLayout(self.standby_page)
         sb_layout.setContentsMargins(0, 0, 0, 0)
-        card_sb, layout_sb = build_card("Targeted Repair Deck")
+        card_sb, layout_sb = build_card(t("UI_PANEL_DEBUG_009"))
 
-        self.desc_sb = QLabel("Awaiting operational query lookup. Matched configuration controls will embed themselves here for adjustments.")
+        self.desc_sb = QLabel(t("UI_PANEL_DEBUG_010"))
         self.desc_sb.setStyleSheet("color: #5c6773; font-size: 12px; border: none;")
         self.desc_sb.setWordWrap(True)
 
@@ -174,22 +177,18 @@ class DebugPanel(QWidget):
         master_layout.addWidget(right_pane)
 
     def showEvent(self, event):
-        """Triggers every single time the user clicks onto this tab, re-scanning the ledger for live updates."""
+        """Triggers every time the user clicks onto this tab, re-scanning the ledger for live updates."""
         super().showEvent(event)
         self._refresh_incident_history_dropdown()
 
     def _refresh_incident_history_dropdown(self):
         """Reads local logs in reverse. Seeds the active log from the config template if missing."""
-        import json
-        import shutil
-
         self.history_combo.blockSignals(True)
         self.history_combo.clear()
-        self.history_combo.addItem(" -- Select a recent logged incident to autofill lookup --")
+        self.history_combo.addItem(t("UI_PANEL_DEBUG_011"))
 
         # RECOVERY COMPLIANCE LINK: Read templates out of config using the resolved path structure
         if not self.reports_file.exists() or self.reports_file.stat().st_size == 0:
-            # Use fallback default template
             project_root = self.reports_file.parents[1]
             template_file = project_root / "config" / "default_debug_reports.jsonl"
 
@@ -197,7 +196,7 @@ class DebugPanel(QWidget):
                 try:
                     self.reports_file.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy(str(template_file), str(self.reports_file))
-                    print("[LAUNCHER HARDWARE]: Local incident ledger seeded successfully from config template.")
+                    print(f"[LAUNCHER HARDWARE]: {t('UI_PANEL_DEBUG_012')}")
 
                     # RECOVERY PASS: Re-enable signals and re-trigger once so the freshly
                     # copied template reads instantly on first boot
@@ -205,8 +204,10 @@ class DebugPanel(QWidget):
                     self._refresh_incident_history_dropdown()
                     return
                 except Exception as e:
-                    print(f"[LAUNCHER WARNING]: Failed to clone config welcome log: {e}", file=sys.stderr)
-
+                    print(
+                        f"[LAUNCHER WARNING]: {t('UI_PANEL_DEBUG_013', error=e)}",
+                        file=sys.stderr,
+                    )
         else:
             try:
                 scanned_items = []
@@ -218,10 +219,10 @@ class DebugPanel(QWidget):
                         try:
                             report = json.loads(line)
                             token = report.get("token")
-                            context = report.get("context", "Unknown Incident")
-                            timestamp = report.get("timestamp")
+                            context = report.get("context", t("UI_PANEL_DEBUG_014"))
+                            timestamp = report.get("timestamp", "")
 
-                            # Clean up ISO timestamp into a neat short clock readout [15:42:01]
+                            # Format ISO timestamp into a short clock readout [15:42:01]
                             time_part = timestamp.split("T")[-1][:8] if "T" in timestamp else "00:00:00"
 
                             if token:
@@ -230,31 +231,31 @@ class DebugPanel(QWidget):
                         except json.JSONDecodeError:
                             continue
 
-                # Reverse the list so the most recent error is immediately sitting right at the top
-                for display_text, token in reversed(scanned_items[-20:]): # Keep the last 20 reports
+                # Reverse the list so the most recent error sits at the top
+                for display_text, token in reversed(scanned_items[-20:]):
                     self.history_combo.addItem(display_text, token)
             except Exception as e:
-                print(f"[DEBUG ENVIRONMENT]: Dropdown refresh failed: {e}", file=sys.stderr)
+                print(
+                    f"[DEBUG ENVIRONMENT]: {t('UI_PANEL_DEBUG_015', error=e)}",
+                    file=sys.stderr,
+                )
 
         self.history_combo.blockSignals(False)
-
 
     def _on_history_selection_changed(self, index):
         """Fires when the user clicks an item in the combo dropdown list."""
         if index <= 0:
             return
-        # Grab the token data attached to the selection item slot
         associated_token = self.history_combo.itemData(index)
         if associated_token:
             self.token_input.setText(associated_token)
-            # Run the matrix search execution loop
             self._execute_matrix_lookup()
 
     def _execute_matrix_lookup(self):
-        """Processes known static list checks first, then falls back to session log file parsing."""
+        """Processes known static list checks first, then checks session log file parsing."""
         code = self.token_input.text().strip().upper()
         if not code:
-            self.report_display.setText(">> Input field blank. Provide an error signature to execute lookup cycles.")
+            self.report_display.setText(f">> {t('UI_PANEL_DEBUG_016')}")
             self.widget_stack.setCurrentWidget(self.standby_page)
             return
 
@@ -268,12 +269,14 @@ class DebugPanel(QWidget):
             steps_text = "\n".join(f"- {s}" for s in item.get("steps", []))
 
             self.report_display.setText(
-                f"DIAGNOSTIC REPORT: CODE {code}\n"
-                f"==================================================\n"
-                f"SUMMARY: {item.get('title', '')}\n"
-                f"DETAILS: {item.get('summary', '')}\n\n"
-                f"POTENTIAL ROOT CAUSES:\n{causes_text}\n\n"
-                f"RECOMMENDED SYSTEM CORRECTIONS:\n{steps_text}"
+                t(
+                    "UI_PANEL_DEBUG_017",
+                    code=code,
+                    title=item.get("title", ""),
+                    summary=item.get("summary", ""),
+                    causes=causes_text,
+                    steps=steps_text,
+                )
             )
 
             target = str(item.get("settings_target")).lower()
@@ -288,34 +291,35 @@ class DebugPanel(QWidget):
             return
 
         # ====================================================
-        # FALLBACK TO SCANNED SESSION EXCEPTION LOGS
+        # CHECK SCANNED SESSION EXCEPTION LOGS
         # ====================================================
-        from pipeline.debug_support import load_debug_report
         report = load_debug_report(code)
         if not report:
             generic_causes = "\n".join(f"- {c}" for c in self.generic_fallback.get("likely_causes", []))
             generic_steps = "\n".join(f"- {s}" for s in self.generic_fallback.get("steps", []))
 
             self.report_display.setText(
-                f"UNKNOWN ENCOUNTERED ANOMALY: REJECTION PROFILE\n"
-                f"==================================================\n"
-                f"SUMMARY: {self.generic_fallback.get('title', 'Unknown code signature')}\n"
-                f"DETAILS: {self.generic_fallback.get('summary', '')}\n\n"
-                f"POTENTIAL ROOT CAUSES:\n{generic_causes}\n\n"
-                f"RECOMMENDED REPAIR STEPS:\n{generic_steps}"
+                t(
+                    "UI_PANEL_DEBUG_018",
+                    title=self.generic_fallback.get("title", t("UI_PANEL_DEBUG_019")),
+                    summary=self.generic_fallback.get("summary", ""),
+                    causes=generic_causes,
+                    steps=generic_steps,
+                )
             )
             self.widget_stack.setCurrentWidget(self.standby_page)
             return
 
         # Explicit unhandled trace readout
         self.report_display.setText(
-            f"DYNAMIC RUNTIME FAILURE BLOCK REPORT\n"
-            f"==================================================\n"
-            f"Session Timestamp: {report.get('timestamp')}\n"
-            f"Context Failure Domain: {report.get('context')}\n"
-            f"Exception Code Pattern: {report.get('exception_type')}\n"
-            f"Message Stream: {report.get('message')}\n\n"
-            f"Raw Kernel Stack Traceback:\n{report.get('traceback')}"
+            t(
+                "UI_PANEL_DEBUG_020",
+                timestamp=report.get("timestamp"),
+                context=report.get("context"),
+                exception_type=report.get("exception_type"),
+                message=report.get("message"),
+                traceback=report.get("traceback"),
+            )
         )
 
         context_str = str(report.get("context")).lower()
@@ -341,13 +345,12 @@ class DebugPanel(QWidget):
 
     def _open_github_issues_browser(self):
         """Launches the default system web browser straight to the repository help tracking page."""
-        import webbrowser
-
-        # Pull the repository URL string straight out of config object variables
-        updates_cfg = self.config.environment.get("updates", {})
-
         try:
             webbrowser.open(self.config.support_url)
-            self.report_display.append(f"\n>> External communication interface deployed: Browsing to {self.config.support_url}")
+            self.report_display.append(
+                f"\n>> {t('UI_PANEL_DEBUG_021', url=self.config.support_url)}"
+            )
         except Exception as e:
-            self.report_display.append(f"\n>> Failed to deploy web browser execution thread: {e}")
+            self.report_display.append(
+                f"\n>> {t('UI_PANEL_DEBUG_022', error=e)}"
+            )

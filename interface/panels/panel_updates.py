@@ -7,6 +7,7 @@ from pathlib import Path
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QMessageBox
 from interface.panels.widgets.shared import build_card
+from pipeline.localization import t
 
 
 class UpdatesPanel(QWidget):
@@ -29,13 +30,13 @@ class UpdatesPanel(QWidget):
         layout.setContentsMargins(15, 15, 15, 15)
         layout.setSpacing(15)
 
-        card, card_layout = build_card("EXOSUIT ECOSYSTEM COMPLIANCE REGISTRY")
+        card, card_layout = build_card(t("UI_PANEL_UPDATES_001"))
 
-        self.version_label = QLabel("Installed Version: Loading...")
+        self.version_label = QLabel(t("UI_PANEL_UPDATES_002"))
         self.version_label.setStyleSheet("color: #ffffff; font-size: 13px; font-weight: bold; border: none;")
         card_layout.addWidget(self.version_label)
 
-        self.status_reporter = QLabel("Ecosystem Status: Standing By...")
+        self.status_reporter = QLabel(t("UI_PANEL_UPDATES_003", status=t("UI_PANEL_UPDATES_004")))
         self.status_reporter.setWordWrap(True)
         self.status_reporter.setOpenExternalLinks(True)
         self.status_reporter.setStyleSheet("font-family: 'Consolas', monospace; font-size: 12px; color: #ffaa00; border: none; padding: 4px 0;")
@@ -45,20 +46,20 @@ class UpdatesPanel(QWidget):
         top_button_row = QHBoxLayout()
         top_button_row.setSpacing(10)
 
-        btn_style = """
-            QPushButton {
-                background-color: #1b2230; border: 1px solid #2b384e; color: white;
-                padding: 10px 16px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px;
-            }
-            QPushButton:hover { background-color: #242f44; border-color: #ffaa00; }
-            QPushButton:disabled { background-color: #181d26; border-color: #222b3c; color: #4b5668; }
-        """
+        btn_style = (
+            "QPushButton {"
+            " background-color: #1b2230; border: 1px solid #2b384e; color: white;"
+            " padding: 10px 16px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px;"
+            "}"
+            "QPushButton:hover { background-color: #242f44; border-color: #ffaa00; }"
+            "QPushButton:disabled { background-color: #181d26; border-color: #222b3c; color: #4b5668; }"
+        )
 
-        self.check_button = QPushButton("CHECK FOR UPDATES")
+        self.check_button = QPushButton(t("UI_PANEL_UPDATES_005"))
         self.check_button.setStyleSheet(btn_style)
         self.check_button.clicked.connect(self._trigger_async_check)
 
-        self.convert_button = QPushButton("CONVERT THIS INSTALL TO GIT")
+        self.convert_button = QPushButton(t("UI_PANEL_UPDATES_006"))
         self.convert_button.setStyleSheet(btn_style)
         self.convert_button.clicked.connect(self._trigger_async_conversion)
 
@@ -71,24 +72,21 @@ class UpdatesPanel(QWidget):
         bottom_button_row = QHBoxLayout()
         bottom_button_row.setSpacing(10)
 
-        self.pull_button = QPushButton("PULL AVAILABLE UPDATES")
-        self.pull_button.setStyleSheet("""
-            QPushButton {
-                background-color: #004477; border: 1px solid #0088cc; color: white;
-                padding: 10px 16px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px;
-            }
-            QPushButton:hover { background-color: #005588; border-color: #ffaa00; }
-            QPushButton:disabled { background-color: #181d26; border-color: #222b3c; color: #4b5668; }
-        """)
+        self.pull_button = QPushButton(t("UI_PANEL_UPDATES_007"))
+        self.pull_button.setStyleSheet(
+            "QPushButton {"
+            " background-color: #004477; border: 1px solid #0088cc; color: white;"
+            " padding: 10px 16px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px;"
+            "}"
+            "QPushButton:hover { background-color: #005588; border-color: #ffaa00; }"
+            "QPushButton:disabled { background-color: #181d26; border-color: #222b3c; color: #4b5668; }"
+        )
         self.pull_button.clicked.connect(self._trigger_async_pull)
         bottom_button_row.addWidget(self.pull_button)
         bottom_button_row.addStretch()
         card_layout.addLayout(bottom_button_row)
 
-        note = QLabel(
-            "Notice: Git updates are available only after this installation is converted "
-            "to a tracked repository. Existing local configuration files are preserved when pulling updates."
-        )
+        note = QLabel(t("UI_PANEL_UPDATES_008"))
         note.setWordWrap(True)
         note.setStyleSheet("color: #5c6773; font-size: 11px; border: none; padding-top: 5px;")
         card_layout.addWidget(note)
@@ -101,7 +99,7 @@ class UpdatesPanel(QWidget):
     def _get_local_commit_sha(self) -> str:
         git_dir = self.project_root / ".git"
         if not git_dir.exists():
-            return "Untracked Archive"
+            return t("UI_PANEL_UPDATES_009")
         try:
             cmd_flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
             res = subprocess.run(
@@ -112,29 +110,29 @@ class UpdatesPanel(QWidget):
                 return res.stdout.strip()
         except Exception:
             pass
-        return "Unknown"
+        return t("UI_PANEL_UPDATES_010")
 
     def _update_version_header(self):
         project = self.config.environment.get("project", {})
-        ver = project.get("version", "Unknown")
+        ver = project.get("version", t("UI_PANEL_UPDATES_010"))
         local_sha = self._get_local_commit_sha()
-        self.version_label.setText(f"Installed Version: v{ver}  |  Local Commit: {local_sha}")
+        self.version_label.setText(t("UI_PANEL_UPDATES_011", version=ver, sha=local_sha))
 
     @Slot(str, str)
     def _update_status_label(self, message_text, color_hex="#ffaa00"):
         self.status_reporter.setStyleSheet(
             f"font-family: 'Consolas', monospace; font-size: 12px; color: {color_hex}; border: none; padding: 4px 0;"
         )
-        self.status_reporter.setText(f"Ecosystem Status: {message_text}")
+        self.status_reporter.setText(t("UI_PANEL_UPDATES_003", status=message_text))
 
     @Slot(bool, str, bool)
     def _on_action_finished(self, success, alert_msg, preserve_status):
         self._refresh_install_state(preserve_status=preserve_status)
         if alert_msg:
             if success:
-                QMessageBox.information(self, "Registry Alert", alert_msg)
+                QMessageBox.information(self, t("UI_PANEL_UPDATES_012"), alert_msg)
             else:
-                QMessageBox.warning(self, "Pipeline Exception", alert_msg)
+                QMessageBox.warning(self, t("UI_PANEL_UPDATES_013"), alert_msg)
 
     def _refresh_install_state(self, preserve_status: bool = False):
         self._update_version_header()
@@ -145,25 +143,23 @@ class UpdatesPanel(QWidget):
             self.convert_button.setEnabled(False)
             self.pull_button.setEnabled(False)
             if not preserve_status:
-                self._update_status_label(
-                    'Git not detected on system PATH. '
-                    '<a href="https://git-scm.com" style="color: #66b2ff;">Download &amp; install Git</a>, '
-                    'then restart the Control Deck to enable easy updates.',
-                    "#ff3333",
-                )
+                self._update_status_label(t("UI_PANEL_UPDATES_014"), "#ff3333")
             return
 
         git_dir = self.project_root / ".git"
         if git_dir.exists():
             self._tracked_repository = True
             if not preserve_status:
-                self._update_status_label("Git Tracked (Click 'CHECK FOR UPDATES' to compare with GitHub)", "#ffaa00")
+                self._update_status_label(
+                    t("UI_PANEL_UPDATES_015", check_btn=t("UI_PANEL_UPDATES_005")),
+                    "#ffaa00",
+                )
             self.convert_button.setEnabled(False)
             self.pull_button.setEnabled(True)
         else:
             self._tracked_repository = False
             if not preserve_status:
-                self._update_status_label("ZIP / extracted installation archive (untracked). Manual updating required", "#ffaa00")
+                self._update_status_label(t("UI_PANEL_UPDATES_016"), "#ffaa00")
             self.convert_button.setEnabled(True)
             self.pull_button.setEnabled(False)
 
@@ -173,7 +169,7 @@ class UpdatesPanel(QWidget):
         self.check_button.setEnabled(False)
         self.convert_button.setEnabled(False)
         self.pull_button.setEnabled(False)
-        self._update_status_label("Fetching remote repository state...", "#00aaff")
+        self._update_status_label(t("UI_PANEL_UPDATES_017"), "#00aaff")
         threading.Thread(target=self._worker_check_updates, daemon=True).start()
 
     def _worker_check_updates(self):
@@ -190,8 +186,8 @@ class UpdatesPanel(QWidget):
                     capture_output=True, text=True, timeout=25, creationflags=cmd_flags
                 )
                 if fetch_res.returncode != 0:
-                    err = fetch_res.stderr.strip() or "Failed to reach remote origin."
-                    self.status_signal.emit(f"Update check failed: {err}", "#ff3333")
+                    err = fetch_res.stderr.strip() or t("UI_PANEL_UPDATES_018")
+                    self.status_signal.emit(t("UI_PANEL_UPDATES_019", error=err), "#ff3333")
                     self.action_complete_signal.emit(False, "", True)
                     return
 
@@ -213,16 +209,16 @@ class UpdatesPanel(QWidget):
                 behind_count = int(behind_str) if behind_str.isdigit() else 0
 
                 if behind_count == 0 and local_sha == remote_sha:
-                    self.status_signal.emit(f"YOU ARE UP TO DATE (Commit: {local_sha})", "#00ff66")
+                    self.status_signal.emit(t("UI_PANEL_UPDATES_020", sha=local_sha), "#00ff66")
                 elif behind_count > 0:
                     self.status_signal.emit(
-                        f"UPDATE AVAILABLE — {behind_count} commit(s) behind ({local_sha} -> {remote_sha})",
-                        "#ffaa00"
+                        t("UI_PANEL_UPDATES_021", count=behind_count, local_sha=local_sha, remote_sha=remote_sha),
+                        "#ffaa00",
                     )
                 else:
                     self.status_signal.emit(
-                        f"Local branch differs from origin/{branch} (Local: {local_sha} | Remote: {remote_sha})",
-                        "#ffaa00"
+                        t("UI_PANEL_UPDATES_022", branch=branch, local_sha=local_sha, remote_sha=remote_sha),
+                        "#ffaa00",
                     )
                 self.action_complete_signal.emit(True, "", True)
             else:
@@ -232,17 +228,17 @@ class UpdatesPanel(QWidget):
                 ).stdout.strip()
 
                 if not remote_line:
-                    self.status_signal.emit(f"Failed to resolve remote branch '{branch}'.", "#ff3333")
+                    self.status_signal.emit(t("UI_PANEL_UPDATES_023", branch=branch), "#ff3333")
                 else:
                     remote_sha = remote_line.split()[:7]
                     self.status_signal.emit(
-                        f"Untracked ZIP archive (Latest remote commit: {remote_sha}). Click 'CONVERT THIS INSTALL TO GIT' to enable updates.",
-                        "#ffaa00"
+                        t("UI_PANEL_UPDATES_024", remote_sha=remote_sha, convert_btn=t("UI_PANEL_UPDATES_006")),
+                        "#ffaa00",
                     )
                 self.action_complete_signal.emit(True, "", True)
 
         except Exception as e:
-            self.status_signal.emit(f"Update check fault: {e}", "#ff3333")
+            self.status_signal.emit(t("UI_PANEL_UPDATES_025", error=e), "#ff3333")
             self.action_complete_signal.emit(False, "", True)
 
     def _trigger_async_conversion(self):
@@ -251,9 +247,11 @@ class UpdatesPanel(QWidget):
         branch = updates.get("branch", "main")
 
         answer = QMessageBox.question(
-            self, "Convert installation to Git",
-            "This adds Git tracking parameters to the current installation folder layout without replacing existing mod files.\n\nContinue?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No
+            self,
+            t("UI_PANEL_UPDATES_026"),
+            t("UI_PANEL_UPDATES_027"),
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
         )
         if answer != QMessageBox.StandardButton.Yes:
             return
@@ -261,7 +259,7 @@ class UpdatesPanel(QWidget):
         self.check_button.setEnabled(False)
         self.convert_button.setEnabled(False)
         self.pull_button.setEnabled(False)
-        self._update_status_label("Initializing local Git configuration...", "#00aaff")
+        self._update_status_label(t("UI_PANEL_UPDATES_028"), "#00aaff")
 
         threading.Thread(target=self._worker_convert_to_git, args=(repository_url, branch), daemon=True).start()
 
@@ -269,37 +267,37 @@ class UpdatesPanel(QWidget):
         try:
             cmd_flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 
-            self.status_signal.emit("Initializing local .git folder...", "#00aaff")
+            self.status_signal.emit(t("UI_PANEL_UPDATES_029"), "#00aaff")
             subprocess.run(["git", "init"], cwd=str(self.project_root), capture_output=True, check=True, creationflags=cmd_flags)
 
-            self.status_signal.emit(f"Binding HEAD to branch '{branch}'...", "#00aaff")
+            self.status_signal.emit(t("UI_PANEL_UPDATES_030", branch=branch), "#00aaff")
             subprocess.run(["git", "symbolic-ref", "HEAD", f"refs/heads/{branch}"], cwd=str(self.project_root), capture_output=True, check=True, creationflags=cmd_flags)
 
-            self.status_signal.emit(f"Setting remote origin to {repository_url}...", "#00aaff")
+            self.status_signal.emit(t("UI_PANEL_UPDATES_031", url=repository_url), "#00aaff")
             subprocess.run(["git", "remote", "add", "origin", repository_url], cwd=str(self.project_root), capture_output=True, check=True, creationflags=cmd_flags)
 
-            self.status_signal.emit("Fetching upstream repository files...", "#00aaff")
+            self.status_signal.emit(t("UI_PANEL_UPDATES_032"), "#00aaff")
             subprocess.run(["git", "fetch", "origin", branch], cwd=str(self.project_root), capture_output=True, check=True, timeout=120, creationflags=cmd_flags)
 
-            self.status_signal.emit("Aligning directory index...", "#00aaff")
+            self.status_signal.emit(t("UI_PANEL_UPDATES_033"), "#00aaff")
             subprocess.run(["git", "reset", "--mixed", f"origin/{branch}"], cwd=str(self.project_root), capture_output=True, check=True, creationflags=cmd_flags)
 
             subprocess.run(["git", "branch", f"--set-upstream-to=origin/{branch}", branch], cwd=str(self.project_root), capture_output=True, check=True, creationflags=cmd_flags)
 
             local_sha = self._get_local_commit_sha()
-            self.status_signal.emit(f"Git tracking active — YOU ARE UP TO DATE (Commit: {local_sha})", "#00ff66")
-            self.action_complete_signal.emit(True, "This installation folder is now actively tracked by Git. Updates can now be directly requested and pulled.", True)
+            self.status_signal.emit(t("UI_PANEL_UPDATES_034", sha=local_sha), "#00ff66")
+            self.action_complete_signal.emit(True, t("UI_PANEL_UPDATES_035"), True)
 
         except Exception as e:
-            self.status_signal.emit("Conversion pipeline aborted.", "#ff3333")
-            self.action_complete_signal.emit(False, f"Git tracking construction failed:\n{e}", True)
+            self.status_signal.emit(t("UI_PANEL_UPDATES_036"), "#ff3333")
+            self.action_complete_signal.emit(False, t("UI_PANEL_UPDATES_037", error=e), True)
 
     def _trigger_async_pull(self):
         self.check_button.setEnabled(False)
         self.convert_button.setEnabled(False)
         self.pull_button.setEnabled(False)
 
-        self._update_status_label("Fetching updates from remote repository...", "#00aaff")
+        self._update_status_label(t("UI_PANEL_UPDATES_038"), "#00aaff")
         threading.Thread(target=self._worker_pull_updates, daemon=True).start()
 
     def _worker_pull_updates(self):
@@ -308,13 +306,13 @@ class UpdatesPanel(QWidget):
             branch = updates.get("branch", "main")
             cmd_flags = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 
-            self.status_signal.emit("Fetching latest commits from origin...", "#00aaff")
+            self.status_signal.emit(t("UI_PANEL_UPDATES_039"), "#00aaff")
             subprocess.run(["git", "-C", str(self.project_root), "fetch", "origin"], capture_output=True, check=True, timeout=60, creationflags=cmd_flags)
 
-            self.status_signal.emit("Applying fast-forward update...", "#00aaff")
+            self.status_signal.emit(t("UI_PANEL_UPDATES_040"), "#00aaff")
             subprocess.run(["git", "-C", str(self.project_root), "merge", "--ff-only", f"origin/{branch}"], capture_output=True, check=True, timeout=60, creationflags=cmd_flags)
 
-            self.status_signal.emit("Ensuring pip package manager is up to date...", "#00aaff")
+            self.status_signal.emit(t("UI_PANEL_UPDATES_041"), "#00aaff")
             subprocess.run(
                 [sys.executable, "-m", "pip", "install", "--upgrade", "pip"],
                 capture_output=True, text=True, timeout=120, creationflags=cmd_flags
@@ -322,28 +320,28 @@ class UpdatesPanel(QWidget):
 
             req_file = self.project_root / "requirements.txt"
             if req_file.exists():
-                self.status_signal.emit("Updating Python dependencies from requirements.txt...", "#00aaff")
+                self.status_signal.emit(t("UI_PANEL_UPDATES_042"), "#00aaff")
                 pip_res = subprocess.run(
                     [sys.executable, "-m", "pip", "install", "--disable-pip-version-check", "-r", str(req_file)],
                     capture_output=True, text=True, timeout=300, creationflags=cmd_flags
                 )
                 if pip_res.returncode != 0:
-                    err = pip_res.stderr.strip() or pip_res.stdout.strip() or "Unknown pip error."
-                    self.status_signal.emit("Update pulled, but dependency installation failed.", "#ff3333")
+                    err = pip_res.stderr.strip() or pip_res.stdout.strip() or t("UI_PANEL_UPDATES_043")
+                    self.status_signal.emit(t("UI_PANEL_UPDATES_044"), "#ff3333")
                     self.action_complete_signal.emit(
                         False,
-                        f"Code updated, but pip failed to install requirements.txt:\n{err}",
+                        t("UI_PANEL_UPDATES_045", error=err),
                         True,
                     )
                     return
 
             local_sha = self._get_local_commit_sha()
-            self.status_signal.emit(f"Synchronized to {local_sha}! RESTART APPLICATION TO APPLY CHANGES.", "#00ff66")
-            self.action_complete_signal.emit(True, "Updates pulled and dependencies verified! Please restart the control deck to run the updated code.", True)
+            self.status_signal.emit(t("UI_PANEL_UPDATES_046", sha=local_sha), "#00ff66")
+            self.action_complete_signal.emit(True, t("UI_PANEL_UPDATES_047"), True)
 
         except Exception as e:
-            self.status_signal.emit("Sync operation interrupted (check for local file modifications).", "#ff3333")
-            self.action_complete_signal.emit(False, f"Git update aborted:\n{e}", True)
+            self.status_signal.emit(t("UI_PANEL_UPDATES_048"), "#ff3333")
+            self.action_complete_signal.emit(False, t("UI_PANEL_UPDATES_049", error=e), True)
 
     def gather_settings(self):
         pass

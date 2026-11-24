@@ -11,6 +11,8 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QListWidget, QPushButton, QFrame, QMessageBox, QProgressBar
 )
 from pipeline.debug_support import debug_error_message, record_exception
+from pipeline.localization import t
+
 
 class ModelsPanel(QWidget):
     catalog_refresh_signal = Signal()
@@ -55,10 +57,10 @@ class ModelsPanel(QWidget):
         list_layout.setSpacing(10)
 
         header_row = QHBoxLayout()
-        list_header = QLabel("AVAILABLE EXOSUIT SPEECH ENGINES")
+        list_header = QLabel(t("UI_PANEL_MODELS_001"))
         list_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
 
-        self.show_all_btn = QPushButton("Refresh Status")
+        self.show_all_btn = QPushButton(t("UI_PANEL_MODELS_002"))
         self.show_all_btn.setStyleSheet("""
             QPushButton { background-color: #1b2230; border: 1px solid #1f2430; border-radius: 4px; color: #5c6773; padding: 4px 10px; font-family: 'Consolas', monospace; font-size: 11px; }
             QPushButton:hover { background-color: #242f44; color: #ffaa00; border-color: #ffaa00; }
@@ -69,7 +71,7 @@ class ModelsPanel(QWidget):
         header_row.addWidget(self.show_all_btn)
         list_layout.addLayout(header_row)
 
-        list_title = QLabel("Select Target Model Resolution:")
+        list_title = QLabel(t("UI_PANEL_MODELS_003"))
         list_title.setStyleSheet("color: #ffffff; font-size: 12px; border: none;")
         list_layout.addWidget(list_title)
 
@@ -82,6 +84,7 @@ class ModelsPanel(QWidget):
         """)
         self.model_list_widget.currentRowChanged.connect(self._on_model_selection_change)
         list_layout.addWidget(self.model_list_widget, stretch=1)
+
         action_frame = QWidget()
         action_frame.setStyleSheet("border: none; background: transparent;")
         action_layout = QHBoxLayout(action_frame)
@@ -93,12 +96,12 @@ class ModelsPanel(QWidget):
             QPushButton:hover { background-color: #242f44; border-color: #ffaa00; }
             QPushButton:disabled { background-color: #181d26; border-color: #222b3c; color: #4b5668; }
         """
-        self.apply_btn = QPushButton("SET AS ACTIVE")
+        self.apply_btn = QPushButton(t("UI_PANEL_MODELS_004"))
         self.apply_btn.setStyleSheet(button_base_style)
         self.apply_btn.setEnabled(False)
         self.apply_btn.clicked.connect(self._activate_selected_model)
 
-        self.download_btn = QPushButton("DOWNLOAD MODEL")
+        self.download_btn = QPushButton(t("UI_PANEL_MODELS_005"))
         self.download_btn.setStyleSheet("""
             QPushButton { background-color: #885500; border: 1px solid #ffaa00; border-radius: 4px; color: #ffffff; padding: 10px 14px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px; }
             QPushButton:hover { background-color: #aa7700; }
@@ -107,7 +110,7 @@ class ModelsPanel(QWidget):
         self.download_btn.setEnabled(False)
         self.download_btn.clicked.connect(self._trigger_async_download)
 
-        self.delete_btn = QPushButton("REMOVE MODEL")
+        self.delete_btn = QPushButton(t("UI_PANEL_MODELS_006"))
         self.delete_btn.setStyleSheet("""
             QPushButton { background-color: #551111; border: 1px solid #ff3333; border-radius: 4px; color: #ffffff; padding: 10px 14px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px; }
             QPushButton:hover { background-color: #772222; }
@@ -123,6 +126,7 @@ class ModelsPanel(QWidget):
 
         left_layout.addWidget(list_container)
         master_layout.addWidget(left_pane, stretch=1)
+
         right_pane = QWidget()
         right_pane.setFixedWidth(420)
         right_layout = QVBoxLayout(right_pane)
@@ -135,29 +139,29 @@ class ModelsPanel(QWidget):
         details_layout.setContentsMargins(20, 20, 20, 20)
         details_layout.setSpacing(12)
 
-        details_header = QLabel("ENGINE SPECIFICS & SYSTEM DIAGNOSTICS")
+        details_header = QLabel(t("UI_PANEL_MODELS_007"))
         details_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
         details_layout.addWidget(details_header)
 
-        self.meta_title_label = QLabel("No Model Selected")
+        self.meta_title_label = QLabel(t("UI_PANEL_MODELS_008"))
         self.meta_title_label.setStyleSheet("color: #ffffff; font-size: 16px; font-weight: bold; border: none;")
         details_layout.addWidget(self.meta_title_label)
 
-        self.meta_status_label = QLabel("Status: Awaiting Operator Matrix Query")
+        self.meta_status_label = QLabel(t("UI_PANEL_MODELS_009"))
         self.meta_status_label.setStyleSheet("font-weight: bold; font-size: 12px; color: #5c6773; border: none;")
         details_layout.addWidget(self.meta_status_label)
 
-        self.meta_desc_label = QLabel("Select an execution weight file out of the data directory list matrix.")
+        self.meta_desc_label = QLabel(t("UI_PANEL_MODELS_010"))
         self.meta_desc_label.setStyleSheet("color: #ffffff; font-size: 13px; border: none;")
         self.meta_desc_label.setWordWrap(True)
         self.meta_desc_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         details_layout.addWidget(self.meta_desc_label, stretch=1)
 
-        self.global_storage_label = QLabel("Total Storage Capacity Used by All Models: Calculating...")
+        self.global_storage_label = QLabel(t("UI_PANEL_MODELS_011"))
         self.global_storage_label.setStyleSheet("font-family: 'Consolas', monospace; font-size: 11px; color: #8892b0; border: none; padding-top: 4px; border-top: 1px solid #1f2430;")
         details_layout.addWidget(self.global_storage_label)
 
-        self.download_progress_label = QLabel("Queue Status: Idle")
+        self.download_progress_label = QLabel(t("UI_PANEL_MODELS_012"))
         self.download_progress_label.setStyleSheet("font-family: 'Consolas', monospace; font-size: 11px; color: #5c6773; border: none; padding-top: 2px;")
         details_layout.addWidget(self.download_progress_label)
 
@@ -175,21 +179,20 @@ class ModelsPanel(QWidget):
         master_layout.addWidget(right_pane)
 
     def _get_model_storage_metrics(self, model_key: str) -> tuple[Path, str]:
-        """Calculates precise physical file paths using the structural JSON config base definitions."""
-        # Dynamically pull the path variable straight out of the centralized config
+        """Calculates physical file paths using the structural JSON config base definitions."""
         weights_dir = Path(self.config.tts_base_dir)
         target_file = weights_dir / model_key
 
         if target_file.exists():
             bytes_on_disk = target_file.stat().st_size
             return target_file, self._format_size(bytes_on_disk)
-        return target_file, "0.0 B (Not Instantiated Locally)"
+        return target_file, t("UI_PANEL_MODELS_013")
 
     def _calculate_global_storage_consumption(self):
-        """Scans your local assets directory to sum cumulative model allocations."""
+        """Scans the local assets directory to sum cumulative model allocations."""
         weights_dir = Path(self.config.tts_base_dir)
         if not weights_dir.exists():
-            self.global_storage_label.setText("Total Storage Used by All Models: 0.0 B")
+            self.global_storage_label.setText(t("UI_PANEL_MODELS_014", size="0.0 B"))
             return
 
         try:
@@ -197,14 +200,14 @@ class ModelsPanel(QWidget):
             companion_bytes = sum(f.stat().st_size for f in weights_dir.glob("*.bin") if f.is_file())
             total_size = cumulative_bytes + companion_bytes
             self.global_storage_label.setText(
-                f"Total Storage Used by All Models: {self._format_size(total_size)}"
+                t("UI_PANEL_MODELS_014", size=self._format_size(total_size))
             )
         except Exception as error:
-            token = record_exception(error, "Scanning installed voice-model storage")
-            self.global_storage_label.setText(f"Total Storage Used by All Models: Telemetry Fault (ID: {token})")
+            token = record_exception(error, t("UI_PANEL_MODELS_015"))
+            self.global_storage_label.setText(t("UI_PANEL_MODELS_016", token=token))
 
     def _check_if_model_present_on_disk(self, model_key: str) -> bool:
-        target_file, size_str = self._get_model_storage_metrics(model_key)
+        target_file, _ = self._get_model_storage_metrics(model_key)
         return target_file.exists() and target_file.stat().st_size > 1000000
 
     @Slot()
@@ -219,11 +222,11 @@ class ModelsPanel(QWidget):
             info = self.model_catalog[key]
             is_downloaded = self._check_if_model_present_on_disk(key)
 
-            status_tag = "[Available]"
+            status_tag = t("UI_PANEL_MODELS_017")
             if is_downloaded:
-                status_tag = "[Downloaded]"
+                status_tag = t("UI_PANEL_MODELS_018")
             if key == current_active:
-                status_tag = "▶ [ACTIVE ON EXOSUIT]"
+                status_tag = t("UI_PANEL_MODELS_019")
 
             self.model_list_widget.addItem(f" {status_tag}  {info['name']}")
 
@@ -239,23 +242,24 @@ class ModelsPanel(QWidget):
 
         self.meta_title_label.setText(info["name"])
 
-        detailed_profile_text = (
-            f"Target Filename Specification:\n{self.selected_model_key}\n\n"
-            f"Absolute Workspace Storage Location:\n{target_path}\n\n"
-            f"Physical File Allocation Size:\n{size_telemetry}\n\n"
-            f"Companion Profile Voice Database:\n{info['voice_bin']}\n\n"
-            f"Resolution Diagnostics Info:\n{info['note']}"
+        detailed_profile_text = t(
+            "UI_PANEL_MODELS_020",
+            model_key=self.selected_model_key,
+            target_path=target_path,
+            size=size_telemetry,
+            voice_bin=info["voice_bin"],
+            note=info["note"],
         )
         self.meta_desc_label.setText(detailed_profile_text)
 
         is_active = (self.config.tts_model_name == self.selected_model_key)
 
         if is_active:
-            self._apply_status_updates("Status: Active and Loaded on Exosuit Matrix", "#00ff66", False, False, False)
+            self._apply_status_updates(t("UI_PANEL_MODELS_021"), "#00ff66", False, False, False)
         elif is_downloaded:
-            self._apply_status_updates("Status: Offline Asset Present on Local Disk", "#ffaa00", True, False, True)
+            self._apply_status_updates(t("UI_PANEL_MODELS_022"), "#ffaa00", True, False, True)
         else:
-            self._apply_status_updates("Status: Not Downloaded (Assets Missing)", "#ff3333", False, True, False)
+            self._apply_status_updates(t("UI_PANEL_MODELS_023"), "#ff3333", False, True, False)
 
     @Slot(str, str, bool, bool, bool)
     def _apply_status_updates(self, text, color_hex, apply_en, dl_en, del_en):
@@ -278,7 +282,11 @@ class ModelsPanel(QWidget):
         percent = int(downloaded * 100 / total)
         self.download_progress_bar.setValue(percent)
         self.download_progress_label.setText(
-            f"Queue Status: Fetching binary frames ({self._format_size(downloaded)} / {self._format_size(total)})"
+            t(
+                "UI_PANEL_MODELS_024",
+                downloaded=self._format_size(downloaded),
+                total=self._format_size(total),
+            )
         )
 
     @staticmethod
@@ -312,18 +320,18 @@ class ModelsPanel(QWidget):
             self._refresh_catalog_list_display()
             if self.model_list_widget.count() > 0:
                 self.model_list_widget.setCurrentRow(self.list_index_keys.index(self.selected_model_key))
-            QMessageBox.information(self, "Success", "Exosuit core weight matrix target swapped!")
+            QMessageBox.information(self, t("UI_PANEL_MODELS_025"), t("UI_PANEL_MODELS_026"))
         except Exception as e:
-            message = debug_error_message(e, "Selecting a voice model")
-            QMessageBox.critical(self, "Configuration Error", f"Could not preserve target voice choice:\n{message}")
+            message = debug_error_message(e, t("UI_PANEL_MODELS_027"))
+            QMessageBox.critical(self, t("UI_PANEL_MODELS_028"), t("UI_PANEL_MODELS_029", message=message))
 
     def _uninstall_model_assets(self):
         if not self.selected_model_key:
             return
-        info = self.model_catalog[self.selected_model_key]
         confirm = QMessageBox.question(
-            self, "Confirm Deletion",
-            f"Permanently uninstall local binary weight file:\n{self.selected_model_key}?\n\nThis will clear up space from your system storage.",
+            self,
+            t("UI_PANEL_MODELS_030"),
+            t("UI_PANEL_MODELS_031", model_key=self.selected_model_key),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         if confirm != QMessageBox.StandardButton.Yes:
@@ -335,12 +343,12 @@ class ModelsPanel(QWidget):
             if target_file.exists():
                 target_file.unlink()
 
-            QMessageBox.information(self, "Success", "Model removed from system storage.")
+            QMessageBox.information(self, t("UI_PANEL_MODELS_025"), t("UI_PANEL_MODELS_032"))
             self._refresh_catalog_list_display()
             self.model_list_widget.setCurrentRow(self.list_index_keys.index(self.selected_model_key))
         except Exception as e:
-            message = debug_error_message(e, "Removing downloaded voice-model files")
-            QMessageBox.critical(self, "Purge Failure", f"Could not remove local folder modules:\n{message}")
+            message = debug_error_message(e, t("UI_PANEL_MODELS_033"))
+            QMessageBox.critical(self, t("UI_PANEL_MODELS_034"), t("UI_PANEL_MODELS_035", message=message))
 
     def _trigger_async_download(self):
         """Activates progress layouts and routes the target download pass out-of-thread."""
@@ -352,7 +360,7 @@ class ModelsPanel(QWidget):
         self.delete_btn.setEnabled(False)
         self.apply_btn.setEnabled(False)
 
-        self.progress_signal.emit("Queue Status: Synchronizing data links from central registry...")
+        self.progress_signal.emit(t("UI_PANEL_MODELS_036"))
         self.download_progress_bar.setRange(0, 0)
         self.download_progress_bar.setValue(0)
         self.download_progress_bar.setVisible(True)
@@ -361,12 +369,11 @@ class ModelsPanel(QWidget):
         worker.start()
 
     def _download_worker_thread(self):
-        """Pulls down the model weights and corresponding binary voices mapping files from json urls."""
+        """Pulls down the model weights and corresponding binary voices mapping files from JSON URLs."""
         target_model = str(self.selected_model_key)
         info = self.model_catalog[target_model]
         target_voice_bin = info["voice_bin"]
 
-        # Dynamically read the base urls and destinations directly out of the centralized JSON setup configuration
         base_url = str(self.config.tts_base_url).rstrip('/')
         dest_dir = Path(self.config.tts_base_dir)
         dest_dir.mkdir(parents=True, exist_ok=True)
@@ -378,8 +385,7 @@ class ModelsPanel(QWidget):
         voice_dest = dest_dir / target_voice_bin
 
         try:
-            # Stream download processing cycle for the .onnx layout graph file
-            self.progress_signal.emit(f"Queue Status: Querying stream payload for {target_model}...")
+            self.progress_signal.emit(t("UI_PANEL_MODELS_037", model_key=target_model))
             with requests.get(model_url, stream=True, allow_redirects=True) as r:
                 r.raise_for_status()
                 total_size = int(r.headers.get('content-length', 0))
@@ -391,9 +397,8 @@ class ModelsPanel(QWidget):
                             downloaded += len(chunk)
                             self.download_progress_signal.emit(downloaded, total_size)
 
-            # Stream download processing cycle for the accompanying .bin voice map matrices array
             if not voice_dest.exists() or voice_dest.stat().st_size < 1000000:
-                self.progress_signal.emit(f"Queue Status: Fetching voice profiles matrix ({target_voice_bin})...")
+                self.progress_signal.emit(t("UI_PANEL_MODELS_038", voice_bin=target_voice_bin))
                 with requests.get(voice_url, stream=True, allow_redirects=True) as r:
                     r.raise_for_status()
                     with open(voice_dest, 'wb') as f:
@@ -401,13 +406,13 @@ class ModelsPanel(QWidget):
                             if chunk:
                                 f.write(chunk)
 
-            self.progress_signal.emit("Queue Status: Model downloaded and verified successfully.")
+            self.progress_signal.emit(t("UI_PANEL_MODELS_039"))
         except Exception as e:
-            self.progress_signal.emit("Queue Status: Download pipeline processing failed.")
-            message = debug_error_message(e, "Downloading or extracting a voice model")
-            print(f"[DOWNLOAD FAULT]: Model extraction failed: {message}")
+            self.progress_signal.emit(t("UI_PANEL_MODELS_040"))
+            message = debug_error_message(e, t("UI_PANEL_MODELS_041"))
+            print(f"[DOWNLOAD FAULT]: {t('UI_PANEL_MODELS_042', message=message)}")
             if model_dest.exists() and model_dest.stat().st_size < 1000000:
-                model_dest.unlink()  # Scrub broken text file fragments automatically if hit by a network anomaly
+                model_dest.unlink()
         finally:
             self.is_downloading = False
             self.download_progress_bar.setVisible(False)

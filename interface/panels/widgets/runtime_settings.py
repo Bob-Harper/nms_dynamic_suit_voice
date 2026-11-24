@@ -1,4 +1,4 @@
-# interface\panels\widgets\runtime_settings.py
+# interface/panels/widgets/runtime_settings.py
 from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QLabel,
@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (
 )
 
 from interface.panels.widgets.buildcard import build_card
+from pipeline.localization import t
 
 
 class RuntimeManagementWidget(QWidget):
@@ -19,14 +20,9 @@ class RuntimeManagementWidget(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(15, 15, 15, 15)
 
-        card, card_layout = build_card("RUNTIME BEHAVIOR")
-        card_layout.addWidget(
-            QLabel(
-                "These values affect the file watcher while the application is running. "
-                "Changes are stored now and take effect the next time the watcher starts."
-            )
-        )
-        card_layout.addWidget(QLabel("Filesystem watcher poll interval (seconds)"))
+        card, card_layout = build_card(t("UI_WIDGET_RUNTIME_001"))
+        card_layout.addWidget(QLabel(t("UI_WIDGET_RUNTIME_002")))
+        card_layout.addWidget(QLabel(t("UI_WIDGET_RUNTIME_003")))
 
         runtime = self.config.environment.setdefault("runtime", {})
         self.poll_interval_spin = QDoubleSpinBox()

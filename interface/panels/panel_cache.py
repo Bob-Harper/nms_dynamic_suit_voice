@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 from interface.panels.widgets.buildcard import build_card
 from interface.panels.widgets.cache_management import CacheManagementWidget
 from pipeline.debug_support import debug_error_message
+from pipeline.localization import t
 from pipeline.quick_cache import QuickCacheEngine
 
 
@@ -50,11 +51,11 @@ class CacheTopUpWorker(QThread):
                         jobs_queued += 1
             self.finished_enqueuing.emit(len(self.wem_ids), jobs_queued)
         except Exception as exc:
-            self.failed.emit(debug_error_message(exc, "Queuing cache top-up"))
+            self.failed.emit(debug_error_message(exc, t("UI_PANEL_CACHE_001")))
 
 
 class ChamberRefreshWorker(QThread):
-    """Instantly swaps ready quick-cache WEMs into mod_dir and queues generation for uncached chambered IDs."""
+    """Swaps ready quick-cache WEMs into mod_dir and queues generation for uncached chambered IDs."""
     finished_chamber_swap = Signal(int, int, int)  # (total_chambered, swapped_instant, queued_fresh)
     failed = Signal(str)
 
@@ -96,7 +97,7 @@ class ChamberRefreshWorker(QThread):
 
             self.finished_chamber_swap.emit(len(mod_wems), swapped_instant, queued_fresh)
         except Exception as exc:
-            self.failed.emit(debug_error_message(exc, "Replacing chambered mod directory WEMs"))
+            self.failed.emit(debug_error_message(exc, t("UI_PANEL_CACHE_002")))
 
 
 class CachePanel(QWidget):
@@ -120,12 +121,9 @@ class CachePanel(QWidget):
         layout.addWidget(self.global_cache_widget)
 
         # 2. Granular WEM Cache & Mod Directory Operations Card
-        wem_card, wem_layout = build_card("VOICE LINE QUICK-CACHE & MOD OPERATIONS")
+        wem_card, wem_layout = build_card(t("UI_PANEL_CACHE_003"))
 
-        self.core_warning_label = QLabel(
-            "WARNING: Engage AI Core before undertaking cache replenishment operations. "
-            "No Man's Sky does not need to be running."
-        )
+        self.core_warning_label = QLabel(t("UI_PANEL_CACHE_004"))
         self.core_warning_label.setWordWrap(True)
         self.core_warning_label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         self.core_warning_label.setStyleSheet(
@@ -134,7 +132,7 @@ class CachePanel(QWidget):
         )
         wem_layout.addWidget(self.core_warning_label)
 
-        wem_layout.addWidget(QLabel("Select Voice Line (WEM ID — Original Transcription):"))
+        wem_layout.addWidget(QLabel(t("UI_PANEL_CACHE_005")))
         self.wem_selector = QComboBox()
         self.wem_selector.setEditable(True)
         self.wem_selector.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
@@ -145,8 +143,8 @@ class CachePanel(QWidget):
         wem_layout.addWidget(self.wem_selector)
 
         meta_row = QHBoxLayout()
-        self.wem_status_label = QLabel("Cached variations: 0 / 16")
-        self.used_checkbox = QCheckBox("Confirmed as Used by current game build")
+        self.wem_status_label = QLabel(t("UI_PANEL_CACHE_006", existing=0, max_count=16))
+        self.used_checkbox = QCheckBox(t("UI_PANEL_CACHE_007"))
         self.used_checkbox.toggled.connect(self._on_used_toggled)
         meta_row.addWidget(self.wem_status_label)
         meta_row.addStretch()
@@ -155,10 +153,10 @@ class CachePanel(QWidget):
 
         # Row 1: Selected WEM Purge / Top Up
         selected_btn_row = QHBoxLayout()
-        self.clear_selected_btn = QPushButton("PURGE SELECTED WEM CACHE")
+        self.clear_selected_btn = QPushButton(t("UI_PANEL_CACHE_008"))
         self.clear_selected_btn.clicked.connect(self._clear_selected_wem)
 
-        self.topup_selected_btn = QPushButton("TOP UP SELECTED WEM TO MAX")
+        self.topup_selected_btn = QPushButton(t("UI_PANEL_CACHE_009"))
         self.topup_selected_btn.clicked.connect(self._topup_selected_wem)
 
         selected_btn_row.addWidget(self.clear_selected_btn)
@@ -167,10 +165,10 @@ class CachePanel(QWidget):
 
         # Row 2: All Confirmed 'Used' Purge / Top Up
         used_btn_row = QHBoxLayout()
-        self.purge_used_btn = QPushButton("PURGE ALL 'USED' WEM CACHES")
+        self.purge_used_btn = QPushButton(t("UI_PANEL_CACHE_010"))
         self.purge_used_btn.clicked.connect(self._purge_all_used_wems)
 
-        self.topup_all_btn = QPushButton("TOP UP ALL 'USED' WEMS TO MAX")
+        self.topup_all_btn = QPushButton(t("UI_PANEL_CACHE_011"))
         self.topup_all_btn.clicked.connect(self._topup_all_used_wems)
 
         used_btn_row.addWidget(self.purge_used_btn)
@@ -179,14 +177,11 @@ class CachePanel(QWidget):
 
         # Row 3: Global Cache Purge / Replace All Chambered Mod WEMs
         global_btn_row = QHBoxLayout()
-        self.purge_all_btn = QPushButton("PURGE ALL QUICK-CACHE")
+        self.purge_all_btn = QPushButton(t("UI_PANEL_CACHE_012"))
         self.purge_all_btn.clicked.connect(self._purge_all_quick_cache)
 
-        self.refresh_chambered_btn = QPushButton("REPLACE ALL CHAMBERED MOD WEMs")
-        self.refresh_chambered_btn.setToolTip(
-            "Instantly swaps one ready quick-cache WEM into the game's mod directory for every chambered voice line "
-            "(and queues fresh generation for any uncached IDs)."
-        )
+        self.refresh_chambered_btn = QPushButton(t("UI_PANEL_CACHE_013"))
+        self.refresh_chambered_btn.setToolTip(t("UI_PANEL_CACHE_014"))
         self.refresh_chambered_btn.clicked.connect(self._replace_all_chambered_wems)
 
         global_btn_row.addWidget(self.purge_all_btn)
@@ -226,6 +221,7 @@ class CachePanel(QWidget):
 
         layout.addWidget(wem_card)
         layout.addStretch()
+
     def _populate_wem_selector(self):
         self.wem_selector.blockSignals(True)
         self.wem_selector.clear()
@@ -233,7 +229,7 @@ class CachePanel(QWidget):
         intent_map = getattr(self.config, "intent_map", {})
         for wem_id, data in sorted(intent_map.items(), key=lambda item: str(item[0])):
             phrase = data.get("Transcription", "").strip()
-            used_tag = "" if str(data.get("Used", "")).strip().lower() == "yes" else " [UNUSED]"
+            used_tag = "" if str(data.get("Used", "")).strip().lower() == "yes" else f" {t('UI_PANEL_CACHE_015')}"
             display_text = f"{wem_id} — {phrase}{used_tag}"
             self.wem_selector.addItem(display_text, userData=str(wem_id))
 
@@ -268,7 +264,9 @@ class CachePanel(QWidget):
         max_count = self.global_cache_widget.cache_horizon_spin.value()
         wem_dir = self.config.quick_cache_dir / str(wem_id)
         existing = len(list(wem_dir.glob("*.wem"))) if wem_dir.exists() else 0
-        self.wem_status_label.setText(f"Cached variations for {wem_id}: {existing} / {max_count}")
+        self.wem_status_label.setText(
+            t("UI_PANEL_CACHE_016", wem_id=wem_id, existing=existing, max_count=max_count)
+        )
 
     def _on_used_toggled(self, checked):
         wem_id = self._current_wem_id()
@@ -280,7 +278,7 @@ class CachePanel(QWidget):
 
         idx = self.wem_selector.currentIndex()
         phrase = self.config.intent_map[wem_id].get("Transcription", "").strip()
-        used_tag = "" if checked else " [UNUSED]"
+        used_tag = "" if checked else f" {t('UI_PANEL_CACHE_015')}"
         self.wem_selector.setItemText(idx, f"{wem_id} — {phrase}{used_tag}")
 
         if hasattr(self.config, "save_intent_map"):
@@ -290,9 +288,8 @@ class CachePanel(QWidget):
         if getattr(self.config, "llm", None) is None:
             QMessageBox.warning(
                 self,
-                "AI Core Not Engaged",
-                "Please click ENGAGE AI CORE before starting cache replenishment operations.\n\n"
-                "(No Man's Sky does not need to be open.)",
+                t("UI_PANEL_CACHE_017"),
+                t("UI_PANEL_CACHE_018"),
             )
             return False
         return True
@@ -304,13 +301,17 @@ class CachePanel(QWidget):
 
         wem_dir = self.config.quick_cache_dir / str(wem_id)
         if not wem_dir.exists() or not any(wem_dir.iterdir()):
-            QMessageBox.information(self, "Nothing to clear", f"No cached files exist for WEM {wem_id}.")
+            QMessageBox.information(
+                self,
+                t("UI_PANEL_CACHE_019"),
+                t("UI_PANEL_CACHE_020", wem_id=wem_id),
+            )
             return
 
         answer = QMessageBox.question(
             self,
-            "Confirm WEM cache clear",
-            f"Delete all cached variations for WEM {wem_id}?",
+            t("UI_PANEL_CACHE_021"),
+            t("UI_PANEL_CACHE_022", wem_id=wem_id),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
@@ -320,12 +321,14 @@ class CachePanel(QWidget):
         try:
             shutil.rmtree(wem_dir)
             self.queue_feedback_label.setStyleSheet("color: #88dd88; font-weight: bold;")
-            self.queue_feedback_label.setText(f"Cleared cached variations for WEM {wem_id}.")
+            self.queue_feedback_label.setText(t("UI_PANEL_CACHE_023", wem_id=wem_id))
             self._refresh_selected_wem_stats()
             self.global_cache_widget.refresh_stats()
         except OSError as error:
             QMessageBox.critical(
-                self, "Clear failed", debug_error_message(error, f"Clearing WEM {wem_id}")
+                self,
+                t("UI_PANEL_CACHE_024"),
+                debug_error_message(error, t("UI_PANEL_CACHE_025", wem_id=wem_id)),
             )
 
     def _purge_all_used_wems(self):
@@ -335,13 +338,13 @@ class CachePanel(QWidget):
             if str(data.get("Used", "")).strip().lower() == "yes"
         ]
         if not used_ids:
-            QMessageBox.information(self, "No used WEMs", "No WEMs are currently marked as Used.")
+            QMessageBox.information(self, t("UI_PANEL_CACHE_026"), t("UI_PANEL_CACHE_027"))
             return
 
         answer = QMessageBox.question(
             self,
-            "Confirm Used WEMs Purge",
-            f"Delete all cached variations across {len(used_ids)} confirmed 'Used' WEM folder(s)?",
+            t("UI_PANEL_CACHE_028"),
+            t("UI_PANEL_CACHE_029", count=len(used_ids)),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
@@ -356,18 +359,20 @@ class CachePanel(QWidget):
                     shutil.rmtree(wem_dir)
                     removed += 1
             self.queue_feedback_label.setStyleSheet("color: #88dd88; font-weight: bold;")
-            self.queue_feedback_label.setText(f"Purged cached folders for {removed} confirmed 'Used' WEM(s).")
+            self.queue_feedback_label.setText(t("UI_PANEL_CACHE_030", removed=removed))
             self._refresh_selected_wem_stats()
             self.global_cache_widget.refresh_stats()
         except OSError as error:
             QMessageBox.critical(
-                self, "Purge failed", debug_error_message(error, "Purging all used WEM caches")
+                self,
+                t("UI_PANEL_CACHE_031"),
+                debug_error_message(error, t("UI_PANEL_CACHE_032")),
             )
 
     def _purge_all_quick_cache(self):
         if self.global_cache_widget.purge_all_caches():
             self.queue_feedback_label.setStyleSheet("color: #88dd88; font-weight: bold;")
-            self.queue_feedback_label.setText("Purged all configured quick-cache and temporary directories.")
+            self.queue_feedback_label.setText(t("UI_PANEL_CACHE_033"))
             self._refresh_selected_wem_stats()
 
     def _topup_selected_wem(self):
@@ -388,14 +393,14 @@ class CachePanel(QWidget):
             if str(data.get("Used", "")).strip().lower() == "yes"
         ]
         if not used_ids:
-            QMessageBox.information(self, "No used WEMs", "No WEMs are currently marked as Used.")
+            QMessageBox.information(self, t("UI_PANEL_CACHE_026"), t("UI_PANEL_CACHE_027"))
             return
 
         max_count = self.global_cache_widget.cache_horizon_spin.value()
         answer = QMessageBox.question(
             self,
-            "Confirm Bulk Top-Up",
-            f"Queue cache generation up to {max_count} variations for {len(used_ids)} used WEMs?",
+            t("UI_PANEL_CACHE_034"),
+            t("UI_PANEL_CACHE_035", max_count=max_count, count=len(used_ids)),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
@@ -404,13 +409,13 @@ class CachePanel(QWidget):
 
     def _start_topup_worker(self, wem_ids, max_count):
         if self._worker is not None and self._worker.isRunning():
-            QMessageBox.warning(self, "Busy", "A cache top-up job is already being queued.")
+            QMessageBox.warning(self, t("UI_PANEL_CACHE_036"), t("UI_PANEL_CACHE_037"))
             return
 
         is_bulk = len(wem_ids) > 1
         self._set_buttons_enabled(False, active_bulk=is_bulk)
         self.queue_feedback_label.setStyleSheet("color: #66b2ff; font-weight: bold;")
-        self.queue_feedback_label.setText("Button triggered — scanning cache directories...")
+        self.queue_feedback_label.setText(t("UI_PANEL_CACHE_038"))
         QApplication.processEvents()
 
         worker = CacheTopUpWorker(self.config, wem_ids, max_count)
@@ -431,13 +436,13 @@ class CachePanel(QWidget):
             btn.setEnabled(enabled)
 
         if enabled:
-            self.topup_selected_btn.setText("TOP UP SELECTED WEM TO MAX")
-            self.topup_all_btn.setText("TOP UP ALL 'USED' WEMS TO MAX")
+            self.topup_selected_btn.setText(t("UI_PANEL_CACHE_009"))
+            self.topup_all_btn.setText(t("UI_PANEL_CACHE_011"))
         else:
             if active_bulk:
-                self.topup_all_btn.setText("WORKING — TOPPING UP ALL 'USED' WEMS...")
+                self.topup_all_btn.setText(t("UI_PANEL_CACHE_039"))
             else:
-                self.topup_selected_btn.setText("WORKING — TOPPING UP SELECTED WEM...")
+                self.topup_selected_btn.setText(t("UI_PANEL_CACHE_040"))
 
     def _on_topup_finished(self, wem_count, jobs_queued):
         self._set_buttons_enabled(True)
@@ -445,33 +450,34 @@ class CachePanel(QWidget):
         self.global_cache_widget.refresh_stats()
         self.queue_feedback_label.setStyleSheet("color: #88dd88; font-weight: bold;")
         self.queue_feedback_label.setText(
-            f"Scan complete across {wem_count} WEM(s): queued {jobs_queued} new generation job(s)."
+            t("UI_PANEL_CACHE_041", wem_count=wem_count, jobs_queued=jobs_queued)
         )
 
     def _on_topup_failed(self, error_msg):
         self._set_buttons_enabled(True)
-        self.queue_feedback_label.setText("Failed to queue top-up jobs.")
-        QMessageBox.critical(self, "Top-Up Error", error_msg)
+        self.queue_feedback_label.setText(t("UI_PANEL_CACHE_042"))
+        QMessageBox.critical(self, t("UI_PANEL_CACHE_043"), error_msg)
 
     def _replace_all_chambered_wems(self):
         if not self._is_core_engaged():
             return
         if self._chamber_worker is not None and self._chamber_worker.isRunning():
-            QMessageBox.warning(self, "Busy", "A chambered WEM replacement is already running.")
+            QMessageBox.warning(self, t("UI_PANEL_CACHE_036"), t("UI_PANEL_CACHE_044"))
             return
 
         mod_wems = list(self.config.mod_dir.glob("*.wem"))
         if not mod_wems:
-            QMessageBox.information(self, "No Chambered WEMs", f"No .wem files found in {self.config.mod_dir}.")
+            QMessageBox.information(
+                self,
+                t("UI_PANEL_CACHE_045"),
+                t("UI_PANEL_CACHE_046", mod_dir=self.config.mod_dir),
+            )
             return
 
         answer = QMessageBox.question(
             self,
-            "Confirm Chambered WEM Replacement",
-            f"Replace all {len(mod_wems)} chambered .wem file(s) in the game mod directory using your quick-cache "
-            f"(and queue fresh generation for any uncached IDs)?\n\n"
-            f"Tip: If you just changed voices, purge the old quick-cache first so old voice lines aren't swapped in.\n\n"
-            f"Note: Generating uncached voice lines in the background could take some time depending on your system setup.",
+            t("UI_PANEL_CACHE_047"),
+            t("UI_PANEL_CACHE_048", count=len(mod_wems)),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
@@ -480,7 +486,7 @@ class CachePanel(QWidget):
 
         self._set_buttons_enabled(False)
         self.queue_feedback_label.setStyleSheet("color: #66b2ff; font-weight: bold;")
-        self.queue_feedback_label.setText("Swapping cached WEMs into game mod directory...")
+        self.queue_feedback_label.setText(t("UI_PANEL_CACHE_049"))
         QApplication.processEvents()
 
         max_count = self.global_cache_widget.cache_horizon_spin.value()
@@ -496,8 +502,12 @@ class CachePanel(QWidget):
         self.global_cache_widget.refresh_stats()
         self.queue_feedback_label.setStyleSheet("color: #88dd88; font-weight: bold;")
         self.queue_feedback_label.setText(
-            f"Chamber refresh complete ({total_chambered} mod WEMs): "
-            f"instantly swapped {swapped_instant} from cache, queued {queued_fresh} fresh generation(s)."
+            t(
+                "UI_PANEL_CACHE_050",
+                total_chambered=total_chambered,
+                swapped_instant=swapped_instant,
+                queued_fresh=queued_fresh,
+            )
         )
 
     def showEvent(self, event):

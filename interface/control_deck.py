@@ -29,6 +29,7 @@ from pipeline.debug_support import (
     install_exception_hooks,
     record_exception,
 )
+from pipeline.localization import t
 
 
 class StreamRedirector(QObject):
@@ -69,19 +70,20 @@ class ConfigLoaderWorker(QThread):
     config_failed_signal = Signal(str)
 
     def run(self):
-        print("[LAUNCHER BACKGROUND]: Initializing SuitVoiceConfig layers...")
+        print(f"[LAUNCHER BACKGROUND]: {t('UI_DECK_INIT_001')}")
         try:
             from pipeline.config import SuitVoiceConfig
             config_instance = SuitVoiceConfig(init_llm=False)
         except Exception as error:
             self.config_failed_signal.emit(
-                debug_error_message(error, "Loading application configuration")
+                debug_error_message(error, t("UI_DECK_INIT_002"))
             )
             return
         self.config_loaded_signal.emit(config_instance)
 
+
 class ExosuitEngineThread(QThread):
-    """runs core No Man's Sky filewatcher loop as a worker thread."""
+    """Runs core No Man's Sky filewatcher loop as a worker thread."""
     engine_log_signal = Signal(str)
     status_signal = Signal(str, bool)
 
@@ -97,11 +99,12 @@ class ExosuitEngineThread(QThread):
             watch_wems(self, self.config)
         except Exception as error:
             self.engine_log_signal.emit(
-                debug_error_message(error, "Starting or running the background watcher")
+                debug_error_message(error, t("UI_DECK_INIT_003"))
             )
 
     def update_status(self, message, is_ready=False):
         self.status_signal.emit(message, is_ready)
+
 
 class ControlDeckDashboard(QMainWindow):
     def __init__(self):
@@ -119,9 +122,11 @@ class ControlDeckDashboard(QMainWindow):
         if not self.tray_icon_path.is_absolute():
             self.tray_icon_path = project_root / self.tray_icon_path
         if not self.tray_icon_path.exists():
-            raise FileNotFoundError(f"Tray icon missing at configured path: {self.tray_icon_path}")
+            raise FileNotFoundError(
+                t("UI_DECK_INIT_004", path=self.tray_icon_path)
+            )
 
-        self.setWindowTitle(f"NMS Dynamic Suit Voice [{v_sig}]")
+        self.setWindowTitle(f"{t('UI_DECK_INIT_005')} [{v_sig}]")
 
         self.resize(960, 850)
         self.setMinimumSize(640, 500)
@@ -142,6 +147,14 @@ class ControlDeckDashboard(QMainWindow):
         # KICK OFF BACKGROUND INITIALIZATION DELAYED
         # Triggers 50ms after the window frame draws, keeping the startup completely unblocked
         QTimer.singleShot(50, self.launch_background_config_loader)
+
+    def _set_status(self, status_key: str, color: str):
+        status_text = t("UI_DECK_INIT_000", status=t(status_key))
+        self.status_badge.setText(status_text)
+        self.status_badge.setStyleSheet(
+            f"font-family: 'Consolas', monospace; font-size: 11px; "
+            f"color: {color}; font-weight: bold;"
+        )
 
     def init_ui(self):
         self.setStyleSheet("""
@@ -171,20 +184,18 @@ class ControlDeckDashboard(QMainWindow):
         header_card.setObjectName("HeaderCard")
         header_layout = QHBoxLayout(header_card)
         header_layout.setContentsMargins(20, 15, 20, 15)
+        header_layout.setSpacing(15)
 
         status_text_layout = QVBoxLayout()
-        system_title = QLabel("EXOSUIT INTEGRATED COGNITION MATRIX")
+        system_title = QLabel(t("UI_DECK_INIT_006"))
         system_title.setStyleSheet("font-family: 'Consolas', monospace; font-size: 15px; font-weight: bold; color: #ffffff;")
 
-        self.status_badge = QLabel("STATUS: INITIALIZING SYSTEM ASSETS...")
-        self.status_badge.setStyleSheet("font-family: 'Consolas', monospace; font-size: 11px; color: #ffaa00; font-weight: bold;")
+        self.status_badge = QLabel()
+        self._set_status("UI_DECK_INIT_007", "#ffaa00")
 
         status_text_layout.addWidget(system_title)
         status_text_layout.addWidget(self.status_badge)
         header_layout.addLayout(status_text_layout)
-
-        header_layout.addLayout(status_text_layout)
-        header_layout.setSpacing(15)
 
         self.telemetry_readout = QTextEdit()
         self.telemetry_readout.setReadOnly(True)
@@ -203,7 +214,7 @@ class ControlDeckDashboard(QMainWindow):
                 padding: 3px 8px;
             }
         """)
-        self.telemetry_readout.append(">> Telemetry link online. Standby...")
+        self.telemetry_readout.append(f">> {t('UI_DECK_INIT_008')}")
         header_layout.addWidget(self.telemetry_readout, stretch=1)
 
         self._stdout_redirector = StreamRedirector(sys.__stdout__)
@@ -211,9 +222,7 @@ class ControlDeckDashboard(QMainWindow):
         sys.stdout = self._stdout_redirector
         self.append_log_signal = self._stdout_redirector.text_written
 
-        self.launch_btn = QPushButton("ENGAGE AI CORE")
-
-        self.launch_btn = QPushButton("ENGAGE AI CORE")
+        self.launch_btn = QPushButton(t("UI_DECK_INIT_009"))
         self.launch_btn.setEnabled(False)
         self.launch_btn.setStyleSheet("background-color: #222225; border: 1px solid #444448; color: #66666d; padding: 10px 20px;")
         header_layout.addWidget(self.launch_btn)
@@ -225,7 +234,7 @@ class ControlDeckDashboard(QMainWindow):
         load_layout = QVBoxLayout(self.loading_panel)
         load_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.loading_msg = QLabel("SYNCHRONIZING EXOSUIT DATA ASSETS (READING LLM MATRIX FILES)...")
+        self.loading_msg = QLabel(t("UI_DECK_INIT_010"))
         self.loading_msg.setStyleSheet("font-family: 'Consolas', monospace; color: #ffaa00; font-size: 12px;")
 
         self.progress_bar = QProgressBar()
@@ -248,11 +257,11 @@ class ControlDeckDashboard(QMainWindow):
             return
 
         self.tray_icon = QSystemTrayIcon(QIcon(str(self.tray_icon_path)), self)
-        self.tray_icon.setToolTip("NMS Dynamic Suit Voice")
+        self.tray_icon.setToolTip(t("UI_DECK_INIT_005"))
         tray_menu = QMenu(self)
-        show_action = QAction("Show Control Deck", self)
+        show_action = QAction(t("UI_DECK_INIT_011"), self)
         show_action.triggered.connect(self.show_window)
-        quit_action = QAction("Close everything completely", self)
+        quit_action = QAction(t("UI_DECK_INIT_012"), self)
         quit_action.triggered.connect(self.quit_application)
         tray_menu.addAction(show_action)
         tray_menu.addSeparator()
@@ -285,17 +294,13 @@ class ControlDeckDashboard(QMainWindow):
     def on_config_loading_failed(self, error):
         if self._quit_requested:
             return
-        self.loading_msg.setText(f"Configuration load failed: {error}")
+        self.loading_msg.setText(f"{t('UI_DECK_INIT_013')}: {error}")
         self.progress_bar.hide()
-        self.status_badge.setText("STATUS: CONFIGURATION ERROR")
-        self.status_badge.setStyleSheet(
-            "font-family: 'Consolas', monospace; font-size: 11px; "
-            "color: #ff3333; font-weight: bold;"
-        )
+        self._set_status("UI_DECK_INIT_014", "#ff3333")
         QMessageBox.critical(
             self,
-            "Configuration load failed",
-            f"The control deck could not load its configuration:\n{error}",
+            t("UI_DECK_INIT_013"),
+            t("UI_DECK_INIT_015", error=error),
         )
 
     def on_config_loading_complete(self, config_instance):
@@ -316,7 +321,7 @@ class ControlDeckDashboard(QMainWindow):
         btn_layout.setContentsMargins(0, 5, 0, 0)
 
         # MASTER KILL-SWITCH BUTTON: Anchor it on the far left side to avoid accidental presses
-        close_everything_btn = QPushButton("FULL PROCESS SHUTDOWN")
+        close_everything_btn = QPushButton(t("UI_DECK_INIT_016"))
         close_everything_btn.setStyleSheet("""
             QPushButton {
                 background-color: #551111;
@@ -338,11 +343,11 @@ class ControlDeckDashboard(QMainWindow):
         # Push standard window options to the right-hand margin
         btn_layout.addStretch()
 
-        cancel_btn = QPushButton("Cancel")
+        cancel_btn = QPushButton(t("UI_DECK_INIT_017"))
         cancel_btn.clicked.connect(self.close)
-        apply_btn = QPushButton("Apply Changes")
+        apply_btn = QPushButton(t("UI_DECK_INIT_018"))
         apply_btn.clicked.connect(self.apply_preferences)
-        save_close_btn = QPushButton("Save & Minimize")
+        save_close_btn = QPushButton(t("UI_DECK_INIT_019"))
         save_close_btn.clicked.connect(self.save_and_close)
 
         button_style = """
@@ -358,8 +363,7 @@ class ControlDeckDashboard(QMainWindow):
         btn_layout.addWidget(save_close_btn)
         self.main_layout.addWidget(button_frame)
 
-        self.status_badge.setText("STATUS: OFFLINE (STANDBY MODE)")
-        self.status_badge.setStyleSheet("font-family: 'Consolas', monospace; font-size: 11px; color: #ff3333; font-weight: bold;")
+        self._set_status("UI_DECK_INIT_020", "#ff3333")
 
         self.launch_btn.setEnabled(True)
         self.launch_btn.setStyleSheet("""
@@ -371,7 +375,6 @@ class ControlDeckDashboard(QMainWindow):
         # Scan and load layout panels seamlessly now that self.config exists
         self.discover_and_mount_panels()
 
-
     def toggle_engine_state(self):
         if self._quit_requested:
             return
@@ -379,17 +382,13 @@ class ControlDeckDashboard(QMainWindow):
         if self.engine_thread is not None and self.engine_thread.isRunning():
             self.engine_thread.running = False
             self.engine_thread.stop_event.set()
-            self.status_badge.setText("STATUS: STOPPING ENGINE...")
+            self._set_status("UI_DECK_INIT_021", "#ffaa00")
             self.launch_btn.setEnabled(False)
             return
 
         self._engine_error_message = None
-        self.status_badge.setText("STATUS: STARTING ENGINE...")
-        self.status_badge.setStyleSheet(
-            "font-family: 'Consolas', monospace; font-size: 11px; "
-            "color: #ffaa00; font-weight: bold;"
-        )
-        self.launch_btn.setText("DISENGAGE AI CORE")
+        self._set_status("UI_DECK_INIT_022", "#ffaa00")
+        self.launch_btn.setText(t("UI_DECK_INIT_023"))
         self.launch_btn.setEnabled(True)
         self.launch_btn.setStyleSheet(
             "background-color: #551111; border: 1px solid #ff3333; "
@@ -405,24 +404,20 @@ class ControlDeckDashboard(QMainWindow):
         if self._quit_requested:
             return
         color = "#00ff66" if is_ready else "#ffaa00"
-        self.status_badge.setText(f"STATUS: {message.upper()}")
+        self.status_badge.setText(t("UI_DECK_INIT_000", status=message.upper()))
         self.status_badge.setStyleSheet(
             f"font-family: 'Consolas', monospace; font-size: 11px; "
             f"color: {color}; font-weight: bold;"
         )
         if self.tray_icon is not None:
-            self.tray_icon.setToolTip(f"NMS Dynamic Suit Voice - {message}")
+            self.tray_icon.setToolTip(f"{t('UI_DECK_INIT_005')} - {message}")
 
     def _on_engine_error(self, message):
         self._engine_error_message = message
-        self.status_badge.setText("STATUS: ENGINE ERROR")
-        self.status_badge.setStyleSheet(
-            "font-family: 'Consolas', monospace; font-size: 11px; "
-            "color: #ff3333; font-weight: bold;"
-        )
+        self._set_status("UI_DECK_INIT_024", "#ff3333")
         if self.tray_icon is not None:
             self.tray_icon.showMessage(
-                "NMS Dynamic Suit Voice",
+                t("UI_DECK_INIT_005"),
                 message,
                 QSystemTrayIcon.MessageIcon.Critical,
             )
@@ -434,24 +429,20 @@ class ControlDeckDashboard(QMainWindow):
             return
 
         self.launch_btn.setEnabled(True)
-        self.launch_btn.setText("ENGAGE AI CORE")
+        self.launch_btn.setText(t("UI_DECK_INIT_009"))
         self.launch_btn.setStyleSheet("""
             QPushButton { background-color: #885500; border: 1px solid #ffaa00; color: #ffffff; font-size: 12px; padding: 10px 20px; }
             QPushButton:hover { background-color: #aa7700; }
         """)
         if self._engine_error_message:
-            self.status_badge.setText("STATUS: ENGINE ERROR")
+            self._set_status("UI_DECK_INIT_024", "#ff3333")
             return
-        self.status_badge.setText("STATUS: OFFLINE (STANDBY MODE)")
-        self.status_badge.setStyleSheet(
-            "font-family: 'Consolas', monospace; font-size: 11px; "
-            "color: #ff3333; font-weight: bold;"
-        )
+        self._set_status("UI_DECK_INIT_020", "#ff3333")
 
     def quit_application(self):
         self._quit_requested = True
         self.launch_btn.setEnabled(False)
-        self.status_badge.setText("STATUS: SHUTTING DOWN...")
+        self._set_status("UI_DECK_INIT_025", "#ffaa00")
         if self.engine_thread is not None:
             self.engine_thread.running = False
             self.engine_thread.stop_event.set()
@@ -483,8 +474,8 @@ class ControlDeckDashboard(QMainWindow):
             event.ignore()
             if not self._tray_notice_shown:
                 self.tray_icon.showMessage(
-                    "NMS Dynamic Suit Voice",
-                    "The control deck is still running in the system tray.",
+                    t("UI_DECK_INIT_005"),
+                    t("UI_DECK_INIT_026"),
                     QSystemTrayIcon.MessageIcon.Information,
                 )
                 self._tray_notice_shown = True
@@ -540,7 +531,12 @@ class ControlDeckDashboard(QMainWindow):
                 panel_class = getattr(imported_module, class_name, None)
 
                 if not panel_class:
-                    print(f"[PANEL FAULT] Expected class '{class_name}' not found in {module_name}.py")
+                    detail = t(
+                        "UI_DECK_INIT_027",
+                        class_name=class_name,
+                        module_name=module_name,
+                    )
+                    print(f"{t('UI_DECK_INIT_029')} {detail}")
                     continue
 
                 default_title = " ".join(w.capitalize() for w in words)
@@ -562,16 +558,15 @@ class ControlDeckDashboard(QMainWindow):
 
             except Exception as load_err:
                 message = debug_error_message(
-                    load_err, f"Loading interface panel {module_name}"
+                    load_err, t("UI_DECK_INIT_028", module_name=module_name)
                 )
-                print(f"[PANEL FAULT] {message}")
-
+                print(f"{t('UI_DECK_INIT_029')} {message}")
 
     def _open_debug_settings(self, target):
         panel_name, _, section = target.partition("/")
         matched_index = -1
 
-        # search for the target tab string
+        # Search for the target tab string
         for index in range(self.notebook.count()):
             if self.notebook.tabText(index).casefold() == panel_name.casefold():
                 matched_index = index
@@ -592,8 +587,8 @@ class ControlDeckDashboard(QMainWindow):
         # Fallback: If no match was ever found, the code hits this boundary line
         QMessageBox.warning(
             self,
-            "Settings unavailable",
-            f"The recommended settings panel is not available: {panel_name}.",
+            t("UI_DECK_INIT_030"),
+            t("UI_DECK_INIT_031", panel_name=panel_name),
         )
 
     def gather_all_panel_data(self):
@@ -604,7 +599,9 @@ class ControlDeckDashboard(QMainWindow):
 
     def apply_preferences(self):
         if self.config is None:
-            QMessageBox.warning(self, "System Busy", "Configuration layers are still initializing. Please wait.")
+            QMessageBox.warning(
+                self, t("UI_DECK_INIT_032"), t("UI_DECK_INIT_033")
+            )
             return
 
         try:
@@ -612,14 +609,15 @@ class ControlDeckDashboard(QMainWindow):
             self._save_configuration_files()
             QMessageBox.information(
                 self,
-                "Applied",
-                "Preferences were saved to the configuration files. "
-                "Restart the application to apply any path changes.",
+                t("UI_DECK_INIT_034"),
+                t("UI_DECK_INIT_035"),
             )
         except Exception as e:
-            message = debug_error_message(e, "Saving application preferences")
+            message = debug_error_message(e, t("UI_DECK_INIT_036"))
             QMessageBox.critical(
-                self, "Error", f"Failed to commit settings to file system maps:\n{message}"
+                self,
+                t("UI_DECK_INIT_040"),
+                t("UI_DECK_INIT_037", message=message),
             )
 
     def save_and_close(self):
@@ -632,18 +630,22 @@ class ControlDeckDashboard(QMainWindow):
             self._save_configuration_files()
             QMessageBox.information(
                 self,
-                "Success",
-                "Configurations saved. The control deck will minimize to the system tray.",
+                t("UI_DECK_INIT_034"),
+                t("UI_DECK_INIT_038"),
             )
             self.close()
         except Exception as e:
-            message = debug_error_message(e, "Saving preferences before closing")
-            QMessageBox.critical(self, "Error", f"Failed to finalize files:\n{message}")
+            message = debug_error_message(e, t("UI_DECK_INIT_039"))
+            QMessageBox.critical(
+                self,
+                t("UI_DECK_INIT_040"),
+                t("UI_DECK_INIT_041", message=message),
+            )
 
     def _save_configuration_files(self):
         config = self.config
         if config is None:
-            raise RuntimeError("Configuration is not loaded.")
+            raise RuntimeError(t("UI_DECK_INIT_042"))
 
         config_directory = Path(__file__).parent.parent / "config"
         files = (
@@ -658,6 +660,7 @@ class ControlDeckDashboard(QMainWindow):
         )
         for target_path, data in files:
             write_json_atomic(target_path, data)
+
 
 def main():
     app = QApplication(sys.argv)

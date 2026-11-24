@@ -2,6 +2,8 @@
     "tts_model": "kokoro-v1.0.fp16.onnx",
     "tts_voice_bin": "voices-v1.0.bin",
     "player_name": "Traveller",
+    "ui_locale": "en_us",
+    "voice_locale": "en_us",
     "phrase_settings": {
         "tone": "Standard",
         "wordiness": "Standard"

@@ -1,3 +1,4 @@
+# interface/panels/panel_3_audio.py
 import json
 import importlib
 import threading
@@ -10,6 +11,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLineEdit, QTextEdit, QCheckBox
 )
 from pipeline.debug_support import debug_error_message
+from pipeline.localization import t
 
 
 class AudioPanel(QWidget):
@@ -22,7 +24,7 @@ class AudioPanel(QWidget):
 
         self.presets_file = Path(__file__).parent.parent.parent / "data" / "audio_presets.json"
         self.loaded_presets = {}
-        self.preset_options = ["Browse Custom Voice Signatures..."]
+        self.preset_options = [t("UI_PANEL_AUDIO_001")]
 
         if self.presets_file.exists():
             try:
@@ -30,7 +32,7 @@ class AudioPanel(QWidget):
                     self.loaded_presets = json.load(f)
                 self.preset_options.extend(list(self.loaded_presets.keys()))
             except Exception as e:
-                message = debug_error_message(e, "Loading saved audio presets")
+                message = debug_error_message(e, t("UI_PANEL_AUDIO_002"))
                 print(f"[PRESET ERROR]: Failed to parse audio_presets.json: {message}")
 
         self.log_signal.connect(self._append_console_log)
@@ -60,12 +62,12 @@ class AudioPanel(QWidget):
         preset_layout.setContentsMargins(15, 12, 15, 12)
         preset_layout.setSpacing(10)
 
-        preset_header = QLabel("QUICK EXOSUIT CHARACTER PROFILES")
+        preset_header = QLabel(t("UI_PANEL_AUDIO_003"))
         preset_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
         preset_layout.addWidget(preset_header)
 
         preset_row = QHBoxLayout()
-        preset_label = QLabel("Precalibrated Vocal Signatures:")
+        preset_label = QLabel(t("UI_PANEL_AUDIO_004"))
         preset_label.setStyleSheet("border: none; color: #ffffff;")
         self.preset_combo = QComboBox()
         self.preset_combo.addItems(self.preset_options)
@@ -78,7 +80,7 @@ class AudioPanel(QWidget):
         preset_layout.addLayout(preset_row)
 
         voice_row = QHBoxLayout()
-        voice_label = QLabel("Available Exosuit Base Voices:")
+        voice_label = QLabel(t("UI_PANEL_AUDIO_005"))
         voice_label.setStyleSheet("border: none; color: #ffffff;")
         self.voice_combo = QComboBox()
         self.voice_combo.addItems(self.available_voices)
@@ -90,7 +92,7 @@ class AudioPanel(QWidget):
         voice_row.addStretch()
         preset_layout.addLayout(voice_row)
 
-        self.voice_desc_box = QLabel("Identity Signature: Loading profile arrays...")
+        self.voice_desc_box = QLabel(t("UI_PANEL_AUDIO_006"))
         self.voice_desc_box.setWordWrap(True)
         self.voice_desc_box.setStyleSheet("""
             QLabel { background-color: #0c0c0e; border: 1px dashed #1f2430; color: #5c6773;
@@ -105,19 +107,19 @@ class AudioPanel(QWidget):
         primary_layout.setContentsMargins(15, 12, 15, 12)
         primary_layout.setSpacing(12)
 
-        primary_header = QLabel("PRIMARY EXOSUIT AUDIO TUNING")
+        primary_header = QLabel(t("UI_PANEL_AUDIO_007"))
         primary_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
         primary_layout.addWidget(primary_header)
 
         self.lufs_slider, self.lufs_val_label, self.loudness_toggle = self._create_slider_row(
             primary_layout,
-            "Target Loudness (LUFS) [Baseline: -11.0]:",
+            t("UI_PANEL_AUDIO_008"),
             -220, -80, -110,
             self._on_slider_changed
         )
         self.peak_slider, self.peak_val_label, _ = self._create_slider_row(
             primary_layout,
-            "Peak Headroom Ceiling (dB) [Baseline: 6.0]:",
+            t("UI_PANEL_AUDIO_009"),
             20, 80, 60,
             self._on_slider_changed,
             has_toggle=False
@@ -125,10 +127,7 @@ class AudioPanel(QWidget):
         if self.loudness_toggle is not None:
             self.loudness_toggle.toggled.connect(self.peak_slider.setEnabled)
 
-        loudness_note = QLabel(
-            "NOTE: Baseline (-11.0 LUFS / 6.0 dB) is calibrated for 100% in-game Voice volume. "
-            "Test in-game with defaults first—and adjust the game's Voice slider—before raising these."
-        )
+        loudness_note = QLabel(t("UI_PANEL_AUDIO_010"))
         loudness_note.setWordWrap(True)
         loudness_note.setStyleSheet(
             "color: #8a99ad; font-size: 10px; font-family: 'Consolas', monospace; "
@@ -138,19 +137,19 @@ class AudioPanel(QWidget):
 
         self.tempo_slider, self.tempo_val_label, self.tempo_toggle = self._create_slider_row(
             primary_layout,
-            "Sentence Pacing (Speed Only) [Baseline: 1.00x]:",
+            t("UI_PANEL_AUDIO_011"),
             50, 200, 100,
             self._on_slider_changed
         )
         self.pitch_slider, self.pitch_val_label, self.pitch_toggle = self._create_slider_row(
             primary_layout,
-            "Core Voice Tone (Pitch Only) [Baseline: 0 st]:",
+            t("UI_PANEL_AUDIO_012"),
             -12, 12, 0,
             self._on_slider_changed
         )
         self.mix_slider, self.mix_val_label, self.mix_toggle = self._create_slider_row(
             primary_layout,
-            "Synthetic Cybernetic Overlay % [Baseline: 10%]:",
+            t("UI_PANEL_AUDIO_013"),
             0, 100, 10,
             self._on_slider_changed
         )
@@ -163,24 +162,24 @@ class AudioPanel(QWidget):
         advanced_layout.setContentsMargins(15, 12, 15, 12)
         advanced_layout.setSpacing(10)
 
-        advanced_header = QLabel("ADVANCED SIGNAL DIAGNOSTICS (FINE TUNING)")
+        advanced_header = QLabel(t("UI_PANEL_AUDIO_014"))
         advanced_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
         advanced_layout.addWidget(advanced_header)
 
         self.rate_slider, self.rate_val_label, self.rate_toggle = self._create_slider_row(
             advanced_layout,
-            "Combined Speed + Pitch Warp [Baseline: 1.00]:",
+            t("UI_PANEL_AUDIO_015"),
             50, 160, 100,
             self._on_slider_changed
         )
         self.formant_slider, self.formant_val_label, self.formant_toggle = self._create_slider_row(
             advanced_layout,
-            "Vocal Resonator / Throat Size % [Baseline: 100%]:",
+            t("UI_PANEL_AUDIO_016"),
             40, 160, 100,
             self._on_slider_changed
         )
 
-        throat_hint = QLabel("Throat Size Guide: Lower % (<100%) = Deeper, larger vocal tract | Higher % (>100%) = Tighter, smaller vocal tract")
+        throat_hint = QLabel(t("UI_PANEL_AUDIO_017"))
         throat_hint.setWordWrap(True)
         throat_hint.setStyleSheet("color: #5c6773; font-size: 10px; font-family: 'Consolas', monospace; border: none;")
         advanced_layout.addWidget(throat_hint)
@@ -188,14 +187,14 @@ class AudioPanel(QWidget):
         btn_action_row = QHBoxLayout()
         btn_action_row.setSpacing(10)
 
-        self.reset_profile_btn = QPushButton("RESET TO PROFILE")
+        self.reset_profile_btn = QPushButton(t("UI_PANEL_AUDIO_018"))
         self.reset_profile_btn.setStyleSheet("""
             QPushButton { background-color: #1f2430; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 12px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px; }
             QPushButton:hover { background-color: #ffaa00; color: #141923; }
         """)
         self.reset_profile_btn.clicked.connect(self._reset_to_saved_userconfig)
 
-        self.restore_baselines_btn = QPushButton("RESTORE SYSTEM BASELINES")
+        self.restore_baselines_btn = QPushButton(t("UI_PANEL_AUDIO_019"))
         self.restore_baselines_btn.setStyleSheet("""
             QPushButton { background-color: #1f2430; border: 1px solid #5c6773; color: #ffffff; padding: 6px 12px; font-weight: bold; font-family: 'Consolas', monospace; font-size: 11px; }
             QPushButton:hover { background-color: #5c6773; color: #ffffff; }
@@ -222,16 +221,16 @@ class AudioPanel(QWidget):
         sandbox_layout.setContentsMargins(15, 15, 15, 15)
         sandbox_layout.setSpacing(10)
 
-        sandbox_header = QLabel("REAL-TIME SYNTHESIS SANDBOX")
+        sandbox_header = QLabel(t("UI_PANEL_AUDIO_020"))
         sandbox_header.setStyleSheet("color: #ffaa00; font-weight: bold; font-family: 'Consolas', monospace; border: none;")
         sandbox_layout.addWidget(sandbox_header)
 
-        input_title = QLabel("Input Live Diagnostic Test Phrase:")
+        input_title = QLabel(t("UI_PANEL_AUDIO_021"))
         input_title.setStyleSheet("color: #ffffff; font-size: 11px; border: none;")
         sandbox_layout.addWidget(input_title)
 
         self.test_text_entry = QLineEdit()
-        self.test_text_entry.setText("Units received. Exosuit environmental tuning sequence verified.")
+        self.test_text_entry.setText(t("UI_PANEL_AUDIO_022"))
         self.test_text_entry.setStyleSheet("""
             QLineEdit { background-color: #0c0c0e; border: 1px solid #1f2430; border-radius: 4px; padding: 6px; color: #ffffff; font-family: 'Segoe UI', sans-serif; }
             QLineEdit:focus { border: 1px solid #ffaa00; }
@@ -241,7 +240,7 @@ class AudioPanel(QWidget):
         playback_action_row = QHBoxLayout()
         playback_action_row.setSpacing(8)
 
-        self.preview_btn = QPushButton("APPLY EFFECTS & PLAY")
+        self.preview_btn = QPushButton(t("UI_PANEL_AUDIO_023"))
         self.preview_btn.setStyleSheet("""
             QPushButton { background-color: #005588; border: 1px solid #00aaff; color: white; padding: 10px 14px; font-weight: bold; font-family: 'Consolas', monospace; }
             QPushButton:hover { background-color: #007acc; border-color: #33bbff; }
@@ -249,7 +248,7 @@ class AudioPanel(QWidget):
         """)
         self.preview_btn.clicked.connect(lambda: self._trigger_async_preview_loop(raw_mode=False))
 
-        self.preview_raw_btn = QPushButton("PLAY RAW")
+        self.preview_raw_btn = QPushButton(t("UI_PANEL_AUDIO_024"))
         self.preview_raw_btn.setStyleSheet("""
             QPushButton { background-color: #1f2430; border: 1px solid #ffaa00; color: #ffaa00; padding: 10px 14px; font-weight: bold; font-family: 'Consolas', monospace; }
             QPushButton:hover { background-color: #ffaa00; color: #141923; }
@@ -257,7 +256,7 @@ class AudioPanel(QWidget):
         """)
         self.preview_raw_btn.clicked.connect(lambda: self._trigger_async_preview_loop(raw_mode=True))
 
-        self.stop_playback_btn = QPushButton("STOP")
+        self.stop_playback_btn = QPushButton(t("UI_PANEL_AUDIO_025"))
         self.stop_playback_btn.setStyleSheet("""
             QPushButton { background-color: #880000; border: 1px solid #ff3333; color: white; padding: 10px 14px; font-weight: bold; font-family: 'Consolas', monospace; }
             QPushButton:hover { background-color: #aa0000; border-color: #ff5555; }
@@ -269,7 +268,7 @@ class AudioPanel(QWidget):
         playback_action_row.addWidget(self.stop_playback_btn, stretch=1)
         sandbox_layout.addLayout(playback_action_row)
 
-        pipeline_title = QLabel("Tuning Engine Pipeline Output:")
+        pipeline_title = QLabel(t("UI_PANEL_AUDIO_026"))
         pipeline_title.setStyleSheet("color: #5c6773; font-size: 11px; border: none; margin-top: 5px;")
         sandbox_layout.addWidget(pipeline_title)
 
@@ -278,11 +277,12 @@ class AudioPanel(QWidget):
         self.status_log_view.setStyleSheet("""
             QTextEdit { background-color: #0c0c0e; border: 1px solid #1f2430; border-radius: 4px; color: #00ff66; font-family: 'Consolas', monospace; font-size: 11px; }
         """)
-        self.status_log_view.append(">> Tuning Engine Status: Standby\n>> Ready to process testing audio streams.")
+        self.status_log_view.append(f">> {t('UI_PANEL_AUDIO_027')}")
         sandbox_layout.addWidget(self.status_log_view)
 
         right_layout.addWidget(sandbox_group)
         master_layout.addWidget(right_pane)
+
     def _create_slider_row(self, parent_layout, label_text, min_val, max_val, default_val, change_callback, has_toggle=True):
         row_frame = QWidget()
         row_frame.setStyleSheet("border: none; background: transparent;")
@@ -293,7 +293,7 @@ class AudioPanel(QWidget):
         if has_toggle:
             toggle_box = QCheckBox()
             toggle_box.setChecked(True)
-            toggle_box.setToolTip("Enable or bypass this audio modifier")
+            toggle_box.setToolTip(t("UI_PANEL_AUDIO_028"))
             toggle_box.setStyleSheet("""
                 QCheckBox::indicator { width: 14px; height: 14px; border: 1px solid #ffaa00; border-radius: 3px; background: #0c0c0e; }
                 QCheckBox::indicator:checked { background: #ffaa00; }
@@ -390,7 +390,7 @@ class AudioPanel(QWidget):
 
     def _update_metadata_description_label(self, voice_key):
         voice_info = self.voice_catalog.get(voice_key, {})
-        desc = voice_info.get("description", "GENDER: Unknown - Check data file | TRAITS: Custom Profile Mapping")
+        desc = voice_info.get("description", t("UI_PANEL_AUDIO_029"))
         self.voice_desc_box.setText(desc)
 
     def _update_all_text_labels(self):
@@ -403,7 +403,7 @@ class AudioPanel(QWidget):
         self.formant_val_label.setText(f"{self.formant_slider.value()}%")
 
     def _reset_to_saved_userconfig(self):
-        self.log_signal.emit("Discarding changes... Reloading saved profile settings.")
+        self.log_signal.emit(t("UI_PANEL_AUDIO_030"))
         if self.config:
             config_dir = self.config.temp_wav_dir.parent.parent / "config"
             user_json_path = config_dir / "user_customization.json"
@@ -417,7 +417,7 @@ class AudioPanel(QWidget):
             self._apply_raw_dictionary_to_sliders(effects)
 
     def _restore_factory_baselines(self):
-        self.log_signal.emit("Restoring calibrated system baselines (-11.0 LUFS, 10% overlay)...")
+        self.log_signal.emit(t("UI_PANEL_AUDIO_031"))
         baseline_defaults = {
             "base_voice": self.voice_combo.currentText() or "af_heart",
             "loudness_target": -11.0,
@@ -451,6 +451,7 @@ class AudioPanel(QWidget):
             s.blockSignals(False)
 
         self._update_all_text_labels()
+
     @Slot(str)
     def _append_console_log(self, text):
         self.status_log_view.append(f">> {text}")
@@ -467,13 +468,13 @@ class AudioPanel(QWidget):
         if sys.platform == "win32":
             import winsound
             winsound.PlaySound(None, winsound.SND_PURGE)
-            self.log_signal.emit("Playback stopped.")
+            self.log_signal.emit(t("UI_PANEL_AUDIO_032"))
 
     def _trigger_async_preview_loop(self, raw_mode=False):
         self.preview_btn.setEnabled(False)
         self.preview_raw_btn.setEnabled(False)
-        mode_label = "RAW UNMODIFIED" if raw_mode else "DSP PROCESSED"
-        self.log_signal.emit(f"Initializing off-thread audio generator [{mode_label}]...")
+        mode_label = t("UI_PANEL_AUDIO_033") if raw_mode else t("UI_PANEL_AUDIO_034")
+        self.log_signal.emit(t("UI_PANEL_AUDIO_035", mode=mode_label))
 
         slider_parameters = {
             "raw_mode": raw_mode,
@@ -509,15 +510,17 @@ class AudioPanel(QWidget):
                 model_path = self.config.tts_model
                 voices_path = self.config.tts_voice_bin
                 if not model_path.exists() or not voices_path.exists():
-                    raise FileNotFoundError(f"Required weights files are missing at: {model_path} or {voices_path}")
+                    raise FileNotFoundError(
+                        t("UI_PANEL_AUDIO_036", model_path=model_path, voices_path=voices_path)
+                    )
                 tts = Kokoro(str(model_path), str(voices_path))
 
-            self.log_signal.emit(f"Synthesizing test line via Kokoro ({params['base_voice']})...")
+            self.log_signal.emit(t("UI_PANEL_AUDIO_037", voice=params["base_voice"]))
             samples, sample_rate = tts.create(params["text"], voice=params["base_voice"], speed=1.0)
             audio = np.asarray(samples, dtype=np.float32)
 
             if not params.get("raw_mode", False):
-                self.log_signal.emit("Applying DSP tuning chain & LUFS mastering...")
+                self.log_signal.emit(t("UI_PANEL_AUDIO_038"))
                 audio = dsp_module.apply_vocal_dsp_chain_matrix(
                     audio=audio,
                     source_sr=int(sample_rate),
@@ -530,7 +533,7 @@ class AudioPanel(QWidget):
                     target_sr=48000,
                 )
             else:
-                self.log_signal.emit("Bypassing DSP modifiers for raw voice playback...")
+                self.log_signal.emit(t("UI_PANEL_AUDIO_039"))
                 audio = dsp_module.apply_vocal_dsp_chain_matrix(
                     audio=audio,
                     source_sr=int(sample_rate),
@@ -555,13 +558,13 @@ class AudioPanel(QWidget):
                 wf.setframerate(48000)
                 wf.writeframes(final_bytes)
 
-            self.log_signal.emit("Streaming preview audio to playback device...")
+            self.log_signal.emit(t("UI_PANEL_AUDIO_040"))
             import winsound
             winsound.PlaySound(str(processed_wav), winsound.SND_FILENAME | winsound.SND_ASYNC)
-            self.log_signal.emit("Preview cycle finished.")
+            self.log_signal.emit(t("UI_PANEL_AUDIO_041"))
         except Exception as e:
-            message = debug_error_message(e, "Generating an audio preview")
-            self.log_signal.emit(f"ERROR: Preview pipeline aborted: {message}")
+            message = debug_error_message(e, t("UI_PANEL_AUDIO_042"))
+            self.log_signal.emit(t("UI_PANEL_AUDIO_043", message=message))
         finally:
             self.reset_btn_signal.emit(True)
 

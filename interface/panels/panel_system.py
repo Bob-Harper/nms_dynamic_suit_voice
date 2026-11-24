@@ -1,8 +1,18 @@
 # interface/panels/panel_4_system.py
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QCheckBox, QLabel, QPushButton, QStackedWidget, QTabWidget, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QLabel,
+    QPushButton,
+    QStackedWidget,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 from interface.panels.widgets.path_management import PathManagementWidget
 from interface.panels.widgets.runtime_settings import RuntimeManagementWidget
+from pipeline.localization import t
+
 
 class SystemPanel(QWidget):
     def __init__(self, config):
@@ -23,20 +33,14 @@ class SystemPanel(QWidget):
         gate_layout = QVBoxLayout(self.gate_page)
         gate_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        warning = QLabel(
-            "SYSTEM DIAGNOSTICS & TUNING CONSOLE\n\n"
-            "Altering these low-level pipeline variables, file allocation tables, "
-            "or operational path roots can cause severe runtime calculation disruptions "
-            "across the cognition matrix engine loops.\n\n"
-            "Proceed ONLY if you are tracking specific workspace environmental paths."
-        )
+        warning = QLabel(t("UI_PANEL_SYSTEM_001"))
         warning.setWordWrap(True)
         warning.setStyleSheet(
             "background-color: #141923; border: 1px solid #ffaa00; border-radius: 6px; padding: 18px; color: #ffffff;"
         )
 
-        self.acknowledgement = QCheckBox("I accept complete technical oversight over these changes.")
-        self.continue_button = QPushButton("CONTINUE TO CRITICAL SYSTEM SETTINGS")
+        self.acknowledgement = QCheckBox(t("UI_PANEL_SYSTEM_002"))
+        self.continue_button = QPushButton(t("UI_PANEL_SYSTEM_003"))
         self.continue_button.setEnabled(False)
         self.continue_button.clicked.connect(self._open_settings)
         self.acknowledgement.toggled.connect(self.continue_button.setEnabled)
@@ -53,8 +57,8 @@ class SystemPanel(QWidget):
         self.runtime_widget = RuntimeManagementWidget(self.config)
         self.path_widget = PathManagementWidget(self.config)
 
-        self.settings_page.addTab(self.runtime_widget, "Runtime Subsystem")
-        self.settings_page.addTab(self.path_widget, "System Paths Mapping")
+        self.settings_page.addTab(self.runtime_widget, t("UI_PANEL_SYSTEM_004"))
+        self.settings_page.addTab(self.path_widget, t("UI_PANEL_SYSTEM_005"))
         self.pages.addWidget(self.settings_page)
 
     def _open_settings(self):
@@ -79,7 +83,9 @@ class SystemPanel(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-        if not self._acknowledged:
+        if self._acknowledged:
+            pass
+        else:
             self.pages.setCurrentWidget(self.gate_page)
 
     def gather_settings(self):

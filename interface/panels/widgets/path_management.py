@@ -1,4 +1,4 @@
-# interface\panels\widgets\path_management.py
+# interface/panels/widgets/path_management.py
 from pathlib import Path
 from PySide6.QtWidgets import (
     QFileDialog,
@@ -11,15 +11,16 @@ from PySide6.QtWidgets import (
 )
 
 from interface.panels.widgets.buildcard import build_card
+from pipeline.localization import t
 
 
 class PathManagementWidget(QWidget):
-    PATH_FIELDS = ( # TODO: json this bitch in with the actual paths
-        ("mod_dir", "No Man's Sky Mod Directory"),
-        ("cache_root", "Cache and Temporary Storage Directory"),
-        ("temp_wem_dir", "Temporary WEM Directory"),
-        ("temp_wav_dir", "Temporary WAV Directory"),
-        ("quick_cache_dir", "Quick Cache Directory"),
+    PATH_FIELD_KEYS = (
+        ("mod_dir", "UI_WIDGET_PATH_003"),
+        ("cache_root", "UI_WIDGET_PATH_004"),
+        ("temp_wem_dir", "UI_WIDGET_PATH_005"),
+        ("temp_wav_dir", "UI_WIDGET_PATH_006"),
+        ("quick_cache_dir", "UI_WIDGET_PATH_007"),
     )
 
     def __init__(self, config):
@@ -29,25 +30,24 @@ class PathManagementWidget(QWidget):
         self.path_edits = {}
         self._build_ui()
 
+    def _field_label(self, key: str) -> str:
+        loc_key = dict(self.PATH_FIELD_KEYS)[key]
+        return t(loc_key)
+
     def _build_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(15, 15, 15, 15)
 
-        card, card_layout = build_card("PLATFORM PATH MANAGEMENT")
-        card_layout.addWidget(
-            QLabel(
-                "Choose the folders used by the mod and its local caches. "
-                "Path changes take effect after restarting the application."
-            )
-        )
+        card, card_layout = build_card(t("UI_WIDGET_PATH_001"))
+        card_layout.addWidget(QLabel(t("UI_WIDGET_PATH_002")))
 
         paths = self.config.environment.setdefault("paths", {})
-        for key, title in self.PATH_FIELDS:
-            card_layout.addWidget(QLabel(title))
+        for key, loc_key in self.PATH_FIELD_KEYS:
+            card_layout.addWidget(QLabel(t(loc_key)))
             row = QHBoxLayout()
             default_value = "cache" if key == "cache_root" else ""
             edit = QLineEdit(str(paths.get(key, default_value)))
-            browse = QPushButton("Browse...")
+            browse = QPushButton(t("UI_WIDGET_PATH_008"))
             browse.clicked.connect(
                 lambda checked=False, field=key, line_edit=edit: self._browse(
                     field, line_edit
@@ -71,7 +71,7 @@ class PathManagementWidget(QWidget):
         )
         selected = QFileDialog.getExistingDirectory(
             self,
-            f"Select {dict(self.PATH_FIELDS)[key]}",
+            t("UI_WIDGET_PATH_009", field_name=self._field_label(key)),
             initial_dir,
         )
         if selected:
@@ -82,13 +82,15 @@ class PathManagementWidget(QWidget):
         values = {key: edit.text().strip() for key, edit in self.path_edits.items()}
         for key, value in values.items():
             if not value:
-                raise ValueError(f"{dict(self.PATH_FIELDS)[key]} cannot be empty.")
+                raise ValueError(
+                    t("UI_WIDGET_PATH_010", field_name=self._field_label(key))
+                )
 
         mod_dir = Path(values["mod_dir"])
         if not mod_dir.is_absolute():
             mod_dir = self.project_root / mod_dir
         if not mod_dir.is_dir():
-            raise ValueError(f"The No Man's Sky mod folder does not exist:\n{mod_dir}")
+            raise ValueError(t("UI_WIDGET_PATH_011", mod_dir=mod_dir))
 
         for key, edit in self.path_edits.items():
             paths[key] = values[key]

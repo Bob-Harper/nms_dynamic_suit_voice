@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
 
 from interface.panels.widgets.buildcard import build_card
 from pipeline.debug_support import debug_error_message, record_exception
+from pipeline.localization import t
 
 
 class CacheManagementWidget(QWidget):
@@ -35,19 +36,15 @@ class CacheManagementWidget(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(15, 15, 15, 15)
 
-        card, card_layout = build_card("EXOSUIT CACHE AND STORAGE")
+        card, card_layout = build_card(t("UI_WIDGET_CACHE_001"))
 
-        # Single compact row: Cached files | Storage usage | Refresh button
         stats_row = QHBoxLayout()
         stats_row.setSpacing(16)
 
-        self.cache_files_label = QLabel("Cached files: Calculating...")
-        self.cache_size_label = QLabel("Storage usage: Calculating...")
-        self.refresh_button = QPushButton("REFRESH STORAGE STATUS")
-        self.refresh_button.setStyleSheet("padding: 6px 12px; font-weight: bold;")
-        self.refresh_button.clicked.connect(self.refresh_stats)
-        self.refresh_button = QPushButton("REFRESH STORAGE STATUS")
-        self.refresh_button.setStyleSheet("""
+        self.cache_files_label = QLabel(t("UI_WIDGET_CACHE_002"))
+        self.cache_size_label = QLabel(t("UI_WIDGET_CACHE_003"))
+        self.refresh_button = QPushButton(t("UI_WIDGET_CACHE_004"))
+        self.refresh_button.setStyleSheet('''
             QPushButton {
                 padding: 8px 14px;
                 font-weight: bold;
@@ -58,7 +55,7 @@ class CacheManagementWidget(QWidget):
                 padding-top: 10px;
                 padding-bottom: 6px;
             }
-        """)
+        ''')
         self.refresh_button.clicked.connect(self.refresh_stats)
 
         stats_row.addWidget(self.cache_files_label)
@@ -67,7 +64,6 @@ class CacheManagementWidget(QWidget):
         stats_row.addWidget(self.refresh_button)
         card_layout.addLayout(stats_row)
 
-        # Compact horizon row: Label + SpinBox side-by-side
         horizon_row = QHBoxLayout()
         horizon_row.setSpacing(10)
 
@@ -77,7 +73,7 @@ class CacheManagementWidget(QWidget):
         self.cache_horizon_spin.setFixedWidth(80)
         self.cache_horizon_spin.setValue(int(cache_settings.get("quick_cache_max", 16)))
 
-        horizon_row.addWidget(QLabel("Maximum quick-cache variations per voice line:"))
+        horizon_row.addWidget(QLabel(t("UI_WIDGET_CACHE_005")))
         horizon_row.addWidget(self.cache_horizon_spin)
         horizon_row.addStretch()
         card_layout.addLayout(horizon_row)
@@ -118,21 +114,22 @@ class CacheManagementWidget(QWidget):
                     if not path.is_symlink() and path.is_file():
                         file_count += 1
                         total_bytes += path.stat().st_size
-            self.cache_files_label.setText(f"Cached files: {file_count:,}")
+            self.cache_files_label.setText(
+                t("UI_WIDGET_CACHE_006", count=f"{file_count:,}")
+            )
             self.cache_size_label.setText(
-                f"Storage usage: {total_bytes / (1024 * 1024):.1f} MB"
+                t("UI_WIDGET_CACHE_007", size_mb=total_bytes / (1024 * 1024))
             )
         except OSError as error:
-            self.cache_files_label.setText("Cached files: unavailable")
+            self.cache_files_label.setText(t("UI_WIDGET_CACHE_008"))
             token = record_exception(error, "Scanning cache storage")
             self.cache_size_label.setText(
-                f"Storage scan failed: {error} (DEBUG TOKEN = {token})"
+                t("UI_WIDGET_CACHE_009", error=error, token=token)
             )
 
         horizon = self.cache_horizon_spin.value()
         self.cache_policy_label.setText(
-            f"Quick cache limit: {horizon} variations per voice line. "
-            "Temporary WEM, WAV, and quick-cache files are included in storage totals."
+            t("UI_WIDGET_CACHE_010", horizon=horizon)
         )
 
     def purge_all_caches(self) -> bool:
@@ -140,9 +137,8 @@ class CacheManagementWidget(QWidget):
         targets = "\n".join(str(path) for path in directories)
         answer = QMessageBox.question(
             self,
-            "Confirm cache purge",
-            "Permanently remove the contents of these configured cache folders?\n\n"
-            f"{targets or '(No cache folders are configured)'}",
+            t("UI_WIDGET_CACHE_011"),
+            t("UI_WIDGET_CACHE_012", targets=targets or t("UI_WIDGET_CACHE_013")),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
@@ -159,19 +155,15 @@ class CacheManagementWidget(QWidget):
                 mod_dir = mod_dir.resolve()
             for directory in directories:
                 if directory == directory.parent:
-                    raise ValueError(f"Refusing to purge a filesystem root: {directory}")
+                    raise ValueError(t("UI_WIDGET_CACHE_014", directory=directory))
                 if directory == self.project_root:
-                    raise ValueError(
-                        f"Refusing to purge the application folder: {directory}"
-                    )
+                    raise ValueError(t("UI_WIDGET_CACHE_015", directory=directory))
                 if mod_dir is not None and (
                     directory == mod_dir
                     or directory in mod_dir.parents
                     or mod_dir in directory.parents
                 ):
-                    raise ValueError(
-                        f"Cache folder overlaps the mod folder: {directory}"
-                    )
+                    raise ValueError(t("UI_WIDGET_CACHE_016", directory=directory))
 
             removed_count = 0
             for directory in directories:
@@ -186,8 +178,9 @@ class CacheManagementWidget(QWidget):
         except (OSError, ValueError) as error:
             message = debug_error_message(error, "Purging cache storage")
             QMessageBox.critical(
-                self, "Cache purge failed",
-                f"Could not clear cache storage:\n{message}"
+                self,
+                t("UI_WIDGET_CACHE_017"),
+                t("UI_WIDGET_CACHE_018", message=message),
             )
             self.refresh_stats()
             return False
@@ -195,8 +188,8 @@ class CacheManagementWidget(QWidget):
         self.refresh_stats()
         QMessageBox.information(
             self,
-            "Cache purge complete",
-            f"Removed {removed_count} cache entries.",
+            t("UI_WIDGET_CACHE_019"),
+            t("UI_WIDGET_CACHE_020", count=removed_count),
         )
         return True
 
