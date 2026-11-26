@@ -19,21 +19,21 @@ This mod replaces static exosuit AI voice lines in No Man’s Sky with dynamical
 
 When No Man's Sky plays an audio file, it reads the physical file it finds inside your mod directory *at the moment it needs it*. The game appears to load the existence and location of the audio file - it does NOT preload the voice file itself when it launches. They access and play the file **EACH TIME** the game calls for that specific `.wem` file block, then are immediately released until called again.
 
-Because the local pipeline generates variations ahead of time into a background cache, the system watcher instantly swaps a fresh file into your game folder, and proceeds to replenish the cache while you are still playing. If you have a powerful enough system, you could even bypass the caching by setting cache size to 0. EIther way, very notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
+Because the local pipeline generates variations ahead of time into a background cache, the system watcher instantly swaps a fresh file into your game folder, and proceeds to replenish the cache while you are still playing. If you have a powerful enough system, you could even bypass the caching by setting cache size to 0. EIther way, every notification is completely new — even when mass-selling stacks of items at a space station terminal. No more repetitive *"Units Received. Units Received. Units Received."*
 
 ## Key Features (As of v1.4.0)
 - **Fully converted to Kokoro ONNX** TTS processing is now faster, more efficient, and has both Male and Female base voices to choose from.
-- **Centralized Control Dashboard:** A graphical config interface to launch and quit the tool, customize player name, adjust multi-threaded look-ahead queues, or fine-tune processing effects.
-- **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely replaced by an included lightweight converter. No software accounts, corporate registration, or heavy background installations of programs or third party software are required. (LLM and TTS models still required)
-- **Pure-Python DSP Matrix Engine:** ffmpeg requirement and sub-process loops have been removed. Volume gain, sentence tempo stretching, and other adjustments are now handled entirely in-memory via single-pass NumPy matrix math.
+- **Centralized Control Dashboard:** A graphical config interface to launch and quit the tool, customize player name, adjust mod directory monitoring timings, or fine-tune processing effects.
+- **Standalone Architecture:** The Audiokinetic Wwise SDK requirement has been completely replaced by an included lightweight open-source converter. No software accounts, corporate registration, or heavy background installations of programs or third party software are required. (LLM and TTS models still required)
 - **Open-Source Audio Converter:** The installer retrieves the WEM converter from its separate project repository; its executable is not bundled in the source.
+- **Pure-Python DSP Matrix Engine:** ffmpeg requirement and sub-process loops have been removed. Volume gain, sentence tempo stretching, and other adjustments are now handled entirely in-memory via single-pass NumPy matrix math.
 - **Dedicated Update Panel:** Update through a top level panel for immediate user-initiated version checks and file updates.
 - **Stateful Quick Cache System:** Thread-isolated background queue managers to top up caches and intelligently handle file locks without interfering with Game.
 - **Protected VRAM Performance:** Runs lightweight models on CPU thread inference, leaving your GPU completely free to push maximum frame rates to the game.
-- **Integrated Token-based Debugging system:**Generated Debug Tokens can be used on the Debug panel within the main interface in some cases to access explanations, advice, and expose relevant settings for immediate resolution.  A direct link to the Issues page on the Github Repository is also provided for further discussion and assistance.  Log files are *NOT* transmitted automatically, to ensure user privacy.
+- **Integrated Token-based Debugging system:** Generated Debug Tokens can be used on the Debug panel within the main interface in some cases to access explanations, advice, and expose relevant settings for immediate resolution.  A direct link to the Issues page on the Github Repository is also provided for further discussion and assistance.  Log files are *NOT* transmitted automatically, to ensure user privacy.
 
 ### Persistent User Configuration Matrix
-Profile and voice customization is saved to `config/user_customization.json`. System settings such as paths, cache limits, and runtime attributes are saved in `config/environment_config.json`.  These settings will persist through updates.  The first time install ships with a set of default files for both to ensure values are included for initial startup, and as backups should the customized configuration files become unusable for any reason.
+Profile information and voice customizations are saved to `config/user_customization.json`. System settings such as paths, cache limits, and runtime attributes are saved in `config/environment_config.json`.  These settings will persist through updates.  The first time install ships with a set of default files for both to ensure values are included for initial startup, and as backups should the customized configuration files become unusable for any reason.
 
 - **First-Time Installation:** If the user configured files do not exist on the drive, the automated setup script will initialize them with default values.
 - **Upgrading the Mod:** If the custom settings files already exist, the engine boundaries will completely shield them from being touched.  If new keys or fields are present, the system will continue to use the defaults until or unless the user adjusts any of those values. The save process will adjust the file as needed without touching existing values.
@@ -69,30 +69,30 @@ py -3.11 installer.py
 Choose **Automatic Mode** for a streamlined setup, or run the installer steps individually. The installer creates its isolated `venv`, installs dependencies, prepares the local assets, and creates desktop shortcuts.
 
 ### Launching the DSV Control Deck
-Double-click the generated desktop shortcut to open the unified Qt control deck. Use **ENGAGE AI CORE** to start monitoring your game directory. Closing the window with X hides it in the system tray; choose **Show Control Deck** to reopen it, or click **CLOSE EVERYTHING** on the bottom left of the main interface to shut down all processes, clear handles, and kill the application. You can also close everything with a dedicated button within the opene interface window.
+Double-click the generated desktop shortcut to open the unified Qt control deck. Use **ENGAGE AI CORE** to start monitoring your game directory. Closing the window with X hides it in the system tray; choose **Show Control Deck** to reopen it, or click **CLOSE EVERYTHING** to shut down all related processes and kill the application. You can also close everything with a dedicated button at the bottom left within the main interface window.
 
-Configure your **Iteration Designation**, audio presets, and system settings across the layout slots without editing source code. **Save & Minimize** saves settings and hides the window in the tray; **Apply Changes** saves while leaving the control deck open.
+Configure your **Iteration Designation**, audio presets, and system settings across the layout slots without editing source code. **Save & Minimize** saves settings and immediately hides the window in the tray; **Apply Changes** saves and then leaves the control deck open.
 
 ### Enhanced Debug Support
 Open the **Debug** panel and review recently logged events, or manually enter a Debug token to see its explanation, likely causes, and suggested repair steps. Pre-calibrated tokens will automatically render their associated repair widget (like Paths) right next to your text readout for immediate review and repair.
 
-Unexpected exceptions receive a `DSV-...` incident token. The matching traceback is saved locally in `logs/debug_reports.jsonl` and can be viewed directly in the interface by selecting it in the dropdown list.
+Unexpected exceptions receive a `DSV-xxx` incident token. The matching traceback is saved locally in `logs/debug_reports.jsonl` and can be viewed directly in the interface by selecting it in the dropdown list.
 
-**QOL Automation:** The moment an exception popup or error signature is produced by the logging core, the issue is made accessible to the Debug panel. You do not need to write it down or screenshot it; navigate directly to the Debug panel and select it from the dropdown list of recently logged events. Review and redact details before sharing in a GitHub issue. The **Open GitHub issues** button only opens the website; it does not submit a report.
+**QOL Automation:** The moment an exception popup or error signature is produced by the logging core, the issue is made accessible to the Debug panel. You do not need to write it down or screenshot it; navigate directly to the Debug panel and select it from the dropdown list of recently logged events. Review and redact details before sharing in a GitHub issue. The **Open GitHub issues** button only opens the Issues page in the repository; it does not submit a report, autofill fields, or search for related issues.
 
 ### Standalone Update Tab and Git Operations
 The dedicated **Updates Tab** manages workflows out in the open without relying on third-party server approval delays:
 
-- **Live Ecosystem Status Label:** The text reporter right above your actions panel changes continuously to show the step-by-step progress of your network actions (e.g. `Connecting to forge registry...`, `Fetching snapshot...`, etc.) so you always know the app is processing data.
-- **Git-tracked install:** Check the configured GitHub branch, convert an extracted install to a tracked repository, and pull updates when local project files can be safely fast-forwarded. Conversion does not replace existing project files. Local project edits block a pull rather than being overwritten.
+- **Live Ecosystem Status Label:** The text reporter right above your actions panel changes continuously to show the step-by-step progress of your network actions (e.g. `Connecting to forge registry...`, `Fetching snapshot...`, etc.) so you always know what the app is doing.
+- **Git-tracked install:** Check the configured GitHub branch, convert a zip extracted install to a tracked repository, and pull updates when local project files can be safely fast-forwarded. Conversion does not replace existing project files. Local project edits block a pull rather than being overwritten.  (Note that user_customization.json and environment_config.json are NOT tracked, to ensure they are not overwritten)
 
-Update checks and downloads are user-initiated through the Updates panel; the application does not update itself automatically. The repository URL and branch are configuration values in `config/environment_config.json`.
+Update checks and downloads are user-initiated through the Updates panel; the application does not update itself automatically. The repository URL and branch are configuration values in `config/environment_config.json` for advanced users who might want to fork the repository.
 
-## Future Framework Roadmap
-- **Data-Driven Theme Engines:** Moving interface stylesheets, palettes, and typography metrics to a local `interface_theme.json` file for zero-code hot-swappable interface styles.
-- **Interface Localization Support:** Transporting all user-facing panel text elements into unhardcoded `.json` localization dictionary matrices for instant regional multi-language translation packs.
+## Future Framework Roadmap Ideas
+- **Interface Themes:** Moving interface palettes, fonts, and other design elements to a local `interface_theme.json` file for swappable interface styles.
+- **Interface Localization Support:** Refactoring all user-facing panel text elements into  `.json` localization dictionaries as language translation packs.
 - **Multiple Profiles:** Allow users to name and store their own created configurations and audio presets.
-- **User Config Backup:** Define a storage location outside the project structure to ensure user-created files are safe even if extinction-level events occur.
+- **User Config Backup:** Define a storage location outside the project structure to ensure user-created files are protected even if extinction-level events occur.
 
 ## Licensing & Third-Party Open Source Attributions
 

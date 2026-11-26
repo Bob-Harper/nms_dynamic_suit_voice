@@ -9,6 +9,9 @@ import tempfile
 from pathlib import Path
 import warnings
 
+# Observe there are some elements normally handled by SuitVoiceConfig but need to resolve BEFORE it is loaded.
+# This is okay, to ensure fast loading interface and tray icon.
+
 # Force python to ignore all UserWarnings and deprecation noise coming from third-party libraries globally
 os.environ["PYTHONWARNINGS"] = "ignore"
 # Force-align the execution context to look back up at the main mod root folder
@@ -372,7 +375,7 @@ class ControlDeckDashboard(QMainWindow):
         """)
         self.launch_btn.clicked.connect(self.toggle_engine_state)
 
-        # Scan and load layout panels seamlessly now that self.config exists
+        # Scan and load layout panels now that self.config exists
         self.discover_and_mount_panels()
 
     def toggle_engine_state(self):
@@ -540,9 +543,12 @@ class ControlDeckDashboard(QMainWindow):
                     continue
 
                 default_title = " ".join(w.capitalize() for w in words)
-                display_title = title_overrides.get(
-                    module_name,
-                    title_overrides.get(default_title, default_title),
+                override_key = f"title_overrides.{module_name}"
+                translated_title = t(override_key)
+                display_title = (
+                    translated_title
+                    if translated_title != override_key
+                    else default_title
                 )
 
                 panel_instance = panel_class(self.config)

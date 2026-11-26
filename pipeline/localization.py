@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from typing import Dict
 from pipeline.debug_support import debug_error_message, record_exception
+
 PROJECT_ROOT = Path(__file__).parent.parent.absolute()
 LOCALIZATION_DIR = PROJECT_ROOT / "data" / "localization"
 USER_CUSTOMIZATION_PATH = PROJECT_ROOT / "config" / "user_customization.json"
@@ -14,7 +15,7 @@ _fallback_translations: Dict[str, str] = {}
 
 
 def _detect_initial_language() -> str:
-    """Reads the preferred locale from environment_config.json before SuitVoiceConfig loads."""
+    """Reads the preferred locale from user_customization.json before SuitVoiceConfig loads."""
     if not USER_CUSTOMIZATION_PATH.exists():
         print(f"[LOCALIZATION WARNING] Config not found at {USER_CUSTOMIZATION_PATH}; defaulting to 'en_us'.")
         return "en_us"
@@ -32,21 +33,34 @@ def _detect_initial_language() -> str:
         print(f"[LOCALIZATION ERROR] {debug_error_message(error, 'Reading locale config')}")
         return "en_us"
 
+
+def _flatten_strings(data: dict, prefix: str = "") -> Dict[str, str]:
+    """Flattens string leaves from nested dicts while skipping ignored keys."""
+    flat: Dict[str, str] = {}
+    for key, value in data.items():
+        if key in _IGNORED_KEYS:
+            continue
+        full_key = f"{prefix}.{key}" if prefix else str(key)
+        if isinstance(value, str):
+            flat[full_key] = value
+        elif isinstance(value, dict):
+            flat.update(_flatten_strings(value, full_key))
+    return flat
+
+
 def _load_language_pack(language: str) -> Dict[str, str]:
-    """Merges all lang_<language>_*.json files from data/localization/<language>/."""
+    """Merges all *.json files from data/localization/<language>/."""
     merged: Dict[str, str] = {}
     lang_dir = LOCALIZATION_DIR / language
     if not lang_dir.is_dir():
         return merged
 
-    for json_file in sorted(lang_dir.glob(f"{language}_*.json")):
+    for json_file in sorted(lang_dir.glob("*.json")):
         try:
             with open(json_file, "r", encoding="utf-8") as f:
                 raw_data = json.load(f)
             if isinstance(raw_data, dict):
-                for key, value in raw_data.items():
-                    if key not in _IGNORED_KEYS and isinstance(value, str):
-                        merged[key] = value
+                merged.update(_flatten_strings(raw_data))
         except Exception as err:
             print(f"[LOCALIZATION] Failed to parse {json_file.name}: {err}")
 

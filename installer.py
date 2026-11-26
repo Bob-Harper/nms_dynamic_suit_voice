@@ -361,7 +361,7 @@ def automate_audio_compiler_provisioning() -> bool:
     print(f"Pulling components to Target Destination: {target_fork_path}")
     print("\n")
 
-    # Safely purge any corrupted folder stubs before pulling from the repository
+    # Purge any corrupted folder stubs before pulling from the repository
     if target_fork_path.exists():
         try:
             shutil.rmtree(target_fork_path)

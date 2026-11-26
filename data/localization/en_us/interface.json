@@ -55,7 +55,7 @@
   "UI_PANEL_PROFILE_011": "Exosuit Voice Language:",
   "UI_PANEL_PROFILE_012": "Coming Soon (en_us)",
   "UI_PANEL_PROFILE_013": "Multi-language TTS & LLM voice generation is currently in development.",
-  "UI_PANEL_PROFILE_014": "Greetings {name}! Welcome to your Exosuit Integration Control Deck.\nThis centralized dashboard manages your customized preferences while serving as the primary launcher.\n\nOPERATION MANUAL, TL;DR EDITION:\n• User Profile: Preferred name and AI behavioral guidelines\n• Updates: Installed version check against available updates\n• Audio Modifiers: Configure and test voice processing settings\n• Audio Models: TTS model selection, this may affect the voices available\n• Cache: Cache settings, adjustments made globally or per file\n• System: Advanced settings and System Paths\n• Debug: Debug assistance for specific issues, support options for previously unlisted events.\nWhen ready, '{engage_btn}' using the button above. May your journey bring you interesting surprises. Good luck, {name}!",
+  "UI_PANEL_PROFILE_014": "Greetings, {name}! Welcome to the Exosuit Control Deck.\n\nQUICK TL;DR:\n• User Profile / Audio Models: Name, AI tone & TTS voices\n• Audio Modifiers / Cache: Voice effects, cached lines & logs\n• System / Updates / Debug: Paths, releases & diagnostics\n\nWhen ready, click '{engage_btn}'. Safe travels, {name}!",
   "UI_PANEL_PROFILE_015": "↳ Profile: {desc}",
   "UI_PANEL_PROFILE_016": "↳ Profile: Default tone metrics active.",
   "UI_PANEL_PROFILE_017": "↳ Profile: {desc}",

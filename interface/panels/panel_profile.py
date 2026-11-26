@@ -173,7 +173,11 @@ class ProfilePanel(QWidget):
         self.tone_combo = QComboBox()
 
         if self.config and hasattr(self.config, "ui_promptdata"):
-            self.tone_combo.addItems(list(self.config.ui_promptdata.get("tones", {}).keys()))
+            for tone_key in self.config.ui_promptdata.get("tones", {}).keys():
+                label_key = f"tones.{tone_key}.label"
+                translated_label = t(label_key)
+                display_label = translated_label if translated_label != label_key else tone_key
+                self.tone_combo.addItem(display_label, tone_key)
 
         self.tone_combo.setMinimumWidth(190)
         self.tone_combo.setStyleSheet(combo_style)
@@ -196,7 +200,11 @@ class ProfilePanel(QWidget):
         self.wordiness_combo = QComboBox()
 
         if self.config and hasattr(self.config, "ui_promptdata"):
-            self.wordiness_combo.addItems(list(self.config.ui_promptdata.get("wordiness", {}).keys()))
+            for wordiness_key in self.config.ui_promptdata.get("wordiness", {}).keys():
+                label_key = f"wordiness.{wordiness_key}.label"
+                translated_label = t(label_key)
+                display_label = translated_label if translated_label != label_key else wordiness_key
+                self.wordiness_combo.addItem(display_label, wordiness_key)
 
         self.wordiness_combo.setMinimumWidth(190)
         self.wordiness_combo.setStyleSheet(combo_style)
@@ -269,23 +277,39 @@ class ProfilePanel(QWidget):
             label = f"{friendly} [{code}]" if friendly != code else code
             self.ui_locale_combo.addItem(label, code)
 
+        active_code = get_language()
+        if self.config and hasattr(self.config, "customization"):
+            active_code = (
+                self.config.customization.get("ui_locale")
+                or active_code
+            ).strip().lower()
+
+        idx = self.ui_locale_combo.findData(active_code)
+        if idx != -1:
+            self.ui_locale_combo.setCurrentIndex(idx)
+
     def _initialize_data_fields(self):
         """Loads configuration fields from the configuration instance."""
         if not self.config:
             return
 
-        user_data = self.config.user_customization
-
         self.name_entry.setText(self.config.player_name)
-        self.tone_combo.setCurrentText(self.config.current_tone)
-        self.wordiness_combo.setCurrentText(self.config.current_wordiness)
 
-        active_ui_locale = str(user_data.get("ui_locale") or get_language() or "en_us").lower()
-        idx = self.ui_locale_combo.findData(active_ui_locale)
-        if idx != -1:
-            self.ui_locale_combo.setCurrentIndex(idx)
+        tone_idx = self.tone_combo.findData(self.config.current_tone)
+        if tone_idx != -1:
+            self.tone_combo.setCurrentIndex(tone_idx)
 
-        self._refresh_briefing_text_layout()
+        word_idx = self.wordiness_combo.findData(self.config.current_wordiness)
+        if word_idx != -1:
+            self.wordiness_combo.setCurrentIndex(word_idx)
+
+        ui_locale = (
+            self.config.customization.get("ui_locale")
+            or get_language()
+        ).strip().lower()
+        locale_idx = self.ui_locale_combo.findData(ui_locale)
+        if locale_idx != -1:
+            self.ui_locale_combo.setCurrentIndex(locale_idx)
 
     def _on_iteration_name_changed(self, text):
         self._refresh_briefing_text_layout()
@@ -303,15 +327,28 @@ class ProfilePanel(QWidget):
         self.welcome_label.setText(welcome_text)
         self._update_live_descriptions()
 
-    def _update_live_descriptions(self, event_text=None):
+    def _update_live_descriptions(self, _index=None):
         if not self.config or not hasattr(self.config, "ui_promptdata"):
             return
 
-        chosen_tone = self.tone_combo.currentText()
-        chosen_wordiness = self.wordiness_combo.currentText()
+        chosen_tone = self.tone_combo.currentData()
+        chosen_wordiness = self.wordiness_combo.currentData()
 
-        t_desc = self.config.ui_promptdata.get("tones", {}).get(chosen_tone, {}).get("description")
-        w_desc = self.config.ui_promptdata.get("wordiness", {}).get(chosen_wordiness, {}).get("description")
+        t_key = f"tones.{chosen_tone}.description"
+        t_localized = t(t_key) if chosen_tone else ""
+        t_desc = (
+            t_localized
+            if chosen_tone and t_localized != t_key
+            else self.config.ui_promptdata.get("tones", {}).get(chosen_tone, {}).get("description")
+        )
+
+        w_key = f"wordiness.{chosen_wordiness}.description"
+        w_localized = t(w_key) if chosen_wordiness else ""
+        w_desc = (
+            w_localized
+            if chosen_wordiness and w_localized != w_key
+            else self.config.ui_promptdata.get("wordiness", {}).get(chosen_wordiness, {}).get("description")
+        )
 
         self.tone_desc_label.setText(
             t("UI_PANEL_PROFILE_015", desc=t_desc) if t_desc else t("UI_PANEL_PROFILE_016")
@@ -338,5 +375,7 @@ class ProfilePanel(QWidget):
         if "phrase_settings" not in self.config.user_customization:
             self.config.user_customization["phrase_settings"] = {}
 
-        self.config.user_customization["phrase_settings"]["tone"] = self.tone_combo.currentText()
-        self.config.user_customization["phrase_settings"]["wordiness"] = self.wordiness_combo.currentText()
+        if self.tone_combo.currentData() is not None:
+            self.config.user_customization["phrase_settings"]["tone"] = self.tone_combo.currentData()
+        if self.wordiness_combo.currentData() is not None:
+            self.config.user_customization["phrase_settings"]["wordiness"] = self.wordiness_combo.currentData()

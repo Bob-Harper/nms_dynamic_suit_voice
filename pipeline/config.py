@@ -4,7 +4,7 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from llama_cpp import Llama, Optional
+from llama_cpp import Llama
 from typing import Any
 from .debug_support import record_exception
 import threading
@@ -44,7 +44,7 @@ class SuitVoiceConfig:
         self.default_customization = load_json(config_dir / "default_customization.json")
         self.user_customization = load_json(config_dir / "user_customization.json")
         self.panel_customization = load_json(config_dir / "panel_layout.json")
-        
+
         # --- PROJECT METADATA ---
         project_meta = self.environment.get("project", {})
         v_num = project_meta.get("version", "Something")
@@ -160,9 +160,24 @@ class SuitVoiceConfig:
             for key, val in raw_prompt_json.get("tones", {}).items()
         }
 
-        self.current_tone = phrase_settings.get("tone")
-        self.current_wordiness = phrase_settings.get("wordiness")
+        valid_tones = {k.casefold(): k for k in self.promptdata.get("tones", {})}
+        raw_tone = phrase_settings.get("tone")
+        if isinstance(raw_tone, str) and raw_tone.casefold() in valid_tones:
+            self.current_tone = valid_tones[raw_tone.casefold()]
+        else:
+            if raw_tone is not None:
+                print(f"[CONFIG WARNING] Unrecognized tone '{raw_tone}' in user_customization.json; leaving untouched.")
+            self.current_tone = raw_tone
 
+        valid_wordiness = {k.casefold(): k for k in self.promptdata.get("wordiness", {})}
+        raw_wordiness = phrase_settings.get("wordiness")
+        if isinstance(raw_wordiness, str) and raw_wordiness.casefold() in valid_wordiness:
+            self.current_wordiness = valid_wordiness[raw_wordiness.casefold()]
+        else:
+            if raw_wordiness is not None:
+                print(f"[CONFIG WARNING] Unrecognized wordiness '{raw_wordiness}' in user_customization.json; leaving untouched.")
+            self.current_wordiness = raw_wordiness
+            
         # Audio effect mapping dict for processing pipeline reference
         self.voice_effects = self.customization.get("voice_effects", {})
 

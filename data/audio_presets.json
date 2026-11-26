@@ -20,7 +20,7 @@
     },
     "Gek NipNip Merchant": {
         "target_model": "kokoro-v1.0.fp16.onnx",
-        "description": "You are definitely too high to land.",
+        "description": "Woah, you are definitely too high to land.",
         "base_voice": "am_adam",
         "loudness_target": -11.0,
         "loudness_true_peak": 6.0,
@@ -77,7 +77,7 @@
     },
     "Queeg 500 Tactical Advisor": {
         "target_model": "kokoro-v1.0.fp16.onnx",
-        "description": "Loaded Factory Standard Exosuit parameters.",
+        "description": "The chances of using this voice are approximately 17 million to one.",
         "base_voice": "am_santa",
         "loudness_target": -11.0,
         "loudness_true_peak": 6.0,
@@ -96,7 +96,7 @@
     },
     "Lucia Kline, Exolinguist": {
         "target_model": "kokoro-v1.0.fp16.onnx",
-        "description": "Loaded Factory Standard Exosuit parameters.",
+        "description": "Could please say that again, slowly this time?",
         "base_voice": "af_heart",
         "loudness_target": -11.0,
         "loudness_true_peak": 6.0,
