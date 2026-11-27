@@ -1,3 +1,5 @@
+# pipeline\nms_dynamic_suit_voice_pipeline.py
+from pipeline.localization import t
 import os
 import win32con
 import win32file
@@ -13,7 +15,7 @@ def watch_wems(engine, config, console_pipe=None):
     # --- PHASE 1: Initialize Kokoro-TTS Engine ---
     if not engine.running:
         return
-    engine.update_status("Loading Kokoro TTS Engine...")
+    engine.update_statust("PIPELINE_NOTIFICATION_002")
 
     qce = QuickCacheEngine(config)
 
@@ -31,7 +33,7 @@ def watch_wems(engine, config, console_pipe=None):
     # --- PHASE 2: Initialize Llama-cpp Core Engine weights ---
     if not engine.running:
         return
-    engine.update_status("Loading Local AI...")
+    engine.update_statust("PIPELINE_NOTIFICATION_003")
 
     from llama_cpp import Llama
     if not engine.running:
@@ -47,7 +49,7 @@ def watch_wems(engine, config, console_pipe=None):
     # --- PHASE 3: Verify Filesystem Watches ---
     if not engine.running:
         return
-    engine.update_status("Verifying Directories...")
+    engine.update_statust("PIPELINE_NOTIFICATION_004")
     mod_dir = config.mod_dir
     if not mod_dir or not mod_dir.exists():
         raise FileNotFoundError(f"Mod directory does not exist: {mod_dir}")
@@ -79,7 +81,7 @@ def watch_wems(engine, config, console_pipe=None):
     ]
 
     watcher.set_target(mod_dir, tracked_ids)
-    print(f"[WATCHER CORE]: Focused Level-1 Oplock tripwires across {len(tracked_ids)} high-frequency voice assets.")
+    print(t("PIPELINE_NOTIFICATION_005", tracked_ids=tracked_ids))
 
     while engine.running:
         try:
@@ -92,9 +94,7 @@ def watch_wems(engine, config, console_pipe=None):
             for wem_id in broken_ids:
                 # Thread-safe log dispatch pipes kernel events straight onto the console tab view  ## BROKEN, TRYING AGAIN LATER
                 if hasattr(config, "ui_console") and config.ui_console is not None:
-                    config.ui_console.append_log_signal.emit(
-                        f"[KERNEL INTERCEPT]: Oplock tripwire snapped on file track: {wem_id}.wem"
-                    )
+                    config.ui_console.append_log_signal.emit(t("PIPELINE_NOTIFICATION_006", wem_id=wem_id))
 
                 cached_file = qce.get_cached_wem(wem_id)
                 if cached_file is None:
@@ -106,9 +106,7 @@ def watch_wems(engine, config, console_pipe=None):
                 if moved_file is not None:
                     # Signal successful dynamic asset injection directly onto the text stream
                     if hasattr(config, "ui_console") and config.ui_console is not None:
-                        config.ui_console.append_log_signal.emit(
-                            f"[FILESYSTEM SWAP]: Seamlessly deployed fresh variation track for {wem_id}.wem"
-                        )
+                        config.ui_console.append_log_signal.emit(t("PIPELINE_NOTIFICATION_007", wem_id=wem_id))
                     watcher.rearm(wem_id)
 
         except Exception as w_e:

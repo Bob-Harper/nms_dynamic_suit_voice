@@ -24,11 +24,15 @@ def construct_standard_prompt(config, category, intent, phrase, wem_id):
     # Check if category exists or is null in promptdata
     category_context = config.promptdata.get(category)
     if category_context is None:
-        print(f"[PROMPT WARNING] Category '{category}' is missing or null in prompt_data.json; using 'Default'.")
+        print(f"[PROMPT WARNING] Category '{category}' is missing or null in prompt_categories.json; using 'Default'.")
         category_context = config.promptdata.get("Default", "")
 
-    wordiness_prompt = config.promptdata.get("wordiness", {}).get(wordiness_level)
-    tone_prompt = config.promptdata.get("tones", {}).get(tone)
+    wordiness_entry = config.behaviour_rules.get("wordiness", {}).get(wordiness_level)
+    tone_entry = config.behaviour_rules.get("tones", {}).get(tone)
+
+    wordiness_prompt = wordiness_entry.get("prompt", "") if isinstance(wordiness_entry, dict) else (wordiness_entry or "")
+    tone_prompt = tone_entry.get("prompt", "") if isinstance(tone_entry, dict) else (tone_entry or "")
+
     recent_lines = retrieve_recent_lines(config, wem_id)
 
     # Assemble dynamic prompt
@@ -43,7 +47,7 @@ def construct_standard_prompt(config, category, intent, phrase, wem_id):
         name = config.player_name.strip()
     )
 
-    system_prompt = system_prompt.format(name=config.player_name.strip())
+    system_prompt = system_prompt.replace("{name}", config.player_name.strip())
     system_prompt += " /nothink"
     return system_prompt
 
@@ -67,17 +71,16 @@ def construct_milcat_prompt(config, category, intent, phrase, wem_id):
 
 
 def determine_tone(config):
-    tones = list(config.promptdata.get("tones", {}).keys())
+    tones = list(config.behaviour_rules.get("tones", {}).keys())
     current_tone = config.current_tone
     # return current_tone  # TO REMOVE ALL RANDOM CHANCE, UNCOMMENT THIS LINE.
     # Adjust values below if desired.
 
-    # 90% chance stick with default
-    if random.random() < 0.9 or not tones:
+    # 90% chance stick with default.  10% chance pick another from the configured tones
+    other_tones = [t for t in tones if t != current_tone]
+    if random.random() < 0.9 or not other_tones:
         return current_tone
-
-    # 10% chance pick another from the configured tones
-    return random.choice([t for t in tones if t != current_tone])
+    return random.choice(other_tones)
 
 
 def determine_wordiness(config):

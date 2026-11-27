@@ -14,6 +14,7 @@ _translations: Dict[str, str] = {}
 _fallback_translations: Dict[str, str] = {}
 
 
+# Note that the error messages in this file are not localized - if there is an error message it is because it CANNOT localize so there is no point.
 def _detect_initial_language() -> str:
     """Reads the preferred locale from user_customization.json before SuitVoiceConfig loads."""
     if not USER_CUSTOMIZATION_PATH.exists():
@@ -22,8 +23,11 @@ def _detect_initial_language() -> str:
     try:
         with open(USER_CUSTOMIZATION_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)
+        if not isinstance(data, dict):
+            return "en_us"
+        project_cfg = data.get("project")
         lang = (
-            data.get("project", {}).get("ui_locale")
+            (project_cfg.get("ui_locale") if isinstance(project_cfg, dict) else None)
             or data.get("ui_locale")
             or "en_us"
         )
@@ -42,7 +46,8 @@ def _flatten_strings(data: dict, prefix: str = "") -> Dict[str, str]:
             continue
         full_key = f"{prefix}.{key}" if prefix else str(key)
         if isinstance(value, str):
-            flat[full_key] = value
+            if value.strip():
+                flat[full_key] = value
         elif isinstance(value, dict):
             flat.update(_flatten_strings(value, full_key))
     return flat
@@ -91,15 +96,21 @@ def get_language() -> str:
 def t(key: str, **kwargs) -> str:
     """
     Translates a localization key and formats any named placeholders.
-    Falls back to English, then to the raw key if missing.
+    Falls back to English, then to the raw key if missing or malformed.
     """
     text = _translations.get(key) or _fallback_translations.get(key) or key
-    if kwargs:
-        try:
-            return text.format(**kwargs)
-        except KeyError:
-            return text
-    return text
+    if not kwargs:
+        return text
+    try:
+        return text.format(**kwargs)
+    except (KeyError, ValueError):
+        fallback = _fallback_translations.get(key)
+        if fallback and fallback != text:
+            try:
+                return fallback.format(**kwargs)
+            except (KeyError, ValueError):
+                pass
+        return text
 
 
 # Initialize immediately on module import so early UI startup has strings ready

@@ -1,7 +1,6 @@
 {
-    "Factory Standard Exosuit Core": {
+    "factory_standard": {
         "target_model": "kokoro-v1.0.fp16.onnx",
-        "description": "Loaded Factory Standard Exosuit parameters.",
         "base_voice": "bf_emma",
         "loudness_target": -11.0,
         "loudness_true_peak": 6.0,
@@ -18,9 +17,8 @@
         "enable_rate": true,
         "enable_formant": true
     },
-    "Gek NipNip Merchant": {
+    "gek_ninip_merchant": {
         "target_model": "kokoro-v1.0.fp16.onnx",
-        "description": "Woah, you are definitely too high to land.",
         "base_voice": "am_adam",
         "loudness_target": -11.0,
         "loudness_true_peak": 6.0,
@@ -37,9 +35,8 @@
         "enable_rate": true,
         "enable_formant": true
     },
-    "Vy'Keen Juggernaut": {
+    "vykeen_juggernaut": {
         "target_model": "kokoro-v1.0.fp16.onnx",
-        "description": "Grah, your voice modulator is weak!",
         "base_voice": "am_adam",
         "loudness_target": -11.0,
         "loudness_true_peak": 6.0,
@@ -56,9 +53,8 @@
         "enable_rate": true,
         "enable_formant": true
     },
-    "Caffeinated Korvax": {
+    "caffeinated_korvax": {
         "target_model": "kokoro-v1.0.fp16.onnx",
-        "description": "WoULd yOu *KZZZZT* LiKe sOMe *KZZZZZT* CoFFeE?",
         "base_voice": "am_adam",
         "loudness_target": -11.0,
         "loudness_true_peak": 6.0,
@@ -75,9 +71,8 @@
         "enable_rate": true,
         "enable_formant": true
     },
-    "Queeg 500 Tactical Advisor": {
+    "queeg_500": {
         "target_model": "kokoro-v1.0.fp16.onnx",
-        "description": "The chances of using this voice are approximately 17 million to one.",
         "base_voice": "am_santa",
         "loudness_target": -11.0,
         "loudness_true_peak": 6.0,
@@ -94,9 +89,8 @@
         "enable_rate": true,
         "enable_formant": true
     },
-    "Lucia Kline, Exolinguist": {
+    "lucia_kline": {
         "target_model": "kokoro-v1.0.fp16.onnx",
-        "description": "Could please say that again, slowly this time?",
         "base_voice": "af_heart",
         "loudness_target": -11.0,
         "loudness_true_peak": 6.0,

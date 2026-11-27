@@ -48,7 +48,6 @@ class _Entry:
         self.next_try = 0.0
         self.fails = 0
 
-
 # Closing a handle with a pending oplock IRP cancels it; the completion then writes the
 # status into the OVERLAPPED asynchronously. Keep those structs alive or the kernel writes
 # into freed memory (observed as a delayed 0xc0000005 in python310.dll).
@@ -188,6 +187,7 @@ class OplockWatch:
             n = len(group)
             self._wait_chunks.append(((wt.HANDLE * n)(*group), n))
         self._wait_dirty = False
+
     def maintain(self, tries=12):
         """Re-open and re-request broken/busy entries; returns newly armed count."""
         with self._lock:

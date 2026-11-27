@@ -1,4 +1,5 @@
 # pipeline/quick_cache.py
+from pipeline.localization import t
 import os
 import threading
 from time import time, sleep
@@ -39,7 +40,7 @@ class QuickCacheEngine:
             # Direct string emission pipes telemetry straight to console layout view
             if hasattr(self.config, "ui_console") and self.config.ui_console is not None:
                 self.config.ui_console.append_log_signal.emit(
-                    f"[CACHE REPLENISH]: Queueing up look-ahead voice generation job for ID: {wem_id}"
+                    t("PIPELINE_NOTIFICATION_008", wem_id=wem_id)
                 )
 
         self._job_queue.put((func, args, kwargs))
@@ -105,11 +106,6 @@ class QuickCacheEngine:
                 attempt += 1
                 sleep_delay = min(0.5, 0.05 * (2 ** min(attempt, 4)))
                 sleep(sleep_delay)
-
-    def update_access_time_to_match_newfile(self, file_path: Path, access_times: dict):
-        """Updates tracking dictionary with the file's access epoch timestamp."""
-        if file_path.exists():
-            access_times[file_path.stem] = file_path.stat().st_atime
 
     def get_cached_wem(self, wem_id: str) -> Path:
         """Main interface method parsing file caches. Returns a single explicit Path target."""

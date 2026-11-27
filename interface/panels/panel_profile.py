@@ -172,8 +172,8 @@ class ProfilePanel(QWidget):
         tone_title_label.setMinimumWidth(165)
         self.tone_combo = QComboBox()
 
-        if self.config and hasattr(self.config, "ui_promptdata"):
-            for tone_key in self.config.ui_promptdata.get("tones", {}).keys():
+        if self.config and hasattr(self.config, "behaviour_rules"):
+            for tone_key in self.config.behaviour_rules.get("tones", {}).keys():
                 label_key = f"tones.{tone_key}.label"
                 translated_label = t(label_key)
                 display_label = translated_label if translated_label != label_key else tone_key
@@ -199,8 +199,8 @@ class ProfilePanel(QWidget):
         word_title_label.setMinimumWidth(165)
         self.wordiness_combo = QComboBox()
 
-        if self.config and hasattr(self.config, "ui_promptdata"):
-            for wordiness_key in self.config.ui_promptdata.get("wordiness", {}).keys():
+        if self.config and hasattr(self.config, "behaviour_rules"):
+            for wordiness_key in self.config.behaviour_rules.get("wordiness", {}).keys():
                 label_key = f"wordiness.{wordiness_key}.label"
                 translated_label = t(label_key)
                 display_label = translated_label if translated_label != label_key else wordiness_key
@@ -328,7 +328,7 @@ class ProfilePanel(QWidget):
         self._update_live_descriptions()
 
     def _update_live_descriptions(self, _index=None):
-        if not self.config or not hasattr(self.config, "ui_promptdata"):
+        if not self.config or not hasattr(self.config, "behaviour_rules"):
             return
 
         chosen_tone = self.tone_combo.currentData()
@@ -339,7 +339,7 @@ class ProfilePanel(QWidget):
         t_desc = (
             t_localized
             if chosen_tone and t_localized != t_key
-            else self.config.ui_promptdata.get("tones", {}).get(chosen_tone, {}).get("description")
+            else self.config.behaviour_rules.get("tones", {}).get(chosen_tone, {}).get("description")
         )
 
         w_key = f"wordiness.{chosen_wordiness}.description"
@@ -347,7 +347,7 @@ class ProfilePanel(QWidget):
         w_desc = (
             w_localized
             if chosen_wordiness and w_localized != w_key
-            else self.config.ui_promptdata.get("wordiness", {}).get(chosen_wordiness, {}).get("description")
+            else self.config.behaviour_rules.get("wordiness", {}).get(chosen_wordiness, {}).get("description")
         )
 
         self.tone_desc_label.setText(

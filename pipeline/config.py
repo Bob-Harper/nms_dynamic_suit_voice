@@ -1,4 +1,5 @@
 # config.py
+from pipeline.localization import t
 import json
 import os
 import shutil
@@ -139,28 +140,30 @@ class SuitVoiceConfig:
         self.player_name = self.customization.get("player_name")
         phrase_settings = self.customization.get("phrase_settings", {})
 
-        self.promptdata_path = self.resolve_json_path(files.get("prompt_data"), root_dir, must_exist=True)
-        raw_prompt_json = json.loads(self.promptdata_path.read_text(encoding="utf-8"))
+        self.prompt_categories = self.resolve_json_path(files.get("prompt_categories"), root_dir, must_exist=True)
+        raw_prompt_json = json.loads(self.prompt_categories.read_text(encoding="utf-8"))
 
         # Preserve full structured descriptions for the Qt control deck
         self.ui_promptdata = raw_prompt_json
 
-        # Copy all category prompt strings and flatten wordiness/tones for the AI engine
+        # Copy all category prompt strings for the AI engine
         self.promptdata: dict[str, Any] = {
             key: val
             for key, val in raw_prompt_json.items()
             if isinstance(val, str)
         }
-        self.promptdata["wordiness"] = {
-            key: (val["prompt"] if isinstance(val, dict) else val)
-            for key, val in raw_prompt_json.get("wordiness", {}).items()
-        }
-        self.promptdata["tones"] = {
-            key: (val["prompt"] if isinstance(val, dict) else val)
-            for key, val in raw_prompt_json.get("tones", {}).items()
+
+        locale = (getattr(self, "ui_locale", None) or "en_us").strip().lower()
+        behaviours_rel = Path("data") / "localization" / locale / "behaviour_rules.json"
+        self.behaviours_path = self.resolve_json_path(str(behaviours_rel), root_dir, must_exist=True)
+        raw_behaviours = json.loads(self.behaviours_path.read_text(encoding="utf-8"))
+
+        self.behaviour_rules = {
+            "wordiness": raw_behaviours.get("wordiness", {}),
+            "tones": raw_behaviours.get("tones", {}),
         }
 
-        valid_tones = {k.casefold(): k for k in self.promptdata.get("tones", {})}
+        valid_tones = {k.casefold(): k for k in self.behaviour_rules["tones"]}
         raw_tone = phrase_settings.get("tone")
         if isinstance(raw_tone, str) and raw_tone.casefold() in valid_tones:
             self.current_tone = valid_tones[raw_tone.casefold()]
@@ -169,7 +172,7 @@ class SuitVoiceConfig:
                 print(f"[CONFIG WARNING] Unrecognized tone '{raw_tone}' in user_customization.json; leaving untouched.")
             self.current_tone = raw_tone
 
-        valid_wordiness = {k.casefold(): k for k in self.promptdata.get("wordiness", {})}
+        valid_wordiness = {k.casefold(): k for k in self.behaviour_rules["wordiness"]}
         raw_wordiness = phrase_settings.get("wordiness")
         if isinstance(raw_wordiness, str) and raw_wordiness.casefold() in valid_wordiness:
             self.current_wordiness = valid_wordiness[raw_wordiness.casefold()]
@@ -177,8 +180,6 @@ class SuitVoiceConfig:
             if raw_wordiness is not None:
                 print(f"[CONFIG WARNING] Unrecognized wordiness '{raw_wordiness}' in user_customization.json; leaving untouched.")
             self.current_wordiness = raw_wordiness
-            
-        # Audio effect mapping dict for processing pipeline reference
         self.voice_effects = self.customization.get("voice_effects", {})
 
         # ====================================================
@@ -241,7 +242,7 @@ class SuitVoiceConfig:
             return self.llm
         with self._llm_lock:
             if self.llm is None:
-                print("[LLM ENGINE]: Initializing Llama GGUF model...")
+                print(t("PIPELINE_NOTIFICATION_001"))
                 self.llm = Llama(
                     model_path=self.llm_model,
                     n_ctx=40960,

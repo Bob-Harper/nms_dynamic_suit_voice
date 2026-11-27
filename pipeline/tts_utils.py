@@ -1,3 +1,5 @@
+# pipeline\tts_utils.py
+from pipeline.localization import t
 import threading
 from math import gcd
 from pathlib import Path
@@ -206,7 +208,7 @@ def run_tts(config, text: str, wem_num: str, postprocess: bool = True) -> Path:
                 if isinstance(config.tts_model, Kokoro):
                     config.kokoro_pipeline = config.tts_model
                 else:
-                    print("[TTS ENGINE]: Initializing Kokoro ONNX pipeline...")
+                    print(t("PIPELINE_NOTIFICATION_009"))
                     config.kokoro_pipeline = Kokoro(
                         str(config.tts_model),
                         str(config.tts_voice_bin),

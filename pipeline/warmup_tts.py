@@ -1,4 +1,5 @@
 # pipeline/warmup_tts.py
+from pipeline.localization import t
 import json
 import os
 import sys
@@ -29,7 +30,7 @@ def verify_file_integrity(file_path: Path, expected_hash: str) -> bool:
 def download_asset_stream(url: str, dest_path: Path):
     """Streams binary payloads in chunks to keep memory clean."""
     import requests
-    print(f"Pipeline: Streaming remote asset from: {url}")
+    print(t("PIPELINE_NOTIFICATION_010", url=url))
     with requests.get(url, stream=True, allow_redirects=True) as r:
         r.raise_for_status()
         with open(dest_path, 'wb') as f:
@@ -46,7 +47,7 @@ def _load_json_with_fallback(primary_path: Path, fallback_path: Path, label: str
 
 def main():
     install_exception_hooks()
-    print("Pipeline: Starting offline TTS compilation warmup...")
+    print(t("PIPELINE_NOTIFICATION_011"))
 
     project_root = Path(__file__).parent.parent.absolute()
     config_dir = project_root / "config"
@@ -59,10 +60,10 @@ def main():
 
     try:
         env_data = _load_json_with_fallback(
-            env_config_path, default_env_config_path, "Environment configuration"
+            env_config_path, default_env_config_path, t("PIPELINE_NOTIFICATION_012")
         )
         user_data = _load_json_with_fallback(
-            user_config_path, default_user_config_path, "User customization configuration"
+            user_config_path, default_user_config_path, t("PIPELINE_NOTIFICATION_013")
         )
     except Exception as e:
         token = record_exception(e, "Reading setup configuration for TTS warmup")
@@ -92,7 +93,7 @@ def main():
     weights_dir = project_root / Path(tts_base_dir_setting.strip('"'))
     weights_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Pipeline: Verifying weights for voice signature -> {tts_model_name} / {tts_voice_bin_name}")
+    print(t("PIPELINE_NOTIFICATION_014", tts_model_name=tts_model_name, tts_voice_bin_name=tts_voice_bin_name))
 
     model_path = weights_dir / tts_model_name
     voices_path = weights_dir / tts_voice_bin_name
@@ -109,33 +110,30 @@ def main():
         import onnxruntime as ort
 
         if not verify_file_integrity(model_path, MODEL_SHA256):
-            print("Pipeline: Local voice model files missing or corrupt. Acquiring model from source")
+            print(t("PIPELINE_NOTIFICATION_015"))
             download_asset_stream(model_url, model_path)
             if not verify_file_integrity(model_path, MODEL_SHA256):
                 raise ValueError("Downloaded model failed SHA256 signature verification loop.")
 
         if not verify_file_integrity(voices_path, VOICES_SHA256):
-            print("Pipeline: Voice library profiles missing or corrupt. Acquiring binary from source")
+            print(t("PIPELINE_NOTIFICATION_016"))
             download_asset_stream(voices_url, voices_path)
             if not verify_file_integrity(voices_path, VOICES_SHA256):
                 raise ValueError("Downloaded voice binary failed SHA256 signature verification loop.")
 
-        print("Enforcing strict local path injection...")
+        print(t("PIPELINE_NOTIFICATION_017"))
 
         ort.set_default_logger_severity(3)
 
         tts_model = Kokoro(str(model_path), str(voices_path))
         base_voice = user_data.get("voice_effects", {}).get("base_voice", "am_adam")
-        test_text = (
-            "The required models and files for voice synthesis are now installed. "
-            "If you are hearing this message, the models are downloaded and everything worked correctly."
-        )
+        test_text = t("PIPELINE_NOTIFICATION_018")
         final_wav = temp_wav_dir / "warmup.wav"
 
         samples, sample_rate = tts_model.create(test_text, voice=base_voice, speed=1.0)
         sf.write(str(final_wav), samples, sample_rate)
 
-        print(f"TTS warmup complete. Verification test file generated: {final_wav}")
+        print(t("PIPELINE_NOTIFICATION_020", final_wav=final_wav))
 
     except Exception as e:
         token = record_exception(e, "Downloading or compiling the TTS model during setup")

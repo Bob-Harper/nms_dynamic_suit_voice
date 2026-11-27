@@ -1,0 +1,56 @@
+{
+    "wordiness": {
+        "Standard": {
+            "label": "motlh",
+            "description": "'ab motlh. wa' pagh cha' mu'tlheghmey.",
+            "prompt": "You must never repeat the input phrase or intent description verbatim or in part or with minor word or punctuation or capitalization substitutions. full Rephrasing is required. The final reworded output should consist of a maximum of two sentences."
+        },
+        "Verbose": {
+            "label": "tIq",
+            "description": "De' tIq. wej pagh vagh mu'tlheghmey.",
+            "prompt": "You must never repeat the input phrase verbatim or with minor word or punctuation or capitalization substitutions. Rephrasing is required. The final output should be a minimum of three sentences to a maximum of 5 sentences."
+        },
+        "Observer": {
+            "label": "bejwI'",
+            "description": "ngajqu'. wa' mu'tlhegh nap neH, pong Hutlh.",
+            "prompt": "Deliver a concise description of a single specific event in exactly one properly punctuated sentence. You must never repeat the input phrase verbatim or with minor word, punctuation, or capitalization substitutions. Do not speculate about outcomes or suggest actions. Do not refer to {name} or imply ownership or possession."
+        }
+    },
+    "tones": {
+      "Standard": {
+          "label": "motlh",
+          "description": "De' nap, cham mu', 'ej ghuHmoHmeH mu'mey.",
+          "prompt": "State the obvious, clearly and concisely, with sci-fi themed technical jargon as delivered by a bored Vulcan reading a technical datasheet. "
+      },
+      "Poetic": {
+          "label": "bom mu'",
+          "description": "lut bom 'ej mu'tlheghmey 'IH.",
+          "prompt": "Render the notification in a 2-sentence Romantic Era rhyming couplet, using vivid metaphorical language in the style of Shelley, Byron, and Keats. Address {name} directly as 'you', describing the experience only as it affects them. Do not place {name} or {name} as a subject; use strict second-person throughout."
+      },
+      "Epic": {
+          "label": "qun tIn",
+          "description": "lut tIn 'ej yoHqu'bogh De' QIch.",
+          "prompt": "Express the notification with grand sweeping intensity and fantastical phrasing, much like James Earl Jones presenting a movie trailer. Focus on how this experience relates to the broad overview of potential future historical events; nothing should be narrated in third person."
+      },
+      "Lamentation": {
+          "label": "'IQqu'",
+          "description": "'IQqu'bogh 'ej bepqu'bogh De' QIch.",
+          "prompt": "Express the notification with mournful, tragic gravitas, much like Marvin the Paranoid Android. Focus on how this experience relates to {name} and possible absurd related events where the outcome will eventually be futile; nothing should be narrated in third person."
+      },
+      "Prophecy": {
+          "label": "paq QIch",
+          "description": "qaSlaHbogh wanI'mey leghbogh De' QIch.",
+          "prompt": "Render the notification as though it was predicted in an ancient prophecy. Speak in present tense, describing the prophecy only in terms of how it affects {name}. Do not narrate events in third person. "
+      },
+      "Philosophical": {
+          "label": "yIn qech",
+          "description": "yIn 'ej meq qelqu'bogh De' QIch.",
+          "prompt": "Provide a deeply profound philosophical interpretation of the possible impact on {name}. Address {name} directly in present tense, reflecting on their experience. Avoid third-person narration; {name} must not be used as a subject. "
+      },
+      "Military": {
+          "label": "SuvwI' ra'",
+          "description": "may' ra'ghom mu'mey 'ej SuvwI' QIch.",
+          "prompt": "Gruff tactical jargon delivered as direct battlefield combat commands."
+      }
+  }
+}

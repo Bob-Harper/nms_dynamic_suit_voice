@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 WEM FORENSICS
-Because "it's a WEM" is not a sufficient answer.
+When "it's a WEM" is not a sufficient answer.
 """
 
 from pathlib import Path

@@ -1,4 +1,5 @@
 # interface/panels/panel_3_audio.py
+from pipeline.localization import t
 import json
 import importlib
 import threading
@@ -11,7 +12,6 @@ from PySide6.QtWidgets import (
     QPushButton, QLineEdit, QTextEdit, QCheckBox
 )
 from pipeline.debug_support import debug_error_message
-from pipeline.localization import t
 
 
 class AudioPanel(QWidget):
